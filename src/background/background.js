@@ -94,3 +94,5 @@ User.prototype = {
 $(document).ready(function() {
     User.login();
 });
+
+
