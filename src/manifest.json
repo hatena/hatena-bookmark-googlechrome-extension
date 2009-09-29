@@ -1,0 +1,39 @@
+{
+  "name": "hatena-bookmark",
+  "id": "d9554fb8837640f492ca1891a0288270",
+  "description": "my extention",
+  "version": "0.0.1",
+  "update_url": "http://localhost/example/update.xml",
+  "permissions": [
+    "http://*/*",
+    "https://*/*",
+    "tabs"
+  ],
+  "background_page": "background/background.html",
+  "toolstrips": [
+    "toolstrips/toolstrip.html"
+  ]
+  // "content_scripts": [
+  //   {
+  //     "run_at": "document_start",
+  //     "js": [
+  //       "content/main.js"
+  //     ],
+  //     "css": [
+  //       "content/main.css"
+  //     ],
+  //     "matches": [
+  //       "http://*/*",
+  //       "https://*/*",
+  //       "file://*"
+  //     ]
+  //   }
+  // ],
+  // "page_actions": [
+  //   {
+  //     "id": "hatena-bookmark_page_action",
+  //     "name": "hatena-bookmark_page_action",
+  //     "icons": ["images/icon.png"]
+  //   }
+  // ]
+}
