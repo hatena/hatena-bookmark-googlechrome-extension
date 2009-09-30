@@ -23,30 +23,61 @@ var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
 if (jQuery) {
-    var obj = $({});
-    obj.bind('foo', function(arg) {
-        p('call foo', arg);
-    });
+    // setter/getter extend version
+    jQuery.extend = jQuery.fn.extend = function() {
+        // copy reference to target object
+        var target = arguments[0] || {}, i = 1, length = arguments.length, deep = false, options;
+    
+        // Handle a deep copy situation
+        if ( typeof target === "boolean" ) {
+            deep = target;
+            target = arguments[1] || {};
+            // skip the boolean and the target
+            i = 2;
+        }
+    
+        // Handle case when target is a string or something (possible in deep copy)
+        if ( typeof target !== "object" && !jQuery.isFunction(target) )
+            target = {};
+    
+        // extend jQuery itself if only one argument is passed
+        if ( length == i ) {
+            target = this;
+            --i;
+        }
+    
+        for ( ; i < length; i++ )
+            // Only deal with non-null/undefined values
+            if ( (options = arguments[ i ]) != null )
+                // Extend the base object
+                for ( var name in options ) {
+                    var src = target[ name ], copy = options[ name ];
+    
+                    // Prevent never-ending loop
+                    if ( target === copy )
+                        continue;
+    
+                    // Recurse if we're merging object values
+                    if ( deep && copy && typeof copy === "object" && !copy.nodeType )
+                        target[ name ] = jQuery.extend( deep, 
+                            // Never move original objects, clone them
+                            src || ( copy.length != null ? [ ] : { } )
+                        , copy );
+    
+                    // Don't bring in undefined values
+                    else if ( copy !== undefined )
+                        target[ name ] = copy;
 
-    // jQuery.eventDispatcher = function(name) {
-    //     var id = '_eventDispatcher_' + name;
-    //     if (document.getElementById(id)) {
-    //         return $('#' + id);
-    //     }
-    // }
+                    else if ( options.__lookupGetter__(name) !== undefined )
+                        target.__defineGetter__(name, options.__lookupGetter__(name));
 
-    // jQuery.implDispatcher = function(obj, name) {
-    //     var id = '_eventDispatcher_' + name;
-    //     var el = document.getElementById(id);
-    //     if (!el) {
-    //         el = $('<span></span>').attr('id', id).append('body');
-    //     } else {
-    //         el = $(el);
-    //     }
-    //     obj.dispatch = function(name, args) {
-    //         el.trigger(name, args);
-    //     }
-    // }
+                    else if ( options.__lookupSetter__(name) !== undefined )
+                        target.__defineSetter__(name, options.__lookupSetter__(name));
+    
+                }
+    
+        // Return the modified object
+        return target;
+    };
 }
-
 
