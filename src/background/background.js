@@ -1,33 +1,30 @@
 
 var MY_NAME_URL = B_HTTP + 'my.name';
 
-var User = function(name, options) {
-    this._name = name;
-    this.options = options || {};
-};
+var UserManager = {};
 
-$.extend(User, {
+$.extend(UserManager, {
     login: function() {
-        $.getJSON(MY_NAME_URL).next(this.loginHandler); // .error(this.loginErrorHandler);
+        $.getJSON(MY_NAME_URL).next(UserManager.loginHandler); // .error(this.loginErrorHandler);
     },
     loginHandler: function(res) {
-        p('loginHandler' , res);
-        User.setUser(res);
+        p('loginHandler');
+        UserManager.setUser(res);
     },
-    loginErrorHandler: function User_loginErrorHandler(res) {
+    loginErrorHandler: function UserManager_loginErrorHandler(res) {
         p('login error...');
     },
-    logout: function User_clearUser () {
-        User.clearUser();
+    logout: function UserManager_clearUser () {
+        UserManager.clearUser();
     },
     clearUser: function() {
-        if (this.user) {
-            this.user.clear();
-            delete this.user;
+        if (UserManager.user) {
+            UserManager.user.clear();
+            delete UserManager.user;
         }
     },
-    setUser: function User_setCurrentUser (res) {
-        var current = User.user;
+    setUser: function UserManager_setCurrentUser (res) {
+        var current = UserManager.user;
         if (current) {
             if (current.name == res.name) {
                 current.options.rks = res.rks;
@@ -36,13 +33,19 @@ $.extend(User, {
                 delete current._ignores;
                 return current;
             }
-            User.clearUser();
+            UserManager.clearUser();
         }
         var user = new User(res.name, res);
-        User.user = user;
-        $(document).trigger('UserChange', [user]);
+        UserManager.user = user;
+        p('UserChange');
+        UserManager.trigger('UserChange', [user]);
     }
 });
+
+var User = function(name, options) {
+    this._name = name;
+    this.options = options || {};
+};
 
 User.prototype = {
     get name() { return this._name },
@@ -89,10 +92,10 @@ User.prototype = {
             p(this._name + "'s database is closed");
         }
     }
-}
+};
 
 $(document).ready(function() {
-    User.login();
+    UserManager.login();
 });
 
 

@@ -23,6 +23,30 @@ var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
 if (jQuery) {
+    var obj = $({});
+    obj.bind('foo', function(arg) {
+        p('call foo', arg);
+    });
+
+    // jQuery.eventDispatcher = function(name) {
+    //     var id = '_eventDispatcher_' + name;
+    //     if (document.getElementById(id)) {
+    //         return $('#' + id);
+    //     }
+    // }
+
+    // jQuery.implDispatcher = function(obj, name) {
+    //     var id = '_eventDispatcher_' + name;
+    //     var el = document.getElementById(id);
+    //     if (!el) {
+    //         el = $('<span></span>').attr('id', id).append('body');
+    //     } else {
+    //         el = $(el);
+    //     }
+    //     obj.dispatch = function(name, args) {
+    //         el.trigger(name, args);
+    //     }
+    // }
 }
 
 
