@@ -1,4 +1,5 @@
 
+Deferred.define();
 
 var MY_NAME_URL = B_HTTP + 'my.name';
 var Database = Deferred.WebDatabase;

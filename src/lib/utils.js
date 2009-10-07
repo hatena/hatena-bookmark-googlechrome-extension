@@ -58,21 +58,23 @@ if (typeof jQuery != 'undefined') {
                         continue;
     
                     // Recurse if we're merging object values
-                    if ( deep && copy && typeof copy === "object" && !copy.nodeType )
+                    if ( deep && copy && typeof copy === "object" && !copy.nodeType ) {
                         target[ name ] = jQuery.extend( deep, 
                             // Never move original objects, clone them
                             src || ( copy.length != null ? [ ] : { } )
                         , copy );
     
                     // Don't bring in undefined values
-                    else if ( copy !== undefined )
-                        target[ name ] = copy;
-
-                    else if ( options.__lookupGetter__(name) !== undefined )
-                        target.__defineGetter__(name, options.__lookupGetter__(name));
-
-                    else if ( options.__lookupSetter__(name) !== undefined )
-                        target.__defineSetter__(name, options.__lookupSetter__(name));
+                    } else {
+                        if ( options.__lookupSetter__(name) !== undefined ) {
+                            target.__defineSetter__(name, options.__lookupSetter__(name));
+                        }
+                        if ( options.__lookupGetter__(name) !== undefined ) {
+                            target.__defineGetter__(name, options.__lookupGetter__(name));
+                        } else if ( copy !== undefined ) {
+                            target[ name ] = copy;
+                        }
+                    }
     
                 }
     

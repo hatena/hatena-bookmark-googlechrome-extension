@@ -2,7 +2,7 @@
 var Sync = $({});
 jQuery.extend(Sync, {
     init: function Sync_init () {
-        var b = model('Bookmark');
+        var b = M('Bookmark');
     }
 /*
     init: function Sync_init () {
