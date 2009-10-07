@@ -45,7 +45,7 @@ $.extend(UserManager, {
         }
         var user = new User(res.name, res);
         UserManager.user = user;
-        p(user.name);
+        p('UserChange: ', user.name);
         UserManager.trigger('UserChange', [user]);
     }
 });

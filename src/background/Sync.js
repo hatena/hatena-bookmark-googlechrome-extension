@@ -8,8 +8,14 @@ jQuery.extend(Sync, {
     sync: function Sync_sync() {
         if (Sync._syncing) return;
         Sync._syncing = true;
-        var url = UserManager.user.dataURL;
-    }
+        var url = UserManager.user.dataURL + '?_now=' + (new Date).getTime();
+        var timestamp;
+        M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
+            if (b) url += '&' + b.get('date');
+        }).next($.get(url)).next(Sync.dataSync);
+    },
+    dataSync: function Sync_dataSync(res) {
+    },
 /*
     init: function Sync_init () {
         var b = model('Bookmark');
