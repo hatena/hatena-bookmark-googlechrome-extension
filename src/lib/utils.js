@@ -22,7 +22,7 @@ var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
-if (jQuery) {
+if (typeof jQuery != 'undefined') {
     // setter/getter extend version
     jQuery.extend = jQuery.fn.extend = function() {
         // copy reference to target object

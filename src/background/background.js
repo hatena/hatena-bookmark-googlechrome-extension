@@ -1,7 +1,9 @@
 
-var MY_NAME_URL = B_HTTP + 'my.name';
 
-var UserManager = {};
+var MY_NAME_URL = B_HTTP + 'my.name';
+var Database = Deferred.WebDatabase;
+var Model = Database.Model, SQL = Database.SQL;
+var UserManager = $({});
 
 $.extend(UserManager, {
     login: function() {
@@ -37,7 +39,7 @@ $.extend(UserManager, {
         }
         var user = new User(res.name, res);
         UserManager.user = user;
-        p('UserChange');
+        p(user.name);
         UserManager.trigger('UserChange', [user]);
     }
 });
@@ -72,13 +74,7 @@ User.prototype = {
         // return res && res[0] ? true : false;
     },
     get database() {
-        // if (!this._db) {
-        //     var dir = this.configDir;
-        //     dir.append('bookmark.sqlite');
-        //     this._db = new Database(dir);
-        //     this._db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
-        // }
-        // return this._db;
+        return new Database('hatenabookmark-' + this.name);
     },
     get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
     // get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
@@ -87,10 +83,6 @@ User.prototype = {
     // },
 
     clear: function user_clear() {
-        if (this._db) {
-            this._db.connection.close();
-            p(this._name + "'s database is closed");
-        }
     }
 };
 
