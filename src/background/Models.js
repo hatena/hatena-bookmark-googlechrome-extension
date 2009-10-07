@@ -1,14 +1,12 @@
 
 (function(Model) {
+var Bookmark, Tag;
 
 Model.initialize = function() {
-    p(Bookmark);
-    // parallel([
-    //     Bookmark.initialize
-    // ]);
+     return parallel([Bookmark.initialize()]);
 }
 
-var Bookmark = Model.Bookmark = Model({
+Bookmark = Model.Bookmark = Model({
     table: 'bookmarks',
     primaryKeys: ['id'],
     fields: {
@@ -25,21 +23,16 @@ Model.getDatabase = function() {
     return UserManager.user.database;
 }
 
-/*
-$.extend({
+$.extend(Bookmark, {
     SEP: "\x00",
     beforeSave: function(b) {
         b.date = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
     },
-    get database () {
-        return Model.getDatabase();
-    }
-}, Bookmark);
-*/
+});
 
+Bookmark.__defineGetter__('database', Model.getDatabase);
 
 })(Model);
-
 
 var M = function(name) {
     return Model[name];

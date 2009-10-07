@@ -4,15 +4,15 @@ var p = function() {
     console.log(JSON.stringify(Array.prototype.slice.call(arguments, 0, arguments.length)));
 }
 
-var _SPRINTF_HASH = {
+var sprintf = function (str) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return str.replace(/%[sdf]/g, function(m) { return sprintf._SPRINTF_HASH[m](args.shift()) });
+};
+
+sprintf._SPRINTF_HASH = {
     '%s': String,
     '%d': parseInt,
     '%f': parseFloat,
-};
-
-var sprintf = function (str) {
-    var args = Array.slice(arguments, 1);
-    return str.replace(/%[sdf]/g, function(m) { return _SPRINTF_HASH[m](args.shift()) });
 };
 
 var B_HOST = 'b.hatena.ne.jp';
@@ -21,6 +21,27 @@ var B_STATIC_HOST = 'b.st-hatena.com';
 var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
+
+if (typeof Deferred != 'undefined') {
+    Deferred.prototype._fire = function (okng, value) {
+        var next = "ok";
+        try {
+            value = this.callback[okng].call(this, value);
+        } catch (e) {
+            next  = "ng";
+            if (Deferred.debug) console.error(e);
+            value = e;
+        }
+        if (value instanceof Deferred) {
+            value._next = this._next;
+        } else {
+            if (this._next) this._next._fire(next, value);
+        }
+        return this;
+    }
+}
+
+Deferred.debug = true;
 
 if (typeof jQuery != 'undefined') {
     // setter/getter extend version

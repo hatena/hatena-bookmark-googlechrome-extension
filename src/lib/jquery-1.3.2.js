@@ -3486,7 +3486,7 @@ jQuery.extend({
 				// Attach handlers for all browsers
 				script.onload = script.onreadystatechange = function(){
 					if ( !done && (!this.readyState ||
-							this.readyState == "loaded" || this.readyState == "complete") ) {
+							this.readyState == "loaded" || this.readyState == "complete" || this.readyState == null) ) {
 						done = true;
 						success();
 						complete();

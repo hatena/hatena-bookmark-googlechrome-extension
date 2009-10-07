@@ -1,8 +1,14 @@
 
 var Sync = $({});
 jQuery.extend(Sync, {
-    init: function Sync_init () {
-        var b = M('Bookmark');
+    init: function Sync_init() {
+        Model.initialize().next(Sync.sync);
+    },
+    _syncing: false,
+    sync: function Sync_sync() {
+        if (Sync._syncing) return;
+        Sync._syncing = true;
+        var url = UserManager.user.dataURL;
     }
 /*
     init: function Sync_init () {

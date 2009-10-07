@@ -1,14 +1,16 @@
 
 Deferred.define();
 
-var MY_NAME_URL = B_HTTP + 'my.name';
+// var MY_NAME_URL = B_HTTP + 'my.name';
+var MY_NAME_URL = '/tmpdata/my.name';
 var Database = Deferred.WebDatabase;
+Database.debugMessage = true;
 var Model = Database.Model, SQL = Database.SQL;
 var UserManager = $({});
 
 $.extend(UserManager, {
     login: function() {
-        $.getJSON(MY_NAME_URL).next(UserManager.loginHandler); // .error(this.loginErrorHandler);
+        $.getJSON(MY_NAME_URL).next(UserManager.loginHandler).error(UserManager.loginErrorHandler); // .error(this.loginErrorHandler);
     },
     loginHandler: function(res) {
         p('loginHandler');
@@ -16,6 +18,8 @@ $.extend(UserManager, {
     },
     loginErrorHandler: function UserManager_loginErrorHandler(res) {
         p('login error...');
+        var j = JSON.parse(res.responseText);
+        UserManager.setUser(j);
     },
     logout: function UserManager_clearUser () {
         UserManager.clearUser();
@@ -27,6 +31,7 @@ $.extend(UserManager, {
         }
     },
     setUser: function UserManager_setCurrentUser (res) {
+        if (!res.login) return;
         var current = UserManager.user;
         if (current) {
             if (current.name == res.name) {
