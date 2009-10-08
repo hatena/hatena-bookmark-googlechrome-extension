@@ -12,6 +12,7 @@ jQuery.extend(Sync, {
         var timestamp;
         console.log(222);
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
+            console.log(b);
             if (b) url += '&' + b.get('date');
         }).next($K($.get(url))).next(Sync.dataSync).error(Sync.errorback);
     },
@@ -43,7 +44,6 @@ jQuery.extend(Sync, {
         p('start');
         var len = infos.length;
         for (var i = len - 1;  i >= 0; i--) {
-            /*
             var bi = i * 3;
             var timestamp = infos[i].split("\t", 2)[1];
             var title = bookmarks[bi];
@@ -56,12 +56,17 @@ jQuery.extend(Sync, {
             b.date = parseInt(timestamp);
             if (url) {
                 try {
-                    b.save();
+                    b.save().error(function() {
+                        p('error: ' + [url, title, comment, timestamp].toString());
+                    });
                 } catch(e) {
-                    p('error: ' + [url, title, comment, timestamp].toString());
                 }
             } else {
             }
+            if (i && (i % items == 0)) {
+                console.log('' + i + title);
+            }
+            /*
             if (i && (i % items == 0)) {
                 Sync.dispatch('progress', { value: (len-i)/len*100|0 });
                 Sync.db.commitTransaction();

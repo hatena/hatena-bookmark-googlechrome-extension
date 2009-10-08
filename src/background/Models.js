@@ -27,7 +27,7 @@ Model.getDatabase = function() {
 $.extend(Bookmark, {
     SEP: "\x00",
     beforeSave: function(b) {
-        b.date = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
+        b.search = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
     },
 });
 

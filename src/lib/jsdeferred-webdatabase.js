@@ -50,13 +50,18 @@
     });
 
     Database.prototype = {
-        transaction: function(callback) {
+        transaction: function(callback, lock) {
             var d = new $D, db = this.db;
             db.transaction(function(tx) {
                 var t = new Transaction(tx);
                 callback(t);
-                return t.commit();
-            }, function(e) { p(e);d.fail(e); }, function(e) { d.call(e); });
+                return t.commit(lock);
+            }, function(e) {
+                if (Database.debugMessage) p('transaction error:' +  e);
+                d.fail(e);
+            }, function(e) {
+                d.call(e);
+            });
             return d;
         },
         getDatabase: function() {
@@ -98,7 +103,6 @@
                 return d;
             });
         }
-        
     }
 
     Transaction = Database.Transaction = function(tx) {
@@ -108,24 +112,40 @@
     }
 
     Transaction.prototype = {
-        commit: function() {
+        commit: function(lock) {
             var d = new $D;
-            this.chains(d);
+            this.chains(d, lock);
             return d;
         },
-        chains: function(d) {
+        chains: function(d, lock, okng, values) {
             if (this.queue.length == 0) return;
 
             var self = this;
             var que = this.queue.shift();
             if (que[0] == 'deferred') {
-                d = d[que[1]].apply(d, que[2]);
-                while (this.queue.length && this.queue[0][0] == 'deferred') {
-                    // 次も deferred ならここで繋げておかずに return を返すと進行してしまう
-                    que = this.queue.shift();
+                if (lock && okng && (que[1] == 'next' || que[1] == 'error')) {
+                    // next は非同期になってしまい Transaction できないため無理矢理...
+                    if ((que[1] == 'next' && okng == 'ok') || (que[1] == 'error' && okng == 'ng')) {
+                        try {
+                            okng = 'ok';
+                            values = que[2][0](values);
+                            d = d.next(function() { return values });
+                        } catch(e) {
+                            okng = 'ng'
+                            values = e;
+                            d = d.error(function() { return values });
+                        }
+                    }
+                    self.chains(d, lock, okng, values);
+                } else {
                     d = d[que[1]].apply(d, que[2]);
+                    while (this.queue.length && this.queue[0][0] == 'deferred') {
+                        // 次も deferred ならここで繋げておかずに return を返すと進行してしまう
+                        que = this.queue.shift();
+                        d = d[que[1]].apply(d, que[2]);
+                    }
+                    return d;
                 }
-                return d;
             } else if (que[0] == 'sql') {
                 var sql = que[1], args = que[2];
                 if (typeof sql == 'function') {
@@ -141,13 +161,13 @@
                 self.tx.executeSql(sql, args, function(_tx, res) {
                     self.tx = _tx;
                     self._lastResult = res;
-                    self.chains(d);
+                    self.chains(d, lock, 'ok', res);
                     if (Database.debugMessage) Database.debug(res, sql, args);
                     d.call(res);
                 }, function(_tx, error) {
                     self.tx = _tx;
-                    self.lastError = [error, sql, args];
-                    self.chains(d);
+                    self._lastError = [error, sql, args];
+                    self.chains(d, lock, 'ng', error);
                     if (Database.debugMessage) Database.debug(error, sql, args);
                     d.fail([error, sql, args]);
                 });
@@ -182,7 +202,7 @@
     })();
 
     /*-- include SQLAbstract --*/
-    /* rev: 615be46aeacd1e9d7a9e349de3a91391d77fcf89 */    
+    /* rev: e01227d5589ad9044e97912d089a879676b75fe4 */    
     (function(Global) {
         var p = function() {
             if (typeof console != 'undefined')
@@ -394,7 +414,7 @@
 
     SQL = Database.SQL = SQLAbstract;
 
-    Model = Database.Model = function(schema) {
+    Model = Database.Model = function(schema, db) {
         var klass = function(data, raw) {
             if (!data) data = {};
             this._klass = klass;
@@ -409,6 +429,7 @@
         var sql = klass.sql = new SQL();
         klass.table = schema.table;
         klass._columnProxy = {};
+        klass._db = db;
 
         extend(klass, {
             proxyColumns: function(hash) {
@@ -478,8 +499,8 @@
             get primaryKeys () {
                 return klass._primaryKeys;
             },
-            set database (db) {
-                klass._db = _db;
+            set database (newdb) {
+                klass._db = newdb;
             },
             get database () {
                 return klass._db;
@@ -512,10 +533,25 @@
             },
             execute: function(sql) {
                 if (sql instanceof Array) {
-                    return klass.database.execute(sql[0], sql[1]);
+                    var tx;
+                    if (klass._tx) {
+                        tx = klass._tx;
+                    } else {
+                        tx = klass.database;
+                    }
+                    return tx.execute(sql[0], sql[1]);
                 } else {
                     throw new Error('klass execute required([stmt, bind])' + sql);
                 }
+            },
+            transaction: function(func) {
+                return klass.database.transaction(function(tx) {
+                    klass._tx = tx;
+                    func();
+                }, true).next(klass.clearTransaction).error(klass.clearTransaction);
+            },
+            clearTransaction: function() {
+                if (klass._tx) delete klass._tx;
             },
             find: function(options) {
                 if (!options) options = {};
