@@ -3,7 +3,8 @@
 var Bookmark, Tag;
 
 Model.initialize = function() {
-     return parallel([Bookmark.initialize()]);
+     // return parallel([Bookmark.initialize()]).next(Bookmark.destroyAll());
+     return Bookmark.initialize();//.next(Bookmark.destroyAll());
 }
 
 Bookmark = Model.Bookmark = Model({

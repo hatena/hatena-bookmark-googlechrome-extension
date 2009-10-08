@@ -22,6 +22,8 @@ var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
+var $K = function(i) { return function() { return i } };
+
 if (typeof Deferred != 'undefined') {
     Deferred.prototype._fire = function (okng, value) {
         var next = "ok";
@@ -39,9 +41,9 @@ if (typeof Deferred != 'undefined') {
         }
         return this;
     }
+    Deferred.debug = true;
 }
 
-Deferred.debug = true;
 
 if (typeof jQuery != 'undefined') {
     // setter/getter extend version
