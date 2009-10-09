@@ -44,6 +44,41 @@
     }
 
     extend(Database, {
+        Util: {
+            _addTrigger: function(obj, name, func, type) {
+                if (!obj && obj[name]) throw new Error('obj or ' + name + ' is not fount.');
+                if (!obj._triggers) obj._triggers = {};
+                if (!obj._triggers[name]) obj._triggers[name] = [];
+                var callers = obj._triggers[name];
+                var origFunc = obj[name];
+                if (type == 'after') {
+                    obj[name] = function() {
+                        var res = origFunc.apply(obj, arguments);
+                        if (res instanceof Deferred) {
+                            return res.next(func);
+                        } else {
+                            func.apply(obj, arguments);
+                            return res;
+                        }
+                    }
+                } else {
+                    obj[name] = function() {
+                        var res = func.apply(obj, arguments);
+                        if (res instanceof Deferred) {
+                            return res.next(origFunc);
+                        } else {
+                            return origFunc.apply(obj, arguments);
+                        }
+                    }
+                }
+            },
+            afterTrigger: function(obj, name, func) {
+                return Database.Util._addTrigger(obj, name, func, 'after');
+            },
+            beforeTrigger: function(obj, name, func) {
+                return Database.Util._addTrigger(obj, name, func, 'before');
+            }
+        },
         _instances: {},
         debug: p,
         global: null
@@ -432,6 +467,12 @@
         klass._db = db;
 
         extend(klass, {
+            afterTrigger: function(name, func) {
+                return Database.Util.afterTrigger(klass, name, func);
+            },
+            beforeTrigger: function(name, func) {
+                return Database.Util.beforeTrigger(klass, name, func);
+            },
             proxyColumns: function(hash) {
                 for (var key in hash) {
                     if (klass.hasColumn(key)) {
@@ -654,6 +695,29 @@
         });
 
         klass.prototype = {
+            afterTrigger: function(name, func) {
+                var orig = klass.prototype[name];
+                klass.prototype[name] = function() {
+                    var res = orig.apply(this, arguments);
+                    if (res instanceof Deferred) {
+                        return res.next(func);
+                    } else {
+                        func.apply(this, arguments);
+                    }
+                    return res;
+                }
+            },
+            beforeTrigger: function(name, func) {
+                var orig = klass.prototype[name];
+                klass.prototype[name] = function() {
+                    var res = func.apply(this, arguments);
+                    if (res instanceof Deferred) {
+                        return res.next(orig);
+                    } else {
+                        return orig.apply(this, arguments);
+                    }
+                }
+            },
             setByProxy: function(key, value) {
                 if (klass._columnProxy[key]) {
                     value = klass._columnProxy[key].setter(value);

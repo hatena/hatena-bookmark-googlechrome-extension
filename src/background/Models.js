@@ -4,7 +4,8 @@ var Bookmark, Tag;
 
 Model.initialize = function() {
      // return parallel([Bookmark.initialize()]).next(Bookmark.destroyAll());
-     return Bookmark.initialize();//.next(Bookmark.destroyAll());
+     // return Bookmark.initialize();//.next(Bookmark.destroyAll());
+     return Bookmark.dropTable().next(Bookmark.initialize);//.next(Bookmark.destroyAll());
 }
 
 Bookmark = Model.Bookmark = Model({
@@ -18,6 +19,13 @@ Bookmark = Model.Bookmark = Model({
         search  : 'TEXT',
         date    : 'INTEGER NOT NULL'
     }
+});
+
+Bookmark.afterTrigger('createTable', function() {
+    return Model.getDatabase().execute([
+        'CREATE INDEX "bookmarks_date" ON "bookmarks" ("date" DESC)',
+        'CREATE INDEX "bookmarks_date" ON "bookmarks" ("date" ASC)'
+    ]).error(function() { return true });
 });
 
 Model.getDatabase = function() {

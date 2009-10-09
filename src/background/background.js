@@ -82,8 +82,8 @@ User.prototype = {
     get database() {
         return new Database('hatenabookmark-' + this.name);
     },
-    //get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
-    get dataURL() { return sprintf(B_HTTP + 'maoe/search.data', this.name) },
+    // get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
+    get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
     // get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
     // getProfileIcon: function user_getProfileIcon(isLarge) {
     //     return UserUtils.getProfileIcon(this.name, isLarge);
