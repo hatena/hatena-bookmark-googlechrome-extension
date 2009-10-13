@@ -24,7 +24,7 @@ value._next=this._next;}else{
 if(this._next)this._next._fire(next,value);}
 return this;}
 };Deferred.next_default=function(fun){
-var d=new Deferred();var id=setTimeout(function(){d.call()},0);d.canceller=function(){clearTimeout(id)};if(fun)d.callback.ok=fun;return d;};Deferred.next_faster_way_readystatechange=(!window.opera &&/\bMSIE\b/.test(navigator.userAgent))&& function(fun){
+var d=new Deferred();var id=setTimeout(function(){d.call()},0);d.canceller=function(){clearTimeout(id)};if(fun)d.callback.ok=fun;return d;};Deferred.next_faster_way_readystatechange=((location.protocol=="http:")&& !window.opera &&/\bMSIE\b/.test(navigator.userAgent))&& function(fun){
 var d=new Deferred();var t=new Date().getTime();if(t-arguments.callee._prev_timeout_called<150){
 var cancel=false;var script=document.createElement("script");script.type="text/javascript";script.src="javascript:";script.onreadystatechange=function(){
 if(!cancel){
@@ -76,7 +76,19 @@ return ret;}
 return(o.begin<=o.end)? Deferred.call(_loop,o.begin):null;});};Deferred.register=function(name,fun){
 this.prototype[name]=function(){
 var a=arguments;return this.next(function(){
-return fun.apply(this,a);});};};Deferred.register("loop",Deferred.loop);Deferred.register("wait",Deferred.wait);Deferred.define=function(obj,list){
+return fun.apply(this,a);});};};Deferred.register("loop",Deferred.loop);Deferred.register("wait",Deferred.wait);Deferred.ResultList=function(args){this.args=Array.prototype.slice.call(args,0)}
+Deferred.bind=function(func,target,callbackArgIndex,errorbackArgIndex){
+return function(){
+var d=new Deferred();d.next=function(fun){return this._post("ok",function(){
+fun.apply(fun,(arguments[0] instanceof Deferred.ResultList)? arguments[0].args:arguments);})};var args=Array.prototype.slice.call(arguments,0);if(!isNaN(callbackArgIndex)&& callbackArgIndex !==null){
+var callback=function(){d.call(new Deferred.ResultList(arguments))};args.splice(callbackArgIndex,0,callback);}
+if(!isNaN(errorbackArgIndex)&& errorbackArgIndex !==null){
+var errorback=function(){d.fail(arguments)};args.splice(errorbackArgIndex,0,errorback);}
+Deferred.next(function(){func.apply(target,args)});return d;}
+}
+Deferred.curry=function(func){
+return Deferred.bind(func,null,0);}
+Deferred.define=function(obj,list){
 if(!list)list=["parallel","wait","next","call","loop"];if(!obj)obj=(function getGlobal(){return this})();for(var i=0;i<list.length;i++){
 var n=list[i];obj[n]=Deferred[n];}
 return Deferred;};(function($){

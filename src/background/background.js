@@ -6,6 +6,13 @@ var MY_NAME_URL = B_HTTP + 'my.name';
 var Database = Deferred.WebDatabase;
 // Database.debugMessage = true;
 var Model = Database.Model, SQL = Database.SQL;
+var Manager = $({});
+
+$.extend(Manager, {
+    editBookmark: function() {
+    }
+});
+
 var UserManager = $({});
 
 $.extend(UserManager, {
@@ -82,8 +89,8 @@ User.prototype = {
     get database() {
         return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 5);
     },
-    // get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
-    get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
+    get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
+    // get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
     // getProfileIcon: function user_getProfileIcon(isLarge) {
     //     return UserUtils.getProfileIcon(this.name, isLarge);
     // },
