@@ -86,18 +86,27 @@
 
     Database.prototype = {
         transaction: function(callback, lock) {
+            if (typeof lock == 'undefined') lock = true;
             var d = new $D, db = this.db;
-            db.transaction(function(tx) {
+            var self = this;
+            self._d = db.transaction(function(tx) {
                 var t = new Transaction(tx);
+                self._tx = t;
                 callback(t);
                 return t.commit(lock);
             }, function(e) {
+                self.clearTransaction();
                 if (Database.debugMessage) p('transaction error:' +  e);
                 d.fail(e);
             }, function(e) {
+                self.clearTransaction();
                 d.call(e);
             });
             return d;
+        },
+        clearTransaction: function() {
+            if (this._tx) delete this._tx;
+            if (this._d) delete this._d;
         },
         getDatabase: function() {
             var options = this.options;
@@ -105,6 +114,8 @@
         },
         execute: function(sql, args) {
             var self = this;
+            if (self._tx)
+                return self._tx.execute(sql, args);
             return next(function() {
                 var d = new $D;
                 if (!(sql instanceof Array)) {
@@ -574,25 +585,19 @@
             },
             execute: function(sql) {
                 if (sql instanceof Array) {
+                    return klass.database.execute(sql[0], sql[1]);
+                    /*
                     var tx;
-                    if (klass._tx) {
-                        tx = klass._tx;
+                    if (klass.database._tx) {
+                        tx = klass.database._tx;
                     } else {
                         tx = klass.database;
                     }
                     return tx.execute(sql[0], sql[1]);
+                    */
                 } else {
                     throw new Error('klass execute required([stmt, bind])' + sql);
                 }
-            },
-            transaction: function(func) {
-                return klass.database.transaction(function(tx) {
-                    klass._tx = tx;
-                    func();
-                }, true).next(klass.clearTransaction).error(klass.clearTransaction);
-            },
-            clearTransaction: function() {
-                if (klass._tx) delete klass._tx;
             },
             find: function(options) {
                 if (!options) options = {};
