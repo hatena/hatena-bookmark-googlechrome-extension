@@ -74,14 +74,22 @@ if (typeof jQuery != 'undefined') {
             if ( (options = arguments[ i ]) != null )
                 // Extend the base object
                 for ( var name in options ) {
-                    var src = target[ name ], copy = options[ name ];
+                    var getterFlag = false;
+                    var src, copy;
+                    if ( options.__lookupGetter__ &&  options.__lookupGetter__(name) !== undefined ) {
+                        target.__defineGetter__(name, options.__lookupGetter__(name));
+                        getterFlag = true;
+                    } else {
+                        copy = options[ name ];
+                    }
     
                     // Prevent never-ending loop
                     if ( target === copy )
                         continue;
     
                     // Recurse if we're merging object values
-                    if ( deep && copy && typeof copy === "object" && !copy.nodeType ) {
+                    if ( deep && !getterFlag && copy && typeof copy === "object" && !copy.nodeType ) {
+                        src = target[ name ];
                         target[ name ] = jQuery.extend( deep, 
                             // Never move original objects, clone them
                             src || ( copy.length != null ? [ ] : { } )
@@ -89,12 +97,10 @@ if (typeof jQuery != 'undefined') {
     
                     // Don't bring in undefined values
                     } else {
-                        if ( options.__lookupSetter__(name) !== undefined ) {
+                        if ( options.__lookupSetter__ && options.__lookupSetter__(name) !== undefined ) {
                             target.__defineSetter__(name, options.__lookupSetter__(name));
                         }
-                        if ( options.__lookupGetter__(name) !== undefined ) {
-                            target.__defineGetter__(name, options.__lookupGetter__(name));
-                        } else if ( copy !== undefined ) {
+                        if ( copy !== undefined && !getterFlag) {
                             target[ name ] = copy;
                         }
                     }
