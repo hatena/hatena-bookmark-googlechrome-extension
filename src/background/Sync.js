@@ -43,7 +43,7 @@ jQuery.extend(Sync, {
         var now = Date.now();
         p('start');
         var len = infos.length;
-        Bookmark.transaction(function() {
+        Bookmark.database.transaction(function() {
             for (var i = len - 1;  i >= 0; i--) {
                 var bi = i * 3;
                 var timestamp = infos[i].split("\t", 2)[1];
@@ -57,8 +57,8 @@ jQuery.extend(Sync, {
                 b.date = parseInt(timestamp);
                 if (url) {
                     try {
-                        b.save().error(function() {
-                            console.error('error: ' + [url, title, comment, timestamp].toString());
+                        b.save().error(function(e) {
+                            console.error('error: ' + [e.toString(), url, title, comment, timestamp].toString());
                         });
                     } catch(e) {
                     }

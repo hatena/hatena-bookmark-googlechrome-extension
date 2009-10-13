@@ -80,11 +80,10 @@ User.prototype = {
         // return res && res[0] ? true : false;
     },
     get database() {
-        return new Database('hatenabookmark-' + this.name);
+        return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 5);
     },
     // get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
     get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
-    // get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
     // getProfileIcon: function user_getProfileIcon(isLarge) {
     //     return UserUtils.getProfileIcon(this.name, isLarge);
     // },
