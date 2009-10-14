@@ -229,6 +229,33 @@ test('HTTPCache(s)', function(d) {
     ]) }).next(function() { d.call(); });
 }, 12, 10000).
 
+test('Model Bookmark/Tag', function(d) {
+    var db = new Database('test.js');
+    var Bookmark = Model.Bookmark, Tag = Model.Tag;
+    Model.getDatabase = function() { return db };
+    // Database.debugMessage = true;
+    Model.initialize(true).next(function() {
+        ok(true, 'initialize model');
+        var bookmark = new Bookmark({
+            url: 'http://www.hatena.ne.jp/',
+            comment: '[hatena][はてな]これはすごい',
+            title: 'はてなのサイト',
+            date: 1255519120
+        });
+        // db.transaction(function() {
+            bookmark.saveWithTransaction().next(function(b) {
+                equals(b.id, 1);
+                Tag.find({}).next(function(tags) {
+                    equals(tags.length, 2);
+                    equals(tags[0].name, 'hatena');
+                    equals(tags[1].name, 'はてな');
+                    d.call();
+                });
+            });
+        // }).next(p).error(p);
+    });
+}, 5, 2000).
+
 test('finished', function(d) {
     ok(true, 'finished!!!');
     d.call();

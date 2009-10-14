@@ -2,12 +2,12 @@
 (function(Model) {
 var Bookmark, Tag;
 
-Model.initialize = function() {
+Model.initialize = function(force) {
      // return parallel([Bookmark.initialize()]).next(Bookmark.destroyAll());
      // return Bookmark.initialize();//.next(Bookmark.destroyAll());
-     return parallel([
-         Bookmark.dropTable().next(Bookmark.initialize),
-         Tag.dropTable().next(Tag.initialize)
+     return Deferred.parallel([
+         Bookmark.dropTable(force).next(Bookmark.initialize),
+         Tag.dropTable(force).next(Tag.initialize)
      ]);//.next(Bookmark.destroyAll());
 }
 
@@ -28,7 +28,7 @@ Bookmark = Model.Bookmark = Model({
     }
 });
 
-Bookmark.__defineGetter__('database', Model.getDatabase);
+Bookmark.__defineGetter__('database', function() { return Model.getDatabase() });
 
 Bookmark.afterTrigger('createTable', function() {
     return Model.getDatabase().execute([
@@ -96,7 +96,7 @@ Tag = Model.Tag = Model({
     }
 });
 
-Tag.__defineGetter__('database', Model.getDatabase);
+Tag.__defineGetter__('database', function() { return Model.getDatabase() });
 
 $.extend(Tag, {
     destroyByBookmark: function(b) {
@@ -115,8 +115,7 @@ $.extend(Tag, {
                     bookmark_id: b.id,
                     name: tag
                 });
-                return t.save().next(function() {
-                });
+                t.save().next();
             }
         } else {
             throw new Error('bid');
@@ -124,9 +123,9 @@ $.extend(Tag, {
     },
 });
 
-})(Model);
+})(Deferred.WebDatabase.Model);
 
 var M = function(name) {
-    return Model[name];
+    return Deferred.WebDatabase.Model[name];
 }
 
