@@ -111,6 +111,70 @@ if (typeof jQuery != 'undefined') {
         return target;
     };
 
+    var URI = function(schema, host, port, path, search, hash) {
+        if (this instanceof URI) {
+            this.init.apply(this, arguments);
+        } else {
+           var i = function () {};
+           i.prototype = URI.prototype;
+           var o = new i;
+           URI.apply(o, arguments);
+           return o;
+        }
+    }
+
+    URI.URI_REGEXP = new RegExp('^([^:/]+)://([^:/]+)(?::(\\d{1,5}))?(/[^?#]*?)(\\?[^#]*)?(#.*)?$');
+    URI.parse = function(url) {
+        var m = url.match(URI.URI_REGEXP);
+        if (!m) throw new Error('invalid uri: ' + url);
+        m.shift();
+        return URI.apply(null, m);
+    }
+
+    URI.prototype = {
+        init: function(schema, host, port, path, search, hash) {
+            this.schema = schema || '';
+            this.host = host || '';
+            this.port = port || '';
+            this.path = path || '';
+            this.search = search || '';
+            this.hash = hash || '';
+        },
+        get path_query() {
+            return this.path + this.search;
+        },
+        get encodeURI() {
+            return encodeURIComponent(this.href);
+        },
+        get entryURL() {
+            var url = [
+                this.host,
+                (this.port ? ':' + this.port : ''),
+                this.path,
+                this.search,
+                this.hash.replace(/#/, '%23')
+            ].join('');
+            if (this.isHTTPS) url = 's/' + url;
+            return B_HTTP + 'entry/' + url;
+        },
+        get isHTTPS() {
+            return this.schema == 'https';
+        },
+        get href() {
+            return [
+                this.schema, '://',
+                this.host,
+                (this.port ? ':' + this.port : ''),
+                this.path,
+                this.search,
+                this.hash
+            ].join('');
+        },
+        toString: function() {
+            return this.href;
+        }
+    }
+
     var Timer = {
         create: function(interval, repeatCount, Global) {
             var currentCount = 0;

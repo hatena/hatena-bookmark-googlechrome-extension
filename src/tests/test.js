@@ -89,6 +89,37 @@ var Database = Deferred.WebDatabase;
 var Model = Database.Model, SQL = Database.SQL;
 
 Deferred.
+test("uri", function(d) {
+    var hatena = 'http://www.hatena.ne.jp/foobar?query=foo#hash=bar';
+    var u = URI.parse(hatena);
+    equals(u.search, '?query=foo');
+    equals(u.hash, '#hash=bar');
+    equals(u.schema, 'http');
+    equals(u.port, '');
+    equals(u.host, 'www.hatena.ne.jp');
+    equals(u.path, '/foobar');
+    equals(u.href, hatena);
+    equals(u.path_query, '/foobar?query=foo');
+    equals(u.encodeURI, encodeURIComponent(hatena));
+    equals(u.entryURL, B_HTTP + 'entry/www.hatena.ne.jp/foobar?query=foo%23hash=bar');
+
+    hatena = 'https://www.hatena.ne.jp/';
+    u = URI.parse(hatena);
+    equals(u.search, '');
+    equals(u.hash, '');
+    equals(u.schema, 'https');
+    ok(u.isHTTPS, 'isHTTPS');
+    equals(u.port, '');
+    equals(u.host, 'www.hatena.ne.jp');
+    equals(u.path, '/');
+    equals(u.href, hatena);
+    equals(u.path_query, '/');
+    equals(u.encodeURI, encodeURIComponent(hatena));
+    equals(u.entryURL, B_HTTP + 'entry/s/www.hatena.ne.jp/');
+
+    d.call();
+}, 21, 1000).
+
 test("timer", function(d){
     var t = Timer.create(10, 5); // 10ms, 5times
     var i = 0;
