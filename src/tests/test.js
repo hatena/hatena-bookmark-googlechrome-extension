@@ -242,19 +242,36 @@ test('Model Bookmark/Tag', function(d) {
             title: 'はてなのサイト',
             date: 1255519120
         });
-        // db.transaction(function() {
-            bookmark.saveWithTransaction().next(function(b) {
-                equals(b.id, 1);
-                Tag.find({}).next(function(tags) {
-                    equals(tags.length, 2);
-                    equals(tags[0].name, 'hatena');
-                    equals(tags[1].name, 'はてな');
-                    d.call();
+        bookmark.saveWithTransaction().next(function(b) {
+            equals(b.id, 1);
+            ok(b.search.indexOf('これはすごい') != -1, 'search comment');
+            ok(b.search.indexOf('サイト') != -1, 'search title');
+            Tag.find({}).next(function(tags) {
+                equals(tags.length, 2);
+                equals(tags[0].name, 'hatena');
+                equals(tags[1].name, 'はてな');
+            }).next(function() {
+                db.transaction(function() {
+                    for (var i = 0;  i < 99; i++) {
+                        var b = new Bookmark({
+                            url: 'http://www.hatena.ne.jp/' + i,
+                            comment: '[hatena][はてな]これはすごい' + i,
+                            title: 'はてなのサイト' + i,
+                            date: 1255519120 + i
+                        });
+                        b.save().next();
+                    }
+                }).next(function() {
+                    ok(true, '100 bookmark insert');
+                    Tag.count().next(function(c) {
+                        equals(c, 200);
+                        d.call();
+                    });
                 });
             });
-        // }).next(p).error(p);
+        });
     });
-}, 5, 2000).
+}, 9, 2000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
