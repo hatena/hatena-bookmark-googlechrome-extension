@@ -116,6 +116,32 @@ test("timer stop", function(d){
     t.start();
 }, 3, 1000).
 
+test('ExpireCache', function(d) {
+    var cache = new ExpireCache('testcache' + (new Date-0));
+    ok(cache.get('foo') == null );
+    cache.set('foo', 'bar');
+    equals(cache.get('foo'), 'bar');
+    cache.set('foo1', 'baz1');
+    equals(cache.get('foo1'), 'baz1');
+    cache.clear('foo1');
+    ok(cache.get('foo1') == null, 'cache clear');
+    cache.clearAll();
+    ok(cache.get('foo') == null, 'cache clear all');
+
+    var cache2 = new ExpireCache('testcache1' + (new Date-0), 60, 'JSON');
+    var data = {foo: 'bar'};
+    cache2.set('data', data);
+    equals(cache2.get('data').foo, 'bar', 'serialize json');
+
+    cache = new ExpireCache('testcache2' + (new Date-0), 0.01); // 10ms cache
+    cache.set('foo1', 'bar');
+    equals(cache.get('foo1'), 'bar');
+    wait(0.2).next(function() {
+        ok(cache.get('foo1') == null, 'cache expired');
+        d.call();
+    });
+}, 8, 3000).
+
 test('finished', function(d) {
     ok(true, 'finished!!!');
     d.call();
