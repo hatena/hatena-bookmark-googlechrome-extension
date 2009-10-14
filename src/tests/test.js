@@ -89,10 +89,32 @@ var Database = Deferred.WebDatabase;
 var Model = Database.Model, SQL = Database.SQL;
 
 Deferred.
-test("foo", function(d){
-    ok(1);
-    d.call();
-}, 7).
+test("timer", function(d){
+    var t = Timer.create(10, 5); // 10ms, 5times
+    var i = 0;
+    t.bind('timer', function(ev, c) {
+        equals(c, ++i);
+    });
+    t.bind('timerComplete', function(ev, c) {
+        equals(c, 5);
+        d.call();
+    });
+    t.start();
+}, 6, 1000).
+
+test("timer stop", function(d){
+    var t = Timer.create(10, 5); // 10ms, 5times
+    var i = 0;
+    t.bind('timer', function(ev, c) {
+        equals(c, ++i);
+        if (c == 3) t.stop();
+    });
+    t.bind('timerComplete', function(ev, c) {
+        ok(false, 'not call this');
+    });
+    setTimeout(function() { d.call() }, 500);
+    t.start();
+}, 3, 1000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
