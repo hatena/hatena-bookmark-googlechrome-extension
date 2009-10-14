@@ -197,7 +197,7 @@ test('HTTPCache(s)', function(d) {
     var url = 'http://b.hatena.ne.jp/secondlife/';
     ExpireCache.clearAllCaches();
     Deferred.parallel([
-        HTTPCache.counter.get('https://example.comn/').next(function(r) {
+        HTTPCache.counter.get('https://www.hatena.ne.jp/').next(function(r) {
             ok(r == null, 'counter cache null');
         }),
         HTTPCache.counter.get(url).next(function(r) {
