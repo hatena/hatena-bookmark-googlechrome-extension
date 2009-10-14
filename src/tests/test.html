@@ -1,5 +1,21 @@
 <html>
   <head>
+    <script type="text/javascript" src="../lib/jsloader.js"></script>
+    <script type="text/javascript">
+          window.addEventListener('DOMContentLoaded', function() {
+              jsloader(["../lib/jquery-1.3.2.js",
+                    "../lib/jsdeferred.js",
+                    "../lib/jsdeferred.jquery.js",
+                    "../lib/jsdeferred.googlechrome.js",
+                    "../lib/jsdeferred-webdatabase.js",
+                    "../lib/utils.js",
+                    "lib/testrunner.js",
+                    "test.js"], function() {
+                    $(window).trigger('load');
+                    });
+          });
+    </script>
+    <!--
     <script type="text/javascript" src="../lib/jquery-1.3.2.js"></script>
     <script type="text/javascript" src="../lib/jsdeferred.js"></script>
     <script type="text/javascript" src="../lib/jsdeferred.jquery.js"></script>
@@ -7,7 +23,7 @@
     <script type="text/javascript" src="../lib/jsdeferred-webdatabase.js"></script>
     <script type="text/javascript" src="../lib/utils.js"></script>
     <script type="text/javascript" src="lib/testrunner.js"></script>
-    <script type="text/javascript" src="../src/jsdeferred-webdatabase.js"></script>
+    -->
     <link rel="stylesheet" href="lib/testsuite.css" type="text/css" media="screen" />
   </head>
   <body>
@@ -17,5 +33,4 @@
     </ol>
     <div id="main"></div>
   </body>
-  <script type="text/javascript" src="test.js"></script>
 </html>
