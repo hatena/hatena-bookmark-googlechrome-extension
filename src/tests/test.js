@@ -95,6 +95,7 @@ test("uri", function(d) {
     equals(u.search, '?query=foo');
     equals(u.hash, '#hash=bar');
     equals(u.schema, 'http');
+    ok(!u.isHTTPS, 'is not HTTPS');
     equals(u.port, '');
     equals(u.host, 'www.hatena.ne.jp');
     equals(u.path, '/foobar');
@@ -118,7 +119,7 @@ test("uri", function(d) {
     equals(u.entryURL, B_HTTP + 'entry/s/www.hatena.ne.jp/');
 
     d.call();
-}, 21, 1000).
+}, 22, 1000).
 
 test("timer", function(d){
     var t = Timer.create(10, 5); // 10ms, 5times
