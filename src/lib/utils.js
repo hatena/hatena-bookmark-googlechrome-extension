@@ -234,6 +234,7 @@ if (typeof jQuery != 'undefined') {
     ExpireCache.__defineGetter__('now', function() { return new Date-0 });
 
     ExpireCache.shared = {};
+    ExpireCache.clearAllCaches = function() { ExpireCache.shared = {} };
     ExpireCache.Seriarizer = {};
     ExpireCache.Seriarizer.JSON = {
         seriarize: function(value) { return JSON.stringify(value) },
@@ -253,7 +254,14 @@ if (typeof jQuery != 'undefined') {
                 ExpireCache.shared[this.sharedKey] = {};
         },
         get sharedKey() { return '_cache_' + this._key },
-        get cache() { return ExpireCache.shared[this.sharedKey] },
+        get cache() { 
+            var c = ExpireCache.shared[this.sharedKey];
+            if (c) {
+                return c;
+            } else {
+                return (ExpireCache.shared[this.sharedKey] = {});
+            }
+        },
         deseriarize: function ExpireCache_deseriarize(value) {
             if (!this.seriarizer) return value;
 
@@ -336,7 +344,7 @@ if (typeof jQuery != 'undefined') {
         setResCache: function HTTPCache_setResCache(url, res) {
             var cache = this.cache;
             var val = res;
-            if (this.options.JSON) {
+            if (this.options.json) {
                 // ({foo: 'bar'}) な JSON 対策
                 if (val.indexOf('(') == 0) {
                     val = val.substring(1);
@@ -359,5 +367,57 @@ if (typeof jQuery != 'undefined') {
             return this.cache.has(url);
         }
     }
+
+    HTTPCache.encodeBookmarkURL = function(url) {
+        return encodeURIComponent((url || '').replace(/#/, '%23'));
+    }
+
+    HTTPCache.counter = new HTTPCache('counterCache', {
+        expire: 60 * 15,
+        baseURL: B_API_STATIC_HTTP + 'entry.count?url=',
+        encoder: HTTPCache.encodeBookmarkURL,
+    });
+
+    HTTPCache.counter.isValid = function(url) {
+        // XXX
+        if (url.indexOf('https') == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    /*
+    HTTPCache.counter.createFilter = function(ev) {
+        let filters = eval( '(' + HTTPCache.counter.prefs.get('counterIgnoreList') + ')');
+        HTTPCache.counter.setFilter(filters);
+    };
+
+    HTTPCache.counter.setFilter = function(filters) {
+        HTTPCache.counter.filters = filters.map(function(v) new RegExp(v));
+    }
+
+    HTTPCache.counter.loadHandler = function(ev) {
+        HTTPCache.counter.createFilter();
+        HTTPCache.counter.prefs.createListener('counterIgnoreList', HTTPCache.counter.createFilter);
+    };
+    */
+
+    HTTPCache.comment = new HTTPCache('commentCache', {
+        expire: 60 * 15,
+        baseURL: B_HTTP + 'entry/jsonlite/?url=',
+        seriarizer: 'JSON',
+        json: true,
+        encoder: HTTPCache.encodeBookmarkURL,
+    });
+
+    HTTPCache.entry = new HTTPCache('entryCache', {
+        expire: 60 * 4,
+        baseURL: B_HTTP + 'my.entry?url=',
+        seriarizer: 'JSON',
+        json: true,
+        encoder: HTTPCache.encodeBookmarkURL,
+    });
+
 }
 

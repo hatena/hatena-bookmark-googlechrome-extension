@@ -149,6 +149,7 @@ test("timer stop", function(d){
 }, 3, 1000).
 
 test('ExpireCache', function(d) {
+    ExpireCache.clearAllCaches();
     var cache = new ExpireCache('testcache' + (new Date-0));
     ok(cache.get('foo') == null );
     cache.set('foo', 'bar');
@@ -175,6 +176,7 @@ test('ExpireCache', function(d) {
 }, 8, 3000).
 
 test('HTTPCache', function(d) {
+    ExpireCache.clearAllCaches();
     var cache = new HTTPCache('test');
     var url = 'http://www.google.com/';
     cache.get(url).next(function(res) {
@@ -190,6 +192,42 @@ test('HTTPCache', function(d) {
         d.call();
     });
 }, 4, 3000).
+
+test('HTTPCache(s)', function(d) {
+    var url = 'http://b.hatena.ne.jp/secondlife/';
+    ExpireCache.clearAllCaches();
+    Deferred.parallel([
+        HTTPCache.counter.get('https://example.comn/').next(function(r) {
+            ok(r == null, 'counter cache null');
+        }),
+        HTTPCache.counter.get(url).next(function(r) {
+            ok(r, 'counter cache');
+            ok(r >= 1, 'counter cache');
+        }),
+        HTTPCache.comment.get(url).next(function(r) {
+            ok(r, 'comment cache');
+            ok(r.count >= 1, 'comment cache count');
+        }),
+        HTTPCache.entry.get(url).next(function(r) {
+            ok(r, 'entry cache');
+        })
+    ]).next(function() { return Deferred.parallel([
+        HTTPCache.counter.get('https://example.comn/').next(function(r) {
+            ok(r == null, '2: counter cache null');
+        }),
+        HTTPCache.counter.get(url).next(function(r) {
+            ok(r, '2: counter cache');
+            ok(r >= 1, '2: counter cache');
+        }),
+        HTTPCache.comment.get(url).next(function(r) {
+            ok(r, '2: comment cache');
+            ok(r.count >= 1, '2: comment cache count');
+        }),
+        HTTPCache.entry.get(url).next(function(r) {
+            ok(r, '2: entry cache');
+        })
+    ]) }).next(function() { d.call(); });
+}, 12, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
