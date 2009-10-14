@@ -142,6 +142,23 @@ test('ExpireCache', function(d) {
     });
 }, 8, 3000).
 
+test('HTTPCache', function(d) {
+    var cache = new HTTPCache('test');
+    var url = 'http://www.google.com/';
+    cache.get(url).next(function(res) {
+        ok(res, 'get cache1');
+    }).next(function() {
+        ok(cache.has(url), 'has cache');
+        cache.get(url).next(function(res) {
+            ok(res, 'get cache2');
+            cache.clearAll();
+            ok(!cache.has(url), 'cache clear all');
+        });
+    }).next(function() {
+        d.call();
+    });
+}, 4, 3000).
+
 test('finished', function(d) {
     ok(true, 'finished!!!');
     d.call();

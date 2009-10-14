@@ -233,5 +233,67 @@ if (typeof jQuery != 'undefined') {
         },
     }
 
+    var HTTPCache = function(key, options) {
+        if (!options) options = {};
+        this.options = options;
+        this.cache = new ExpireCache('http-' + key, options.expire, options.seriarizer);
+    }
+
+    HTTPCache.prototype = {
+        createURL: function HTTPCache_createURL (url) {
+            if (this.options.encoder)
+                url = this.options.encoder(url);
+            return (this.options.baseURL || '') + url;
+        },
+        isValid: function(url) {
+            return true;
+        },
+        get: function HTTPCache_get(url) {
+            if (!this.isValid(url)) {
+                return Deferred.next($K(null));
+            }
+
+            var cache = this.cache;
+            if (cache.has(url)) {
+                var val = cache.get(url);
+                return Deferred.next($K(val));
+            } else {
+                var self = this;
+                var d = new Deferred();
+                $.get(this.createURL(url)).next(function(res) {
+                    d.call(self.setResCache(url, res));
+                }).error(function() {
+                    cache.set(url, null);
+                    d.call(null);
+                });
+                return d;
+            }
+        },
+        setResCache: function HTTPCache_setResCache(url, res) {
+            var cache = this.cache;
+            var val = res;
+            if (this.options.JSON) {
+                // ({foo: 'bar'}) な JSON 対策
+                if (val.indexOf('(') == 0) {
+                    val = val.substring(1);
+                    val = val.substr(0, val.lastIndexOf(')'));
+                }
+                val = JSON.parse(val);
+            }
+            cache.set(url, val);
+            p('http not using cache: ' + url);
+            return cache.get(url);
+        },
+        clear: function HTTPCache_clear (url) {
+            p('http cache clear: ' + url);
+            return this.cache.clear(url);
+        },
+        clearAll: function HTTPCache_clearAll () {
+            return this.cache.clearAll();
+        },
+        has: function HTTPCache_has (url) {
+            return this.cache.has(url);
+        }
+    }
 }
 
