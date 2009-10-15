@@ -273,6 +273,11 @@ test('Model Bookmark/Tag', function(d) {
     });
 }, 9, 2000).
 
+test('UserManeger', function(d) {
+    UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
+    UserManager.login();
+}, 9, 2000).
+
 test('finished', function(d) {
     ok(true, 'finished!!!');
     d.call();

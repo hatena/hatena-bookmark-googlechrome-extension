@@ -85,3 +85,4 @@ User.prototype = {
     clear: function user_clear() {
     }
 };
+
