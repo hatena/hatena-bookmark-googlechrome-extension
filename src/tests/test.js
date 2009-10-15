@@ -285,6 +285,8 @@ test('UserManeger', function(d) {
         UserManager.clearUser();
         ok(UserManager.user != user, 'no user');
         d.call();
+
+        UserManager.unbind('UserChange');
     });
     UserManager.login();
 }, 7, 1000).

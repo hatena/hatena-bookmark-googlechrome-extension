@@ -1,0 +1,2072 @@
+Low-Layer Hacks: P2Pアルゴリズム毎のメリット/デメリット 
+[分散] 
+http://lowhacks.blogspot.com/2009/10/p2p_10.html
+Daring Fireball: Markdown Syntax Documentation 
+マークダウン 
+http://daringfireball.net/projects/markdown/syntax
+teideal glic deisbhéalach  » Blog Archive   » Announcing a major revision of the Haskell text library 
+[haskell] textライブラリのパフォーマンスチューニング結果。結果もさることながら、ベンチマークツールのできがとてもよさそう。QuickCheckでテストしてHPCでカバレッジを見てCriterionで性能評価という流れ。 
+http://www.serpentine.com/blog/2009/10/09/announcing-a-major-revision-of-the-haskell-text-library/
+50 Great Examples of Data Visualization 
+[visualization] 
+http://ce.sysu.edu.cn/hope/Education/ShowArticle.asp?ArticleID=4883
+Haskell で圧縮 
+[haskell] モジュール構成 
+http://docs.google.com/present/view?id=dgmtnsn3_158f7zk93fp
+action-permutations 
+[haskell] Applicativeなpermutation。Text.Parsec.Permの代わりに使える？ 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/action-permutations
+RubyのWWW::Mechanizeを解説 for 0.9.3 - きたももんががきたん。 
+[ruby][web] 
+http://d.hatena.ne.jp/kitamomonga/20081209/kaisetsu_for_ver_0_9_ruby_www_mechanize
+Push-pull Functional Reactive Programming on Vimeo 
+[haskell][frp] Conal ElliottによるReactiveのプレゼン動画。動いているConal Elliott初めて見た。 
+http://www.vimeo.com/6686570
+Communicating Haskell Processes 
+[haskell][並行] チャネルを使ったメッセージパッシングがベースの並行ライブラリ。CSPをベースにしているらしい。 
+http://www.cs.kent.ac.uk/projects/ofa/chp/
+Designing a DSL? - Gmane Loom 
+[haskell][edsl] EDSLの設計は何を参考にする？The fun of programmingとかThe Haskell School of ExpressionとかConal Elliottとか。 
+http://thread.gmane.org/gmane.comp.lang.haskell.cafe/64267
+Testing Polymorphic Properties (PDF) 
+[haskell][quickcheck] 
+http://www.cse.chalmers.se/~bernardy/PolyTest.pdf
+Testing polymorphic properties with QuickCheck - Gmane Loom 
+[haskell][quickcheck] 
+http://thread.gmane.org/gmane.comp.lang.haskell.general/17535
+ 類似画像検索システムを作ろう - 人工知能に関する断想録 
+[アルゴリズム][graphics] 
+http://d.hatena.ne.jp/aidiary/20091003/1254574041
+ [reactive] Newbie Difficulty ..    
+[haskell][frp] DeusとかいうFRP実装のサンプル？ 
+http://www.haskell.org/pipermail/reactive/2009-September/000329.html
+teideal glic deisbhéalach  » Blog Archive   » Criterion, a new benchmarking library for Haskell 
+[haskell] ベンチマーク 
+http://www.serpentine.com/blog/2009/09/29/criterion-a-new-benchmarking-library-for-haskell/
+More about Haskell and Intel Concurrent Collections « SoftTalk – multicore and parallel programming 
+[haskell][データ構造] 
+http://softtalkblog.wordpress.com/2009/09/29/more-about-haskell-and-intel-concurrent-collections/
+  Mapreduce & Hadoop Algorithms in Academic Papers 
+[mapreduce] 
+http://atbrox.com/2009/10/01/mapreduce-and-hadoop-academic-papers/
+An Engineer's Guide to Bandwidth (Yahoo! Developer Network Blog) 
+[network] 
+http://developer.yahoo.net/blog/archives/2009/10/a_engineers_gui.html
+Graphalyze 
+[haskell][graph] 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Graphalyze
+Flymake-mode for Haskell (Emacs) - 落書き、時々落学 
+[haskell][emacs] flymake-modeの設定 
+http://d.hatena.ne.jp/jeneshicc/20090309/1236584710
+CmdArgs: Easy Command Line Processing 
+[haskell] CmdArgsの使い方。かなりいけてる。 
+http://community.haskell.org/~ndm/darcs/cmdargs/cmdargs.htm
+Nginx Internals 
+ 
+http://www.slideshare.net/joshzhu/nginx-internals
+Kazuho@Cybozu Labs: パフォーマンスとスケーラビリティのためのデータベースアーキテクチャ (BPStudy#25発表資料) 
+[db] 
+http://developer.cybozu.co.jp/kazuho/2009/09/bpstudy25-bbc6.html
+DEFUN08-talk-notes.pdf 
+[haskell][iteratee] Iteratee I/Oの発表スライド（ノート付き） 
+http://okmij.org/ftp/Haskell/Iteratee/DEFUN08-talk-notes.pdf
+FriendFeed では MySQL を使いどのようにスキーマレスのデータを保存しているのか 
+[db] 
+http://hyuki.com/yukiwiki/wiki.cgi?HowFriendFeedUsesMySqlToStoreSchemaLessData
+MySQL5開拓団 - MySQL 5.0 概観と実験環境作り / KLab株式会社 
+[db] 
+http://www.klab.jp/media/mysql/
+Concurrent Pearl: The Sort Pump « Communicating Haskell Processes 
+[haskell][並行] 
+http://chplib.wordpress.com/2009/09/18/the-sort-pump/
+Change blindness - 変化の見落とし - Radium Software 
+[認知] 面白い 
+http://d.hatena.ne.jp/KZR/20090916/p1
+Impromptu: Scheme ベースのライブコーディング環境 - Radium Software 
+[scheme] 
+http://d.hatena.ne.jp/KZR/20090915/p2
+Hackpact documentation (week 1) «  Alex McLean 
+[haskell] 
+http://yaxu.org/hackpact-documentation/
+Open database life: 新書籍「Linux-DBシステム構築/運用入門」 
+[本][db] 
+http://opendatabaselife.blogspot.com/2009/09/linux-db.html
+Haskell.cz blog  &raquo; Blog Archive   &raquo; Building a shared library in Haskell 
+[haskell] 共有ライブラリの作り方 
+http://blog.haskell.cz/pivnik/building-a-shared-library-in-haskell/
+Rainer's Blog: why you can't build a reliable TCP protocol without app-level acks... 
+[network] RELP導入の意義 
+http://blog.gerhards.net/2008/05/why-you-cant-build-reliable-tcp.html
+Playing with Haskell Data (PDF) 
+[haskell][generics][uniplate] traversalとqueryに特化したsyb的存在のUniplate（aka. Play）紹介スライド 
+http://community.haskell.org/~ndm/downloads/slides-playing_with_haskell_data-18_jan_2007.pdf
+Neil Mitchell's Haskell Blog: Boilerplate considered harmful (Uniplate edition!) 
+[haskell][generics][uniplate][syb] uniplate作者によるuniplateとsybの比較。uniplateは簡潔で速い。sybはuniplateより一般的で強力。 
+http://neilmitchell.blogspot.com/2007/06/boilerplate-considered-harmful-uniplate.html
+Scrap your boilerplate ... in Haskell 
+[haskell][generics][syb] 
+http://www.cs.vu.nl/boilerplate/
+lucille development blog  » Blog Archive   » Scrap your boilerplate 
+[haskell][generics][syb] sybの使用例 
+http://lucille.atso-net.jp/blog/?p=704
+GHC/Type families - HaskellWiki 
+[haskell][型] 
+http://www.haskell.org/haskellwiki/GHC/Type_families
+The Comonad.Reader » Iteratees, Parsec and Monoids (Slides) 
+[haskell][monoid][iteratee] モノイドの適用例と、モノイドを効果的に使ったパーザのスライド。type familiesが出てきてよくわからない。 
+http://comonad.com/reader/2009/iteratees-parsec-and-monoid/
+融合変換による関数プログラムの最適化 (PDF) 
+[haskell][論文] hylomorphismなどに関する日本語の記述有り 
+http://media.itc.u-tokyo.ac.jp/onoue/pub/drthesis02.pdf
+RRDtool 1.2系を使う (PDF) 
+rrdtoolのわかりやすいマニュアル 
+http://www.bonz.squares.net/~takuro/rrdtool1.2-ver1.0.pdf
+category-extras 
+[haskell][圏論] 各種morphismが使えるライブラリ 
+http://hackage.haskell.org/package/category-extras
+Acaralate 
+[haskell][圏論] Functional Programming with Bananas, Lenses, Envelopes and Barbed Wireの簡単なサマリ 
+http://nonowarn.tumblr.com/post/161397967/cata-ana-hylo-para-morphisms
+Recursion Patterns as Hylomorphisms (PDF) 
+[haskell][圏論] hylomorphismを使って再帰のないquicksortを書く 
+http://www.di.uminho.pt/~mac/Publications/DI-PURe-031101.pdf
+A Classic: Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire (PS, see comments for PDF) : programming 
+[haskell][圏論] 再帰のパターン（なんとかmorphism）についてまとまっている論文 
+http://www.reddit.com/r/programming/comments/6q591/A_Classic_Functional_Programming_with_Bananas
+# Adventures with ActiveRecord find # 
+[db][ruby][activerecord] 
+http://www.whatcodecraves.com/articles/2009/04/08/adventures_with_active_record_find/
+Ruby on Rails - ActiveRecord - — ありえるえりあ 
+[db][ruby][activerecord] 
+http://dev.ariel-networks.com/articles/workshop/rails-activerecord/
+Chapter 18. Monad transformers 
+[haskell][monad] monad transformerの性能劣化について。RWHにも書いてあった。 
+http://book.realworldhaskell.org/read/monad-transformers.html#id659676
+ command line flag types are monoids    
+[haskell][型] コマンドライン引数はモノイドである。確かにそうだ。 
+http://www.haskell.org/pipermail/cabal-devel/2007-December/001509.html
+Performance/Monads - HaskellWiki 
+[haskell][monad] monad transformerによる速度劣化問題の対策 
+http://www.haskell.org/haskellwiki/Performance/Monads
+Unstacking Monads for Performance « This sentence is false 
+[haskell][monad] monad transformerによるパフォーマンス劣化について 
+http://obfuscatedcode.wordpress.com/2008/05/17/unstacking-monads-for-performance/
+Lazy IO considered harmful; way to go, Left-fold enumerator! ‎(Haskell‎) 
+[haskell][iteratee] iteratee I/Oとsafe lazy I/O 
+http://sites.google.com/site/haskell/notes/lazy-io-considered-harmful-way-to-go-left-fold-enumerator
+koweycode: some ideas for practical QuickCheck 
+[haskell][テスト] 
+http://koweycode.blogspot.com/2009/07/some-ideas-for-practical-quickcheck.html
+Nathan Sanders : Journal - Profiling in Haskell, part 1 
+[haskell][プロファイリング] 
+http://sandersn.com/blog/index.php?title=profiling_in_haskell_part_1&more=1&c=1&tb=1&pb=1
+λόγος: Setting up a simple test with Cabal 
+[haskell][テスト] Cabalからテストコードを呼ぶ 
+http://gbacon.blogspot.com/2009/06/setting-up-simple-test-with-cabal.html
+Issue 14 «  The Monad.Reader 
+[haskell][graphics] Hieroglyphの解説記事が載ってる 
+http://themonadreader.wordpress.com/2009/07/29/issue-14/
+Grapefruit - HaskellWiki 
+[haskell][frp][gui][graphics] 
+http://www.haskell.org/haskellwiki/Grapefruit#Publications_and_talks
+Functional reactive grapefruit  «  Arch Linux and Haskell 
+[haskell][frp][arrow][gui][graphics] 
+http://archhaskell.wordpress.com/2009/02/15/functional-reactive-grapefruit/
+Grapefruit/Comparison to other FRP libraries - HaskellWiki 
+[haskell][frp] 
+http://www.haskell.org/haskellwiki/Grapefruit/Comparison_to_other_FRP_libraries
+アポロ１１号のソースコード - Radium Software 
+[読み物] 
+http://d.hatena.ne.jp/KZR/20090727/p2
+Nonlinear: Functional Anti-Patterns 
+[haskell] 
+http://trevion.blogspot.com/2006/11/functional-anti-patterns.html
+Haskell (GHC 6.8) における拡張可能なレコードを実現する手法 - Inemuri nezumi diary(2008-05-07) 
+[haskell] 
+http://madscientist.jp/~ikegami/diary/20080507.html#p01
+Structure of a Haskell project - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/Structure_of_a_Haskell_project
+Parsec Parser Testing with QuickCheck « lstephen 
+[haskell][quickcheck][parsec][monad] ParsecをQuickCheckでテストする 
+http://lstephen.wordpress.com/2007/07/29/parsec-parser-testing-with-quickcheck/
+Foldable and Traversable - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/Foldable_and_Traversable
+Simonpj/Talk:FunWithTypeFuns - HaskellWiki 
+[haskell][型] Fun with Type Functions 
+http://haskell.org/haskellwiki/Simonpj/Talk:FunWithTypeFuns
+Unamb - HaskellWiki 
+[haskell] unambiguous choice。⊥ `por` True = Trueみたいな並列論理和を実装できる。実装自体はConcurrent Haskell + unsafePerformIOで。 
+http://haskell.org/haskellwiki/Unamb
+[Haskell-cafe] First go at reactive programming 
+[haskell][frp] FRPを用いたHTTPサーバの実装 
+http://www.mail-archive.com/haskell-cafe@haskell.org/msg36375.html
+Less Sugar/More Meat  » Blog Archive   » Introducing Reactive: Events 
+[haskell][frp] 
+http://netsuperbrain.com/blog/posts/introducing-reactive-events/
+Hieroglyph HOWTO, part I: Sparklines | Hieroglyphics 
+[haskell][graphics] 
+http://vis.renci.org/jeff/2009/02/03/hieroglyph-howto-part-i-sparklines/
+Hieroglyph 
+[haskell][graphics] 2Dグラフィックライブラリ 
+http://hackage.haskell.org/package/Hieroglyph
+Gmane Loom 
+[haskell][データ構造] a b ... z aa ab ... zz aaa ...と効率 
+http://thread.gmane.org/gmane.comp.lang.haskell.cafe/59999
+fmlist 
+[haskell][データ構造] middle-infinite list 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/fmlist
+testrunner 
+[haskell][quickcheck] 
+http://projects.haskell.org/testrunner/
+Functional Fun: What's in a forall? 
+[haskell] 
+http://nibrofun.blogspot.com/2009/06/whats-in-forall.html
+Kazuho@Cybozu Labs: Pacific という名前の分散ストレージを作り始めた件 
+[db][分散] 
+http://developer.cybozu.co.jp/kazuho/2009/06/pacific-18c7.html
+Conal Elliott  » Blog Archive   » Memoizing polymorphic functions - part one 
+[haskell] 
+http://conal.net/blog/posts/memoizing-polymorphic-functions-part-one/
+RRDtool - RRDtool Gallery 
+RRDtoolのギャラリー 
+http://oss.oetiker.ch/rrdtool/gallery/index.en.html
+Haskell/Zippers - Wikibooks, collection of open-content textbooks 
+[haskell][データ構造][zipper] 
+http://en.wikibooks.org/wiki/Haskell/Zippers
+データ再帰という考えと双方向リスト - 取り急ぎブログです 
+[haskell][データ構造] 
+http://d.hatena.ne.jp/Otter_O/20080906/1220690321
+Building recursive data structures in Haskell 
+[haskell][データ構造] data recursionの例 
+http://www.comlab.ox.ac.uk/people/duncan.coutts/papers/recursive_data_structures_in_haskell.pdf
+platform 
+[haskell] まるごとパッケージ 
+http://hackage.haskell.org/platform/
+Stateモナドを絵を描いて理解してみた - oto-oto-oto日記 
+[haskell][monad] 
+http://d.hatena.ne.jp/oto-oto-oto/20090605/1244233749
+checkers 
+[haskell][quickcheck] 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/checkers
+Simply efficient functional reactivity 
+[haskell][frp] 
+http://conal.net/papers/simply-reactive/
+Cisco SNMP Object Navigator 
+OID <=> オブジェクト名検索 
+http://tools.cisco.com/Support/SNMP/do/BrowseOID.do
+OpenLLDP - Open Source implementation of IEEE 802.1AB 
+[network] LLDPの実装 
+http://openlldp.sourceforge.net/
+SCTPによるネットワーキングの向上 
+[nework] 
+http://www.ibm.com/developerworks/jp/linux/library/l-sctp/
+QuickCheck as a test set generator - HaskellWiki 
+[haskell][quickcheck] variant 
+http://www.haskell.org/haskellwiki/QuickCheck_as_Test_Set_Generator
+SmallCheck 
+[haskell][quickcheck] Lazy SmallCheck: automatic exhaustive testing for small value 
+http://www.cs.york.ac.uk/fp/smallcheck/
+teideal glic deisbhéalach  » Blog Archive   » The basics of applicative functors, put to practical work 
+[haskell] 
+http://www.serpentine.com/blog/2008/02/06/the-basics-of-applicative-functors-put-to-practical-work/
+Generalised algebraic datatype - HaskellWiki 
+[haskell][gadt][型] 
+http://www.haskell.org/haskellwiki/Generalised_algebraic_datatype
+Anamorphisms in Haskell « Ulisses Costa Blog 
+[haskell] 
+http://ulissesaraujo.wordpress.com/2009/04/08/anamorphisms-in-haskell/
+Hylomorphisms in Haskell « Ulisses Costa Blog 
+[haskell] 
+http://ulissesaraujo.wordpress.com/2009/04/09/hylomorphisms-in-haskell/
+EventuallyConsistent - 結果整合性 
+[db][分散] 
+http://www.hyuki.com/yukiwiki/wiki.cgi?EventuallyConsistent
+gregory david collins: Building a website with Haskell, part 2 
+[haskell][web] Happstack利用例その2 
+http://gregorycollins.net/posts/2009/03/30/building-a-website-part-2
+gregory david collins: Building a website with Haskell, part 1 
+[haskell][web] Happstack利用例 
+http://gregorycollins.net/posts/2009/03/28/building-a-website-part-1
+YouTube - Vacuum: visualizing Haskell data structures live: Part 2 
+[haskell] データ構造を可視化する Part 2 
+http://www.youtube.com/watch?v=A1wtQ_mYHHo
+YouTube - Vacuum: visualize Haskell data structures live 
+[haskell] データ構造を可視化する 
+http://www.youtube.com/watch?v=X4-212uMgy8
+Advanced Bash-Scripting Guide 
+[bash] 
+http://www.tldp.org/LDP/abs/html/
+haskell.cgi?HowTo%3aProgrammingEnvironment#H-uvp2e7 
+[haskell][ghc] haskell-modeで^Jが出たときはghci-haskelineを使う。 
+http://www.sampou.org/cgi-bin/haskell.cgi?HowTo%3aProgrammingEnvironment#H-uvp2e7
+第25回　Haskell流の例外処理を学ぶ：ITpro 
+[haskell] Extensible Exceptionの紹介 / Real World Haskellは古い例外処理方法を使っているらしい。 
+http://itpro.nikkeibp.co.jp/article/COLUMN/20081104/318426/
+ViewPatterns - GHC - Trac 
+[haskell] 高度なパターンマッチング 
+http://hackage.haskell.org/trac/ghc/wiki/ViewPatterns
+ExtensibleExceptions - Haskell Prime - Trac 
+[haskell] throwDynはdeprecatedになるみたい。throwDynとioErrorをくっつけてExtensible Exceptionになる？ / GHC 6.10.1には実装済みのよう。 
+http://hackage.haskell.org/trac/haskell-prime/wiki/ExtensibleExceptions
+Gmane -- Mail To News And Back Again 
+[haskell] Haskellにエラーハンドリングの方法が多すぎるという指摘 
+http://article.gmane.org/gmane.comp.lang.haskell.libraries/6382
+8 ways to report errors in Haskell 
+[haskell] エラーハンドリングの方法。文字列ならMonadのfailメソッドを使う。それ以外では、IOモナド内ではthrowDynを、その他のモナドならモナド変換子を使うべし。 
+http://www.randomhacks.net/articles/2007/03/10/haskell-8-ways-to-report-errors
+[ANN] Safe Lazy IO in Haskell 
+[haskell] 決定的で例外を扱いやすくリソース管理の正確なI/O 
+http://article.gmane.org/gmane.comp.lang.haskell.general/16977
+Avoiding IO - HaskellWiki 
+[haskell] 一工夫してIOを避ける 
+http://www.haskell.org/haskellwiki/Avoiding_IO
+Newtype - HaskellWiki 
+[haskell] dataとnewtypeの違い 
+http://www.haskell.org/haskellwiki/Newtype
+Necrobious': A fun example of Haskell's newtype 
+[haskell] newtypeでtype safeに。generalized newtype derivingも。 
+http://necrobious.blogspot.com/2009/03/fun-example-of-haskells-newtype.html
+Debian Administration :: An introduction to bash completion: part 1 
+[bash] bash-completionの書き方 
+http://www.debian-administration.org/articles/316
+New paper: Runtime Support for Multicore Haskell &laquo; GHC Mutterings 
+[haskell][並列] 
+http://ghcmutterings.wordpress.com/2009/03/03/new-paper-runtime-support-for-multicore-haskell/
+If you need speed, don't talk to main! - Data.Random 
+[haskell][平行] 
+http://axman6.homeip.net/blog/2009/03/if-you-need-speed-dont-talk-to-main.html
+The Yi Blog: Lazy and Incremental Parsing: the paper 
+[haskell][パーザ] 
+http://yi-editor.blogspot.com/2009/03/lazy-and-incremental-parsing-paper.html
+Playing with GHC’s parallel runtime « Control.Monad.Writer 
+[haskell][ghc][並列] 
+http://donsbot.wordpress.com/2009/03/04/playing-with-ghcs-parallel-runtime/
+FP Lunch  » Blog Archive   » Breadth first labelling 
+[haskell] 
+http://sneezy.cs.nott.ac.uk/fplunch/weblog/?p=205
+Welcome to LSB Navigator 
+[linux] LSBに準拠しているかどうかチェックできる 
+http://dev.linuxfoundation.org/navigator/commons/welcome.php
+Sourcecode and documentation for libnl - version 1.1-5 libnl Documentation 
+[network][socket] netlinkのライブラリlibnlのドキュメント 
+http://libnl.sourcearchive.com/documentation/1.1-5/main.html
+Manpage of RTNETLINK 
+[network][socket] 
+http://www.linux.or.jp/JM/html/LDP_man-pages/man7/rtnetlink.7.html
+koweycode: implementing join in terms of (>>=) 
+[haskell][monad] 
+http://koweycode.blogspot.com/2009/02/implementing-join-in-terms-of.html
+Manipulating the Networking Environment Using RTNETLINK 
+[network][socket] netlink socketの使い方 
+http://www.linuxjournal.com/article/8498
+Random Permutations and Sorting 
+[haskell] 
+http://apfelmus.nfshost.com/random-permutations.html
+splonderzoek: Incremental fold, a design pattern 
+[haskell] How to Refold a Map (The Monad Reader) 
+http://splonderzoek.blogspot.com/2009/02/incremental-fold-design-pattern.html
+Gmane -- Mail To News And Back Again 
+[haskell][型][gadt] 
+http://article.gmane.org/gmane.comp.lang.haskell.cafe/52948
+SOCALFP Presentation Slides: “Happstack is better than X” « the Happstack project blog 
+[haskell] 
+http://blog.happstack.com/2009/02/18/socalfp-presentation-slides-happstack-is-better-than-x/
+Using Mutable Arrays for Faster Sorting « Haskellville 
+[haskell] 
+http://lindstroem.wordpress.com/2009/02/19/using-mutable-arrays-for-faster-sorting/
+The Typeclassopedia — request for feedback « blog :: Brent -> [String] 
+[haskell][型] 
+http://byorgey.wordpress.com/2009/02/16/the-typeclassopedia-request-for-feedback/
+JSDeferred の parallel が直接繋げられない理由 - 冬通りに消え行く制服ガールは、夢物語にリアルを求めない。 - subtech 
+[javascript] 
+http://subtech.g.hatena.ne.jp/cho45/20080125/1201268562
+JS: コンテナとしての Object のキーの列挙 - 冬通りに消え行く制服ガールは、夢物語にリアルを求めない。 - subtech 
+[javascript] 
+http://subtech.g.hatena.ne.jp/cho45/20071229/1198873804
+Greasemonkey スクリプトの構成 - 冬通りに消え行く制服ガールは、夢物語にリアルを求めない。 - subtech 
+[javascript][greasemonkey] 
+http://subtech.g.hatena.ne.jp/cho45/20071207/1197038494
+uneval - 冬通りに消え行く制服ガールは、夢物語にリアルを求めない。 - subtech 
+[javascript] 
+http://subtech.g.hatena.ne.jp/cho45/20071125/1195964965
+autocomplpop.vim - 冬通りに消え行く制服ガールは、夢物語にリアルを求めない。 - subtech 
+[vim] 
+http://subtech.g.hatena.ne.jp/cho45/20071111/1194766579
+IT戦記 - JavaScript を学ぶ際に一番重要なのに、誤解されがちな setTimeout 系の概念 
+[javascript] 
+http://d.hatena.ne.jp/amachang/20060910/1157911122
+JavaScript はどのように実行されるか - IT戦記 
+[javascript] 
+http://d.hatena.ne.jp/amachang/20081025/1224944124
+motemen's arrow-js at master — GitHub 
+[javascript][arrow] 
+http://github.com/motemen/arrow-js/tree/master
+Shibuya.js in Kyoto - arrow-js - GitHub 
+[javascript][arrow] 
+http://wiki.github.com/motemen/arrow-js/shibuya-js-in-kyoto
+JSDeferred - CodeRepos::Share - Trac 
+[javascript] 
+http://coderepos.org/share/wiki/JSDeferred
+Netlink Sockets - Overview  
+[socket] netlinkの説明 
+http://qos.ittc.ku.edu/netlink/html/
+Understanding And Programming With Netlink Sockets 
+[socket] netlink socketの説明(PDF) 
+http://people.redhat.com/nhorman/papers/netlink.pdf
+auto-complete.el for Haskell - Inemuri nezumi diary(2009-02-15) 
+[haskell][emacs] 
+http://madscientist.jp/~ikegami/diary/20090215.html#p01
+XPath Tutorial 
+[javascript] 
+http://www.zvon.org/xxl/XPathTutorial/General/examples.html
+An Introduction to Mock Objects in Ruby 
+[ruby] モックオブジェクトとは。Mochaの使い方。 
+http://blog.floehopper.org/presentations/lrug-mock-objects-2007-07-09/
+Martin Sulzmann's Blog: Transactional boosting 
+[haskell][stm][並行] 
+http://sulzmann.blogspot.com/2008/11/transactional-boosting.html
+github に gem を公開する - 川o・-・）＜2nd life 
+[ruby] githubのが簡単らしい 
+http://d.hatena.ne.jp/secondlife/20080520/1211286537
+川o・-・）＜2nd life - RubyGems パッケージの作り方 - rubyforge 登録まで 
+[ruby] rubyforgeに登録 
+http://d.hatena.ne.jp/secondlife/20061106/1162785661
+RDoc による自動ドキュメント生成 
+[ruby] ドキュメント生成 
+http://ruby.gfd-dennou.org/tutorial/rdoc/
+Dive Into Greasemonkey 
+[greasemonkey] 
+http://diveintogreasemonkey.org/
+diagrams : Compositional 2D Graphics in Haskell 
+[haskell][graphics] 
+http://code.haskell.org/diagrams/
+cutagem documentation 
+[ruby] Rubyのパッケージを作るのはこれがいいらしい 
+http://cutagem.rubyforge.org/
+Programming Interfaces Guide 
+[socket] ソケットプログラミング 
+http://docsun.cites.uiuc.edu/sun_docs/C/solaris_9/SUNWdev/NETPROTO/p40.html
+LoveRubyNet Wiki: RubyExtensionProgrammingGuide 
+[ruby] RubyのC拡張ライブラリの作り方 
+http://i.loveruby.net/w/RubyExtensionProgrammingGuide.html
+ad Hominem: Quoted Strings with Regular Expressions. 
+[正規表現] "括られた"文字列に対する正規表現 
+http://ad.hominem.org/log/2005/05/quoted_strings.php
+笑わないプログラマ　Spinlockと便器 
+[並行] 
+http://s03.2log.net/home/programmer/archives/blog11.html
+Inemuri nezumi diary(2009-01-08) 
+[haskell] unsafePerformIO の使用は限定されています。ご利用は計画的に。/ GetOptの効果的な使い方 
+http://madscientist.jp/~ikegami/diary/20090108.html#p01
+Haskell者セブン - Inemuri nezumi diary(2009-01-19) 
+[人][haskell] 彼は、アポなし突撃で「今、あなたは何が問題だと考えているのか」「困っていることは何か」「解決するためのアイデアを簡単に説明してみよ」などとジョーク交じりで要求し、適切かつ知性を感じさせるアドバイスを授ける。熟練した John がこれらのことを行うためには、たったの15分しか必要ない。 
+http://madscientist.jp/~ikegami/diary/20090119.html#p02
+The Universe of Discourse : Triples and Closure 
+[haskell][monad][圏論] 
+http://blog.plover.com/math/monad-closure.html
+Paper Details 
+[haskell] worker wrapper transformationの論文 
+http://www.ittc.ku.edu/~andygill/paper.php?label=WorkerWrapper08
+Functional Thinking » Memoization in GHC 
+[ghc][haskell] 元の関数定義を変えることなくworker wrapperと書き換え規則でメモ化する 
+http://blog.unsafeperformio.com/?p=34
+A Neighborhood of Infinity: Fast incremental regular expression matching with monoids 
+[haskell][正規表現] 
+http://sigfpe.blogspot.com/2009/01/fast-incremental-regular-expression.html
+monoid-fingertree.html 
+[haskell][データ構造] 
+http://apfelmus.nfshost.com/monoid-fingertree.html
+Conal Elliott  » Blog Archive   » Lazier function definitions by merging partial values 
+[haskell] 
+http://conal.net/blog/posts/lazier-function-definitions-by-merging-partial-values/
+How to make code least strict? - fa.haskell | Google グループ 
+[haskell] コードをできるだけlazyに保つには 
+http://groups.google.com/group/fa.haskell/browse_thread/thread/56f1ec385cfb9394
+Term::ANSIColor for Ruby 
+[ruby] 
+http://term-ansicolor.rubyforge.org/
+第15回 型からプログラムを当てる：ITpro 
+[型] 'aや'bなどの型変数と関数型t1 -> t2および組型t1 * t2だけからなる型を持つ関数については，関数の型と値だけから「ソースコード」を復元することができる 
+http://itpro.nikkeibp.co.jp/article/COLUMN/20071005/283903/
+ Handling explicit and implicit recusion in Haskell data  - nomeata’s mind shares 
+[haskell][データ構造] 
+http://www.joachim-breitner.de/blog/archives/316-Handling-explicit-and-implicit-recusion-in-Haskell-data.html
+ Haskell GADTで存在型から型を復元 - らくがきえんじん 
+[haskell][型] existential type + GADT 
+http://d.hatena.ne.jp/syd_syd/20081226/p2
+Maintaining laziness - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/Maintaining_laziness
+Yampa vs. Reactive - gmane.comp.lang.haskell.cafe 
+[haskell][frp] 
+http://comments.gmane.org/gmane.comp.lang.haskell.cafe/49021
+Conal Elliott  » Blog Archive   » Smarter termination for thread racing 
+[haskell][並行] 
+http://conal.net/blog/posts/smarter-termination-for-thread-racing/
+ Haskell 型クラスで型推論を制御 (zipWith編) - らくがきえんじん 
+[haskell][型] 
+http://d.hatena.ne.jp/syd_syd/20081211/p1
+ Haskell 型レベル計算で継続渡し - らくがきえんじん 
+[haskell][型] 
+http://d.hatena.ne.jp/syd_syd/20081209/p1
+Pointless fun | mh 
+[haskell] 
+http://matt.immute.net/content/pointless-fun
+Less Sugar/More Meat  &raquo; Blog Archive   &raquo; Introducing Reactive: Behaviors 
+[haskell][frp] 
+http://netsuperbrain.com/blog/posts/introducing-reactive-behaviors/
+Conal Elliott >> Sequences, segments, and signals 
+[haskell][frp] 
+http://conal.net/blog/posts/sequences-segments-and-signals/
+Haskell Programming: Types 
+[haskell][monad] 
+http://okmij.org/ftp/Haskell/types.html#state-algebra
+Haskell Monad Tutorial 
+[haskell][monad] 
+http://www.muitovar.com/monad/moncow.xhtml
+Functional Pearl: Trees « This sentence is false 
+[haskell] 
+http://obfuscatedcode.wordpress.com/2008/02/16/functional-pearl-trees/
+Conal Elliott � Merging partial values 
+[haskell] 
+http://conal.net/blog/posts/merging-partial-values/
+Conal Elliott � Functional concurrency with unambiguous choice 
+[haskell][並行] ambiguous choice: undefined `por` True => Trueとか0 `ptimes` undefined => 0とか 
+http://conal.net/blog/posts/functional-concurrency-with-unambiguous-choice/
+Arrays without bounds - blog 21 
+[haskell][データ構造] 
+http://twan.home.fmf.nl/blog/haskell/UnboundedArray.details
+Comparing concurrent linked-list implementations in Haskell � GHC Mutterings 
+[haskell][並行] 
+http://ghcmutterings.wordpress.com/2008/11/14/comparing-concurrent-linked-list-implementations-in-haskell/
+auto-complete.elで自動的に候補を出した状態で補完する（絞り込み・候補選択対応） - ’(rubikitch wanna be (a . lisper)) 
+[emacs] 
+http://d.hatena.ne.jp/rubikitch/20081109/autocomplete
+ParserCombinators < HUT < TWiki 
+[パーザ] 
+http://www.cs.uu.nl/wiki/bin/view/HUT/ParserCombinators
+Memory efficiency questions for real-time graphics - gmane.comp.lang.haskell.cafe 
+[haskell] 
+http://comments.gmane.org/gmane.comp.lang.haskell.cafe/46951
+External Sort: Sort a 10-million integer file with just 256M of ram. - gmane.comp.lang.haskell.cafe 
+[haskell] 
+http://permalink.gmane.org/gmane.comp.lang.haskell.cafe/46776
+Conal Elliott � Simpler, more efficient, functional linear maps 
+[haskell][データ構造] 
+http://conal.net/blog/posts/simpler-more-efficient-functional-linear-maps/
+Conal Elliott � Composing memo tries 
+[haskell] 
+http://conal.net/blog/posts/composing-memo-tries/
+Conal Elliott � Elegant memoization with functional memo tries 
+[haskell] 
+http://conal.net/blog/posts/elegant-memoization-with-functional-memo-tries/
+Abstract Absurdities: Some first steps with Data.Reactive 
+[haskell][frp] 
+http://abstractabsurd.blogspot.com/2008/09/some-first-steps-with-datareactive.html
+Galois › Blog › Blog � Left-fold enumerators: a safe, expressive and efficient I/O interface for Haskell 
+[haskell] 
+http://www.galois.com/blog/2008/09/12/left-fold-enumerators-a-safe-expressive-and-efficient-io-interface-for-haskell/
+Streams and Iteratees - Incremental multi-level input processing with left-fold enumerator: predictable, high-performance, safe, and elegant 
+[haskell][iteratee] 
+http://okmij.org/ftp/Streams.html#iteratee
+2008-10-03 - らくがきえんじん 
+[haskell][型] 
+http://d.hatena.ne.jp/syd_syd/20081003#p1
+aggressively optimized for insanity - Data Parallel Haskell fun 
+[haskell][ghc][並列][dph] 
+http://empitsu-kami.livejournal.com/2075.html
+λ Tony’s blog λ � Blog Archive � 20 Intermediate Haskell Exercises 
+[haskell][型] 
+http://blog.tmorris.net/20-intermediate-haskell-exercises/
+待ち行列に入門した 
+[アルゴリズム] 
+http://steps.dodgson.org/?date=20080812
+Typed Logic: Fuzzy unification parser in Haskell 
+[haskell][パーザ] 
+http://logicaltypes.blogspot.com/2008/09/fuzzy-unification-parser-in-haskell.html
+The initial view on typed sprintf and sscanf 
+[haskell][型][gadt] 型付きsprintf/sscanf 
+http://article.gmane.org/gmane.comp.lang.haskell.general/16405
+Fast parallel binary trees for the shootout: Control.Parallel.Strategies FTW  
+[haskell][並列] language shootoutのbinary treeをControl.Parallel.Strategiesで高速化 
+http://article.gmane.org/gmane.comp.lang.haskell.cafe/43968
+FP Lunch � Blog Archive � Modular Monad Transformers 
+[monad][haskell] 
+http://sneezy.cs.nott.ac.uk/fplunch/weblog/?p=111
+Typed Logic: Scanner-parsers II: State Monad Transformers 
+[haskell][パーザ][monad] 
+http://logicaltypes.blogspot.com/2008/08/scanner-parsers-ii-state-monad.html
+Typed Logic: Scanner-parsers I: lifting functions 
+[haskell][パーザ][monad] 
+http://logicaltypes.blogspot.com/2008/08/scanner-parsers-i-lifting-functions.html
+Towards Hard Real-Time Erlang | Lambda the Ultimate 
+[erlang][並行] 
+http://lambda-the-ultimate.org/node/2954
+特集：memcachedを知り尽くす｜gihyo.jp … 技術評論社 
+[web] 
+http://gihyo.jp/dev/feature/01/memcached
+The Comonad.Reader � Kan Extensions 
+[haskell][monad] 
+http://comonad.com/reader/2008/kan-extensions/
+Informative Null Pointer (1) - d.y.d. 
+あとでよむ 
+http://www.kmonos.net/wlog/88.html#_2233080818
+Typed Logic: A Haskell Rule Engine 
+[haskell][monad] 
+http://logicaltypes.blogspot.com/2008/06/haskell-rule-engine.html
+Typed Logic: Composing functions with Arrows 
+[haskell][arrow] 
+http://logicaltypes.blogspot.com/2008/05/composing-functions-with-arrows.html
+This FTP site 
+[haskell] ためになるリンク集的な何か 
+http://okmij.org/ftp/
+A fancier Get monad or two  a la binary and binary strict  
+[haskell] bianaryパッケージ 
+http://article.gmane.org/gmane.comp.lang.haskell.libraries/9691
+GHC/FAQ - HaskellWiki 
+[ghc][haskell] 便利なtips 
+http://www.haskell.org/haskellwiki/GHC:FAQ
+mod_perlで親プロセスとのCopy on Writeな共有メモリを増やす方法。 - Perlとかmemoとか日記とか。 
+[perl] 必要なモジュール一覧を取得 
+http://d.hatena.ne.jp/hideden/20080409/1207740439
+過去日記２００４／１０ 
+[読み物] 「いろんなことをたくさん勉強すれば物知りになって、知らないことやわからないことが少なくなると思いますか」 / 私の丸は今どのくらいの大きさだろう 
+http://www1.odn.ne.jp/mushimaru/diary/dry0410.htm
+Perlオブジェクト指向プログラミング | melma! 
+[perl][oop] 
+http://www.melma.com/backnumber_14785_1152965/
+チェビシェフの不等式 - Wikipedia 
+[統計] 文章の長さ: 平均1000文字、標準偏差: 200文字 ⇒ 少なくとも75%の文章が600から1400文字の長さである（k = 2）。 
+http://ja.wikipedia.org/wiki/%E3%83%81%E3%82%A7%E3%83%93%E3%82%B7%E3%82%A7%E3%83%95%E3%81%AE%E4%B8%8D%E7%AD%89%E5%BC%8F
+The Comonad.Reader � Recursion Schemes: A Field Guide 
+[haskell][圏論] 
+http://comonad.com/reader/2008/recursion-schemes/
+Schwartzian transform in Haskell - Vox 
+[haskell] Haskellでシュワルツ変換。どの程度効果があるのかな。 
+http://osfameron.vox.com/library/post/schwartzian-transform-in-haskell.html?_c=feed-atom
+Bryan O’Sullivan: Concurrent and multicore programming in Haskell 
+[haskell][並列][並行] bayfpの動画。Control.Parallel → NDP → STM → 質疑応答。 
+http://blip.tv/file/913860
+This Blog Can Also Be A Hat : Writing a Regular Expression parser in Haskell: Part 3 
+[haskell][パーザ] 
+http://blogs.msdn.com/matt/archive/2008/06/09/writing-a-regular-expression-parser-in-haskell-part-3.aspx
+This Blog Can Also Be A Hat : Writing a Regular Expression parser in Haskell: Part 2 
+[haskell][パーザ] 
+http://blogs.msdn.com/matt/archive/2008/06/02/writing-a-regular-expression-parser-in-haskell-part-2.aspx
+This Blog Can Also Be A Hat : Writing a Regular Expression parser in Haskell: Part 1 
+[haskell][パーザ] 
+http://blogs.msdn.com/matt/archive/2008/06/01/writing-a-regular-expression-parser-in-haskell-part-1.aspx
+A Shortcut Fusion Rule for Circular Program Calculation 
+[haskell] 論文のほう (PDF) 
+http://www.fing.edu.uy/~pardo/papers/hw07.pdf
+A Shortcut Fusion Rule for Circular Program Calculation (slides) 
+[haskell] sort $ map (+6) xsをfuseする (PDF) 
+http://cs.ioc.ee/~tarmo/tday-vanaoue/pardo-slides.pdf
+Haskell hacking - Haskell as fast as C: working at a high altitude for low level performance 
+[haskell][ghc] 前回の続き。fusionが肝。 
+http://cgi.cse.unsw.edu.au/~dons/blog/2008/06/04#fast-fusion
+Serialisation and compression with Data Binary - HaskellWiki 
+[haskell][ffi] Data.BinaryやFFIの効果的な使い方 
+http://www.haskell.org/haskellwiki/Serialisation_and_compression_with_Data_Binary
+kpreid: Zippers for evaluation and program analysis 
+[haskell] 
+http://kpreid.livejournal.com/9816.html
+Recursive functions and constant parameter closures (inlining/strictness analyzer question) - gmane.comp.lang.haskell.glasgow.user 
+[haskell][ghc] 
+http://comments.gmane.org/gmane.comp.lang.haskell.glasgow.user/14518
+OCamlでランクn多相 - ヒビルテ(2008-05-29) 
+[haskell][ocaml][型] 
+http://www.tom.sfc.keio.ac.jp/~sakai/d/?date=20080529#p01
+嘘のような、本当の話 - Garbage Collection(2008-05-23) 
+[読み物] 
+http://www.lizard-tail.com/isana/diary/?date=20080523
+Moose - A complete modern object system for Perl 5 
+[perl] 
+http://www.iinteractive.com/moose/
+Neil Mitchell's Haskell Blog: Haskell and Performance 
+[haskell] 本気でCに勝とうとしている人たちがいるのがすばらしい 
+http://neilmitchell.blogspot.com/2008/05/haskell-and-performance.html
+HackageDB: ghc-core-0.1 
+[ghc][haskell] 読みやすいcore言語を吐いてくれるghcのラッパー 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/ghc-core
+Haskell hacking - Write Haskell as fast as C: exploiting strictness, laziness and recursion 
+[haskell] sum xs / fromIntegral (length xs)は何故メモリリークするかから始まり、Cに匹敵する速度まで改善。でも、こんなimperativeなコード書きたくない。続編に期待 
+http://cgi.cse.unsw.edu.au/~dons/blog/2008/05/16#fast
+Well Quite 
+[haskell] session typeのチュートリアル 
+http://wellquite.org/sessions/tutorial_1.html
+Real World Haskell 
+[haskell][本] 
+http://book.realworldhaskell.org/beta/index.html
+eigenclass - Comparing lightweight threads 
+[haskell][ghc][並行] 
+http://eigenclass.org/hiki/lightweight-threads-with-lwt
+GLPKで楽しく最適化しよう！ 
+[数学] 
+http://mukun_mmg.at.infoseek.co.jp/mmg/glpk/index.htm
+LispUser.net : /lisp/2006-06-03-22-40.html 
+[lisp][mop] 
+http://lispuser.net/memo/lisp/2006-06-03-22-40.html
+Scheme:MOP:InstancePool 
+[scheme][mop] 
+http://practical-scheme.net/wiliki/wiliki.cgi?Scheme%3aMOP%3aInstancePool
+Scheme:MOP:パラメタライズドクラス 
+[scheme][mop] 
+http://practical-scheme.net/wiliki/wiliki.cgi?Scheme%3aMOP%3a%e3%83%91%e3%83%a9%e3%83%a1%e3%82%bf%e3%83%a9%e3%82%a4%e3%82%ba%e3%83%89%e3%82%af%e3%83%a9%e3%82%b9
+Nabble - Haskell - Haskell-Cafe - Optimizing a high-traffic network architecture 
+[haskell][ghc][c10k] 
+http://www.nabble.com/Optimizing-a-high-traffic-network-architecture-td1943389.html
+Hayoo! 
+[haskell] Hoogleをインクリメンタルサーチ対応させた感じの検索エンジン。対応ライブラリが多いこと・ソースへのリンクがあるのが良い。ただし、遅い。 
+http://holumbus.fh-wedel.de/hayoo/hayoo.html
+The dreams that stuff is made of � IO Monad: The Continuation Presentation 
+[haskell][monad][gadt] 
+http://luqui.org/blog/archives/2008/03/29/io-monad-the-continuation-presentation/
+Useful MySQL Stuff 
+[db] 
+http://www.faemalia.net/mysqlUtils/
+separating IO from logic -- example - Conal's Journal 
+[haskell] 
+http://journal.conal.net/#%5B%5Bseparating%20IO%20from%20logic%20--%20example%5D%5D
+Tangible Value - HaskellWiki 
+[haskell] 
+http://haskell.org/haskellwiki/TV
+GlusterFS - GlusterDocumentation 
+[分散] わりとドキュメントが充実している 
+http://www.gluster.org/docs/index.php/GlusterFS
+GlusterFS FAQ - GlusterDocumentation 
+[分散] わりとドキュメントが充実している 
+http://www.gluster.org/docs/index.php/GlusterFS_FAQ
+Flapjaxチュートリアル 
+[frp][javascript] Flapjaxのドキュメント日本語訳 
+http://www.geocities.jp/lethevert/flapjax/tutorial.html
+Type-driven testing in Haskell (Simon Peyton Jones) 
+[haskell][テスト] 
+http://www.foomongers.org.uk/videos/spj-typedriventestinginhaskell.html
+Google Research Publication: BigTable 
+[web] 
+http://labs.google.com/papers/bigtable.html
+Flickr Architecture | High Scalability 
+[web] 
+http://highscalability.com/flickr-architecture
+GHC/Type families - HaskellWiki 
+[haskell][ghc][型] 
+http://www.haskell.org/haskellwiki/GHC/Indexed_types
+超立方体 - Wikipedia 
+[数学] hypercubeのこと 
+http://ja.wikipedia.org/wiki/%E8%B6%85%E7%AB%8B%E6%96%B9%E4%BD%93
+Sorting Network (1) - 汁ごはん 
+[アルゴリズム] 
+http://d.hatena.ne.jp/silphire/20061014/1160820908
+Sorting network - Wikipedia, the free encyclopedia 
+[アルゴリズム] 
+http://en.wikipedia.org/wiki/Sorting_network
+Unification 
+ 
+http://www2.biglobe.ne.jp/~optimist/computing/unification.html
+Library/CC-delcont - HaskellWiki 
+[haskell][継続] delimited continuation 
+http://www.haskell.org/haskellwiki/Library/CC-delcont
+Delimited Continuation with do-notation - らくがきえんじん 
+[haskell][継続] 
+http://d.hatena.ne.jp/syd_syd/20080227#p2
+限定継続 in Haskell 98 by Oleg Kiselyov - らくがきえんじん 
+[haskell][継続] 
+http://d.hatena.ne.jp/syd_syd/20080227#p1
+teideal glic deisbh�alach � Blog Archive � FileManip, an expressive Haskell library for manipulating files 
+[haskell] 便利 
+http://www.serpentine.com/blog/2007/05/01/filemanip-an-expressive-haskell-library-for-manipulating-files/
+weblog.masukomi.org Using Darcs WITH Subversion / CVS 
+ 
+http://weblog.masukomi.org/2007/3/29/using-darcs-with-subversion-cvs
+Programming Languages for Distributed Applications 
+[分散][oz] 
+http://www.ueda.info.waseda.ac.jp/~takagi/seminars/plfda.html
+Conal Elliott � Future values 
+[haskell][frp] ここから始まるFRPな解説 
+http://conal.net/blog/posts/future-values/
+Reactive - HaskellWiki 
+[haskell][frp] 
+http://haskell.org/haskellwiki/Reactive
+Conal Elliott's home page 
+[haskell][人][frp] FRPがメインの人。Franの中の人？ 
+http://conal.net/
+LatencyTOP 
+[linux] 
+http://www.latencytop.org/
+Constructing List Homomorphism from Left and Right Folds | Niche Computing Science 
+[haskell] 
+http://www.iis.sinica.edu.tw/~scm/2008/constructing-list-homomorphism/
+parsec3 pre-release [attempt 2] - gmane.comp.lang.haskell.cafe 
+[haskell][パーザ] 新らしいParsec 
+http://permalink.gmane.org/gmane.comp.lang.haskell.cafe/36034
+Functional Thinking � The Haskell Program Coverage Toolkit (part 1) 
+[haskell] 
+http://blog.unsafeperformio.com/?p=18
+Muad`Dib: Counting Infinity 
+[haskell] 
+http://muaddibspace.blogspot.com/2008/01/counting-infinity.html
+Text.ParserCombinators.ByteStringParser 
+[haskell][パーザ] ByteStringなParsec。Lucuのよりもちゃんとしている。乗り換えようかな。 
+http://darcs.serpentine.com/bytestringparser/dist/doc/html/bytestringparser/Text-ParserCombinators-ByteStringParser.html
+Don Stewart 
+[人][haskell] ByteString, Haskell Weekly News, lambdabot, hs-pluginsなどの中の人。並列化の話もよく出てくる。 
+http://cgi.cse.unsw.edu.au/~dons/
+Haskell hacking - Use those extra cores and beat C today! (Parallel Haskell redux) 
+[haskell][並列] fibの引数で粒度を調整しているけど、こんなの書きたくないよなあ。 
+http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core
+Haskell hacking - No more exceptions: debugging Haskell code with GHCi 
+[haskell][デバッグ] 
+http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/14#no-exceptions
+Haskell hacking - Roll Your Own Window Manager: Tracking Focus with a Zipper 
+[haskell][データ構造][zipper] xmonadでzipperを使っているらしい 
+http://cgi.cse.unsw.edu.au/~dons/blog/2007/05/17#xmonad_part1b_zipper
+Haskell hacking - Programming Haskell: String processing (with a dash of concurrency) 
+[haskell][並行] 
+http://cgi.cse.unsw.edu.au/~dons/blog/2006/12/17#programming-haskell-part-2
+Gata Durmiente - diario 
+[haskell] Haskellで書いたhttpd 
+http://ccm.sherry.jp/cgi-bin/libroverde/libroverde.cgi/read/2007/6/22
+HackageDB: stringsearch-0.2 
+[haskell] 
+http://hackage.haskell.org/cgi-bin/hackage-scripts/package/stringsearch-0.2
+Data.List.Stream 
+[データ構造][haskell] stream fusionを使ったListの代替 
+http://www.cse.unsw.edu.au/~dons/streams.html
+A Web Monad 
+[monad][web] 
+http://www.alpheccar.org/en/posts/show/87
+Mathematical Pamphlet � Calculating the reflect-rotate-translate normal form for an isometry of the plane in Haskell, and verifying it with QuickCheck. 
+[haskell][テスト] QuickCheck 
+http://www.kennknowles.com/blog/2007/12/03/calculating-the-reflect-rotate-translate-normal-form-for-an-isometry-of-the-plane-in-haskell-and-verifying-it-with-quickcheck/
+Neil Mitchell - Supero 
+[haskell][ghc] 
+http://www-users.cs.york.ac.uk/~ndm/supero/
+ConsistentHashing - コンシステント・ハッシュ法 
+[分散] なにこれ 
+http://www.hyuki.com/yukiwiki/wiki.cgi?ConsistentHashing
+Haskell raytracer at nobugs.org 
+[haskell] 
+http://www.nobugs.org/developer/htrace/index.html
+Things that amuse me 
+[haskell] 
+http://augustss.blogspot.com/2007/11/benchmarking-ray-tracing-haskell-vs.html
+EmacsWiki: FlymakeHaskell 
+[haskell][emacs] 
+http://emacswiki.org/cgi-bin/emacs/FlymakeHaskell
+packrat parsing, and idea of `ParserT' | The Haskell Sequence 
+[haskell][パーザ] 
+http://sequence.complete.org/node/206
+Monads as containers - HaskellWiki 
+[haskell][monad] 
+http://www.haskell.org/haskellwiki/Monads_as_Containers
+teideal glic deisbh�alach � Blog Archive � Playing fast and loose with Parsec for parsing in Haskell 
+[haskell][パーザ] 
+http://www.serpentine.com/blog/2007/01/19/playing-fast-and-loose-with-parsec-for-parsing-in-haskell/
+teideal glic deisbh辿alach � Blog Archive � Parsing a simple config file in Haskell 
+[haskell][パーザ] 
+http://www.serpentine.com/blog/2007/01/31/parsing-a-simple-config-file-in-haskell/
+HUT / Parser Combinators 
+[haskell][パーザ] 
+http://www.cs.uu.nl/wiki/HUT/ParserCombinators
+teideal glic deisbh�alach � Blog Archive � A Haskell regular expression tutorial 
+[haskell][正規表現] 
+http://www.serpentine.com/blog/2007/02/27/a-haskell-regular-expression-tutorial/
+Guidance on using asynchronous exceptions 
+[haskell] 
+http://permalink.gmane.org/gmane.comp.lang.haskell.cafe/31735
+blog.kfish.org: Survey: Haskell Unicode support 
+[haskell] 
+http://blog.kfish.org/2007/10/survey-haskell-unicode-support.html
+Parsing Techniques - Second Edition 
+[パーザ][本] 
+http://www.cs.vu.nl/~dick/PT2Ed.html
+Overloading functional references - 21 thoughts 
+[haskell][monad] 
+http://twan.home.fmf.nl/blog/haskell/overloading-functional-references.details
+References, Arrows and Categories - 21 thoughts 
+[haskell][arrow] 
+http://twan.home.fmf.nl/blog/haskell/References-Arrows-and-Categories.details
+コンパイラ演習 
+[コンパイラ] 
+http://www.is.s.u-tokyo.ac.jp/vu/97/jugyo/processor/compilerresume/index.html
+[haskell] 正格性フラグを使ってseqを定義する - ヒビルテ (2007-10-23) 
+[haskell] なるほど 
+http://www.tom.sfc.keio.ac.jp/~sakai/d/?date=20071023#p01
+帰納的定義と数学的帰納法 
+[数学] 
+http://nicosia.is.s.u-tokyo.ac.jp/pub/staff/hagiya/kougiroku/ind/ind
+mult.ifario.us : Tuppence Tour of Haskell Concurrency Constructs 
+[haskell][並行] 
+http://mult.ifario.us/articles/2007/10/21/tuppence-tour-of-haskell-concurrency-constructs
+Karetta|Gaucheプログラミング|継続渡しスタイル 
+[継続][scheme] 
+http://karetta.jp/book-node/gauche-hacks/007565
+Scheme:CPS 
+[継続][scheme] Schemeで継続渡しの例 
+http://practical-scheme.net/wiliki/wiliki.cgi?Scheme%3ACPS
+Haskell Workshop 2007 - List of Accepted Papers 
+[haskell] ビデオ付き 
+http://www.ludd.ltu.se/~pj/hw2007/HaskellWorkshop.html
+Combinatory logic - HaskellWiki 
+[コンビネータ][haskell] 
+http://www.haskell.org/haskellwiki/Combinatory_logic
+Lightweight Dependent-type Programming 
+[haskell][型] 
+http://okmij.org/ftp/Computation/lightweight-dependent-typing.html
+mult.ifario.us : Wiring Haskell into a FastCGI Web Server 
+[haskell][web] 
+http://mult.ifario.us/articles/2007/10/03/wiring-haskell-into-a-fastcgi-web-server
+Probability monads at Hac 07 II 
+[haskell][monad] 
+http://www.randomhacks.net/articles/2007/10/02/probability-monads-at-hac-07-ii
+みかログ: マルチコアでスケールしないErlang その２ 
+[erlang][並列] 
+http://blog.mikage.to/mika/2007/09/erlang_5b3a.html
+Text.Parsers.Frisby 
+[haskell][パーザ] packrat parserの実装。コンビネータになっている。 
+http://repetae.net/computer/frisby/
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 6 
+[並列] 
+http://www.embedded.com/design/multicore/201806715
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 5 
+[並列] 
+http://www.embedded.com/design/multicore/201804960?_requestid=708724
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 4 
+[並列] 
+http://www.embedded.com/design/multicore/201803783?_requestid=708481
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 3 
+[並列] 
+http://www.embedded.com/design/multicore/201802337?_requestid=208531
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 2 
+[並列] 
+http://www.embedded.com/design/multicore/201801070?_requestid=208521
+Embedded.com - Making the transition from sequential to implicit parallel programming: Part 1 
+[並列] 
+http://www.embedded.com/design/multicore/201500267
+Agda Exercise: Sized Mergesort | Shin-Cheng Mu 
+[型] 依存型は良いけど、この型宣言はきついなあ。 
+http://www.iis.sinica.edu.tw/~scm/?p=36
+My First Agda Program: Append, Reverse, and Merge | Shin-Cheng Mu 
+[型] 本当の依存型をもつHaskellに似た言語Agda 
+http://www.iis.sinica.edu.tw/~scm/?p=35
+teideal glic deisbh�alach � Blog Archive � What the heck is a Wide Finder, anyway? 
+[haskell][パーザ] ログ 
+http://www.serpentine.com/blog/2007/09/25/what-the-heck-is-a-wide-finder-anyway/
+Online video course on monads | Lambda the Ultimate 
+[monad] 
+http://lambda-the-ultimate.org/node/2455
+||: iba Consulting Gesellschaft - intelligent business architecture:|| 
+[haskell] ビデオ 
+http://iba-cg.de/haskell.html
+Internet Server Performance Readings 
+[c10k] サーバのパフォーマンスに関するリンク集 
+http://www.cs.uwaterloo.ca/~brecht/courses/856/readings.html
+Zipper - HaskellWiki 
+[haskell][データ構造][zipper] 
+http://www.haskell.org/haskellwiki/Zipper
+teideal glic deisbh�alach � Blog Archive � Pure Haskell MySQL bindings in the works 
+[haskell][db] pure HaskellなMySQLバインディング解説 
+http://www.serpentine.com/blog/2007/09/05/pure-haskell-mysql-bindings-in-the-works/
+teideal glic deisbh�alach � mysql - Haskell language bindings for MySQL 
+[haskell][db] pure HaskellなMySQLバインディング 
+http://www.serpentine.com/blog/software/mysql/
+teideal glic deisbh�alach � Data.SuffixTree - lazy, efficient suffix trees in Haskell 
+[haskell][データ構造] suffix tree 
+http://www.serpentine.com/blog/software/suffixtree/
+userver.uwaterloo.ca 
+[c10k] イベントドリブンで高速なwebサーバ 
+http://userver.uwaterloo.ca/
+DList : Difference Lists 
+[haskell][データ構造] appendとsnocがO(1)のリスト 
+http://www.cse.unsw.edu.au/~dons/dlist.html
+gmane.comp.lang.haskell.cafe - Bi-directional Maps 
+[haskell][データ構造] 双方向マップ 
+http://comments.gmane.org/gmane.comp.lang.haskell.cafe/27795
+User-level transactional programming in Haskell | Lambda the Ultimate 
+[haskell][並行] 
+http://lambda-the-ultimate.org/node/2408
+Fixing an overloaded web server 
+[c10k] 
+http://alumnus.caltech.edu/~dank/fixing-overloaded-web-server.html
+Measuring the Capacity of a Web Server 
+[c10k] 
+http://www.cs.rice.edu/CS/Systems/Web-measurement/paper/paper.html
+High-Performance Server Architecture 
+[c10k] 
+http://pl.atyp.us/content/tech/servers.html
+High Availability MySQL 
+[ha][db] 
+http://mysqlha.blogspot.com/
+Resources, Concurrency and Local Reasoning | Lambda the Ultimate 
+[並行] 
+http://lambda-the-ultimate.org/node/2381
+HXT/Practical - HaskellWiki 
+[haskell] HXT実例集 
+http://haskell.org/haskellwiki/HXT/Practical
+Neil’s point-free blog � Haskell: Explaining Arrows through XML Transformations 
+[haskell][arrow] HXTの解説記事 
+http://neilbartlett.name/blog/2007/08/01/haskell-explaining-arrows-through-xml-transformationa/
+FFI cook book - HaskellWiki 
+[haskell][ffi] 
+http://www.haskell.org/haskellwiki/FFICookBook
+FFI Introduction - HaskellWiki 
+[haskell][ffi] 
+http://www.haskell.org/haskellwiki/FFI_Introduction
+GHC/Using the FFI - HaskellWiki 
+[haskell][ffi] 
+http://www.haskell.org/haskellwiki/GHC/Using_the_FFI
+MySQL Conference & Expo 2007  April 23, 2007 - April 26, 2007  Santa Clara, California 
+[db] 
+http://conferences.oreillynet.com/pub/w/54/presentations.html
+Finger Trees: A Simple General-purpose Data Structure 
+[データ構造][アルゴリズム] Finger Treeの元論文 
+http://www.soi.city.ac.uk/~ross/papers/FingerTree.html
+A Neighborhood of Infinity: The Monads Hidden Behind Every Zipper 
+[haskell][monad][データ構造][zipper] zipperとモナドの関係 
+http://sigfpe.blogspot.com/2007/01/monads-hidden-behind-every-zipper.html
+Lightweight concurrency primitives for GHC 
+[haskell][並行] 
+http://research.microsoft.com/~simonpj/papers/lw-conc/index.htm
+Category Theory and Haskell 3 : Algebras and Monads 
+[haskell][圏論] 
+http://www.alpheccar.org/en/posts/show/77
+Things that amuse me - Representing DSL expressions in Haskell 
+[haskell][edsl] 
+http://augustss.blogspot.com/2007/06/representing-dsl-expressions-in-haskell.html
+What To Know Before Debating Type Systems 
+[型] 
+http://cdsmith.twu.net/types.html
+186::Diary - 計算量に関して - 矢沢久雄の情報工学“再”入門を祝す 
+[アルゴリズム][計算量] 
+http://d.hatena.ne.jp/smoking186/20070625/1182763734
+Finite Domain Constraint Programming in Oz. A Tutorial. 
+[oz][チュートリアル] 
+http://www.mozart-oz.org/documentation/fdt/index.html
+Category theory and Haskell : Part 2 
+[haskell][圏論] 
+http://www.alpheccar.org/en/posts/show/76
+Category Theory and the category of Haskell programs : Part 1 
+[haskell][圏論] 
+http://www.alpheccar.org/en/posts/show/74
+Haskell/Continuation passing style - Wikibooks, collection of open-content textbooks 
+[haskell][callcc][継続] 
+http://en.wikibooks.org/wiki/Haskell/Continuation_passing_style
+Haskell Program Coverage 
+[haskell] 
+http://projects.unsafeperformio.com/hpc/
+Chris Okasaki's Publications 
+[haskell][データ構造][アルゴリズム][人] Purely Functional Data Structuresの中の人 
+http://www.eecs.usma.edu/webs/people/okasaki/pubs.html
+PArrows 
+[haskell][arrow] 
+http://www.cs.helsinki.fi/u/ekarttun/PArrows/
+もわの台所: I/O scheduler を知る 
+[linux] 
+http://mowa-net.jp/~amedama/mt/2006/11/io_scheduler.html
+libaio(Linuxの非同期I/Oライブラリ)の使い方 - moratorium 
+[aio] 
+http://kzk9.net/blog/2007/06/libaio.html
+The Monad.Reader - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/The_Monad.Reader
+blog.kfish.org: Review: TagSoup 
+[haskell] 
+http://blog.kfish.org/2007/06/review-tagsoup.html
+therning.org/ magnus � Blog Archive � Adventures in parsing, part 4 
+[haskell] Advencures in parsing 4 
+http://therning.org/magnus/archives/296
+Programming in Clean 
+[clean][本] 
+http://www.discenda.org/Clean/
+HAppS Tutorial 
+[haskell][web][チュートリアル] 
+http://happs.org/HAppS/doc/tutorial.html
+therning.org/ magnus � Blog Archive � Adventures in parsing, part 3 
+[haskell] Adventures in parsing 3 
+http://therning.org/magnus/archives/295
+therning.org/ magnus � Blog Archive � More adventures in parsing 
+[haskell] Adventures in parsing 2 
+http://therning.org/magnus/archives/290
+therning.org/ magnus � Blog Archive � Adventures in parsing 
+[haskell] Advencures in parsing 1 
+http://therning.org/magnus/archives/289
+Haskell program coverage - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/Haskell_Program_Coverage
+Grapefruit - HaskellWiki 
+[haskell][arrow] Arrowを使ったGUIライブラリ 
+http://haskell.org/haskellwiki/Grapefruit
+GHC/Stand-alone deriving declarations - HaskellWiki 
+[haskell][型] 
+http://haskell.org/haskellwiki/GHC/StandAloneDeriving
+GHC/Indexed types - HaskellWiki 
+[haskell][型] 
+http://haskell.org/haskellwiki/GHC/Indexed_types
+[ruby-dev:30827] Supporting Fiber 
+[ruby][並行] 
+http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/30827
+Coq : back to basics 
+[coq] 
+http://www.alpheccar.org/en/posts/show/71
+The GHC typechecker is Turing complete 
+[haskell][型][コンビネータ] 
+http://article.gmane.org/gmane.comp.lang.haskell.general/14088
+Programming Kung Fu Qi: A SK Combinator in the Qi Type System, a comparision with Haskell 
+[コンビネータ][haskell] 
+http://programmingkungfuqi.blogspot.com/2007/05/sk-combinator-in-qi-type-system.html
+Enhyper - Why Events are a Bad Idea (for high concurrency servers) 
+[並行][erlang][haskell] 
+http://enhyper.blogspot.com/2007/05/why-events-are-bad-idea-for-high.html
+Things to avoid - HaskellWiki 
+[haskell] やってはいけないパターン 
+http://haskell.org/haskellwiki/Things_to_avoid
+[Haskell] Even higher-order abstract syntax: typeclasses vs GADT 
+[haskell][型][gadt] 
+http://www.haskell.org/pipermail/haskell/2007-January/019012.html
+Neil Mitchell - Derive 
+[haskell] Data.Derive。derivingを自動でやってくれる? 
+http://www-users.cs.york.ac.uk/~ndm/derive/
+Top level mutable state - HaskellWiki 
+[haskell] 
+http://www.haskell.org/haskellwiki/Top_level_mutable_state
+1-sutou.pdf (application/pdf オブジェクト) 
+[ocaml][型] Quicksilverの論文。(ppl2007/ppl2007) 
+http://www.sato.kuis.kyoto-u.ac.jp/ppl2007/proceedings/1-sutou.pdf
+Quicksilver (Extended Abstract) 
+[ocaml] 型安全なネットワークライブラリ。PDFが消えている。 
+http://72.14.235.104/search?q=cache:K4j1bYlTUpYJ:www.kb.ecei.tohoku.ac.jp/~sumii/pub/quicksilver.pdf%20quicksilver%20ocaml&hl=ja&ct=clnk&cd=3&gl=jp&client=firefox-a
+Djinn, Coq, Monad and a bit of Haskell 
+[haskell][coq] 
+http://www.alpheccar.org/en/posts/show/70
+An Implementation of Session Types - Neubauer, Thiemann (ResearchIndex) 
+[haskell] 
+http://citeseer.ist.psu.edu/neubauer04implementation.html
+Koen Claessen - Publications 
+[arrow][monad] 継続モナドによるConcurrency Monadの実装 
+http://www.cs.chalmers.se/~koen/pubs/entry-jfp99-monad.html
+ImperativeHaskell - The Haskell Wiki 
+[haskell][monad] STモナドを使った例 
+http://www.haskell.org/hawiki/ImperativeHaskell
+Real-World Haskell 
+[haskell][本] オライリーからReal-World Haskellという本が出るらしい。ラムダ芋。しかもCreative Commonsだそうで。 
+http://www.realworldhaskell.org/blog/
+nominolo's Blog: Network.HTTP   ByteStrings 
+[haskell] ByteStringでソケット周りを高速化。Simon Marlowがスレッドでも大丈夫とコメント。 
+http://nominolo.blogspot.com/2007/05/networkhttp-bytestrings.html
+A Very Brief Introduction to the Pi-Calculus (in Japanese) 
+[並行] 
+http://web.yl.is.s.u-tokyo.ac.jp/kobalab/kadai99/picalc.html
+Circular programming - HaskellWiki 
+[haskell] circular program 
+http://haskell.org/haskellwiki/Circular_programming
+Comparison chain - HaskellWiki 
+[haskell] Perl 6の比較演算子みたいなことをやるには 
+http://haskell.org/haskellwiki/Comparison_chain
+Meet Bob The Monadic Lover - HaskellWiki 
+[haskell][monad] 
+http://haskell.org/haskellwiki/Meet_Bob_The_Monadic_Lover
+Combinatory logic - HaskellWiki 
+[数学][haskell] 
+http://haskell.org/haskellwiki/Combinatory_logic
+Lifting pattern - HaskellWiki 
+[haskell] 関数がコンビネータになっていたらliftingするのがよい。理由は、1. 他で活用できるから。2. テストしやすいから。 
+http://haskell.org/haskellwiki/Lifting_pattern
+Applications of recursively defined data structures 
+[データ構造] circular program 
+http://www.csse.monash.edu.au/~lloyd/tildeFP/1993ACJ/
+events-are-bad.txt 
+[並行] 
+http://www.spa.is.uec.ac.jp/~kinuko/survey/body/events-are-bad.html
+Event-driven Programming for Robust Software 
+[並行] 
+http://www.ce-lab.net/ringo/events_robust.html
+Re: why is Data.Set not a Monad? 
+[haskell] 
+http://article.gmane.org/gmane.comp.lang.haskell.libraries/6861
+純粋関数型雑記帳 - The Deep Inside of GHC’s Integer 
+[haskell][ghc] 
+http://d.hatena.ne.jp/tanakh/20070506#p1
+Research papers/Functional pearls - HaskellWiki 
+[haskell] Functional Pearlのコレクション 
+http://www.haskell.org/haskellwiki/Research_papers/Functional_pearls
+advanced topics in programming languages - Google Video 
+ 
+http://video.google.com/videosearch?q=advanced%20topics%20in%20programming%20languages
+Unifying events and threads 
+[haskell][並行] 
+http://www.seas.upenn.edu/~lipeng/homepage/unify.html
+Multi-Core Ant Colony Optimization for TSP in Erlang 
+[haskell][erlang][並列] TSPの測定Erlang版。ErlangよりGHCの方が速いが、並列化の効果はErlangの方が大きい。 
+http://eric_rollins.home.mindspring.com/erlangAnt.html
+Main Page - CTMWiki 
+[本] 
+http://www.codepoetics.com/wiki/index.php?title=Main_Page
+Robust Composition: Towards a Unified Approach to Access Control and Concurrency Control 
+[並行] 3章にデッドロックのおこらないメッセージパッシングが載っているらしい 
+http://www.erights.org/talks/thesis/index.html
+Making it stick.: Misguided: The Road Not To Be Travelled 
+[stm][並行] 
+http://patricklogan.blogspot.com/2007/02/misguided-road-not-to-be-travelled.html
+armstrong on software: Pure and simple transaction memories 
+[並行] transactional memoryの解説。shared memoryのつづき。 
+http://armstrongonsoftware.blogspot.com/2006/09/pure-and-simple-transaction-memories.html
+armstrong on software: Why I don't like shared memory 
+[並行] 共有メモリがいけてない理由。最終的にはmessage passingがいいよねという話。コメント欄ではものすごい勢いで議論の穴を指摘されている。 
+http://armstrongonsoftware.blogspot.com/2006/09/why-i-dont-like-shared-memory.html
+Software Transactional Memory for concurrency � Closure Sale 
+[haskell][stm][並行] 
+http://mikeburrell.wordpress.com/2007/03/20/software-transactional-memory-for-concurrency/
+lambda.oasis: Observations from DATE 2007 
+[並行] transactional memoryはスケールしない。 
+http://notvincenz.blogspot.com/2007/04/observations-from-date-2007.html
+Google's MapReduce Programming Model -- Revisited 
+[haskell][並列][分散] HaskellでMapReduce 
+http://www.cs.vu.nl/~ralf/MapReduce/
+Rewriting Haskell Strings 
+[haskell] ByteStringはfusionで最適化している 
+http://www.cse.unsw.edu.au/~dons/papers/CSL06.html
+Map fusion: Making Haskell 225% faster 
+[haskell] fusion。rewrite rulesの正しさはQuickCheckでテストしてね。 
+http://www.randomhacks.net/articles/2007/02/10/map-fusion-and-haskell-performance
+Online Bibliography of Haskell Research 
+[haskell] 
+http://haskell.readscheme.org/index.html
+Haskell and Web: Haskell Transactional Cache 
+[haskell][web] 
+http://haskell-web.blogspot.com/2006/11/transactional-cache-for-haskell.html
+Too Much Code: The Imaginary Concurrency Debate 
+[haskell][erlang][並行] 
+http://toomuchcode.blogspot.com/2007/04/imaginary-concurrency-debate.html
+Twitter, Rails, Hammers, and 11,000 Nails per Second — Thought Palace 
+[rails][ruby] 
+http://mooseyard.com/Jens/2007/04/twitter-rails-hammers-and-11000-nails-per-second/
+NewGhciDebugger - GHC - Trac 
+[haskell][ghc] 
+http://hackage.haskell.org/trac/ghc/wiki/NewGhciDebugger
+HaskellDbTutorial - The Haskell Wiki 
+[haskell][チュートリアル] 
+http://www.haskell.org/hawiki/HaskellDbTutorial
+HXT - HaskellWiki 
+[haskell][チュートリアル] 
+http://www.haskell.org/haskellwiki/HXT
+The lambda revolution - Haskell hacking 
+[haskell][チュートリアル] プロジェクトの始め方 
+http://cgi.cse.unsw.edu.au/~dons/blog/2006/12/11#release-a-library-today
+haskell - haskellのある暮らし - 型クラスの定義方法について 
+[haskell][型] 
+http://haskell.g.hatena.ne.jp/jmk/20070220/1171991940
+Mark P Jones: Home Page 
+[人][haskell] 
+http://web.cecs.pdx.edu/~mpj/index.html
+プログラミング言語を作る 
+ 
+http://www.kmaebashi.com/programmer/devlang/
+TheC10kProblem - 「C10K問題」（クライアント1万台問題）とは、ハードウェアの性能上は問題がなくても、あまりにもクライアントの数が多くなるとサーバがパンクする問題のこと 
+[web][c10k] 
+http://www.hyuki.com/yukiwiki/wiki.cgi?TheC10kProblem
+Generalised Algebraic Data Types, Phantom Types, and Dependent Types 
+[haskell][gadt] 
+http://www.cs.nott.ac.uk/~pni/Papers/Notes/GADTs.html
+Nub Games � Writing a Simple Search Engine in Haskell: Part 1 — Maybe and List 
+[haskell] 
+http://blogs.nubgames.com/code/?p=19
+Nub Games � Writing a Simple Search Engine in Haskell: Part 0 — Introduction 
+[haskell] 
+http://blogs.nubgames.com/code/?p=18
+Cookbook - HaskellWiki 
+[haskell][チュートリアル] 
+http://haskell.org/haskellwiki/Cookbook
+Actors that Unify Threads and Events | Lambda the Ultimate 
+[並行] 
+http://lambda-the-ultimate.org/node/2081
+関数型プログラミング言語Haskell Part6 
+[haskell][monad] 
+http://pc10.2ch.net/test/read.cgi/tech/1162902266/735-
+plaseek93 - Google 検索 
+[clean][本] Functional Programming and Parallel Graph Rewriting 
+http://www.google.co.jp/search?q=plaseek93&filter=0
+Erlang-Style Distributed Haskell 
+[並列][分散][haskell][erlang] 
+http://www.informatik.uni-kiel.de/~fhu/PUBLICATIONS/1999/ifl.html
+TeX etc. -- Part 1 
+[latex] LaTeXのパッケージ一覧 
+http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/texindex.html#f
+微酔半壊: MinCaml読解ノート 目次 
+[mincaml] 
+http://smpl.seesaa.net/article/5456194.html
+速攻MinCamlコンパイラ概説 
+[mincaml] 
+http://min-caml.sourceforge.net/
+Patrick Logan on Software Transaction Memory | Lambda the Ultimate 
+[stm] なにこれ? あとで読む． 
+http://lambda-the-ultimate.org/node/2048
+John Hughes 
+[人][haskell] Why Functional Programming Mattersの中の人 
+http://www.cs.chalmers.se/~rjmh/
+Programming Tools Group - Duncan Coutts's unpublished reports and talks 
+[人][haskell] Gtk2Hsの中の人 
+http://progtools.comlab.ox.ac.uk/members/duncan/pubs
+Philip Wadler's home page 
+[人][haskell] いろいろやっている人 
+http://homepages.inf.ed.ac.uk/wadler/
+Professor Paul Hudak's Home Page 
+[人][haskell] The Haskell School of Expressionの中の人 
+http://cs-www.cs.yale.edu/homes/hudak/
+Simon Marlow 
+[人][haskell] GHCの中の人 
+http://www.haskell.org/~simonmar/
+Simon Peyton Jones 
+[人][haskell] GHCの中の人 
+http://research.microsoft.com/~simonpj/
+Intel Research People: Rob Ennals 
+[人][haskell] optimistic evaluationの中の人 
+http://berkeley.intel-research.net/rennals/
+J[funcgui]  
+[haskell] あとで見る． 
+http://d.hatena.ne.jp/w_o/searchdiary?word=funcgui
+Haskell and Web Applications 
+[haskell][web] 
+http://www.defmacro.org/ramblings/haskell-web.html
+Rubyソースコード完全解説 
+[ruby] 
+http://i.loveruby.net/ja/rhg/book/
+Gentoo Linux Documentation -- eselect Developer Reference 
+[gentoo] eselectモジュールの書き方 
+http://www.gentoo.org/proj/en/eselect/dev-guide.xml
+Scheme:使いたい人のための継続入門 
+[scheme][継続][callcc] 
+http://www.shiro.dreamhost.com/scheme/wiliki/wiliki.cgi?Scheme%3a%e4%bd%bf%e3%81%84%e3%81%9f%e3%81%84%e4%ba%ba%e3%81%ae%e3%81%9f%e3%82%81%e3%81%ae%e7%b6%99%e7%b6%9a%e5%85%a5%e9%96%80
+andrew cooke: writing: folds 
+[haskell] 
+http://www.acooke.org/andrew/writing/folds.html
+d.y.d. - PEPM 
+PEPM 2007 (Workshop on Partial Evaluation and Program Manipulation)のまとめ 
+http://www.kmonos.net/wlog/69.html#_2218070128
+プログラミング言語の基礎概念「Programming Language Concepts」 
+[用語集] 
+http://sky.zero.ad.jp/~zaa54437/programming/concepts/
+檜山正幸のキマイラ飼育記 - 圏論やモナドが、どうして文書処理やXMLと関係するのですか？ 
+[圏論][monad] 
+http://d.hatena.ne.jp/m-hiyama/20070125/1169702291
+Pugs as a library 
+[haskell][perl][ghc] 勝手にタイトル変えちゃった 
+http://d.hatena.ne.jp/m-a-o/20070125#p2
+Rails vs Seaside 
+[smalltalk][ruby][rails] 
+http://onsmalltalk.com/programming/smalltalk/rails-vs-seaside/
+Synchronized threads, part II | The Haskell Sequence 
+[stm][haskell][並行] 
+http://sequence.complete.org/node/253
+Synchronized threads, part I | The Haskell Sequence 
+[stm][haskell][並行] 
+http://sequence.complete.org/node/252
+A simple TCP client | The Haskell Sequence 
+[stm][haskell][並行] 
+http://sequence.complete.org/node/257
+A simple TCP server | The Haskell Sequence 
+[stm][haskell][並行] 
+http://sequence.complete.org/node/258
+Talk:SantaClausProblemV2 - HaskellWiki 
+[stm][haskell][並行] SPJによるSTMの解説 (Beautiful concurrency) 
+http://haskell.org/haskellwiki/Talk:SantaClausProblemV2
+Algorithm.com.au - Concurrency   Erlang 
+[並行][erlang] 
+http://www.algorithm.com.au/talks/concurrency-erlang/
+Program-Transformation.Org 
+[プログラム変換] 
+http://www.program-transformation.org/Transform/WebHome
+MIT CSAIL Theory of Computation Group 
+[アルゴリズム] 
+http://theory.csail.mit.edu/
+開発者のための正しいCSRF対策 
+[web][脆弱性] 
+http://www.jumperz.net/texts/csrf.htm
+A type-based solution to the "strings problem": a fitting end to XSS and SQL-injection holes? 
+[haskell][型][web][脆弱性] 型システムでXSSやSQLインジェクションを防ぐ 
+http://blog.moertel.com/articles/2006/10/18/a-type-based-solution-to-the-strings-problem
+haskell - HaHaHa! - HaskellのモナドIO 
+[haskell][monad] 
+http://haskell.g.hatena.ne.jp/nobsun/20060907/monadicIO
+PukiWiki - ebuildとbash 
+[gentoo][bash] 
+http://wiki.gentoo.gr.jp/index.php?%5B%5Bebuild%A4%C8bash%5D%5D
+Perl 5 Internals 
+[perl] 
+http://www.faqs.org/docs/perl5int/
+Advanced Bash-Scripting Guide 
+[bash] 
+http://www.faqs.org/docs/abs/HTML/index.html
+INFO020: Programming Languages- Langages Evolu�s 
+[cs][本] Concepts, Techniques, and Models of Computer ProgrammingのPDFあり 
+http://www.ulb.ac.be/di/rwuyts/INFO020_2003/
+Today I abandon 
+[haskell][ocaml][型] unsafePerformIOが型安全でない話とvalue restrictionの関係 
+http://d.hatena.ne.jp/suiginto/20061217#1166337747
+haskell - soutaroのHaskellにっき - Haskellにはvalue restriction(値多相)がない件 
+[haskell][ocaml][型] 
+http://haskell.g.hatena.ne.jp/soutaro/20060613/p1
+memcached client | The Haskell Sequence 
+[haskell] 
+http://sequence.complete.org/node/213
+IBM dW : Java technology : Javaの理論と実践: アトミックで行く - Japan 
+[並行][java] 
+http://www-06.ibm.com/jp/developerworks/java/041203/j_j-jtp11234.html
+IBM dW : Javaの理論と実践：ノンブロッキング・アルゴリズムの紹介 - Japan 
+[並行][java] 
+http://www-06.ibm.com/jp/developerworks/java/060519/j_j-jtp04186.shtml
+ACM Queue - Unlocking Concurrency - Multicore programming with transactional memory 
+[並行][stm] 
+http://acmqueue.com/modules.php?name=Content&pa=showpage&pid=444
+COMP4132: Advanced Functional Programming - Topics 
+[haskell][edsl] EDSLの実例など 
+http://www.cse.unsw.edu.au/~cs4132/topics.html
+Haskell Programming: Miscellanea 
+[haskell] Haskellのコード片．shuffleなどもある． 
+http://okmij.org/ftp/Haskell/
+Lightweight Languages 2003 
+[動画] 本家LLのストリーミング映像 
+http://ll3.ai.mit.edu/
+Programming Language Research Engine 
+[検索エンジン] プログラミング言語関連の論文検索エンジン 
+http://www.cdiggins.com/search/
+モナドのすべて　Haskell におけるモナドプログラミングの理論と実践に関する包括的ガイド  
+[haskell][monad] 
+http://www.sampou.org/haskell/a-a-monads/html/
+ESMAJ : EXACT STRING MATCHING ALGORITHMS 
+[アルゴリズム] 文字列探索 
+http://www-igm.univ-mlv.fr/~lecroq/string/index.html
+グラフ理論 
+[数学][グラフ理論] 
+http://coolee.at.infoseek.co.jp/graphtheory.html
+NumberParamTypes - TmrWiki 
+[haskell][型] 
+http://www.haskell.org/tmrwiki/NumberParamTypes
+Category theory - HaskellWiki 
+[数学][haskell][圏論] 
+http://haskell.org/haskellwiki/Category_theory
+As L approaches Hack-Level 
+[haskell][アルゴリズム] diffのアルゴリズム関連．あとで読む． 
+http://alangloria.blogspot.com/2006/11/edit-graphs-im-currently-hacking.html
+Heterogenous collections - HaskellWiki 
+[haskell] 
+http://haskell.org/haskellwiki/Heterogenous_collections
+arrow.txt 
+[haskell][arrow][チュートリアル] Arrowのチュートリアル 
+http://www.thenewsh.com/~newsham/x/arrow.txt
+How to write a Haskell program - HaskellWiki 
+[haskell] プロジェクトのはじめかた 
+http://haskell.org/haskellwiki/How_to_write_a_Haskell_program
+The Haskell School of Expression: Home Page 
+[haskell][本] The Haskell School of Expressionのサポートページ． 
+http://www.haskell.org/soe/
+Gentoo Development Guide: Master Index 
+[gentoo] Portage関連のtips，リファレンスなど 
+http://devmanual.gentoo.org/index.html
+Multi-Core Ant Colony Optimization for TSP in Haskell 
+[並列][haskell] 
+http://eric_rollins.home.mindspring.com/haskellAnt.html
+GHC/Concurrency - HaskellWiki 
+[ghc][並列][並行][haskell] 
+http://haskell.org/haskellwiki/GHC/Concurrency
+Scheme:call/ccと副作用 
+[callcc][scheme] 
+http://practical-scheme.net/wiliki/wiliki.cgi?Scheme%3acall%2fcc%e3%81%a8%e5%89%af%e4%bd%9c%e7%94%a8
+Google グループ: comp.lang.functional 
+[clean][haskell] CleanとHaskellの違い 
+http://groups.google.com.au/group/comp.lang.functional/msg/c09cb40a66558a19
+Krugle - Transform Code into Profit. 
+[検索エンジン] Haskellコードも検索可能なエンジン 
+http://www.krugle.com/
+Gentoo Development Guide: Ebuild Writing 
+[gentoo] Ebuildを書くときのリファレンス 
+http://devmanual.gentoo.org/ebuild-writing/index.html
+Sequential and parallel sorting algorithms 
+[アルゴリズム] 
+http://www.inf.fh-flensburg.de/lang/algorithmen/sortieren/algoen.htm
+Commentary/Rts/Scheduler - GHC - Trac 
+[ghc][並列][並行][haskell] ネイティブスレッドとHaskellスレッドなど 
+http://hackage.haskell.org/trac/ghc/wiki/Commentary/Rts/Scheduler
+4.17. Flag reference 
+[haskell][ghc] GHCのコマンドラインオプション一覧 
+http://www.haskell.org/ghc/docs/latest/html/users_guide/flag-reference.html
+Performance - HaskellWiki 
+[haskell] パフォーマンス向上のtips 
+http://haskell.org/haskellwiki/Performance
+GHC/Using Rules - HaskellWiki 
+[haskell] 
+http://haskell.org/haskellwiki/GHC/Using_Rules
+Correctness of short cut fusion - HaskellWiki 
+[haskell] 
+http://haskell.org/haskellwiki/Correctness_of_short_cut_fusion
+The GHC Commentary - Supporting multi-threaded interoperation 
+[haskell] 
+http://www.cse.unsw.edu.au/~chak/haskell/ghc/comm/rts-libs/multi-thread.html
+Build a Web spider on Linux 
+[ruby] 
+http://www-128.ibm.com/developerworks/linux/library/l-spider/
+プログラム言語とその他のメモ。 
+[haskell][scheme] 
+http://www.ice.nuie.nagoya-u.ac.jp/~h003149b/lang/index.html
+Glasgow Parallel Haskell Algorithms Repository 
+[haskell][並列][アルゴリズム] 
+http://www.macs.hw.ac.uk/~dsg/gph/nofib/
+たかが論理、されど論理 
+[読み物] 
+http://nicosia.is.s.u-tokyo.ac.jp/pub/essay/hagiya/7bits/saredo
+Why I love Haskell 
+[haskell][stm] 
+http://wagerlabs.com/articles/2005/12/14/why-i-love-haskell
+Haskell vs. Erlang,  Reloaded 
+[haskell][stm] 
+http://wagerlabs.com/articles/2006/01/01/haskell-vs-erlang-reloaded
+what GUI library should i select? 
+[haskell] 
+http://thread.gmane.org/gmane.comp.lang.haskell.cafe/16497/focus=16497
+Jason Creighton's Blog: A Simple RPN Calculator in Haskell 
+[haskell] 逆ポーランド記法電卓 
+http://jcreigh.blogspot.com/2006/11/simple-rpn-calculator-in-haskell.html
+Google Co-op - Custom Search Engine 
+[haskell] GoogleのHaskell専用検索エンジン 
+http://www.google.com/coop/cse?cx=015832023690232952875%3Acunmubfghzq
+Monad Transformers Step by Step 
+[haskell][monad][チュートリアル] モナド変換子のチュートリアル 
+http://uebb.cs.tu-berlin.de/~magr/pub/Transformers.en.html
+A Neighborhood of Infinity: You Could Have Invented Monads! (And Maybe You Already Have.) 
+[haskell][monad][チュートリアル] モナドのチュートリアル 
+http://sigfpe.blogspot.com/2006/08/you-could-have-invented-monads-and.html
+ADUni.org: ArsDigita University Curriculum 
+[cs] 講義資料集 
+http://www.aduni.org/courses/
+Category:Haskell - Wikibooks, collection of open-content textbooks 
+[haskell] 
+http://en.wikibooks.org/wiki/Category:Haskell
+Index of Compiler Resume 
+[コンパイラ] 東大のコンパイラ演習資料 
+http://www.is.s.u-tokyo.ac.jp/vu/jugyo/processor/process/soft/compilerresume/index.html
+LicensedPreludeExts - The Haskell Wiki 
+[haskell] Preludeに足りないもの 
+http://www.haskell.org/hawiki/LicensedPreludeExts
+defmacro - Writing A Lisp Interpreter In Haskell 
+[haskell] 
+http://www.defmacro.org/ramblings/lisp-in-haskell.html
+70	20091010140318
+29	20091010122615
+4	20091010014019
+15	20091008070825
+1	20091007174000
+1	20091007165300
+121	20091007140837
+1	20091006011420
+1	20091004144121
+1	20091004143019
+1	20091004142702
+1	20091004142609
+386	20091004090626
+1	20091003005008
+3	20091002163856
+1	20091002163721
+15	20091002163714
+5	20091002163041
+1	20090930150706
+4	20090930083056
+1	20090930080618
+12	20090929133742
+241	20090929133650
+1	20090925140804
+407	20090925123502
+5	20090925105205
+1	20090920095832
+15	20090917133408
+50	20090916000217
+2	20090916000158
+76	20090915161557
+3	20090911191205
+1	20090911111107
+1	20090903191648
+1	20090903132210
+6	20090902191752
+6	20090902191248
+2	20090901200439
+3	20090901200043
+1	20090824011341
+5	20090817152035
+1	20090817141037
+1	20090817140541
+1	20090817140245
+2	20090817084623
+1	20090810164832
+65	20090810164810
+1	20090810135250
+1	20090810135035
+1	20090809175139
+1	20090809174903
+2	20090809135506
+3	20090809131207
+1	20090809131004
+3	20090809130819
+1	20090809123111
+1	20090809044138
+1	20090809043238
+1	20090809041926
+487	20090729205422
+1	20090724182748
+8	20090717115447
+1	20090714124505
+2	20090714092939
+1	20090710210928
+2	20090705131034
+1	20090629201129
+1	20090629134134
+2	20090628014236
+1	20090625232706
+2	20090625232617
+1	20090622143610
+1	20090622142115
+1	20090615193132
+2	20090615193002
+233	20090612001919
+4	20090612001707
+5	20090611161454
+3	20090608160451
+3	20090608153950
+1	20090608153609
+7	20090607104138
+6	20090606233020
+1	20090524150034
+1	20090524150006
+2	20090514124126
+2	20090513181012
+27	20090430112245
+4	20090419022136
+1	20090419021703
+1	20090412133932
+1	20090412133849
+2	20090412133835
+2	20090412133742
+93	20090404123859
+1	20090401001629
+1	20090330004834
+1	20090330003417
+1	20090330003325
+18	20090324112743
+1	20090322134453
+2	20090322123322
+4	20090322123152
+1	20090322121603
+1	20090322121325
+5	20090322120405
+1	20090322105822
+3	20090321143918
+1	20090321141238
+2	20090320152947
+2	20090316194638
+2	20090309011951
+1	20090309011920
+2	20090309011836
+2	20090309011711
+1	20090309011456
+1	20090306173820
+1	20090305184158
+2	20090305125656
+1	20090301214451
+1	20090227185941
+1	20090222083713
+1	20090222083344
+1	20090222083316
+1	20090222082154
+3	20090222081455
+1	20090222080913
+9	20090221192201
+12	20090221191927
+11	20090221191638
+22	20090221191309
+37	20090221190241
+246	20090221184957
+516	20090221184059
+10	20090221165459
+5	20090221165443
+77	20090221164717
+1	20090218221715
+1	20090218220302
+10	20090218010443
+88	20090218003110
+1	20090216190230
+1	20090215033617
+167	20090213144353
+242	20090212124149
+86	20090212124043
+205	20090212001921
+2	20090211115142
+8	20090206160708
+1	20090206145558
+65	20090203125854
+4	20090128141729
+60	20090125224946
+11	20090125124107
+15	20090125123544
+1	20090125122612
+1	20090125122128
+4	20090125121610
+1	20090125121116
+1	20090125121055
+1	20090122030243
+1	20090122030218
+19	20090120194738
+8	20090117172611
+2	20090101045958
+2	20081231141252
+3	20081231013911
+1	20081220164415
+1	20081220163509
+1	20081213132245
+5	20081213132002
+1	20081213122238
+2	20081213121512
+2	20081213120529
+1	20081205222010
+4	20081205221917
+3	20081123025539
+1	20081123024634
+1	20081123024559
+1	20081120001822
+2	20081120001434
+33	20081113222253
+1	20081103123355
+1	20081101183702
+1	20081025104546
+1	20081022224438
+2	20081017013334
+2	20081017013315
+1	20081013122610
+2	20081013115051
+2	20081013115008
+3	20081004142603
+1	20080923000322
+2	20080921013547
+43	20080915012807
+2	20080907072528
+1	20080907072246
+2	20080907072210
+1	20080906132455
+1	20080830134342
+1	20080830134322
+2	20080829020141
+223	20080820113402
+1	20080820013722
+30	20080820013617
+1	20080803234023
+2	20080803233952
+10	20080802161755
+1	20080801213305
+1	20080720020134
+66	20080715004032
+6	20080714004758
+41	20080713005931
+4	20080701015919
+3	20080624082302
+2	20080621145508
+2	20080621132725
+2	20080612103918
+2	20080612103858
+3	20080612103842
+2	20080605022514
+2	20080605022332
+2	20080604232228
+2	20080601020601
+2	20080531095621
+2	20080531095530
+6	20080531095322
+801	20080524113320
+22	20080522022110
+4	20080520090054
+2	20080517103727
+6	20080517025710
+1	20080508071441
+12	20080502004652
+1	20080429103642
+23	20080428213639
+1	20080426141825
+1	20080426141302
+1	20080426141232
+1	20080411165510
+7	20080407010715
+1	20080331072154
+14	20080324015133
+1	20080320141918
+1	20080320141629
+11	20080318014012
+2	20080318013934
+7	20080318000708
+1	20080314204237
+70	20080311223657
+11	20080311223445
+1	20080310090148
+3	20080303222549
+1	20080303221756
+4	20080303221037
+7	20080301152333
+2	20080229233849
+1	20080227202303
+2	20080227202229
+1	20080226180029
+1	20080226140547
+10	20080221005206
+1	20080220210302
+2	20080220204832
+1	20080220203848
+15	20080211163144
+2	20080210122016
+2	20080202192153
+1	20080129005230
+1	20080127010459
+1	20080126202739
+1	20080120124731
+1	20080120123005
+3	20080120122933
+2	20080120122858
+1	20080120122731
+1	20080109015439
+1	20080104090514
+2	20071223121814
+2	20071219153555
+1	20071210085410
+1	20071208154917
+212	20071204004523
+3	20071203012723
+4	20071203012650
+1	20071203012633
+1	20071127022100
+1	20071124052533
+1	20071124052501
+2	20071124052441
+1	20071124045427
+3	20071120184158
+1	20071117002026
+6	20071116080542
+23	20071113013804
+2	20071110232135
+3	20071108082524
+5	20071024034132
+1	20071024022047
+9	20071023023748
+1	20071021234630
+11	20071021003459
+9	20071021001004
+2	20071010083818
+1	20071007045111
+2	20071007045043
+1	20071004222938
+1	20071003002858
+7	20071002075535
+1	20070928222318
+1	20070928072642
+1	20070928072631
+1	20070928072615
+1	20070928072603
+1	20070928072516
+1	20070928072449
+1	20070928012957
+1	20070928012902
+1	20070926233025
+3	20070917152914
+1	20070916225023
+1	20070908151805
+1	20070908114752
+1	20070908041440
+3	20070908041317
+1	20070823073209
+4	20070823020059
+1	20070822081054
+1	20070820231944
+5	20070820010814
+2	20070818140618
+1	20070818140553
+29	20070818140438
+1	20070813112902
+1	20070808081355
+2	20070806015720
+1	20070806015604
+1	20070805123300
+2	20070805123243
+1	20070805123231
+15	20070805011828
+7	20070801125758
+2	20070722054624
+1	20070704180258
+3	20070703113528
+2	20070701103057
+1	20070628074415
+5	20070628014605
+3	20070628005632
+1	20070625203624
+3	20070625203601
+1	20070624234238
+1	20070623070254
+2	20070622001919
+4	20070616141510
+43	20070614014520
+86	20070614012116
+5	20070613003623
+1	20070610032425
+1	20070605235226
+4	20070605234214
+1	20070603201412
+1	20070603201252
+1	20070603201239
+1	20070603201219
+1	20070601011718
+2	20070601005650
+1	20070531231035
+1	20070531231003
+22	20070530210858
+1	20070530083959
+1	20070530021042
+1	20070530020957
+1	20070530020904
+3	20070529013645
+1	20070529013440
+1	20070528084520
+1	20070526165547
+1	20070525083254
+1	20070525082802
+2	20070525081701
+1	20070525081320
+1	20070525081033
+1	20070524084926
+9	20070523201326
+1	20070523015809
+49	20070523013925
+2	20070521004242
+1	20070521004149
+1	20070521004044
+1	20070521004022
+1	20070520191956
+1	20070520185907
+28	20070511015009
+11	20070511014941
+1	20070508012137
+10	20070507073250
+5	20070506231405
+3	20070506000212
+13	20070504131454
+3	20070430230313
+2	20070430162118
+1	20070430115600
+1	20070430044032
+1	20070430042219
+2	20070430040107
+1	20070429141329
+3	20070429132121
+7	20070429041424
+1	20070429040203
+2	20070428145907
+2	20070422182531
+4	20070422180018
+1	20070422174444
+9	20070422032545
+1	20070420015513
+1	20070415224640
+3	20070415224616
+2	20070405011818
+3	20070306184539
+1	20070306140724
+1	20070306140121
+509	20070305164117
+1	20070305161037
+1	20070305160612
+1	20070305160552
+2	20070305160029
+1	20070223163727
+1	20070220151704
+1	20070216010832
+2	20070214174139
+2	20070212193902
+6	20070212193253
+158	20070212193223
+2	20070209013110
+1	20070208200136
+1	20070208194809
+8	20070208193828
+1	20070208193451
+2	20070208193343
+3	20070208193229
+2	20070208193156
+3	20070208133901
+2	20070207202014
+1329	20070206060322
+1	20070204154819
+68	20070204050146
+1	20070131191302
+6	20070129131152
+43	20070126172249
+92	20070126030738
+1	20070126022624
+5	20070124003041
+1	20070123060950
+1	20070123060934
+2	20070123060910
+2	20070123060854
+1	20070122123010
+9	20070122122843
+3	20070120032336
+1	20070102060129
+776	20061227001101
+2	20061226233357
+25	20061222104117
+1	20061222092329
+5	20061221230948
+3	20061221230322
+2	20061219042222
+1	20061217164701
+2	20061217164411
+1	20061214171446
+26	20061213145447
+70	20061213142631
+3	20061211135047
+1	20061205034313
+3	20061203000812
+1	20061129174004
+1	20061127183236
+79	20061127160010
+20	20061127125546
+42	20061126184354
+1	20061126043405
+1	20061123175802
+1	20061123011437
+1	20061123005101
+1	20061123004624
+7	20061123004455
+4	20061122025212
+2	20061122024943
+1	20061121174029
+1	20061121173826
+6	20061121124149
+1	20061120015052
+270	20061119222308
+1	20061119052411
+1	20061118232320
+1	20061116175307
+1	20061116165548
+1	20061116164935
+1	20061116164852
+1	20061116164826
+1	20061116163832
+6	20061116151532
+61	20061116020048
+1	20061115061307
+22	20061115025822
+2	20061114194745
+4	20061114194645
+1	20061114150459
+1	20061114144114
+1	20061113200535
+3	20061113200430
+7	20061113200240
+81	20061113200111
+1	20061113195805
+30	20061113195635
+1	20061113195134
+25	20061113194719
