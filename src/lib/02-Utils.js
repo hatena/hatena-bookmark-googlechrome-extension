@@ -116,6 +116,15 @@ if (typeof jQuery != 'undefined') {
         return target;
     };
 
+    jQuery.httpSuccess = function( xhr ) {
+        try {
+            // IE error sometimes returns 1223 when it should be 204 so treat it as success, see #1450
+            return !xhr.status && (location.protocol == "file:" || location.protocol == "chrome-extension:") ||
+                ( xhr.status >= 200 && xhr.status < 300 ) || xhr.status == 304 || xhr.status == 1223;
+        } catch(e){}
+        return false;
+    };
+
     var URI = function(schema, host, port, path, search, hash) {
         if (this instanceof URI) {
             this.init.apply(this, arguments);

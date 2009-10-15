@@ -8,18 +8,19 @@ jQuery.extend(Sync, {
     sync: function Sync_sync() {
         if (Sync._syncing) return;
         Sync._syncing = true;
-        var url = UserManager.user.dataURL + '?_now=' + (new Date).getTime();
-        var timestamp;
-        console.log(222);
+        var url = Sync.getDataURL() + '?_now=' + (new Date).getTime();
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
             console.log(b);
             if (b) url += '&' + b.get('date');
         }).next($K($.get(url))).next(Sync.dataSync).error(Sync.errorback);
     },
+    getDataURL: function() {
+        return UserManager.user.dataURL;
+    },
     errorback: function(e) {
         p('Sync Error: ', e);
         Sync._syncing = false;
-        Sync.trigger('fail');
+        Sync.trigger('fail', [e]);
     },
     dataSync: function Sync_dataSync(res) {
         Sync.trigger('progress', {value: 0});
@@ -27,7 +28,7 @@ jQuery.extend(Sync, {
 
         var text = res;
         if (!text.length) {
-            Sync.trigger('complete');
+            Sync._complete();
             return;
         }
 
@@ -52,7 +53,7 @@ jQuery.extend(Sync, {
                 var url = bookmarks[bi+2];
                 var b = new Bookmark;
                 b.title = title;
-                b.comment = comment.replace(commentRe, '');
+                b.comment = (comment || '').replace(commentRe, '');
                 b.url = url;
                 b.date = parseInt(timestamp);
                 if (url) {
@@ -82,22 +83,20 @@ jQuery.extend(Sync, {
                 */
             }
         }).next(function () {
-            Sync.trigger('complete');
-            $(document).trigger('BookmarksUpdated');
-
+            Sync._complete();
             p('complete:', infos.length);
             p('time: ' + (Date.now() - now));
-            Bookmark.count().next(function(r) { p('count:' + r) });
+            Bookmark.count().next(function(r) { p('completed count:' + r) });
         }).error(Sync.errorback);
+    },
+    _complete: function() {
+        Sync._syncing = false;
+        Sync.trigger('complete');
     },
     createDataStructure: function Sync_createDataStructure (text) {
         var infos = text.split("\n");
         var bookmarks = infos.splice(0, infos.length * 3/4);
         return [bookmarks, infos];
     },
-});
-
-Sync.bind('complete', function() {
-    Sync._syncing = false;
 });
 

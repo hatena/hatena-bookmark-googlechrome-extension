@@ -276,8 +276,8 @@ test('Model Bookmark/Tag', function(d) {
 test('UserManeger', function(d) {
     UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
     UserManager.deferred('bind', 'UserChange').next(function(ev, user) {
-        equals(UserManager.user, user, 'user');
         ok(true, 'Loggin!');
+        equals(UserManager.user, user, 'user');
         equals(user.name, 'hatenatest');
         ok(user.ignores instanceof RegExp, 'ignores regexp list');
         ok(user.public != user.private, 'public/private');
@@ -290,6 +290,24 @@ test('UserManeger', function(d) {
     });
     UserManager.login();
 }, 7, 1000).
+
+test('sync sync sync', function(d) {
+    var db = new Database('SyncTest');
+    Model.getDatabase = function() { return db };
+    Sync.getDataURL = function() {
+        return '/tests/data/../data/hatenatest.data';
+    }
+    Sync.deferred('bind', 'progress').next(function(ev, obj) {
+        if (obj.value !== null && obj.value == 0) {
+            ok(true, 'progress start');
+        }
+    });
+    Sync.deferred('bind', 'complete').next(function() {
+        ok(true, 'Sync!');
+        d.call();
+    });
+    Sync.init();
+}, 2, 5000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');

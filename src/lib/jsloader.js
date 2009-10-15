@@ -1,5 +1,6 @@
 
 function jsloader(urls, callback) {
+    var now = (new Date-0);
     var load = function(url) {
         var script = document.createElement('script');
         script.type = 'text/javascript';
@@ -11,7 +12,9 @@ function jsloader(urls, callback) {
             }
         } else {
             script.onload = callback;
-       }
+        }
+        url = './' + now + '/../' + url;
+        console.log(url);
         script.src = url + '?' + (new Date-0);
         document.getElementsByTagName('head')[0].appendChild(script);
     }

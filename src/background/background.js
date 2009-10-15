@@ -10,6 +10,10 @@ UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
 });
 
+Sync.bind('complete', function() {
+    $(document).trigger('BookmarksUpdated');
+});
+
 $(document).ready(function() {
     UserManager.login();
 });
