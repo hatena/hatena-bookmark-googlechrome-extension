@@ -230,11 +230,11 @@ test('HTTPCache(s)', function(d) {
 }, 12, 10000).
 
 test('Model Bookmark/Tag', function(d) {
-    var db = new Database('test.js');
+    var db = new Database('testModelBookmarkTag');
     var Bookmark = Model.Bookmark, Tag = Model.Tag;
     Model.getDatabase = function() { return db };
     // Database.debugMessage = true;
-    Model.initialize(true).next(function() {
+    Model.initialize().next(function() {
         ok(true, 'initialize model');
         var bookmark = new Bookmark({
             url: 'http://www.hatena.ne.jp/',
