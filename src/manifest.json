@@ -10,21 +10,21 @@
     "tabs",
     "bookmarks"
   ],
-  "background_page": "background/background.html",
+  "background_page": "background/background.html"
   // "toolstrips": [
   //   "toolstrips/toolstrip.html"
   // ],
-  "content_scripts": [
-    {
-      "run_at": "document_start",
-      "js": [
-        "content/bookmark.js"
-      ],
-      "matches": [
-        "http://b.hatena.ne.jp/*"
-      ]
-    }
-  ]
+  // "content_scripts": [
+  //   {
+  //     "run_at": "document_start",
+  //     "js": [
+  //       "content/bookmark.js"
+  //     ],
+  //     "matches": [
+  //       "http://b.hatena.ne.jp/*"
+  //     ]
+  //   }
+  // ]
   // "content_scripts": [
   //   {
   //     "run_at": "document_start",

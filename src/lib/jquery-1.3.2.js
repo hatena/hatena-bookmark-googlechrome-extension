@@ -3576,6 +3576,8 @@ jQuery.extend({
 					s.ifModified && jQuery.httpNotModified( xhr, s.url ) ? "notmodified" :
 					"success";
 
+console.log(status);
+console.log(xhr.responseText.length);
 				if ( status == "success" ) {
 					// Watch for, and catch, XML document parse errors
 					try {

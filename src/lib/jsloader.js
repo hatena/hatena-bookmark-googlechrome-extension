@@ -14,7 +14,6 @@ function jsloader(urls, callback) {
             script.onload = callback;
         }
         url = './' + now + '/../' + url;
-        console.log(url);
         script.src = url + '?' + (new Date-0);
         document.getElementsByTagName('head')[0].appendChild(script);
     }

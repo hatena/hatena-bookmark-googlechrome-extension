@@ -307,7 +307,7 @@ test('sync sync sync', function(d) {
         d.call();
     });
     Sync.init();
-}, 2, 5000).
+}, 2, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');

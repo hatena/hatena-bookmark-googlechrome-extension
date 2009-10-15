@@ -10,9 +10,11 @@ jQuery.extend(Sync, {
         Sync._syncing = true;
         var url = Sync.getDataURL() + '?_now=' + (new Date).getTime();
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
-            console.log(b);
+            // console.log(b);
             if (b) url += '&' + b.get('date');
-        }).next($K($.get(url))).next(Sync.dataSync).error(Sync.errorback);
+        }).next($K($.get(url))).next(function(r) {
+            Sync.dataSync(r);
+        }).error(Sync.errorback);
     },
     getDataURL: function() {
         return UserManager.user.dataURL;
