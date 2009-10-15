@@ -327,7 +327,10 @@ test('sync sync sync', function(d) {
                         equals(r, 519, 'total count2');
                         Tag.find({where: {name: 'db'}}).next(function(r) {
                             equals(r.length, 14, 'tag2');
-                            d.call();
+                            Bookmark.search('高速').next(function(r) {
+                                equals(r.length, 3, 'search');
+                                d.call();
+                            });
                         });
                     });
                 });
@@ -336,7 +339,7 @@ test('sync sync sync', function(d) {
         });
     });
     Sync.init();
-}, 8, 10000).
+}, 9, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
