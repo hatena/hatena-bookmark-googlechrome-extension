@@ -248,7 +248,7 @@
     })();
 
     /*-- include SQLAbstract --*/
-    /* rev: e01227d5589ad9044e97912d089a879676b75fe4 */    
+    /* rev: 9a01158cc8454d80869fff950ff6caf760d8b546 */    
     (function(Global) {
         var p = function() {
             if (typeof console != 'undefined')
@@ -279,7 +279,19 @@
     
         SQLAbstract.prototype = {
             select: function(table, fields, where, options) {
-                if (!fields) fields = '*';
+                if (!fields) {
+                    fields = '*';
+                } else {
+                    if (fields instanceof Array) {
+                        var res = [];
+                        for (var i = 0;  i < fields.length; i++) {
+                            res.push(this.field(fields[i]));
+                        }
+                        fields = res.join(', ');
+                    } else {
+                        fields = this.field(fields);
+                    }
+                }
                 var stmt, bind = [];
                 stmt = 'SELECT ' + (fields || '*') + ' FROM ' + table;
                 if (where) {
@@ -293,6 +305,17 @@
                     bind = bind.concat(opt[1]);
                 }
                 return [stmt, bind];
+            },
+            field: function(obj) {
+                if (SQLAbstract.isString(obj)) {
+                    return obj;
+                } else {
+                    var res = [];
+                    for (var key in obj) {
+                        res.push('' + key + ' AS ' + obj[key]);
+                    }
+                    return res.join(', ');
+                }
             },
             insert: function(table, data) {
                 var keys = [], bind = [], values = [];
@@ -408,11 +431,14 @@
                 for (var key in hash) {
                     var val = hash[key];
                     if (val instanceof Array) {
-                        bind = bind.concat(val);
-                        var len = val.length;
+                        // bind = bind.concat(val);
+                        // var len = val.length;
                         var tmp = [];
-                        while (len--) {
-                            tmp.push(this.holder(key)[0]);
+                        var v;
+                        while ((v = val.shift())) {
+                            var t = this.holder(key, v);
+                            bind = bind.concat(t[1]);
+                            tmp.push(t[0]);
                         }
                         stmt.push('(' + tmp.join(' OR ') + ')');
                     } else {

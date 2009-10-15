@@ -49,6 +49,8 @@ $.extend(Bookmark, {
         var tmp = Bookmark.parse(str);
         return tmp[0];
     },
+    search: function(words) {
+    },
     parse: function(str) {
         var re = /\[([^\[\]]+)\]/g;
         var match;
