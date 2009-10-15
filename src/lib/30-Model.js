@@ -38,7 +38,7 @@ Bookmark.afterTrigger('createTable', function() {
 });
 
 $.extend(Bookmark, {
-    SEP: "\x00",
+    SEP: "\u0002",
     beforeSave: function(b) {
         b.search = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
     },
@@ -49,7 +49,26 @@ $.extend(Bookmark, {
         var tmp = Bookmark.parse(str);
         return tmp[0];
     },
-    search: function(words) {
+    search: function(word, options) {
+        var words = (word || '').toUpperCase().split(/\s+/);
+        if (!options) options = {};
+        options = $.extend({
+            order: 'date',
+            limit: 20,
+            offset: 0
+        }, options);
+
+        var searches = words.map(function(w) { return {'like': '%' + w + '%'} });
+        var select = Bookmark.select('*', {search: searches}, options);
+        // XXX
+        select[0] = select[0].replace(/ \? OR search/g, ' ? AND search');
+
+        var klass = Bookmark;
+        var d = klass.execute(select);
+        return d.next(function(res) {
+            return klass.resultSet(res, options.resultType);
+        });
+        return Bookmark.execute(select);
     },
     parse: function(str) {
         var re = /\[([^\[\]]+)\]/g;

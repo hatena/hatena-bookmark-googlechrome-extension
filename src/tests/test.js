@@ -266,13 +266,20 @@ test('Model Bookmark/Tag', function(d) {
                     ok(true, '100 bookmark insert');
                     Tag.count().next(function(c) {
                         equals(c, 200);
-                        d.call();
+                        Bookmark.search('なのサ').next(function(r) {
+                            equals(r.length, 20, 'search res');
+                            Bookmark.search('すごい5').next(function(r) {
+                                equals(r.length, 11, 'search res2');
+                                equals(r[r.length-1].url, 'http://www.hatena.ne.jp/59', 'search order');
+                                d.call();
+                            });
+                        });
                     });
                 });
             });
         });
     });
-}, 9, 2000).
+}, 12, 2000).
 
 test('UserManeger', function(d) {
     UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
