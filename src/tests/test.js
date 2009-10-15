@@ -25,6 +25,8 @@ var is = function(a, b, mes) {
     equals(a.toString(), b.toString(), mes);
 }
 
+var Bookmark = Model.Bookmark, Tag = Model.Tag;
+
 Deferred.test = function(name, t, count, wait) {
     var d = new Deferred();
     var search = location.search;
@@ -231,7 +233,6 @@ test('HTTPCache(s)', function(d) {
 
 test('Model Bookmark/Tag', function(d) {
     var db = new Database('testModelBookmarkTag');
-    var Bookmark = Model.Bookmark, Tag = Model.Tag;
     Model.getDatabase = function() { return db };
     // Database.debugMessage = true;
     Model.initialize().next(function() {
@@ -304,10 +305,31 @@ test('sync sync sync', function(d) {
     });
     Sync.deferred('bind', 'complete').next(function() {
         ok(true, 'Sync!');
-        d.call();
+        Sync.unbind('complete');
+        Bookmark.count().next(function(r) {
+            equals(r, 518, 'total count');
+            Tag.find({where: {name: 'db'}}).next(function(r) {
+                equals(r.length, 13, 'tag');
+
+                Sync.getDataURL = function() {
+                    return '/tests/data/../data/hatenatest.new.data';
+                }
+                Sync.deferred('bind', 'complete').next(function() {
+                    ok(true, 'sync sync');
+                    Bookmark.count().next(function(r) {
+                        equals(r, 519, 'total count2');
+                        Tag.find({where: {name: 'db'}}).next(function(r) {
+                            equals(r.length, 14, 'tag2');
+                            d.call();
+                        });
+                    });
+                });
+                Sync.sync();
+            });
+        });
     });
     Sync.init();
-}, 2, 10000).
+}, 8, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');

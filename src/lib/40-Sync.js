@@ -12,8 +12,8 @@ jQuery.extend(Sync, {
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
             // console.log(b);
             if (b) url += '&' + b.get('date');
-        }).next($K($.get(url))).next(function(r) {
-            Sync.dataSync(r);
+        }).next(function() {
+            $.get(url).next(Sync.dataSync).error(Sync.errorback);
         }).error(Sync.errorback);
     },
     getDataURL: function() {
@@ -88,7 +88,6 @@ jQuery.extend(Sync, {
             Sync._complete();
             p('complete:', infos.length);
             p('time: ' + (Date.now() - now));
-            Bookmark.count().next(function(r) { p('completed count:' + r) });
         }).error(Sync.errorback);
     },
     _complete: function() {
