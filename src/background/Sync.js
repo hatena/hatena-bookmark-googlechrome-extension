@@ -88,9 +88,6 @@ jQuery.extend(Sync, {
             p('complete:', infos.length);
             p('time: ' + (Date.now() - now));
             Bookmark.count().next(function(r) { p('count:' + r) });
-        M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
-            console.log(b.date);
-            });
         }).error(Sync.errorback);
     },
     createDataStructure: function Sync_createDataStructure (text) {
@@ -102,10 +99,5 @@ jQuery.extend(Sync, {
 
 Sync.bind('complete', function() {
     Sync._syncing = false;
-});
-
-UserManager.bind('UserChange', function() {
-    p('get change');
-    if (UserManager.user) Sync.init();
 });
 

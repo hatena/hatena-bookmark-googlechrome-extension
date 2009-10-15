@@ -6,7 +6,9 @@ $.extend(Manager, {
     }
 });
 
-
+UserManager.bind('UserChange', function() {
+    if (UserManager.user) Sync.init();
+});
 
 $(document).ready(function() {
     UserManager.login();
