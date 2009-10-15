@@ -275,8 +275,19 @@ test('Model Bookmark/Tag', function(d) {
 
 test('UserManeger', function(d) {
     UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
+    UserManager.deferred('bind', 'UserChange').next(function(ev, user) {
+        equals(UserManager.user, user, 'user');
+        ok(true, 'Loggin!');
+        equals(user.name, 'hatenatest');
+        ok(user.ignores instanceof RegExp, 'ignores regexp list');
+        ok(user.public != user.private, 'public/private');
+        ok(user.database instanceof Database, 'database instance');
+        UserManager.clearUser();
+        ok(UserManager.user != user, 'no user');
+        d.call();
+    });
     UserManager.login();
-}, 9, 2000).
+}, 7, 1000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
