@@ -7,9 +7,11 @@ var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
-var Database = Deferred.WebDatabase;
-// Database.debugMessage = true;
-var Model = Database.Model, SQL = Database.SQL;
+if (Deferred.WebDatabase) {
+    var Database = Deferred.WebDatabase;
+    // Database.debugMessage = true;
+    var Model = Database.Model, SQL = Database.SQL;
+}
 
 // utility
 var p = function() {
@@ -167,7 +169,7 @@ if (typeof jQuery != 'undefined') {
             } else {
                 var updated = false;
                 for (var key in obj) {
-                    if (obj[key] === null) {
+                    if (obj[key] === null || typeof obj[key] == 'undefined') {
                         delete pair[key];
                     } else {
                         pair[key] = obj[key];

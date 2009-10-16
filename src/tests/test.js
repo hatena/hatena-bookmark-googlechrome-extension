@@ -151,8 +151,9 @@ test("uri", function(d) {
     equals(u.search, '?query1=bar%23');
     u.param({query3: 'baz'});
     equals(u.search, '?query1=bar%23&query3=baz');
+    var uriqueryundef;
     u.param({
-        query1: null,
+        query1: uriqueryundef,
         query2: null,
         query3: null,
     });

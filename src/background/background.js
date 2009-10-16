@@ -3,7 +3,13 @@ var Manager = $({});
 
 $.extend(Manager, {
     editBookmark: function(url, winno, tabno) {
-        window.open('bookmarkedit.html');
+        var uri = URI.parse('http://chrome/background/bookmarkedit.html');
+        uri.param({
+            url: url,
+            winno: winno,
+            tabno: tabno
+        });
+        window.open(uri.path_query, 'bookmarkedit');
     }
 });
 
