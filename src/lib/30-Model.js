@@ -142,6 +142,21 @@ $.extend(Tag, {
             throw new Error('bid');
         }
     },
+    getNameCountHash: function() {
+        console.log(434);
+        return Tag.find({
+            fields: [{'count(name)': 'c'}, 'name'],
+            group: 'name',
+            resultType: 'RAW'
+        }).next(function(res) {
+            var tags = {}, rows = res.rows;
+            var len = rows.length;
+            for (var i = 0;  i < len; i++) {
+                tags[rows.item(i).name] = rows.item(i).c;
+            }
+            return tags;
+        });
+    }
 });
 
 })(Deferred.WebDatabase.Model);

@@ -329,7 +329,12 @@ test('sync sync sync', function(d) {
                             equals(r.length, 14, 'tag2');
                             Bookmark.search('高速').next(function(r) {
                                 equals(r.length, 3, 'search');
-                                d.call();
+                                Tag.getNameCountHash().next(function(tags) {
+                                    equals(Object.keys(tags).length, 88);
+                                    equals(tags['並行'], 40);
+                                    equals(tags['javascript'], 11);
+                                    d.call();
+                                });
                             });
                         });
                     });
@@ -339,7 +344,7 @@ test('sync sync sync', function(d) {
         });
     });
     Sync.init();
-}, 9, 10000).
+}, 12, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
