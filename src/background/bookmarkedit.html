@@ -9,8 +9,78 @@
 <script type="text/javascript" src="../lib/02-Utils.js"></script>
 <script type="text/javascript" src="../lib/05-Config.js"></script>
 <script type="text/javascript" src="bookmarkedit.js"></script>
+<!--
+<link rel="stylesheet" href="bookmarkedit.css" type="text.css" />
+-->
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #999;
+}
+
+#header {
+    width:100%;
+    display: table;
+    text-align:right;
+}
+
+#edit {
+    width:100%;
+    display: table;
+}
+
+.edit-row {
+    display: table-row;
+}
+.edit-left {
+    width: 80px;
+}
+
+.edit-cell {
+    display: table-cell;
+}
+
+</style>
 </head>
-<body></body>
-hi
+<body>
+<div id="header">ようこそ<img id="user-icon"><span id="username">hogehoge</span>さん</div>
+<div id="edit">
+    <div class="edit-row">
+        <div class="edit-left edit-cell">タイトル:</div>
+        <div class="edit-cell">ほげほげ</div>
+    </div>
+    <div class="edit-row">
+        <div class="edit-left edit-cell">URL:</div>
+        <div class="edit-cell">
+            <span id="url">htt://hogehoge.com/</span>
+            <br>
+            <span id="users-count">1 users</span><img id="comment-show">
+        </div>
+    </div>
+    <div class="edit-row">
+        <div class="edit-left edit-cell">コメント:</div>
+        <div class="edit-cell">
+            <input type="text" id="comment" name="comment"><span id="type-counter">0/100</span>
+            <br>
+            <input type="hidden" id="with_status_op" name="with_status_op" />
+            <input type="checkbox" id="confirm-bookmark" name="confirm-bookmark" />
+            <label for="confirm-bookmark">ブックマークを確認</label>
+            <input type="checkbox" id="private" name="private" />
+            <label for="private">公開しない</label>
+            <input type="checkbox" id="send_mail" name="send_mail" />
+            <label for="send_mail">メールする</label>
+        </div>
+    </div>
+</div>
+<dl id="recommend-tags-container">
+    <dt>おすすめタグ<dt>
+    <dd id="recommend-tags"><span class="tag">firefox</span></dd>
+</dl>
+<dl id="all-tags-container">
+    <dt>タグ<dt>
+    <dd id="all-tags"><span class="tag">firefox</span></dd>
+</dl>
+</body>
 </html>
 
