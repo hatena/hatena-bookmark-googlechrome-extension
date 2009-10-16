@@ -14,13 +14,13 @@ $.extend(Manager, {
 });
 
 UserManager.bind('UserChange', function() {
-    // if (UserManager.user) Sync.init();
-    Manager.editBookmark('http://example.com/');
+    if (UserManager.user) Sync.init();
 });
-// 
-// Sync.bind('complete', function() {
-//     $(document).trigger('BookmarksUpdated');
-// });
+
+Sync.bind('complete', function() {
+    Manager.editBookmark('http://example.com/');
+    $(document).trigger('BookmarksUpdated');
+});
 
 $(document).ready(function() {
     console.log('ready');

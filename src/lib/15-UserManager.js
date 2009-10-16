@@ -4,14 +4,14 @@ UserManager.MY_NAME_URL = B_HTTP + 'my.name';
 
 $.extend(UserManager, {
     login: function() {
-        $.getJSON(UserManager.MY_NAME_URL).next(UserManager.loginHandler).error(UserManager.loginErrorHandler); // .error(this.loginErrorHandler);
+        $.getJSON(UserManager.MY_NAME_URL).next(UserManager.loginHandler).error(UserManager.loginErrorHandler);
     },
     loginHandler: function(res) {
         p('loginHandler');
         UserManager.setUser(res);
     },
     loginErrorHandler: function UserManager_loginErrorHandler(res) {
-        p('login error...');
+        p('login error...', res);
         var j = JSON.parse(res.responseText);
         UserManager.setUser(j);
     },

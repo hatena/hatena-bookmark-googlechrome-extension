@@ -277,7 +277,7 @@ test('Model Bookmark/Tag', function(d) {
     var db = new Database('testModelBookmarkTag');
     Model.getDatabase = function() { return db };
     // Database.debugMessage = true;
-    Model.initialize().next(function() {
+    Model.initialize(true).next(function() {
         ok(true, 'initialize model');
         var bookmark = new Bookmark({
             url: 'http://www.hatena.ne.jp/',
@@ -384,7 +384,9 @@ test('sync sync sync', function(d) {
             });
         });
     });
-    Sync.init();
+    Model.initialize(true).next(function() {
+        Sync.init();
+    });
 }, 12, 10000).
 
 test('finished', function(d) {

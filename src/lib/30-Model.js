@@ -3,12 +3,31 @@
 var Bookmark, Tag;
 
 Model.initialize = function(force) {
-     // return parallel([Bookmark.initialize()]).next(Bookmark.destroyAll());
-     // return Bookmark.initialize();//.next(Bookmark.destroyAll());
-     return Deferred.parallel([
-         Bookmark.dropTable(force).next(Bookmark.initialize),
-         Tag.dropTable(force).next(Tag.initialize)
-     ]);//.next(Bookmark.destroyAll());
+    // return parallel([Bookmark.initialize()]).next(Bookmark.destroyAll());
+    // return Bookmark.initialize();//.next(Bookmark.destroyAll());
+    if (force) {
+        return Deferred.parallel([
+            Bookmark.dropTable(force).next(Bookmark.initialize),
+            Tag.dropTable(force).next(Tag.initialize)
+        ]);//.next(Bookmark.destroyAll());
+    } else {
+        return Deferred.parallel([
+            Bookmark.isTableCreated().next(function(bool) {
+                if (!bool) {
+                    return Bookmark.initialize();
+                } else {
+                    return Deferred.next();
+                }
+            }),
+            Tag.isTableCreated().next(function(bool) {
+                if (!bool) {
+                    return Tag.initialize();
+                } else {
+                    return Deferred.next();
+                }
+            })
+       ]);
+    }
 }
 
 Model.getDatabase = function() {
