@@ -10,7 +10,13 @@
     "tabs",
     "bookmarks"
   ],
-  "background_page": "background/background.html"
+  "browser_action": {
+    "name": "addbookmark",
+    "icons": ["images/chrome-b-plus.png"]
+  },
+  //"background_page": "background/background.html"
+  "background_page": "background/test.html"
+
   // "toolstrips": [
   //   "toolstrips/toolstrip.html"
   // ],

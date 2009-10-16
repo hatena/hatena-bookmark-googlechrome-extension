@@ -136,8 +136,30 @@ test("uri", function(d) {
     equals(u.encodeURI, encodeURIComponent(hatena));
     equals(u.entryURL, B_HTTP + 'entry/s/www.hatena.ne.jp/');
 
+    hatena = 'http://www.hatena.ne.jp/foobar?query1=foo%23&query2=bar#test';
+    u = URI.parse(hatena);
+    equals(u.param('query1'), 'foo#');
+    equals(u.param('query2'), 'bar');
+    u.param({query2: 'bar2'});
+    equals(u.param('query2'), 'bar2');
+    u.param({
+        query1: 'bar#',
+        query2: null,
+    });
+    equals(u.param('query1'), 'bar#');
+    equals(u.param('query2'), null);
+    equals(u.search, '?query1=bar%23');
+    u.param({query3: 'baz'});
+    equals(u.search, '?query1=bar%23&query3=baz');
+    u.param({
+        query1: null,
+        query2: null,
+        query3: null,
+    });
+    equals(u.search, '');
+
     d.call();
-}, 22, 1000).
+}, 30, 1000).
 
 test("timer", function(d){
     var t = Timer.create(10, 5); // 10ms, 5times

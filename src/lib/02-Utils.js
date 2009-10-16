@@ -160,6 +160,49 @@ if (typeof jQuery != 'undefined') {
         get encodeURI() {
             return encodeURIComponent(this.href);
         },
+        param: function(obj) {
+            var pair = this._getSearchHash();
+            if (typeof obj === 'string' || obj instanceof String) {
+                return pair[obj];
+            } else {
+                var updated = false;
+                for (var key in obj) {
+                    if (obj[key] === null) {
+                        delete pair[key];
+                    } else {
+                        pair[key] = obj[key];
+                    }
+                    updated = true;
+                }
+                if (updated) {
+                    var res = [];
+                    for (var key in pair) {
+                        res.push([encodeURIComponent(key), encodeURIComponent(pair[key])].join('='));
+                    }
+                    if (res.length) {
+                        this.search = '?' + res.join('&');
+                    } else {
+                        this.search = '';
+                    }
+                }
+            }
+        },
+        _getSearchHash: function() {
+            if (this.search.indexOf('?') != 0) {
+                return {};
+            } else {
+                var query = this.search.substring(1);
+                return this._queries(query);
+            }
+        },
+        _queries: function(query) {
+             var res = {};
+             query.split('&').forEach(function(q) {
+                 var kv = q.split('=',2);
+                 res[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]);
+             });
+             return res;
+        },
         get entryURL() {
             var url = [
                 this.host,

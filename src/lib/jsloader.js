@@ -12,6 +12,7 @@ function jsloader(urls, callback) {
             }
         } else {
             script.onload = callback;
+            script.onerror = function(e) { console.log(e) };
         }
         url = './' + now + '/../' + url;
         script.src = url + '?' + (new Date-0);
