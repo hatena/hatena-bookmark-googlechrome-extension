@@ -9,9 +9,8 @@ jQuery.extend(Sync, {
         if (Sync._syncing) return;
         Sync._syncing = true;
         var url = Sync.getDataURL() + '?_now=' + Timer.now;
-        console.log(33);
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
-            console.log(b);
+            // console.log(b);
             if (b) url += '&timestamp=' + b.get('date');
         }).next(function() {
             $.get(url).next(Sync.dataSync).error(Sync.errorback);

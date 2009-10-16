@@ -162,7 +162,6 @@ $.extend(Tag, {
         }
     },
     getNameCountHash: function() {
-        console.log(434);
         return Tag.find({
             fields: [{'count(name)': 'c'}, 'name'],
             group: 'name',

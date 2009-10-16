@@ -74,7 +74,7 @@ User.prototype = {
         // return res && res[0] ? true : false;
     },
     get database() {
-        return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 5);
+        return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
     },
     get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
     // get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },

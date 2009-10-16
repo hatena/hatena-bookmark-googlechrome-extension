@@ -16,16 +16,45 @@
 * {
     margin: 0;
     padding: 0;
-    border: 1px solid #999;
+    font: 100%/1.4 "Arial", "Helvetica", sans-serif;
+}
+
+pre {
+  margin: 0.5em 1.5em;
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  font-family: monospace;
+  font-size: 90%;
+}
+
+blockquote cite {
+  font-style: normal;
+}
+
+blockquote cite a {
+  white-space: nowrap;
+}
+
+body {
+    font-size: 85%;
+    font-family: sans-serif;
 }
 
 #header {
     width:100%;
     display: table;
     text-align:right;
+    background: #EEE url('/images/logo-text.png') no-repeat 10px center;
+    padding: 5px;
+    font-size: 90%;
+}
+
+#username {
+    margin: 0 4px 0 4px;
 }
 
 #edit {
+    padding: 8px;
     width:100%;
     display: table;
 }
@@ -33,43 +62,99 @@
 .edit-row {
     display: table-row;
 }
+
 .edit-left {
     width: 80px;
+    font-size: 90%;
+    font-weight: bold;
 }
 
 .edit-cell {
     display: table-cell;
 }
 
+#comment {
+    width: 100%;
+}
+
+#comment-area {
+    width: 100%;
+    display: table;
+}
+
+#type-counter {
+    width: 60px;
+    padding-left: 10px;
+}
+
+#bookmark-options {
+}
+
+#checkbox-options {
+    padding: 3px;
+    font-size: 90%;
+}
+
+#checkbox-options label {
+    margin-right: 5px;
+    cursor:pointer;
+}
+
+#recommend-tags-container, #all-tags-container {
+    padding:0px 8px 0px 8px;
+}
+
+#recommend-tags-container dt, #all-tags-container dt {
+    padding:5px 0px 0px 5px;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+#recommend-tags-container dd, #all-tags-container dd {
+    background-color: #E7F0FC;
+    border-radius: 3px;
+    padding: 6px;
+    font-size: 90%;
+}
+
+#title {
+    font-weight: bold;
+    font-size: 110%;
+}
+
 </style>
 </head>
 <body>
-<div id="header">ようこそ<img id="user-icon"><span id="username">hogehoge</span>さん</div>
+<div id="header">ようこそ<img id="user-icon"><a id="username">hogehoge</a>さん</div>
 <div id="edit">
     <div class="edit-row">
         <div class="edit-left edit-cell">タイトル:</div>
-        <div class="edit-cell">ほげほげ</div>
+        <div id="title" class="edit-cell">ほげほげ</div>
     </div>
     <div class="edit-row">
         <div class="edit-left edit-cell">URL:</div>
         <div class="edit-cell">
-            <span id="url">htt://hogehoge.com/</span>
+            <a href="http://example.com/" id="url">http://hogehoge.com/</a>
             <br>
             <span id="users-count">1 users</span><img id="comment-show">
         </div>
     </div>
     <div class="edit-row">
         <div class="edit-left edit-cell">コメント:</div>
-        <div class="edit-cell">
-            <input type="text" id="comment" name="comment"><span id="type-counter">0/100</span>
-            <br>
-            <input type="hidden" id="with_status_op" name="with_status_op" />
-            <input type="checkbox" id="confirm-bookmark" name="confirm-bookmark" />
-            <label for="confirm-bookmark">ブックマークを確認</label>
-            <input type="checkbox" id="private" name="private" />
-            <label for="private">公開しない</label>
-            <input type="checkbox" id="send_mail" name="send_mail" />
-            <label for="send_mail">メールする</label>
+        <div class="edit-cell" id="bookmark-options">
+            <div id="comment-area" class="edit-row">
+                <input class="edit-cell" type="text" id="comment" name="comment">
+                <span class="edit-cell" id="type-counter">0/100</span>
+            </div>
+            <div id="checkbox-options">
+                <input type="hidden" id="with_status_op" name="with_status_op" />
+                <input type="checkbox" id="confirm-bookmark" name="confirm-bookmark" />
+                <label for="confirm-bookmark">ブックマークを確認</label>
+                <input type="checkbox" id="private" name="private" />
+                <label for="private">公開しない</label>
+                <input type="checkbox" id="send_mail" name="send_mail" />
+                <label for="send_mail">メールする</label>
+            </div>
         </div>
     </div>
 </div>
