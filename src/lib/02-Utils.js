@@ -190,6 +190,9 @@ if (typeof jQuery != 'undefined') {
     }
 
     var Timer = {
+        get now() {
+            return (new Date).getTime();
+        },
         create: function(interval, repeatCount, Global) {
             var currentCount = 0;
             var interval = interval || 60; // ms

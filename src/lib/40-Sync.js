@@ -8,10 +8,10 @@ jQuery.extend(Sync, {
     sync: function Sync_sync() {
         if (Sync._syncing) return;
         Sync._syncing = true;
-        var url = Sync.getDataURL() + '?_now=' + (new Date).getTime();
+        var url = Sync.getDataURL() + '?_now=' + Timer.now;
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
             // console.log(b);
-            if (b) url += '&' + b.get('date');
+            if (b) url += '&timestamp=' + b.get('date');
         }).next(function() {
             $.get(url).next(Sync.dataSync).error(Sync.errorback);
         }).error(Sync.errorback);
@@ -43,7 +43,7 @@ jQuery.extend(Sync, {
         var infos = tmp[1];
         delete tmp;
         p(sprintf('start: %d data', infos.length));
-        var now = Date.now();
+        var now = Timer.now;
         p('start');
         var len = infos.length;
         Bookmark.database.transaction(function() {
@@ -87,7 +87,7 @@ jQuery.extend(Sync, {
         }).next(function () {
             Sync._complete();
             p('complete:', infos.length);
-            p('time: ' + (Date.now() - now));
+            p('time: ' + (Timer.now - now));
         }).error(Sync.errorback);
     },
     _complete: function() {

@@ -25,6 +25,21 @@ var is = function(a, b, mes) {
     equals(a.toString(), b.toString(), mes);
 }
 
+function mockAjax(opts) {
+    if (opts.url.indexOf('http') == 0) {
+        var orig_url = opts.url;
+        var url = URI.parse(opts.url);
+        opts.url = '/tests/data/' + url.schema + '/' + url.host + url.path + escape(url.search).replace(/%/g, '_');
+        // console.log([opts.url, '<-', orig_url].join(' '));
+    }
+    return opts;
+}
+
+var orig_ajax = $.ajax; $.ajax = function (opts) {
+    opts = mockAjax(opts);
+    return orig_ajax(opts);
+}
+
 var Bookmark = Model.Bookmark, Tag = Model.Tag;
 
 Deferred.test = function(name, t, count, wait) {
@@ -72,6 +87,7 @@ Deferred.test = function(name, t, count, wait) {
 // var i = 0;
 Deferred.test.setup = function(d) {
 //    console.log('setup' + (++i));
+    Timer.__defineGetter__('now', function() { return (new Date).getTime() });
     d.call();
 };
 
@@ -180,23 +196,26 @@ test('ExpireCache', function(d) {
 test('HTTPCache', function(d) {
     ExpireCache.clearAllCaches();
     var cache = new HTTPCache('test');
-    var url = 'http://www.google.com/';
+    var url = 'http://b.hatena.ne.jp/index.html';
+    var r_tmp;
     cache.get(url).next(function(res) {
         ok(res, 'get cache1');
-    }).next(function() {
+        return res.toString();
+    }).next(function(res1) {
         ok(cache.has(url), 'has cache');
         cache.get(url).next(function(res) {
             ok(res, 'get cache2');
+            is(res, res1, 'eq cache');
             cache.clearAll();
             ok(!cache.has(url), 'cache clear all');
         });
     }).next(function() {
         d.call();
     });
-}, 4, 3000).
+}, 5, 3000).
 
 test('HTTPCache(s)', function(d) {
-    var url = 'http://b.hatena.ne.jp/secondlife/';
+    var url = 'http://b.hatena.ne.jp/index.html';
     ExpireCache.clearAllCaches();
     Deferred.parallel([
         HTTPCache.counter.get('https://www.hatena.ne.jp/').next(function(r) {
@@ -214,7 +233,7 @@ test('HTTPCache(s)', function(d) {
             ok(r, 'entry cache');
         })
     ]).next(function() { return Deferred.parallel([
-        HTTPCache.counter.get('https://example.comn/').next(function(r) {
+        HTTPCache.counter.get('https://www.hatena.ne.jp/').next(function(r) {
             ok(r == null, '2: counter cache null');
         }),
         HTTPCache.counter.get(url).next(function(r) {
@@ -229,7 +248,7 @@ test('HTTPCache(s)', function(d) {
             ok(r, '2: entry cache');
         })
     ]) }).next(function() { d.call(); });
-}, 12, 10000).
+}, 12, 1000).
 
 test('Model Bookmark/Tag', function(d) {
     var db = new Database('testModelBookmarkTag');
@@ -282,7 +301,7 @@ test('Model Bookmark/Tag', function(d) {
 }, 12, 2000).
 
 test('UserManeger', function(d) {
-    UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
+    // UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
     UserManager.deferred('bind', 'UserChange').next(function(ev, user) {
         ok(true, 'Loggin!');
         equals(UserManager.user, user, 'user');
@@ -300,10 +319,12 @@ test('UserManeger', function(d) {
 }, 7, 1000).
 
 test('sync sync sync', function(d) {
+    Timer.__defineGetter__('now', function() { return 1255663923100 });
     var db = new Database('SyncTest');
     Model.getDatabase = function() { return db };
+    var user = new User('hatenatest', {});
     Sync.getDataURL = function() {
-        return '/tests/data/../data/hatenatest.data';
+        return user.dataURL;
     }
     Sync.deferred('bind', 'progress').next(function(ev, obj) {
         if (obj.value !== null && obj.value == 0) {
@@ -318,9 +339,6 @@ test('sync sync sync', function(d) {
             Tag.find({where: {name: 'db'}}).next(function(r) {
                 equals(r.length, 13, 'tag');
 
-                Sync.getDataURL = function() {
-                    return '/tests/data/../data/hatenatest.new.data';
-                }
                 Sync.deferred('bind', 'complete').next(function() {
                     ok(true, 'sync sync');
                     Bookmark.count().next(function(r) {
