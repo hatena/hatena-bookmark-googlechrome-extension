@@ -19,7 +19,7 @@ var sprintf = function (str) {
         var r = String(args.shift());
         var c = '';
         num = parseInt(num) - r.length;
-        while (num--) c += '0';
+        while (--num >= 0) c += '0';
         return c + r;
     }).replace(/%[sdf]/g, function(m) { return sprintf._SPRINTF_HASH[m](args.shift()) });
 };
