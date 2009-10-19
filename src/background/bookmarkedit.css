@@ -25,6 +25,21 @@ body {
     font-family: sans-serif;
 }
 
+a:link,
+a:hover,
+a:visited {
+    color: #000080;
+}
+
+a#users-count:link,
+a#users-count:hover,
+a#users-count:visited {
+    font-size: 90%;
+    color: #E9637A;
+    padding: 0px 3px 0px 3px;
+    font-weight: bold;
+}
+
 #header {
     width:100%;
     display: table;
@@ -83,6 +98,17 @@ body {
 #comment-area {
     width: 100%;
     display: table;
+}
+
+#bookmarked-notice {
+    text-align: center;
+    padding: 5px;
+    margin: 3px;
+    font-size: 90%;
+    font-weight: bold;
+    color: #555;
+    background-color: #FDD;
+    border-radius: 3px;
 }
 
 #type-counter {

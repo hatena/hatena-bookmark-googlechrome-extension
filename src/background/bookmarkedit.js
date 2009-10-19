@@ -25,7 +25,9 @@ function init() {
 
 function setByBookmark(b) {
     if (b) {
-        p(b.date);
+        $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
+        .removeClass('none');
+        $('#comment').attr('value', b.comment);
     }
 }
 
@@ -40,15 +42,13 @@ function setURL(url) {
 }
 
 function setEntry(entry) {
-    p(entry);
-    // [{"favorites":[{"body":"\u3066\u3059\u3068","is_private":null,"epoch":1235065834,"timestamp":"2009/02/19","name":"nagayama","tags":[]}],"count":"33","recommend_tags":["test","rfc","network","dns","microblog","\u30a4\u30f3\u30bf\u30fc\u30cd\u30c3\u30c8","hb","html","\u30c6\u30b9\u30c8","hatenabookmark"],"entry_url":"http://b.hatena.ne.jp/entry/example.com/","original_url":"http://example.com/","title_last_editor":"","url":"http://example.com/","title":"Example Web Page","has_asin":0}]
     $('body').removeClass('data-loading');
     $('#title-text').text(entry.title);
     setURL(entry.original_url);
     var count = parseInt(entry.count);
     if (count) {
         var uc = $('#users-count');
-        uc.text(String(count) + (count == 1 ? 'user' : 'users'));
+        uc.text(String(count) + (count == 1 ? ' user' : ' users'));
         uc.attr('href', entry.entry_url);
         $('#users-count-container').removeClass('none');
     }

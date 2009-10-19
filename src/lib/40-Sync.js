@@ -70,7 +70,7 @@ jQuery.extend(Sync, {
                 } else {
                 }
                 if (i && (i % items == 0)) {
-                    // console.log('' + i + title);
+                    console.log('' + i + title);
                 }
                 /*
                 if (i && (i % items == 0)) {
