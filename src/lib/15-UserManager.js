@@ -51,6 +51,12 @@ var User = function(name, options) {
 
 User.prototype = {
     get name() { return this._name },
+    get icon() { return this.getProfileIcon(false) },
+    getProfileIcon: function(isLarge) {
+        var name = this.name;
+        return sprintf('http://www.st-hatena.com/users/%s/%s/profile%s.gif',
+                       name.substring(0, 2), name, isLarge ? '' : '_s');
+    },
     get plususer() { return this.options.plususer == 1 },
     get rks() { return this.options.rks },
     get private() { return this.options.private == 1 },
@@ -85,3 +91,5 @@ User.prototype = {
     clear: function user_clear() {
     }
 };
+
+
