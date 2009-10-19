@@ -14,6 +14,8 @@ function init() {
     } else {
         $('#plus-inputs').remove();
     }
+    $('#title-text').text(request_uri.param('title'));
+    $('#favicon').attr('src', request_uri.param('faviconUrl'));
 
     var url = request_uri.param('url');
     setURL(url);
@@ -36,14 +38,16 @@ function setURL(url) {
     $('#url').text(url);
     $('#url').attr('href', url);
 
-    var faviconURI = new URI('http://favicon.st-hatena.com');
-    faviconURI.param({url: url});
-    $('#favicon').attr('src', faviconURI);
+    if (!$('#favicon').attr('src') {
+        var faviconURI = new URI('http://favicon.st-hatena.com');
+        faviconURI.param({url: url});
+        $('#favicon').attr('src', faviconURI);
+    }
 }
 
 function setEntry(entry) {
     $('body').removeClass('data-loading');
-    $('#title-text').text(entry.title);
+    if (entry.title) $('#title-text').text(entry.title);
     setURL(entry.original_url);
     var count = parseInt(entry.count);
     if (count) {
@@ -54,13 +58,17 @@ function setEntry(entry) {
     }
 }
 
+function closeWin() {
+    chrome.windows.remove(currentWin.id);
+}
+
 function formSubmitHandler(ev) {
     var form = $(this);
 
     var user = UserManager.user;
     user.saveBookmark(form.serialize());
     setTimeout(function() {
-        chrome.windows.remove(currentWin.id);
+        closeWin();
     }, 0);
     return false;
 }

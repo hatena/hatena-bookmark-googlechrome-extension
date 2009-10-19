@@ -44,7 +44,7 @@ var import = function(source, names, target) {
 
 var $K = function(i) { return function() { return i } };
 
-Utils = {
+var Utils = {
     isString: function(obj) {
         return typeof obj === 'string' || obj instanceof String;
     },
@@ -58,6 +58,11 @@ Utils = {
             dateStr.substr(10,2),
             dateStr.substr(12,2)
         );
+    },
+    editBookmarkCurrent: function(winId) {
+        chrome.tabs.getSelected(winId, function(tabs) {
+            chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tabs.id);
+        });
     }
 }
 

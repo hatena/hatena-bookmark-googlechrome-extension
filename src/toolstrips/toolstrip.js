@@ -1,6 +1,6 @@
 
-function addBookmark() {
-    chrome.extension.getBackgroundPage().Manager.editBookmark();
+function editBookmark() {
+    Utils.editBookmarkCurrent();
 }
 
 

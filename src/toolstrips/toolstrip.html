@@ -2,15 +2,18 @@
 <html>
 <head>
 <meta charset="utf-8" />
+<script type="text/javascript" src="../lib/02-Utils.js"></script>
+<script type="text/javascript" src="toolstrip.js"></script>
 <!--
 <script type="text/javascript" src="../lib/utils.js"></script>
-<script type="text/javascript" src="toolstrip.js"></script>
 <link rel="stylesheet" href="toolstrip.css" type="text/css" media="all" />
 -->
 </head>
 <body>
 <div class="toolstrip-button">
     <span onclick="chrome.windows.create({url:'../tests/test.html'});" id="runtest"><img src="../images/chrome-b-search.png" width="16" height="16" title="runtests" alt="runtests" /></span>
+
+    <span onclick="editBookmark();" id="runtest"><img src="../images/chrome-b-plus.png" width="16" height="16" title="runtests" alt="runtests" /></span>
 </div>
 </body>
 </html>

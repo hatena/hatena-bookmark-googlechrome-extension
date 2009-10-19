@@ -54,7 +54,7 @@ a#users-count:visited {
 }
 
 #edit {
-    padding: 8px;
+    padding: 8px 8px 0 8px;
     width:100%;
     display: table;
 }
