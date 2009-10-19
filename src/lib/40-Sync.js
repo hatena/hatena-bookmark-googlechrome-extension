@@ -11,12 +11,9 @@ jQuery.extend(Sync, {
         var url = URI.parse(Sync.getDataURL());
         url.param({_now: Timer.now});
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
-            // console.log(b);
-            if (b) console.log('aaa', b.dateFullYMD);
             if (b)
                 url.param({timestamp: b.dateFullYMD});
         }).next(function() {
-            console.log(url.toString());
             $.get(url.toString()).next(Sync.dataSync).error(Sync.errorback);
         }).error(Sync.errorback);
     },
