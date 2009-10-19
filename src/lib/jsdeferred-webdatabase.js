@@ -656,7 +656,7 @@
                 var result = [], rows = res.rows;
                 var len = rows.length;
                 for (var i = 0;  i < len; i++) {
-                    var r = new klass(rows.item(i));
+                    var r = new klass(rows.item(i), true);
                     r._created = true;
                     result.push(r);
                 }

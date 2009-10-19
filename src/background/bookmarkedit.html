@@ -9,134 +9,26 @@
 <script type="text/javascript" src="../lib/02-Utils.js"></script>
 <script type="text/javascript" src="../lib/05-Config.js"></script>
 <script type="text/javascript" src="bookmarkedit.js"></script>
-<!--
 <link rel="stylesheet" href="bookmarkedit.css" type="text.css" />
--->
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    font: 100%/1.4 "Arial", "Helvetica", sans-serif;
-}
-
-pre {
-  margin: 0.5em 1.5em;
-  padding: 0.5em;
-  border: 1px solid #ddd;
-  font-family: monospace;
-  font-size: 90%;
-}
-
-blockquote cite {
-  font-style: normal;
-}
-
-blockquote cite a {
-  white-space: nowrap;
-}
-
-body {
-    font-size: 85%;
-    font-family: sans-serif;
-}
-
-#header {
-    width:100%;
-    display: table;
-    text-align:right;
-    background: #EEE url('/images/logo-text.png') no-repeat 10px center;
-    padding: 5px;
-    font-size: 90%;
-}
-
-#username {
-    margin: 0 4px 0 4px;
-}
-
-#edit {
-    padding: 8px;
-    width:100%;
-    display: table;
-}
-
-.edit-row {
-    display: table-row;
-}
-
-.edit-left {
-    width: 80px;
-    font-size: 90%;
-    font-weight: bold;
-}
-
-.edit-cell {
-    display: table-cell;
-}
-
-#comment {
-    width: 100%;
-}
-
-#comment-area {
-    width: 100%;
-    display: table;
-}
-
-#type-counter {
-    width: 60px;
-    padding-left: 10px;
-}
-
-#bookmark-options {
-}
-
-#checkbox-options {
-    padding: 3px;
-    font-size: 90%;
-}
-
-#checkbox-options label {
-    margin-right: 5px;
-    cursor:pointer;
-}
-
-#recommend-tags-container, #all-tags-container {
-    padding:0px 8px 0px 8px;
-}
-
-#recommend-tags-container dt, #all-tags-container dt {
-    padding:5px 0px 0px 5px;
-    font-weight: bold;
-    font-size: 90%;
-}
-
-#recommend-tags-container dd, #all-tags-container dd {
-    background-color: #E7F0FC;
-    border-radius: 3px;
-    padding: 6px;
-    font-size: 90%;
-}
-
-#title {
-    font-weight: bold;
-    font-size: 110%;
-}
-
-</style>
 </head>
-<body>
-<div id="header">ようこそ<img id="user-icon"><a id="username">hogehoge</a>さん</div>
+<body class="data-loading">
+<div id="header">ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん</div>
+<form id="form">
 <div id="edit">
     <div class="edit-row">
         <div class="edit-left edit-cell">タイトル:</div>
-        <div id="title" class="edit-cell">ほげほげ</div>
+        <div id="title" class="edit-cell loaded"><img id="favicon" width="16" height="16"><span id="title-text"></span></div>
+        <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16">データをロードしています…</div>
     </div>
     <div class="edit-row">
         <div class="edit-left edit-cell">URL:</div>
         <div class="edit-cell">
-            <a href="http://example.com/" id="url">http://hogehoge.com/</a>
-            <br>
-            <span id="users-count">1 users</span><img id="comment-show">
+            <div>
+                <a href="" id="url"></a>
+            </div>
+            <div>
+                <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
+            </div>
         </div>
     </div>
     <div class="edit-row">
@@ -147,13 +39,16 @@ body {
                 <span class="edit-cell" id="type-counter">0/100</span>
             </div>
             <div id="checkbox-options">
-                <input type="hidden" id="with_status_op" name="with_status_op" />
-                <input type="checkbox" id="confirm-bookmark" name="confirm-bookmark" />
+                <input type="hidden" id="input-url" name="url" />
+                <input value="1" type="checkbox" id="confirm-bookmark" name="confirm-bookmark" />
                 <label for="confirm-bookmark">ブックマークを確認</label>
-                <input type="checkbox" id="private" name="private" />
-                <label for="private">公開しない</label>
-                <input type="checkbox" id="send_mail" name="send_mail" />
-                <label for="send_mail">メールする</label>
+                <span id="plus-inputs" class="none">
+                    <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
+                    <input value="1" type="checkbox" id="private" name="private" />
+                    <label for="private">公開しない</label>
+                    <input value="1" type="checkbox" id="send_mail" name="send_mail" />
+                    <label for="send_mail">メールする</label>
+                </span>
             </div>
         </div>
     </div>
@@ -166,6 +61,21 @@ body {
     <dt>タグ<dt>
     <dd id="all-tags"><span class="tag">firefox</span></dd>
 </dl>
+<div id="buttons">
+    <div class="edit-row">
+        <div class="edit-cell">
+            <input id="delete-button" type="button" value="削除" />
+        </div>
+        <div id="buttons-spacer" class="edit-cell"></div>
+        <div class="edit-cell">
+            <input type="submit" value="追加" />
+        </div>
+        <div class="edit-cell">
+            <input id="cancel" type="button" value="キャンセル" />
+        </div>
+    </div>
+</div>
+</form>
 </body>
 </html>
 

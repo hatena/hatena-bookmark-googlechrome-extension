@@ -88,6 +88,9 @@ User.prototype = {
     //     return UserUtils.getProfileIcon(this.name, isLarge);
     // },
 
+    saveBookmark: function(data) {
+        p(data);
+    },
     clear: function user_clear() {
     }
 };

@@ -107,6 +107,19 @@ var Database = Deferred.WebDatabase;
 var Model = Database.Model, SQL = Database.SQL;
 
 Deferred.
+test("utils", function(d) {
+    equals(sprintf('foo%sbar%sbaz', '-', '-'), 'foo-bar-baz');
+    equals(sprintf('foo%dbar%dbaz', '30hogehoge', 22), 'foo30bar22baz');
+    equals(sprintf('%05d-%04d-%03d', 10, 10, 10), '00010-0010-010');
+    ok(Utils.isString('foo'), 'isString');
+    ok(Utils.isString(new String('foo')), 'isString');
+    ok(!Utils.isString(null), 'isString null');
+    ok(!Utils.isString(undefined), 'isString undef');
+
+    equals(Utils.strToDate('20091019175513').getTime(), 1255942513*1000);
+    ok(Utils.strToDate('20091019175513') instanceof Date, 'date');
+    d.call();
+}).
 test("uri", function(d) {
     var hatena = 'http://www.hatena.ne.jp/foobar?query=foo#hash=bar';
     var u = URI.parse(hatena);
@@ -276,6 +289,10 @@ test('HTTPCache(s)', function(d) {
 test('Model Bookmark/Tag', function(d) {
     var db = new Database('testModelBookmarkTag');
     Model.getDatabase = function() { return db };
+
+    var bDate = new Bookmark();
+    bDate.date = new Date(1255519120 * 1000);
+    equals(bDate.get('date'), 1255519120 , 'date proxy');
     // Database.debugMessage = true;
     Model.initialize(true).next(function() {
         ok(true, 'initialize model');
@@ -283,10 +300,11 @@ test('Model Bookmark/Tag', function(d) {
             url: 'http://www.hatena.ne.jp/',
             comment: '[hatena][はてな]これはすごい',
             title: 'はてなのサイト',
-            date: 1255519120
         });
+        bookmark.set('date', 1255519120);
         bookmark.saveWithTransaction().next(function(b) {
             equals(b.id, 1);
+            equals(b.date - 0, new Date(1255519120 * 1000)-0, 'date proxy');
             ok(b.search.indexOf('これはすごい') != -1, 'search comment');
             ok(b.search.indexOf('サイト') != -1, 'search title');
             Tag.find({}).next(function(tags) {
@@ -300,8 +318,8 @@ test('Model Bookmark/Tag', function(d) {
                             url: 'http://www.hatena.ne.jp/' + i,
                             comment: '[hatena][はてな]これはすごい' + i,
                             title: 'はてなのサイト' + i,
-                            date: 1255519120 + i
                         });
+                        b.set('date', 1255519120 + i);
                         b.save().next();
                     }
                 }).next(function() {
@@ -321,7 +339,7 @@ test('Model Bookmark/Tag', function(d) {
             });
         });
     });
-}, 12, 2000).
+}, 14, 5000).
 
 test('UserManeger', function(d) {
     // UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';

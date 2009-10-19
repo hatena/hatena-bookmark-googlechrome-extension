@@ -47,6 +47,21 @@ Bookmark = Model.Bookmark = Model({
     }
 });
 
+Bookmark.proxyColumns({
+    date: {
+        getter: function(val) {
+            if (typeof val == 'undefined') {
+                return;
+            } else {
+                return new Date(val * 1000);
+            }
+        },
+        setter: function(val) {
+            return val.getTime() / 1000;
+        }
+    }
+});
+
 Bookmark.__defineGetter__('database', function() { return Model.getDatabase() });
 
 Bookmark.afterTrigger('createTable', function() {
@@ -63,6 +78,9 @@ $.extend(Bookmark, {
     },
     afterSave: function(b) {
         b.updateTags();
+    },
+    findByUrl: function(url) {
+        return Bookmark.findFirst({where: {url: url}});
     },
     parseTags: function(str) {
         var tmp = Bookmark.parse(str);
@@ -116,6 +134,10 @@ $.extend(Bookmark.prototype, {
         if (this.id) {
             return Tag.destroyByBookmark(this).next(Tag.createByBookmark(this));
         }
+    },
+    get dateFullYMD() {
+        var d = this.date;
+        return sprintf('%04d%02d%02d%02d%02d%02d', d.getFullYear() + (d.getMonth()+1) + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds());
     },
     get tags() {
         return Bookmark.parseTags(this.comment);

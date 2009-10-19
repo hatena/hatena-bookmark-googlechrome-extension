@@ -8,12 +8,6 @@ var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 var GLOBAL = this;
 
-if (Deferred.WebDatabase) {
-    var Database = Deferred.WebDatabase;
-    // Database.debugMessage = true;
-    var Model = Database.Model, SQL = Database.SQL;
-}
-
 // utility
 var p = function() {
     console.log(JSON.stringify(Array.prototype.slice.call(arguments, 0, arguments.length)));
@@ -21,7 +15,19 @@ var p = function() {
 
 var sprintf = function (str) {
     var args = Array.prototype.slice.call(arguments, 1);
-    return str.replace(/%[sdf]/g, function(m) { return sprintf._SPRINTF_HASH[m](args.shift()) });
+    return str.replace(/%0(\d+)d/g, function(m, num) {
+        var r = String(args.shift());
+        var c = '';
+        num = parseInt(num) - r.length;
+        while (num--) c += '0';
+        return c + r;
+    }).replace(/%[sdf]/g, function(m) { return sprintf._SPRINTF_HASH[m](args.shift()) });
+};
+
+sprintf._SPRINTF_HASH = {
+    '%s': String,
+    '%d': parseInt,
+    '%f': parseFloat
 };
 
 var import = function(source, names, target) {
@@ -36,15 +42,32 @@ var import = function(source, names, target) {
     }
 }
 
-sprintf._SPRINTF_HASH = {
-    '%s': String,
-    '%d': parseInt,
-    '%f': parseFloat,
-};
-
 var $K = function(i) { return function() { return i } };
 
+Utils = {
+    isString: function(obj) {
+        return typeof obj === 'string' || obj instanceof String;
+    },
+    strToDate: function(dateStr) {
+        // dateStr // yyyymmddhhmmss
+        return new Date(
+            dateStr.substr(0,4),
+            parseInt(dateStr.substr(4,2)) - 1,
+            dateStr.substr(6,2),
+            dateStr.substr(8,2),
+            dateStr.substr(10,2),
+            dateStr.substr(12,2)
+        );
+    }
+}
+
 if (typeof Deferred != 'undefined') {
+    if (Deferred.WebDatabase) {
+        var Database = Deferred.WebDatabase;
+        // Database.debugMessage = true;
+        var Model = Database.Model, SQL = Database.SQL;
+    }
+
     Deferred.prototype._fire = function (okng, value) {
         var next = "ok";
         try {

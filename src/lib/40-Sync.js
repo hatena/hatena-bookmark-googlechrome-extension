@@ -8,12 +8,16 @@ jQuery.extend(Sync, {
     sync: function Sync_sync() {
         if (Sync._syncing) return;
         Sync._syncing = true;
-        var url = Sync.getDataURL() + '?_now=' + Timer.now;
+        var url = URI.parse(Sync.getDataURL());
+        url.param({_now: Timer.now});
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
             // console.log(b);
-            if (b) url += '&timestamp=' + b.get('date');
+            if (b) console.log('aaa', b.dateFullYMD);
+            if (b)
+                url.param({timestamp: b.dateFullYMD});
         }).next(function() {
-            $.get(url).next(Sync.dataSync).error(Sync.errorback);
+            console.log(url.toString());
+            $.get(url.toString()).next(Sync.dataSync).error(Sync.errorback);
         }).error(Sync.errorback);
     },
     getDataURL: function() {
@@ -53,11 +57,12 @@ jQuery.extend(Sync, {
                 var title = bookmarks[bi];
                 var comment = bookmarks[bi+1];
                 var url = bookmarks[bi+2];
+                if (!timestamp) { continue; };
                 var b = new Bookmark;
                 b.title = title;
                 b.comment = (comment || '').replace(commentRe, '');
                 b.url = url;
-                b.date = parseInt(timestamp);
+                b.set('date', Utils.strToDate(timestamp) / 1000);
                 if (url) {
                     try {
                         b.save().error(function(e) {
@@ -68,7 +73,7 @@ jQuery.extend(Sync, {
                 } else {
                 }
                 if (i && (i % items == 0)) {
-                    console.log('' + i + title);
+                    // console.log('' + i + title);
                 }
                 /*
                 if (i && (i % items == 0)) {
