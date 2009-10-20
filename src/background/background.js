@@ -3,12 +3,12 @@ var Manager = $({});
 
 $.extend(Manager, {
     editBookmark: function(url, options) {
-        var uri = URI.parse('http://chrome/background/bookmarkedit.html');
+        var uri = URI.pathQuery('/background/bookmarkedit.html');
         if (options) uri.param(options);
         uri.param({
             url: url
         });
-        window.open(uri.path_query, 'bookmarkedit');
+        window.open(uri.pathQuery, 'bookmarkedit');
     },
     editBookmarkTab: function(tabId) {
         chrome.tabs.get(tabId, function(tab) {

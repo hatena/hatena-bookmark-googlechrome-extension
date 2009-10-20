@@ -20,6 +20,10 @@ URI.parse = function(url) {
     return URI.apply(null, m);
 }
 
+URI.pathQuery = function(path) {
+    return URI.parse('none://none/' + path);
+}
+
 URI.prototype = {
     init: function(schema, host, port, path, search, hash) {
         this.schema = schema || '';
@@ -29,17 +33,23 @@ URI.prototype = {
         this.search = search || '';
         this.hash = hash || '';
     },
-    get path_query() {
+    get pathQuery() {
         return this.path + this.search;
     },
     get encodeURI() {
         return encodeURIComponent(this.href);
     },
-    param: function(obj) {
+    param: function(obj, arg) {
         var pair = this._getSearchHash();
-        if (typeof obj === 'string' || obj instanceof String) {
+        if ((typeof obj === 'string' || obj instanceof String) && typeof arg == 'undefined') {
             return pair[obj];
         } else {
+            if (typeof arg != 'undefined') {
+                var key = obj;
+                obj = {};
+                obj[key] = arg;
+            }
+
             var updated = false;
             for (var key in obj) {
                 if (obj[key] === null || typeof obj[key] == 'undefined') {

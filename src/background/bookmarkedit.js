@@ -38,7 +38,7 @@ function setURL(url) {
     $('#url').text(url);
     $('#url').attr('href', url);
 
-    if (!$('#favicon').attr('src') {
+    if (!$('#favicon').attr('src')) {
         var faviconURI = new URI('http://favicon.st-hatena.com');
         faviconURI.param({url: url});
         $('#favicon').attr('src', faviconURI);

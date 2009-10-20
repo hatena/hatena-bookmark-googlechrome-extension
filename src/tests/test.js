@@ -131,7 +131,7 @@ test("uri", function(d) {
     equals(u.host, 'www.hatena.ne.jp');
     equals(u.path, '/foobar');
     equals(u.href, hatena);
-    equals(u.path_query, '/foobar?query=foo');
+    equals(u.pathQuery, '/foobar?query=foo');
     equals(u.encodeURI, encodeURIComponent(hatena));
     equals(u.entryURL, B_HTTP + 'entry/www.hatena.ne.jp/foobar?query=foo%23hash=bar');
 
@@ -145,7 +145,7 @@ test("uri", function(d) {
     equals(u.host, 'www.hatena.ne.jp');
     equals(u.path, '/');
     equals(u.href, hatena);
-    equals(u.path_query, '/');
+    equals(u.pathQuery, '/');
     equals(u.encodeURI, encodeURIComponent(hatena));
     equals(u.entryURL, B_HTTP + 'entry/s/www.hatena.ne.jp/');
 
@@ -162,11 +162,11 @@ test("uri", function(d) {
     equals(u.param('query1'), 'bar#');
     equals(u.param('query2'), null);
     equals(u.search, '?query1=bar%23');
-    u.param({query3: 'baz'});
+    u.param('query3', 'baz');
     equals(u.search, '?query1=bar%23&query3=baz');
-    var uriqueryundef;
+    var undef;
     u.param({
-        query1: uriqueryundef,
+        query1: undef,
         query2: null,
         query3: null,
     });
