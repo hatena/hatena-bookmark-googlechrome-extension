@@ -24,6 +24,15 @@ URI.pathQuery = function(path) {
     return URI.parse('none://none/' + path);
 }
 
+URI.parseQuery = function(query) {
+     var res = {};
+     query.split('&').forEach(function(q) {
+         var kv = q.split('=',2);
+         res[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]);
+     });
+     return res;
+}
+
 URI.prototype = {
     init: function(schema, host, port, path, search, hash) {
         this.schema = schema || '';
@@ -77,16 +86,8 @@ URI.prototype = {
             return {};
         } else {
             var query = this.search.substring(1);
-            return this._queries(query);
+            return URI.parseQuery(query);
         }
-    },
-    _queries: function(query) {
-         var res = {};
-         query.split('&').forEach(function(q) {
-             var kv = q.split('=',2);
-             res[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]);
-         });
-         return res;
     },
     get entryURL() {
         var url = [

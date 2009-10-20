@@ -22,7 +22,8 @@ var p = function() {
 }
 
 var is = function(a, b, mes) {
-    equals(a.toString(), b.toString(), mes);
+    equals(JSON.stringify(a), JSON.stringify(b), mes);
+    // equals(a.toString(), b.toString(), mes);
 }
 
 function mockAjax(opts) {
@@ -172,8 +173,17 @@ test("uri", function(d) {
     });
     equals(u.search, '');
 
+    var parsed = URI.parseQuery('comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1');
+    is(parsed, {
+        comment: '[hatena]hatenabookmark',
+        url: 'http://b.hatena.ne.jp/',
+        with_status_op: '1',
+        private: '1',
+    });
+    ok(!parsed.foo);
+
     d.call();
-}, 30, 1000).
+}, 32, 1000).
 
 test("timer", function(d){
     var t = Timer.create(10, 5); // 10ms, 5times
