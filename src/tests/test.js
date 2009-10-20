@@ -121,6 +121,96 @@ test("utils", function(d) {
     ok(Utils.strToDate('20091019175513') instanceof Date, 'date');
     d.call();
 }).
+
+test("jQuery classlike", function(d) {
+    var Klass = $({});
+    $.extend(Klass, {
+        _id: 0,
+        getID: function() { return ++this._id },
+        init: function(val) {
+            this.id = Klass.getID();
+            this.val = val;
+        },
+    });
+
+    Klass.prototype = {
+        dispatchTrigger: function() {
+            Klass.trigger('dispatch', this);
+        }
+    }
+    Klass.init.prototype = Klass.prototype;
+
+    var klass1 = new Klass.init('foo');
+    equals(klass1.id, 1);
+
+    var klass2 = new Klass.init('bar');
+    equals(klass2.id, 2);
+
+    Klass.bind('dispatch', function(ev, target) {
+        equals(target.id, klass1.id);
+    });
+    klass1.dispatchTrigger();
+
+    Klass.unbind('dispatch');
+
+    Klass.bind('dispatch', function(ev, target) {
+        equals(target.id, klass2.id);
+    });
+    klass2.dispatchTrigger();
+
+    d.call();
+}, 4).
+
+test("deferred retry", function(d) {
+    var count = 0;
+    var successThird = function() {
+        var deferred = new Deferred;
+        setTimeout(function() {
+            var c = ++count;
+            if (c == 3) {
+                deferred.call('third');
+            } else {
+                deferred.fail('no third');
+            }
+        }, 10);
+        return deferred;
+    }
+    Deferred.retry(successThird, 4).next(function(mes) {
+        equals('third', mes)
+        count = 0;
+        Deferred.retry(successThird, 2).next(function(mes) {
+            ok(false, 'don"t call this');
+        }).error(function(mes) {
+            ok(true, 'retry over');
+            d.call();
+        });
+    }).error(function() {
+        ok(false, 'don"t call this');
+    });
+    // orig_ajax({
+    //     type: 'GET',
+    //     url: 'http://www.google.com/',
+    //     timeout: 1,
+    // }).next(function(s) {
+    //     console.log('success');
+    //     p(s);
+    // }).error(function(a) {
+    //     p(this);
+    //     console.log('error');
+    //     console.log(a);
+    // });
+    // var w = d.wait(0.5).next(function() {
+    //     alert(1);
+    // });
+    // setTimeout(function() {
+    //     w.cancel();
+    // }, 100);
+    // var ret = Deferred.retry(function() {
+    //     return d.wait(1).next(function() { return 10 });
+    // });
+    //d.call();
+}, 2, 2000).
+
 test("uri", function(d) {
     var hatena = 'http://www.hatena.ne.jp/foobar?query=foo#hash=bar';
     var u = URI.parse(hatena);

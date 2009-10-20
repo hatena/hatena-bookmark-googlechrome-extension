@@ -90,6 +90,29 @@ if (typeof Deferred != 'undefined') {
         return this;
     }
     // Deferred.debug = true;
+
+    Deferred.retry = function(funcDeffered, retryCount, wait) {
+        /* funcDeffered() return Deferred */
+        if (typeof retryCount == 'undefined') {
+            retryCount == 1;
+        }
+
+        var d = new Deferred();
+        var retry = function() {
+            var m = funcDeffered(retryCount);
+            m.next(function(mes) {
+                d.call(mes);
+            }).error(function(e) {
+                if (--retryCount <= 0) {
+                    d.fail(['retry failed', e]);
+                } else {
+                    setTimeout(retry, (wait || 0) * 1000);
+                }
+            });
+        };
+        setTimeout(retry, 0);
+        return d;
+    }
 }
 
 

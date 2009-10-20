@@ -118,3 +118,21 @@ URI.prototype = {
     }
 }
 
+/*
+User.SaveRequester = $({});
+User.SaveRequester.prototype = {
+    save: function() {
+        }
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
