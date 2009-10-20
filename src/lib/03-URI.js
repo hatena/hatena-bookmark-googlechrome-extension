@@ -21,7 +21,7 @@ URI.parse = function(url) {
 }
 
 URI.pathQuery = function(path) {
-    return URI.parse('none://none/' + path);
+    return URI.parse('none://none' + path);
 }
 
 URI.parseQuery = function(query) {

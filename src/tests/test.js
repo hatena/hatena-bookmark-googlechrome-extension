@@ -175,10 +175,10 @@ test("deferred retry", function(d) {
         }, 10);
         return deferred;
     }
-    Deferred.retry(successThird, 4).next(function(mes) {
+    Deferred.retry(4, successThird).next(function(mes) {
         equals('third', mes)
         count = 0;
-        Deferred.retry(successThird, 2).next(function(mes) {
+        Deferred.retry(2, successThird).next(function(mes) {
             ok(false, 'don"t call this');
         }).error(function(mes) {
             ok(true, 'retry over');

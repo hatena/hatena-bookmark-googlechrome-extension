@@ -79,6 +79,9 @@ User.prototype = {
         // var res = model('Bookmark').findByUrl(url);
         // return res && res[0] ? true : false;
     },
+    getEndPoint: function(name) {
+        return B_HTTP + this.name + '/' + name;
+    },
     get database() {
         return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
     },
@@ -89,8 +92,25 @@ User.prototype = {
     // },
 
     saveBookmark: function(data) {
-        p(data);
         // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1"]
+        var data = URI.parseQuery(data);
+        data.rks = this.rks;
+        var endpoint = this.getEndPoint('add.edit.json');
+        Deferred.retry(3, function() {
+            return $.ajax({
+                url: endpoint,
+                type: 'POST',
+                data: data,
+                timeout: 10000,
+            });
+        }, {wait: 3}).next(function(res) {
+            // XXX データに基づき更新する
+            console.log('save success');
+            // console.log(res);
+            Sync.sync();
+        }).error(function(res) {
+            console.log('save error');
+        });
     },
     clear: function user_clear() {
     }

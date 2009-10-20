@@ -26,6 +26,7 @@ jQuery.extend(Sync, {
         Sync.trigger('fail', [e]);
     },
     dataSync: function Sync_dataSync(res) {
+        p('sync res' + res);
         Sync.trigger('progress', {value: 0});
         var Bookmark = M('Bookmark');
 
