@@ -4,7 +4,7 @@
  *
  * http://coderepos.org/share/wiki/JSDeferred
  *
- * Version:: 0.2.2
+ * Version:: 0.3.0
  * License:: MIT
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -116,6 +116,7 @@ Deferred.prototype = {
 		} catch (e) {
 			next  = "ng";
 			value = e;
+			if (Deferred.onerror) Deferred.onerror(e);
 		}
 		if (value instanceof Deferred) {
 			value._next = this._next;
@@ -290,6 +291,37 @@ Deferred.parallel = function (dl) {
 	return ret;
 };
 
+/* function earlier (deferredlist) //=> Deferred
+ *
+ * Continue process when one deferred in `deferredlist` has completed. Others will cancel.
+ * parallel ('and' processing) <=> earlier ('or' processing)
+ */
+Deferred.earlier = function (dl) {
+	var ret = new Deferred(), values = {}, num = 0;
+	for (var i in dl) if (dl.hasOwnProperty(i)) (function (d, i) {
+		d.next(function (v) {
+			values[i] = v;
+			if (dl instanceof Array) {
+				values.length = dl.length;
+				values = Array.prototype.slice.call(values, 0);
+			}
+			ret.canceller();
+			ret.call(values);
+		}).error(function (e) {
+			ret.fail(e);
+		});
+		num++;
+	})(dl[i], i);
+
+	if (!num) Deferred.next(function () { ret.call() });
+	ret.canceller = function () {
+		for (var i in dl) if (dl.hasOwnProperty(i)) {
+			dl[i].cancel();
+		}
+	};
+	return ret;
+};
+
 
 /* function loop (n, fun) //=> Deferred
  *
@@ -343,6 +375,32 @@ Deferred.loop = function (n, fun) {
 	});
 };
 
+
+/* function repeat (n, fun) //=> Deferred
+ *
+ * Loop `n` tiems with `fun`.
+ * This function automatically return control to browser, if loop time over 20msec.
+ * This is useful for huge loop  not to block browser UI.
+ *
+ * Sample::
+ *     repeat(10, function (i) {
+ *         i //=> 0,1,2,3,4,5,6,7,8,9
+ *     });
+ */
+Deferred.repeat = function (n, f) {
+	var i = 0, end = {}, ret = null;
+	return Deferred.next(function () {
+		var t = (new Date()).getTime();
+		divide: {
+			do {
+				if (i >= n) break divide;
+				ret = f(i++);
+			} while ((new Date()).getTime() - t < 20);
+			return Deferred.call(arguments.callee);
+		}
+	});
+};
+
 /* function Deferred.register (name, fun) //=> void 0
  *
  * Register `fun` to Deferred prototype for method chain.
@@ -371,7 +429,7 @@ Deferred.register = function (name, fun) {
 Deferred.register("loop", Deferred.loop);
 Deferred.register("wait", Deferred.wait);
 
-/* Deferred.connect (func [, opts: { ok : 0, ng : null, target: null} ) //=> Function //=> Deferred
+/* Deferred.connect (func [, opts: { ok : 0, ng : null, target: null} ]) //=> Function //=> Deferred
  *
  * Connect a function with Deferred.  That is, transform a function
  * that takes a callback into one that returns a Deferred object.
@@ -383,7 +441,7 @@ Deferred.register("wait", Deferred.wait);
  *     });
  */
 // Allow to pass multiple values to next.
-Deferred.ResultList = function (args) { this.args = Array.prototype.slice.call(args, 0) }
+Deferred.Arguments = function (args) { this.args = Array.prototype.slice.call(args, 0) }
 Deferred.connect = function (func, obj) {
 	if (!obj) obj = {};
 	var callbackArgIndex  = obj.ok;
@@ -394,14 +452,14 @@ Deferred.connect = function (func, obj) {
 		var d = new Deferred();
 
 		d.next = function (fun) { return this._post("ok", function () {
-			fun.apply(this, (arguments[0] instanceof Deferred.ResultList) ? arguments[0].args : arguments);
+			fun.apply(this, (arguments[0] instanceof Deferred.Arguments) ? arguments[0].args : arguments);
 		}) };
 
 		var args = Array.prototype.slice.call(arguments, 0);
 		if (!(isFinite(callbackArgIndex) && callbackArgIndex !== null)) {
 			callbackArgIndex = args.length;
 		}
-		var callback = function () { d.call(new Deferred.ResultList(arguments)) };
+		var callback = function () { d.call(new Deferred.Arguments(arguments)) };
 		args.splice(callbackArgIndex, 0, callback);
 		if (isFinite(errorbackArgIndex) && errorbackArgIndex !== null) {
 			var errorback = function () { d.fail(arguments) };
@@ -412,8 +470,46 @@ Deferred.connect = function (func, obj) {
 	}
 }
 
+/* Deferred.retry(retryCount, func [, options = { wait : 0 } ])
+ *
+ * Try func (returns Deferred) max `retryCount`.
+ *
+ * Sample::
+ *     Deferred.retry(3, function () {
+ *         return http.get(...);
+ *     }).
+ *     next(function (res) {
+ *         res //=> response if succeeded
+ *     }).
+ *     error(function (e) {
+ *         e //=> error if all try failed
+ *     });
+ */
+Deferred.retry = function (retryCount, funcDeffered/* funcDeffered() return Deferred */, options) {
+	if (!options) options = {};
+
+	var wait = options.wait || 0;
+	var d = new Deferred();
+	var retry = function () {
+		var m = funcDeffered(retryCount);
+		m.
+			next(function (mes) {
+				d.call(mes);
+			}).
+			error(function (e) {
+				if (--retryCount <= 0) {
+					d.fail(['retry failed', e]);
+				} else {
+					setTimeout(retry, wait * 1000);
+				}
+			});
+	};
+	setTimeout(retry, 0);
+	return d;
+}
+
 Deferred.define = function (obj, list) {
-	if (!list) list = ["parallel", "wait", "next", "call", "loop"];
+	if (!list) list = ["parallel", "wait", "next", "call", "loop", "repeat"];
 	if (!obj)  obj  = (function getGlobal () { return this })();
 	for (var i = 0; i < list.length; i++) {
 		var n = list[i];

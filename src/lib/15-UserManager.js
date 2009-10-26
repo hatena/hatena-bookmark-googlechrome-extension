@@ -101,7 +101,7 @@ User.prototype = {
                 url: endpoint,
                 type: 'POST',
                 data: data,
-                timeout: 10000,
+                timeout: 15000,
             });
         }, {wait: 3}).next(function(res) {
             // XXX データに基づき更新する
