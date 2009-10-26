@@ -73,6 +73,7 @@ if (typeof Deferred != 'undefined') {
         var Model = Database.Model, SQL = Database.SQL;
     }
 
+    /*
     Deferred.prototype._fire = function (okng, value) {
         var next = "ok";
         try {
@@ -89,7 +90,9 @@ if (typeof Deferred != 'undefined') {
         }
         return this;
     }
+    */
     // Deferred.debug = true;
+    Deferred.onerror = function(e) { console.error(e);console.error(e.stack) };
 
     Deferred.retry = function(retryCount, funcDeffered/* funcDeffered() return Deferred */, options) {
         if (typeof retryCount == 'undefined')

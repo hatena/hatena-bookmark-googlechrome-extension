@@ -76,8 +76,9 @@ User.prototype = {
         return null;
     },
     hasBookmark: function user_hasBookmark(url) {
-        // var res = model('Bookmark').findByUrl(url);
-        // return res && res[0] ? true : false;
+        return Model.Bookmark.findByUrl(url).next(function(res) {
+            return (res ? true : false);
+        });
     },
     getEndPoint: function(name) {
         return B_HTTP + this.name + '/' + name;
@@ -96,6 +97,7 @@ User.prototype = {
         var data = URI.parseQuery(data);
         data.rks = this.rks;
         var endpoint = this.getEndPoint('add.edit.json');
+        var self = this;
         Deferred.retry(3, function() {
             return $.ajax({
                 url: endpoint,
@@ -104,13 +106,41 @@ User.prototype = {
                 timeout: 15000,
             });
         }, {wait: 3}).next(function(res) {
-            // XXX データに基づき更新する
-            console.log('save success');
-            // console.log(res);
-            Sync.sync();
+            p('save success');
+            self.updateBookmark(data.url, res);
         }).error(function(res) {
-            console.log('save error');
+            p('save error');
         });
+    },
+    updateBookmark: function(url, data) {
+         // XXX
+         try {
+             data = JSON.parse(data);
+         } catch(e) {
+         }
+         var self = this;
+         Model.Bookmark.findByUrl(url).next(function(b) {
+             if (b) {
+                 b.set('comment', data.comment_raw || '');
+                 Model.getDatabase().transaction(function() {
+                     b.save().next(function() {
+                         $(document).trigger('BookmarksUpdated');
+                     });
+                 });
+             } else {
+                 p('update bookmark - save sync' + Sync._syncing);
+                 setTimeout(function() {
+                     Sync.sync();
+                     setTimeout(function() {
+                         p('update bookmark - save sync retry');
+                         self.hasBookmark(url).next(function(has) {
+                             p('update bookmark - save sync retry has: ' + !!has);
+                             if (!has) Sync.sync();
+                         });
+                     }, 10000);
+                 }, 1000);
+             }
+         });
     },
     clear: function user_clear() {
     }

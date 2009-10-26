@@ -13,6 +13,9 @@
   "toolstrips": [
     "toolstrips/toolstrip.html"
   ],
+  "page_action": {
+    "default_title": "B!"
+  },
   // "browser_action": {
   //   "name": "addbookmark",
   //   "icons": ["images/chrome-b-plus.png"],

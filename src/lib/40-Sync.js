@@ -10,6 +10,7 @@ jQuery.extend(Sync, {
         Sync._syncing = true;
         var url = URI.parse(Sync.getDataURL());
         url.param({_now: Timer.now});
+        // M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
         M('Bookmark').findFirst({order: 'date desc'}).next(function(b) {
             if (b)
                 url.param({timestamp: b.dateFullYMD});

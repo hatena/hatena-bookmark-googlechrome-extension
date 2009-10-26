@@ -96,7 +96,7 @@
                 return t.commit(lock);
             }, function(e) {
                 self.clearTransaction();
-                if (Database.debugMessage) p('transaction error:' +  e);
+                if (Database.debugMessage) console.error('transaction error:' +  e);
                 d.fail(e);
             }, function(e) {
                 self.clearTransaction();
