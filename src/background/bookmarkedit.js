@@ -29,6 +29,7 @@ function setByBookmark(b) {
     if (b) {
         $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
         .removeClass('none');
+        $('#delete-button').removeClass('none');
         $('#comment').attr('value', b.comment);
     }
 }
@@ -59,6 +60,12 @@ function setEntry(entry) {
 }
 
 function closeWin() {
+    chrome.windows.remove(currentWin.id);
+}
+
+function deleteBookmark() {
+    var url = request_uri.param('url');
+    UserManager.user.deleteBookmark(url);
     chrome.windows.remove(currentWin.id);
 }
 

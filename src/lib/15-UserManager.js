@@ -92,6 +92,37 @@ User.prototype = {
     //     return UserUtils.getProfileIcon(this.name, isLarge);
     // },
 
+    deleteBookmark: function(url) {
+        var data = {
+            url: url,
+            rks: this.rks,
+        };
+        var endpoint = this.getEndPoint('api.delete_bookmark.json');
+        var self = this;
+
+        Deferred.retry(3, function() {
+            return $.ajax({
+                url: endpoint,
+                type: 'POST',
+                data: data,
+                timeout: 15000,
+            });
+        }, {wait: 3}).next(function(res) {
+            p('remote delete success - ' url);
+            Model.Bookmark.findByUrl(url).next(function(b) {
+                if (b) {
+                    // XXX: remove tag
+                    p('delete bookmarked - ' + url);
+                    b.destroy().next(function() {
+                         $(document).trigger('BookmarksUpdated');
+                    });
+                }
+            });
+        }).error(function(res) {
+            Manager.deleteBookmarkError(data);
+        });
+    },
+
     saveBookmark: function(data) {
         // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1"]
         var data = URI.parseQuery(data);
@@ -106,10 +137,10 @@ User.prototype = {
                 timeout: 15000,
             });
         }, {wait: 3}).next(function(res) {
-            p('save success');
+            p('remote save success - ' + data.url);
             self.updateBookmark(data.url, res);
         }).error(function(res) {
-            p('save error');
+            Manager.saveBookmarkError(data);
         });
     },
     updateBookmark: function(url, data) {
@@ -138,7 +169,7 @@ User.prototype = {
                              if (!has) Sync.sync();
                          });
                      }, 10000);
-                 }, 1000);
+                 }, 500);
              }
          });
     },

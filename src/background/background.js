@@ -27,6 +27,12 @@ $.extend(Manager, {
             });
         });
     },
+    editBookmarkError: function(data) {
+        console.error(data);
+    },
+    deleteBookmarkError: function(data) {
+        console.error(data);
+    },
     _iconDataCache: {},
     getIconData: function(iconId) {
         if (!Manager._iconDataCache[iconId]) {

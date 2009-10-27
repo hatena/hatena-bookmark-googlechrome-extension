@@ -801,11 +801,19 @@
                     this._created = true;
                 }
             },
-            remove: function() {
+            destroy: function() {
                 if (!this._created) {
                     throw new Error('this row not created');
                 }
-                return klass.execute(sql.deleteSql(klass.table, this.getPrimaryWhere()));
+                var self = this;
+                if (klass.beforeDestoroy) klass.beforeDestoroy(self);
+
+                var d = klass.execute(sql.deleteSql(klass.table, this.getPrimaryWhere()));
+                return d.next(function(res) {
+                    delete self._created;
+                    if (klass.afterDestroy) klass.afterDestroy(self);
+                    return self;
+                });
             },
             save: function() {
                 var d;
