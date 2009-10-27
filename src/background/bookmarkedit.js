@@ -62,7 +62,7 @@ function setEntry(entry) {
 function closeWin() {
     Deferred.chrome.windows.getCurrent().next(function(win) {
         saveWindowPositions(win);
-        chrome.windows.remove(currentWin.id);
+        // chrome.windows.remove(currentWin.id);
     });
 }
 
@@ -85,7 +85,7 @@ function loadWindowPosition(win) {
         }
     }
 
-    Deferred.chrome.windows.update(win.id, pos).next();
+    // Deferred.chrome.windows.update(win.id, pos).next();
 }
 
 function deleteBookmark() {

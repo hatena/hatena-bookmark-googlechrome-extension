@@ -13,8 +13,15 @@
   "toolstrips": [
     "toolstrips/toolstrip.html"
   ],
+  /*
   "page_action": {
     "default_title": "B!"
+  },
+  */
+  "browser_action": {
+    "default_icon": "images/chrome-b-search.png",
+    "default_title": "HatenaBookmark Counter",
+    "popup": "background/bookmarkedit.html"
   },
   // "browser_action": {
   //   "name": "addbookmark",

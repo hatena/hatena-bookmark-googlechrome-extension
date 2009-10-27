@@ -17,15 +17,19 @@ $.extend(Manager, {
         });
         window.open(uri.pathQuery, 'bookmarkedit');
     },
-    editBookmarkTab: function(tabId) {
-        chrome.tabs.get(tabId, function(tab) {
-            Manager.editBookmark(tab.url, {
-                faviconUrl: tab.faviconUrl,
-                winId: tab.windowId,
-                tabId: tab.id,
-                title: tab.title
-            });
+    editBookmarkTab: function(tab) {
+        Manager.editBookmark(tab.url, {
+            faviconUrl: tab.faviconUrl,
+            winId: tab.windowId,
+            tabId: tab.id,
+            title: tab.title
         });
+    },
+    editBookmarkTabId: function(tabId) {
+        chrome.tabs.get(tabId, Manager.editBookmarkTab);
+    },
+    editBookmarkCurrentTab: function() {
+        chrome.tabs.getSelected(null, Manager.editBookmarkTab);
     },
     editBookmarkError: function(data) {
         console.error(data);
@@ -40,14 +44,16 @@ $.extend(Manager, {
         });
     },
     _iconDataCache: {},
-    getIconData: function(iconId) {
-        if (!Manager._iconDataCache[iconId]) {
-            if (!Manager._ctx) {
+    get ctx() {
+       if (!Manager._ctx) {
                 var canvas = document.getElementById('bookmark-icon-canvas');
                 Manager._ctx = canvas.getContext('2d');
-            }
-            var ctx = Manager._ctx;
-
+       }
+       return Manager._ctx;
+    },
+    getIconData: function(iconId) {
+        if (!Manager._iconDataCache[iconId]) {
+            var ctx = Manager.ctx;
             var icon = document.getElementById(iconId);
             ctx.clearRect(1, 1, icon.width, icon.height);
             ctx.drawImage(icon, 1, 1);
@@ -55,34 +61,79 @@ $.extend(Manager, {
         }
         return Manager._iconDataCache[iconId];
     },
-    updateBookmarkIcon: function(tabId) {
-        chrome.tabs.get(tabId, function(tab) {
-            if (tab.url && tab.url.indexOf('http') == 0) {
-                chrome.pageAction.setIcon({
-                    tabId: tabId,
-                    imageData: Manager.getIconData('bookmark-add-icon')
+    updateBookmarkIcon: function(tab) {
+        return;
+
+        var tabId = tab.id;
+        if (tab.url && tab.url.indexOf('http') == 0) {
+            chrome.pageAction.setIcon({
+                tabId: tabId,
+                imageData: Manager.getIconData('bookmark-add-icon')
+            });
+            chrome.pageAction.show(tabId);
+            if (UserManager.user) {
+                UserManager.user.hasBookmark(tab.url).next(function(has) {
+                    if (has) {
+                        chrome.pageAction.setIcon({
+                            tabId: tabId,
+                            imageData: Manager.getIconData('bookmark-added-icon')
+                        });
+                        chrome.pageAction.show(tabId);
+                    }
                 });
-                chrome.pageAction.show(tabId);
-                if (UserManager.user) {
-                    UserManager.user.hasBookmark(tab.url).next(function(has) {
-                        if (has) {
-                            chrome.pageAction.setIcon({
-                                tabId: tabId,
-                                imageData: Manager.getIconData('bookmark-added-icon')
-                            });
-                            chrome.pageAction.show(tabId);
-                        }
+            }
+        } else {
+            chrome.pageAction.hide(tabId);
+        }
+    },
+    updateBookmarkCounter: function(tab) {
+        if (tab.url && tab.url.indexOf('http') == 0) {
+            /*
+            chrome.browserAction.setBadgeText({
+                text: "*'-'*",
+            });
+            chrome.browserAction.setBadgeBackgroundColor({
+                color: [255,200,200, 255],
+            });
+            */
+
+            HTTPCache.counter.get(tab.url).next(function(count) {
+                if (count == null) {
+                    chrome.browserAction.setBadgeText({
+                        text: '-',
+                    });
+                    chrome.browserAction.setBadgeBackgroundColor({
+                        color: [200,200,200, 255],
+                    });
+                } else {
+                    chrome.browserAction.setBadgeText({
+                        text: "" + count,
+                    });
+                    chrome.browserAction.setBadgeBackgroundColor({
+                        color: [255,0,0, 200],
                     });
                 }
-            } else {
-                chrome.pageAction.hide(tabId);
-            }
+            });
+        } else {
+            chrome.browserAction.setBadgeText({
+                text: '',
+            });
+            chrome.browserAction.setBadgeBackgroundColor({
+                color: [99,99,99, 255],
+            });
+        }
+    },
+    updateTab: function(tab) {
+        Manager.updateBookmarkIcon(tab);
+        Manager.updateBookmarkCounter(tab);
+    },
+    updateTabById: function(tabId) {
+        chrome.tabs.get(tabId, function(tab) {
+            Manager.updateTab(tab);
         });
     },
-    updatePageAction: function() {
-        chrome.tabs.getSelected(null, function(tab) {
-            Manager.updateBookmarkIcon(tab.id);
-        });
+    updateCurrentTab: function() {
+        chrome.tabs.getSelected(null, Manager.updateTab);
     },
 });
 
@@ -96,7 +147,7 @@ Sync.bind('complete', function() {
 });
 
 $(document).bind('BookmarksUpdated', function() {
-    Manager.updatePageAction();
+    Manager.updateCurrentTab();
 });
 
 $(document).ready(function() {
@@ -106,17 +157,15 @@ $(document).ready(function() {
 
 chrome.tabs.onUpdated.addListener(function(tabId, opt) {
     if (opt.status === 'loading')
-        Manager.updateBookmarkIcon(tabId);
+        Manager.updateTabById(tabId);
 });
 
 chrome.tabs.onSelectionChanged.addListener(function(tabId) {
-    Manager.updatePageAction();
+    Manager.updateCurrentTab();
 });
 
 chrome.pageAction.onClicked.addListener(function() {
-    chrome.tabs.getSelected(null, function(tab) {
-        Manager.editBookmarkTab(tab.id);
-    });
+    Manager.editBookmarkCurrentTab();
 });
 
 
