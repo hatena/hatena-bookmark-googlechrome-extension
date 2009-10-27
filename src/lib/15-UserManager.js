@@ -108,7 +108,7 @@ User.prototype = {
                 timeout: 15000,
             });
         }, {wait: 3}).next(function(res) {
-            p('remote delete success - ' url);
+            p('remote delete success - ' + url);
             Model.Bookmark.findByUrl(url).next(function(b) {
                 if (b) {
                     // XXX: remove tag
@@ -165,7 +165,7 @@ User.prototype = {
                      setTimeout(function() {
                          p('update bookmark - save sync retry');
                          self.hasBookmark(url).next(function(has) {
-                             p('update bookmark - save sync retry has: ' + !!has);
+                             p('update bookmark - save sync retry if false -> ' + !!has);
                              if (!has) Sync.sync();
                          });
                      }, 10000);

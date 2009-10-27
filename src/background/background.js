@@ -75,6 +75,7 @@ $.extend(Manager, {
     },
     updatePageAction: function() {
         chrome.tabs.getSelected(null, function(tab) {
+            console.log(tab);
             Manager.updateBookmarkIcon(tab.id);
         });
     },
@@ -104,7 +105,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, opt) {
 });
 
 chrome.tabs.onSelectionChanged.addListener(function(tabId) {
-    Manager.updatePageAction();
+    setTimeout(function() {
+        Manager.updatePageAction();
+    }, 100);
     // console.log('select');
     // console.log(tabId);
     // Manager.updateBookmarkIcon(tabId);

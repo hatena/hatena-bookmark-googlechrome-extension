@@ -60,13 +60,38 @@ function setEntry(entry) {
 }
 
 function closeWin() {
-    chrome.windows.remove(currentWin.id);
+    Deferred.chrome.windows.getCurrent().next(function(win) {
+        saveWindowPositions(win);
+        chrome.windows.remove(currentWin.id);
+    });
+}
+
+function saveWindowPositions(win) {
+    localStorage.bookmarkEditWindowPositions = JSON.stringify({
+        left: win.left,
+        top: win.top,
+        width: Math.max(100, win.width),
+        height: Math.max(100, win.height),
+    });
+}
+
+function loadWindowPosition(win) {
+    var pos;
+    try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
+    if (!pos) {
+        pos = {
+            width: 500,
+            height: 400,
+        }
+    }
+
+    Deferred.chrome.windows.update(win.id, pos).next();
 }
 
 function deleteBookmark() {
     var url = request_uri.param('url');
     UserManager.user.deleteBookmark(url);
-    chrome.windows.remove(currentWin.id);
+    closeWin();
 }
 
 function formSubmitHandler(ev) {
@@ -85,19 +110,14 @@ $(document).bind('click', function(ev) {
 });
 
 var currentWin;
+Deferred.chrome.windows.getCurrent().next(function(win) {
+    currentWin = win;
+    loadWindowPosition(win);
+}).error(function(e) { console.log(e) });
+
 $(document).bind('ready', function() {
     $('#form').bind('submit', formSubmitHandler);
     $('a').each(function() { this.target = '_blank' });
-
-    Deferred.chrome.windows.getCurrent().next(function(win) {
-        currentWin = win;
-        Deferred.chrome.windows.update(win.id, {
-            width: 500,
-            height: 400,
-        }).next(function() {
-            init();
-        }).error(function(e) { console.log(e) });
-    });
-    window.resize
+    init();
 });
 
