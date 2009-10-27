@@ -33,6 +33,12 @@ $.extend(Manager, {
     deleteBookmarkError: function(data) {
         console.error(data);
     },
+    confirmBookmark: function(openURL) {
+        chrome.tabs.create({
+            url: openURL,
+            selected: true,
+        });
+    },
     _iconDataCache: {},
     getIconData: function(iconId) {
         if (!Manager._iconDataCache[iconId]) {
@@ -43,9 +49,9 @@ $.extend(Manager, {
             var ctx = Manager._ctx;
 
             var icon = document.getElementById(iconId);
-            ctx.clearRect(0, 0, icon.width, icon.height);
-            ctx.drawImage(icon, 0, 0);
-            Manager._iconDataCache[iconId] = ctx.getImageData(0,0,icon.width,icon.height);
+            ctx.clearRect(1, 1, icon.width, icon.height);
+            ctx.drawImage(icon, 1, 1);
+            Manager._iconDataCache[iconId] = ctx.getImageData(1,1,icon.width,icon.height);
         }
         return Manager._iconDataCache[iconId];
     },
@@ -75,7 +81,6 @@ $.extend(Manager, {
     },
     updatePageAction: function() {
         chrome.tabs.getSelected(null, function(tab) {
-            console.log(tab);
             Manager.updateBookmarkIcon(tab.id);
         });
     },
@@ -105,12 +110,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, opt) {
 });
 
 chrome.tabs.onSelectionChanged.addListener(function(tabId) {
-    setTimeout(function() {
-        Manager.updatePageAction();
-    }, 100);
-    // console.log('select');
-    // console.log(tabId);
-    // Manager.updateBookmarkIcon(tabId);
+    Manager.updatePageAction();
 });
 
 chrome.pageAction.onClicked.addListener(function() {

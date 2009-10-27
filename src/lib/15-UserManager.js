@@ -129,7 +129,10 @@ User.prototype = {
         data.rks = this.rks;
         var endpoint = this.getEndPoint('add.edit.json');
         var self = this;
-        Deferred.retry(3, function() {
+
+        p(data);
+        Deferred.retry(3, function(i) {
+            p('save ajax start:' + data.url + ' : ' + i);
             return $.ajax({
                 url: endpoint,
                 type: 'POST',
@@ -138,6 +141,11 @@ User.prototype = {
             });
         }, {wait: 3}).next(function(res) {
             p('remote save success - ' + data.url);
+            if (data.confirm_bookmark) {
+                setTimeout(function() {
+                    Manager.confirmBookmark(URI.parse(data.url).entryURL);
+                }, 10);
+            }
             self.updateBookmark(data.url, res);
         }).error(function(res) {
             Manager.saveBookmarkError(data);
