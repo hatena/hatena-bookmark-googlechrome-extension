@@ -441,6 +441,13 @@ test('Model Bookmark/Tag', function(d) {
     });
 }, 14, 5000).
 
+test('UserView', function(d) {
+    var view = new User.View('nagayama');
+    equals(view.icon , 'http://www.st-hatena.com/users/na/nagayama/profile_s.gif');
+    equals(view.largeIcon, 'http://www.st-hatena.com/users/na/nagayama/profile.gif');
+
+    d.call();
+}).
 test('UserManeger', function(d) {
     // UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
     UserManager.deferred('bind', 'UserChange').next(function(ev, user) {

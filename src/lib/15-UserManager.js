@@ -46,17 +46,29 @@ $.extend(UserManager, {
 
 var User = function(name, options) {
     this._name = name;
+    this.view = new User.View(name);
     this.options = options || {};
+};
+
+User.View = function(name) {
+    this.name = name;
+}
+
+User.View.prototype = {
+    getProfileIcon: function(name, isLarge) {
+        return sprintf('http://www.st-hatena.com/users/%s/%s/profile%s.gif',
+                       name.substring(0, 2), name, isLarge ? '' : '_s');
+    },
+    get icon() {
+        return this.getProfileIcon(this.name);
+    },
+    get largeIcon() {
+        return this.getProfileIcon(this.name, true);
+    },
 };
 
 User.prototype = {
     get name() { return this._name },
-    get icon() { return this.getProfileIcon(false) },
-    getProfileIcon: function(isLarge) {
-        var name = this.name;
-        return sprintf('http://www.st-hatena.com/users/%s/%s/profile%s.gif',
-                       name.substring(0, 2), name, isLarge ? '' : '_s');
-    },
     get plususer() { return this.options.plususer == 1 },
     get rks() { return this.options.rks },
     get private() { return this.options.private == 1 },

@@ -16,8 +16,8 @@
   <div class="table-row">
     <div id="header-left">
       <ul class="tab-ui">
-        <li onclick="ViewManager.show('bookmark');" id="tab-bookmark-edit"><img src="/images/chrome-b-plus.png">ブックマーク</li>
-        <li onclick="ViewManager.show('comment');" id="tab-comment-viewer"><img src="/images/serif_list.gif">コメント</li>
+        <li onclick="ViewManager.show('bookmark');" id="bookmark-tab"><img src="/images/chrome-b-plus.png">ブックマーク</li>
+        <li onclick="ViewManager.show('comment');" id="comment-tab"><img src="/images/serif_list.gif">コメント</li>
       </ul>
     </div>
     <div id="header-right">
@@ -98,7 +98,7 @@
   </form>
 </div>
 <div id="comment-container">
-  comment
+  <ul id="comment-list"></ul>
 </div>
 <div id="search-container">
   search result

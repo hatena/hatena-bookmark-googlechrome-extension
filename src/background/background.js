@@ -172,7 +172,11 @@ chrome.pageAction.onClicked.addListener(function() {
 chrome.tabs.create({
     url: '/background/popup.html?url=http://example.com/'
 });
-
+/*
+setTimeout(function() {
+chrome.windows.create({url:'../tests/test.html'});
+}, 10);
+*/
 
 
 

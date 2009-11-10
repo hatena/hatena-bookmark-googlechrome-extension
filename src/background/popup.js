@@ -1,8 +1,8 @@
 
 
-// Deferred.debug = true;
+Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
-import(BG, ['UserManager', 'HTTPCache', 'URI', 'Manager', 'Model']);
+import(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model']);
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;
@@ -18,7 +18,7 @@ if (popupMode) {
 function initBookmark() {
     getInformation().next(function(info) {
         var user = UserManager.user;
-        $('#usericon').attr('src', user.icon);
+        $('#usericon').attr('src', user.view.icon);
         $('#username').text(user.name);
         if (user.plususer) {
             $('#plus-inputs').removeClass('none');
@@ -151,6 +151,7 @@ function formSubmitHandler(ev) {
 }
 
 function searchFormSubmitHandler(ev) {
+    View.search.search($('#search-word').attr('value'));
     return false;
 }
 
@@ -161,17 +162,67 @@ var View = {
         },
         init: function() {
         },
+        search: function(word) {
+            ViewManager.show('search');
+            this.container.text('search:' + word);
+        }
     },
     comment: {
         get container() {
             return $('#comment-container');
         },
-        init: function() {
+        get list() {
+            return $('#comment-list');
         },
+        get tab() {
+            return $('#comment-tab');
+        },
+        init: function() {
+            if (this.inited) return;
+            var self = this;
+            getInformation().next(function(info) {
+                HTTPCache.comment.get(info.url).next(function(r) { 
+                    self.list.html('');
+                    self.showComment(r) 
+                });
+            });
+        },
+        showComment: function(data) {
+            var self = this;
+            var bookmarks = data.bookmarks;
+            var i = 0;
+            Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
+                var frag = document.createDocumentFragment();
+                for (var j = 0;  j < o.step; j++) {
+                    var b = bookmarks[i++];
+                    if (!b) continue;
+                    var v = new User.View(b.user);
+                    var li = Utils.createElementFromString(
+                        '<li><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="http://example.com/?XXX">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                     {
+                         data: {
+                             icon: v.icon,
+                             user: b.user,
+                             comment: b.comment,
+                             timestamp: b.timestamp.substring(0, 10),
+                             document: document
+                         }
+                     });
+                    frag.appendChild(li);
+                }
+                self.list.append(frag);
+            });
+            this.inited = true;
+            // "timestamp":"2009/11/04 19:26:11","comment":"","user":"wao_xx","tags":[]},
+            // this.container.text(JSON.stringify(data));
+        }
     },
     bookmark: {
         get container() {
             return $('#bookmark-container');
+        },
+        get tab() {
+            return $('#bookmark-tab');
         },
         init: function() {
             initBookmark();
@@ -183,11 +234,15 @@ var ViewManager = {
     show: function (name) {
         Object.keys(View).forEach(function(key) {
             if (key != name) {
-                View[key].container.hide();
+                var current = View[key];
+                current.container.hide();
+                if (current.tab) current.tab.removeClass('current');
             } else {
                 setTimeout(function() {
-                    View[name].container.show();
-                    View[name].init();
+                    var current = View[name];
+                    current.container.show();
+                    if (current.tab) current.tab.addClass('current');
+                    current.init();
                 }, 0);
             }
         });
