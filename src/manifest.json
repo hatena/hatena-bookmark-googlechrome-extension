@@ -10,10 +10,10 @@
     "tabs",
     "bookmarks"
   ],
+  /*
   "toolstrips": [
     "toolstrips/toolstrip.html"
   ],
-  /*
   "page_action": {
     "default_title": "B!"
   },
@@ -21,7 +21,7 @@
   "browser_action": {
     "default_icon": "images/chrome-b-search.png",
     "default_title": "HatenaBookmark Counter",
-    "popup": "background/bookmarkedit.html"
+    "popup": "background/popup.html"
   },
   // "browser_action": {
   //   "name": "addbookmark",
@@ -31,9 +31,6 @@
   "background_page": "background/background.html"
   // "background_page": "background/test.html"
 
-  // "toolstrips": [
-  //   "toolstrips/toolstrip.html"
-  // ],
   // "content_scripts": [
   //   {
   //     "run_at": "document_start",
