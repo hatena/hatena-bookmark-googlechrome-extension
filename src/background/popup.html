@@ -16,8 +16,8 @@
   <div class="table-row">
     <div id="header-left">
       <ul class="tab-ui">
-        <li onclick="bookmarkEditMode();" id="tab-bookmark-edit"><img src="/images/chrome-b-plus.png">ブックマーク</li>
-        <li onclick="commentViewerMode();" id="tab-comment-viewer"><img src="/images/serif_list.gif">コメント</li>
+        <li onclick="ViewManager.show('bookmark');" id="tab-bookmark-edit"><img src="/images/chrome-b-plus.png">ブックマーク</li>
+        <li onclick="ViewManager.show('comment');" id="tab-comment-viewer"><img src="/images/serif_list.gif">コメント</li>
       </ul>
     </div>
     <div id="header-right">
@@ -28,7 +28,7 @@
     </div>
   </div>
 </div>
-<div id="bookmark-edit-container">
+<div id="bookmark-container">
   <div id="bookmark-edit-header">
       ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
   </div>

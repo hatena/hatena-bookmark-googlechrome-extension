@@ -150,9 +150,54 @@ function formSubmitHandler(ev) {
     return false;
 }
 
-$(document).bind('click', function(ev) {
-    ev.metaKey = true;
-});
+function searchFormSubmitHandler(ev) {
+    return false;
+}
+
+var View = {
+    search: {
+        get container() {
+            return $('#search-container');
+        },
+        init: function() {
+        },
+    },
+    comment: {
+        get container() {
+            return $('#comment-container');
+        },
+        init: function() {
+        },
+    },
+    bookmark: {
+        get container() {
+            return $('#bookmark-container');
+        },
+        init: function() {
+            initBookmark();
+        },
+    }
+};
+
+var ViewManager = {
+    show: function (name) {
+        Object.keys(View).forEach(function(key) {
+            if (key != name) {
+                View[key].container.hide();
+            } else {
+                setTimeout(function() {
+                    View[name].container.show();
+                    View[name].init();
+                }, 0);
+            }
+        });
+    }
+}
+
+
+// $(document).bind('click', function(ev) {
+//     ev.metaKey = true;
+// });
 
 var currentWin;
 Deferred.chrome.windows.getCurrent().next(function(win) {
@@ -162,7 +207,11 @@ Deferred.chrome.windows.getCurrent().next(function(win) {
 
 $(document).bind('ready', function() {
     $('#form').bind('submit', formSubmitHandler);
-    $('a').each(function() { this.target = '_blank' });
-    initBookmark();
+    $('#search-form').bind('submit', searchFormSubmitHandler);
+    // $('a').each(function() { this.target = '_blank' });
+    ViewManager.show('comment');
 });
+
+
+
 

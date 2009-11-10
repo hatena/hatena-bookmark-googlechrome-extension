@@ -199,8 +199,9 @@ ul.tab-ui li.current {
     display: none;
 }
 
-#search-viewer,
-#comment-viewer {
+#bookmark-container,
+#comment-container,
+#search-container {
   display: none;
 }
 
