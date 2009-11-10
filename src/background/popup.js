@@ -1,8 +1,11 @@
 
-var popupMode = true;
+
 // Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
 import(BG, ['UserManager', 'HTTPCache', 'URI', 'Manager', 'Model']);
+
+var request_uri = URI.parse('http://chrome/' + location.href);
+var popupMode = request_uri.param('url') ? false : true;
 
 if (popupMode) {
     // XXX
@@ -11,7 +14,6 @@ if (popupMode) {
     }
 }
 
-var request_uri = URI.parse('http://chrome/' + location.href);
 
 function initBookmark() {
     getInformation().next(function(info) {
@@ -104,8 +106,8 @@ function loadWindowPosition(win) {
 }
 
 function getInformation() {
+    var d = new Deferred();
     if (popupMode) {
-        var d = new Deferred();
         BG.chrome.tabs.getSelected(null, function(tab) {
             d.call({
                 url: tab.url,
@@ -115,16 +117,18 @@ function getInformation() {
                 title: tab.title,
             });
         });
-        return d;
     } else {
-        Deferred.next({
-            url: request_uri.param('url'),
-            faviconUrl: request_uri.param('faviconUrl'),
-            winId: request_uri.param('windowId'),
-            tabId: request_uri.param('tabId'),
-            title: request_uri.param('title'),
-        });
+        setTimeout(function() {
+            d.call({
+                url: request_uri.param('url'),
+                faviconUrl: request_uri.param('faviconUrl'),
+                winId: request_uri.param('windowId'),
+                tabId: request_uri.param('tabId'),
+                title: request_uri.param('title'),
+            })
+        }, 0);
     }
+    return d;
 }
 
 function deleteBookmark() {

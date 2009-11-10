@@ -168,7 +168,10 @@ chrome.pageAction.onClicked.addListener(function() {
     Manager.editBookmarkCurrentTab();
 });
 
-
+// debug
+chrome.tabs.create({
+    url: '/background/popup.html?url=http://example.com/'
+});
 
 
 

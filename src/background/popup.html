@@ -12,70 +12,96 @@
 <link rel="stylesheet" href="popup.css" type="text/css" />
 </head>
 <body style="min-width:400px;" class="data-loading">
-<div id="header">ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん</div>
-<div id="bookmarked-notice" class="none"></div>
-<form id="form">
-<div id="edit">
-    <div class="edit-row">
-        <div class="edit-left edit-cell">タイトル:</div>
-        <div id="title" class="edit-cell loaded"><img id="favicon" width="16" height="16"><span id="title-text"></span></div>
-        <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16">データをロードしています…</div>
+<div id="header">
+  <div class="table-row">
+    <div id="header-left">
+      <ul class="tab-ui">
+        <li onclick="bookmarkEditMode();" id="tab-bookmark-edit"><img src="/images/chrome-b-plus.png">ブックマーク</li>
+        <li onclick="commentViewerMode();" id="tab-comment-viewer"><img src="/images/serif_list.gif">コメント</li>
+      </ul>
     </div>
-    <div class="edit-row">
-        <div class="edit-left edit-cell">URL:</div>
-        <div class="edit-cell">
-            <div>
-                <a href="" id="url"></a>
-            </div>
-            <div>
-                <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
-            </div>
-        </div>
+    <div id="header-right">
+      <form id="search-form">
+        <input type="image" src="/images/searchbutton.gif" width=16 height=16 />
+        <input id="search-word" type="text" />
+      </form>
     </div>
-    <div class="edit-row">
-        <div class="edit-left edit-cell">コメント:</div>
-        <div class="edit-cell" id="bookmark-options">
-            <div id="comment-area" class="edit-row">
-                <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
-                <span class="edit-cell" id="type-counter">0/100</span>
-            </div>
-            <div id="checkbox-options">
-                <input type="hidden" id="input-url" name="url" />
-                <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
-                <label for="confirm-bookmark">ブックマークを確認</label>
-                <span id="plus-inputs" class="none">
-                    <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
-                    <input value="1" type="checkbox" id="private" name="private" />
-                    <label for="private">公開しない</label>
-                    <input value="1" type="checkbox" id="send_mail" name="send_mail" />
-                    <label for="send_mail">メールする</label>
-                </span>
-            </div>
-       </div>
-    </div>
+  </div>
 </div>
-<dl id="recommend-tags-container">
-    <dt>おすすめタグ<dt>
-    <dd id="recommend-tags"><span class="tag">firefox</span></dd>
-</dl>
-<dl id="all-tags-container">
-    <dt>タグ<dt>
-    <dd id="all-tags"><span class="tag">firefox</span></dd>
-</dl>
-<div id="buttons">
-    <div class="edit-row">
-        <div class="edit-cell">
-            <input class="none" onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
-        </div>
-        <div id="buttons-spacer" class="edit-cell"></div>
-        <div class="edit-cell">
-            <input type="submit" value="追加" />
-        </div>
-        <div class="edit-cell">
-            <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
-        </div>
-    </div>
+<div id="bookmark-edit-container">
+  <div id="bookmark-edit-header">
+      ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
+  </div>
+  <div id="bookmarked-notice" class="none"></div>
+  <form id="form">
+  <div id="edit">
+      <div class="table-row">
+          <div class="edit-left edit-cell">タイトル:</div>
+          <div id="title" class="edit-cell loaded"><img id="favicon" width="16" height="16"><span id="title-text"></span></div>
+          <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16">データをロードしています…</div>
+      </div>
+      <div class="table-row">
+          <div class="edit-left edit-cell">URL:</div>
+          <div class="edit-cell">
+              <div>
+                  <a href="" id="url"></a>
+              </div>
+              <div>
+                  <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
+              </div>
+          </div>
+      </div>
+      <div class="table-row">
+          <div class="edit-left edit-cell">コメント:</div>
+          <div class="edit-cell" id="bookmark-options">
+              <div id="comment-area" class="table-row">
+                  <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
+                  <span class="edit-cell" id="type-counter">0/100</span>
+              </div>
+              <div id="checkbox-options">
+                  <input type="hidden" id="input-url" name="url" />
+                  <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
+                  <label for="confirm-bookmark">ブックマークを確認</label>
+                  <span id="plus-inputs" class="none">
+                      <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
+                      <input value="1" type="checkbox" id="private" name="private" />
+                      <label for="private">公開しない</label>
+                      <input value="1" type="checkbox" id="send_mail" name="send_mail" />
+                      <label for="send_mail">メールする</label>
+                  </span>
+              </div>
+         </div>
+      </div>
+  </div>
+  <dl id="recommend-tags-container">
+      <dt>おすすめタグ<dt>
+      <dd id="recommend-tags"><span class="tag">firefox</span></dd>
+  </dl>
+  <dl id="all-tags-container">
+      <dt>タグ<dt>
+      <dd id="all-tags"><span class="tag">firefox</span></dd>
+  </dl>
+  <div id="buttons">
+      <div class="table-row">
+          <div class="edit-cell">
+              <input class="none" onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
+          </div>
+          <div id="buttons-spacer" class="edit-cell"></div>
+          <div class="edit-cell">
+              <input type="submit" value="追加" />
+          </div>
+          <div class="edit-cell">
+              <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
+          </div>
+      </div>
+  </div>
+  </form>
 </div>
-</form>
+<div id="comment-container">
+  comment
+</div>
+<div id="search-container">
+  search result
+</div>
 </body>
 </html>
