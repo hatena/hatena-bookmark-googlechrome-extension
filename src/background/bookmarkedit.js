@@ -1,7 +1,15 @@
 
-Deferred.debug = true;
+var popupMode = true;
+// Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
 import(BG, ['UserManager', 'HTTPCache', 'URI', 'Manager', 'Model']);
+
+if (popupMode) {
+    // XXX
+    p = function(msg) {
+        BG.console.log(JSON.stringify(Array.prototype.slice.call(arguments, 0, arguments.length)));
+    }
+}
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 
@@ -18,6 +26,7 @@ function init() {
     $('#favicon').attr('src', request_uri.param('faviconUrl'));
 
     var url = request_uri.param('url');
+    if (!url) return;
     setURL(url);
 
     $('#comment').focus();
@@ -60,10 +69,14 @@ function setEntry(entry) {
 }
 
 function closeWin() {
-    Deferred.chrome.windows.getCurrent().next(function(win) {
-        saveWindowPositions(win);
-        // chrome.windows.remove(currentWin.id);
-    });
+    if (popupMode) {
+        BG.chrome.experimental.extension.getPopupView().close();
+    } else {
+        Deferred.chrome.windows.getCurrent().next(function(win) {
+            saveWindowPositions(win);
+            // chrome.windows.remove(currentWin.id);
+        });
+    }
 }
 
 function saveWindowPositions(win) {
