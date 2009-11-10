@@ -13,25 +13,27 @@ if (popupMode) {
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 
-function init() {
-    var user = UserManager.user;
-    $('#usericon').attr('src', user.icon);
-    $('#username').text(user.name);
-    if (user.plususer) {
-        $('#plus-inputs').removeClass('none');
-    } else {
-        $('#plus-inputs').remove();
-    }
-    $('#title-text').text(request_uri.param('title'));
-    $('#favicon').attr('src', request_uri.param('faviconUrl'));
+function initBookmark() {
+    getInformation().next(function(info) {
+        var user = UserManager.user;
+        $('#usericon').attr('src', user.icon);
+        $('#username').text(user.name);
+        if (user.plususer) {
+            $('#plus-inputs').removeClass('none');
+        } else {
+            $('#plus-inputs').remove();
+        }
+        $('#title-text').text(info.title);
+        $('#favicon').attr('src', info.faviconUrl);
 
-    var url = request_uri.param('url');
-    if (!url) return;
-    setURL(url);
+        var url = info.url;
+        if (!url) return;
+        setURL(url);
 
-    $('#comment').focus();
-    HTTPCache.entry.get(url).next(setEntry);
-    Model.Bookmark.findByUrl(url).next(setByBookmark);
+        $('#comment').focus();
+        HTTPCache.entry.get(url).next(setEntry);
+        Model.Bookmark.findByUrl(url).next(setByBookmark);
+    });
 }
 
 function setByBookmark(b) {
@@ -101,10 +103,36 @@ function loadWindowPosition(win) {
     // Deferred.chrome.windows.update(win.id, pos).next();
 }
 
+function getInformation() {
+    if (popupMode) {
+        var d = new Deferred();
+        BG.chrome.tabs.getSelected(null, function(tab) {
+            d.call({
+                url: tab.url,
+                faviconUrl: tab.faviconUrl,
+                winId: tab.windowId,
+                tabId: tab.id,
+                title: tab.title,
+            });
+        });
+        return d;
+    } else {
+        Deferred.next({
+            url: request_uri.param('url'),
+            faviconUrl: request_uri.param('faviconUrl'),
+            winId: request_uri.param('windowId'),
+            tabId: request_uri.param('tabId'),
+            title: request_uri.param('title'),
+        });
+    }
+}
+
 function deleteBookmark() {
-    var url = request_uri.param('url');
-    UserManager.user.deleteBookmark(url);
-    closeWin();
+    getInformation().next(function(info) {
+        var url = info.url;
+        UserManager.user.deleteBookmark(url);
+        closeWin();
+    });
 }
 
 function formSubmitHandler(ev) {
@@ -131,6 +159,6 @@ Deferred.chrome.windows.getCurrent().next(function(win) {
 $(document).bind('ready', function() {
     $('#form').bind('submit', formSubmitHandler);
     $('a').each(function() { this.target = '_blank' });
-    init();
+    initBookmark();
 });
 
