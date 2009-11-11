@@ -170,7 +170,8 @@ chrome.pageAction.onClicked.addListener(function() {
 
 // debug
 chrome.tabs.create({
-    url: '/background/popup.html?url=http://example.com/'
+    // url: '/background/popup.html?url=http://a.hatena.ne.jp/'
+    url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
 /*
 setTimeout(function() {

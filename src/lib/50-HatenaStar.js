@@ -3746,3 +3746,6 @@ it under the same terms as the Perl programming language.
 =cut
 */
 Hatena.Star.BaseURL = 'http://s.hatena.ne.jp/';
+
+
+

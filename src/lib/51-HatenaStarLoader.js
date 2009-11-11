@@ -1,4 +1,5 @@
 
+
 Hatena.Bookmark = {};
 Hatena.Bookmark.Star = {
     loadStar: function(cssSelector, parentNode) {
@@ -9,16 +10,8 @@ Hatena.Bookmark.Star = {
         if (!elements) return;
         Hatena.Bookmark.Star.loadElements( elements );
     },
-    loadStarBeforeOnLoad: function(cssSelector, parentNode) {
-        if (Ten.Browser.isFirefox) {
-            Ten.DOM.addEventListener('onload', function() {
-                Hatena.Bookmark.Star.loadStar(cssSelector, parentNode);
-            });
-        } else {
-            Hatena.Bookmark.Star.loadStar(cssSelector, parentNode);
-        }
-    },
     loadElements: function(elements) {
+        p('load');
         var entries = [];
         for (var i = 0;  i < elements.length; i++) {
             var element = elements[i];
@@ -34,18 +27,18 @@ Hatena.Bookmark.Star = {
     },
     addEntries: function(entries) {
         var c = Hatena.Star.EntryLoader;
-    
         var entries_org = c.entries;
         c.entries = null;
         c.entries = [];
         if (entries && typeof(entries.length) == 'number') {
-            for (var i = 0; i < entries.length; i++) {
+            var len = entries.length;
+            for (var i = 0; i < len; i++) {
                 var e = new Hatena.Star.Entry(entries[i]);
                 e.showButtons();
                 c.entries.push(e);
             }
         }
-        c.getStarEntries();
+        c.getStarEntries(entries);
         if (entries_org) {
             c.entries.push(entries_org);
             c.entries = Ten.Array.flatten(c.entries);
@@ -114,99 +107,60 @@ Hatena.Bookmark.Star = {
         }
     },
     receiveStarEntries: function(res) {
-        var res = eval('(' + res + ')');
+        var res = JSON.parse(res);
         var c = Hatena.Star.EntryLoader;
         c.receiveStarEntries(res);
     },
-    getStarEntries: function() {
-        // テスト中
+    getStarEntries: function(entries) {
         var c = Hatena.Star.EntryLoader;
-        var entries = c.entries;
-        if (!entries.length) return;
+        // var entries = c.entries;
+        if (!entries || !entries.length) return;
         var endpoint = 'entries.simple.json?';
-        
+
         var url = Hatena.Star.BaseURL + endpoint;
-        var crossdomain = Hatena.Bookmark.XHR.canCrossDomainXHR();
-        if (crossdomain) {
-            // Ten.JSONP.MaxBytes = 100000000;
-            // あまりにロードを大きくするとそれはそれで遅い
-        } 
-        if (entries.length > 5 && location.pathname.indexOf('/entry/') != -1) {
-            // それなりの entry 数があるときは
-            // b.hatena.ne.jp/username/permalink への star とする
-            var regex = /^(http?:\/\/b.hatena.ne.jp\/)([^\/]+\/\d+)#bookmark\-(\d+)/;
-            var matched = entries[1].uri.match(regex);
-            var eid;
-            if (matched) {
-                endpoint = 'entries.bookmark.json?';
-                url = Hatena.Star.BaseURL + endpoint;
-
-                if (location.pathname.indexOf('/entry/') != -1) {
-                    // entry ページは eid を省略して発行できるように
-                    eid = matched[3];
-                    if (eid) {
-                        url += '&eid=' + eid;
-                    }
-                }
-
-                for (var i = 0; i < entries.length; i++) {
-                     if (url.length > Ten.JSONP.MaxBytes) {
-                         new Ten.JSONP(url, c, 'receiveStarEntries');
-                         url = Hatena.Star.BaseURL + endpoint;
-                         if (eid) {
-                            url += '&eid=' + eid;
-                         }
-                     }
-                     matched = entries[i].uri.match(regex) || [];
-                     var u = matched[2];
-                     var e = matched[3];
-                     if (u && e) {
-                         url += '&u=' + encodeURIComponent(u);
-                         if (!eid) {
-                             url += '&e=' + encodeURIComponent(e);
-                         }
-                     } else {
-                         url += '&uri=' + encodeURIComponent(entries[i].uri);
-                     }
-                }
-                if (crossdomain) {
-                    var tmp = url.split('?', 2);
-                    var xhr = new Hatena.Bookmark.XHR(tmp[0], 'POST');
-                    xhr.timeout = 60 * 1000;
-                    xhr.crossdomain = true;
-                    xhr.onComplete(function(res) {
-                        var obj = eval('(' + res.responseText + ')');
-                        c.receiveStarEntries(obj);
-                    });
-                    xhr.load(tmp[1]);
-                } else {
-                    new Ten.JSONP(url, c, 'receiveStarEntries');
-                }
-                return;
-            }
-        }
 
         // normal loading
-        for (var i = 0; i < entries.length; i++) {
-            if (url.length > Ten.JSONP.MaxBytes) {
-                new Ten.JSONP(url, c, 'receiveStarEntries');
-                url = Hatena.Star.BaseURL + endpoint;
-            }
+        var len = entries.length;
+        for (var i = 0; i < len; i++) {
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
-        if (crossdomain) {
-            var tmp = url.split('?', 2);
-            var xhr = new Hatena.Bookmark.XHR(tmp[0], 'POST');
-            xhr.timeout = 60 * 1000;
-            xhr.crossdomain = true;
-            xhr.onComplete(function(res) {
-                var obj = eval('(' + res.responseText + ')');
-                c.receiveStarEntries(obj);
-            });
-            xhr.load(tmp[1]);
-        } else {
-            new Ten.JSONP(url, c, 'receiveStarEntries');
-        }
+        jQuery.get(url).next(function(res) {
+            c.receiveStarEntries(JSON.parse(res));
+        });
     }
 }
+
+Hatena.Star.EntryLoader.loadEntries = function() {};
+Hatena.Star.EntryLoader.getStarEntries = Hatena.Bookmark.Star.getStarEntries;
+
+Ten.Style.getGlobalRule = function(selector) {
+    return null;
+};
+
+Hatena.Star.Button = new Ten.Class({
+    _buttons: {},
+    createButton: function(args) {
+        var img;
+        if (args.src && (img = Hatena.Star.Button._buttons[args.src])) {
+            return img.cloneNode(false);
+        }
+        var img = document.createElement('img');
+        for (var attr in args) {
+            img.setAttribute(attr, args[attr]);
+        }
+        with (img.style) {
+            cursor = 'pointer';
+            margin = '0 3px';
+            padding = '0';
+            border = 'none';
+            verticalAlign = 'middle';
+        }
+        if (args.src) Hatena.Star.Button._buttons[args.src] = img.cloneNode(false);
+        return img;
+    },
+    sels: {},
+    getImgSrc: function(c,container) {
+        return c.ImgSrc;
+    }
+});
 

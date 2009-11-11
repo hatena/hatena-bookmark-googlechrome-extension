@@ -184,26 +184,24 @@ var View = {
                 HTTPCache.comment.get(info.url).next(function(r) {
                     self.list.html('');
                     self.showComment(r);
-                    Hatena.Bookmark.Star.loadStar('ul#comment-list li');
                 });
             });
         },
         showComment: function(data) {
-            console.log(data);
             var eid = data.eid;
             var self = this;
             var bookmarks = data.bookmarks;
             var i = 0;
-            // Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
-            var frag = document.createDocumentFragment();
-            for (var i = 0, len = bookmarks.length; i < len; i++) {
-                //for (var j = 0;  j < o.step; j++) {
-                    var b = bookmarks[i];
+            Deferred.loop({begin:0, end: bookmarks.length, step:200}, function(n, o) {
+                var frag = document.createDocumentFragment();
+                var elements = [];
+                for (var j = 0;  j < o.step; j++) {
+                    var b = bookmarks[i++];
                     if (!b) continue;
                     var v = new User.View(b.user);
                     var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d", b.user, b.timestamp.substring(0, 10).replace(/\//g, ''), eid);
                     var li = Utils.createElementFromString(
-                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a target="_blank" class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
                          data: {
                              permalink: permalink,
@@ -215,10 +213,12 @@ var View = {
                          }
                      });
                     frag.appendChild(li);
-                //}
-            }
-            self.list.append(frag);
-            //});
+                    elements.push(li);
+                }
+                Hatena.Bookmark.Star.loadElements(elements);
+                self.list.append(frag);
+                return Deferred.wait(0.5);
+            });
             this.inited = true;
         }
     },
