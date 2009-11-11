@@ -213,6 +213,7 @@ ul.tab-ui li.current {
 #comment-container {
   max-height: 500px;
   overflow-y:scroll;
+  word-break:break-all;
 }
 
 #comment-list li {

@@ -11,7 +11,6 @@ Hatena.Bookmark.Star = {
         Hatena.Bookmark.Star.loadElements( elements );
     },
     loadElements: function(elements) {
-        p('load');
         var entries = [];
         for (var i = 0;  i < elements.length; i++) {
             var element = elements[i];
@@ -26,6 +25,17 @@ Hatena.Bookmark.Star = {
             Hatena.Bookmark.Star.addEntries(entries);
     },
     addEntries: function(entries) {
+        var starElements = [];
+        if (entries && typeof(entries.length) == 'number') {
+            var len = entries.length;
+            for (var i = 0; i < len; i++) {
+                var e = new Hatena.Star.Entry(entries[i]);
+                e.showButtons();
+                starElements.push(e);
+            }
+        }
+        Hatena.Bookmark.Star.getStarEntries(entries, starElements);
+        /*
         var c = Hatena.Star.EntryLoader;
         var entries_org = c.entries;
         c.entries = null;
@@ -43,6 +53,7 @@ Hatena.Bookmark.Star = {
             c.entries.push(entries_org);
             c.entries = Ten.Array.flatten(c.entries);
         }
+        */
     },
     createArticleEntry: function(el) {
         var entry = {};
@@ -106,17 +117,42 @@ Hatena.Bookmark.Star = {
             }
         }
     },
-    receiveStarEntries: function(res) {
-        var res = JSON.parse(res);
-        var c = Hatena.Star.EntryLoader;
-        c.receiveStarEntries(res);
+    receiveStarEntries: function(res, starElements) {
+        var entries = res.entries;
+        if (!entries) entries = [];
+        p(entries.length);
+        p(starElements.length);
+        for (var i = 0, cLen = starElements.length ; i < cLen ; i++) {
+            var e = starElements[i];
+            if (e.starEntry) continue;
+            if (!e.eURI) e.eURI = encodeURIComponent(e.uri);
+            for (var j = 0, eLen = entries.length ; j < eLen ; j++) {
+                var se = entries[j];
+                if (!se.uri) continue;
+                if ((se.eURI || (se.eURI = encodeURIComponent(se.uri))) == e.eURI) {
+                    e.bindStarEntry(se);
+                    entries.splice(j,1);
+                    break;
+                }
+            }
+            if (typeof(e.can_comment) == 'undefined') {
+                e.setCanComment(res.can_comment);
+            }
+            e.showStars();
+            e.showCommentButton();
+        }
+        if (res.rks) {
+            if (!Hatena.Visitor || typeof(Hatena.Visitor) == 'undefined') {
+                Hatena.Visitor = {};
+            }
+            if (!Hatena.Visitor.RKS) Hatena.Visitor.RKS = res.rks;
+        }
     },
-    getStarEntries: function(entries) {
-        var c = Hatena.Star.EntryLoader;
+    getStarEntries: function(entries, starElements) {
+        // var c = Hatena.Star.EntryLoader;
         // var entries = c.entries;
         if (!entries || !entries.length) return;
         var endpoint = 'entries.simple.json?';
-
         var url = Hatena.Star.BaseURL + endpoint;
 
         // normal loading
@@ -124,8 +160,10 @@ Hatena.Bookmark.Star = {
         for (var i = 0; i < len; i++) {
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
+        p('star load start: ' + url.substring(0, 100));
         jQuery.get(url).next(function(res) {
-            c.receiveStarEntries(JSON.parse(res));
+            p('* - star data loaded: ' + url.substring(0, 100));
+            Hatena.Bookmark.Star.receiveStarEntries(JSON.parse(res), starElements);
         });
     }
 }

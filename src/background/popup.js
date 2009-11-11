@@ -192,7 +192,7 @@ var View = {
             var self = this;
             var bookmarks = data.bookmarks;
             var i = 0;
-            Deferred.loop({begin:0, end: bookmarks.length, step:200}, function(n, o) {
+            Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
                 var frag = document.createDocumentFragment();
                 var elements = [];
                 for (var j = 0;  j < o.step; j++) {
@@ -201,7 +201,7 @@ var View = {
                     var v = new User.View(b.user);
                     var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d", b.user, b.timestamp.substring(0, 10).replace(/\//g, ''), eid);
                     var li = Utils.createElementFromString(
-                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a target="_blank" class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
                          data: {
                              permalink: permalink,
@@ -217,7 +217,7 @@ var View = {
                 }
                 Hatena.Bookmark.Star.loadElements(elements);
                 self.list.append(frag);
-                return Deferred.wait(0.5);
+                return Deferred.wait(0.25);
             });
             this.inited = true;
         }
@@ -268,6 +268,9 @@ Deferred.chrome.windows.getCurrent().next(function(win) {
 $(document).bind('ready', function() {
     $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);
+    $('a').live('click', function() {
+        this.target = '_blank';
+    });
     // $('a').each(function() { this.target = '_blank' });
     ViewManager.show('comment');
 });
