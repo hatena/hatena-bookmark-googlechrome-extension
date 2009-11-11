@@ -181,26 +181,32 @@ var View = {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
-                HTTPCache.comment.get(info.url).next(function(r) { 
+                HTTPCache.comment.get(info.url).next(function(r) {
                     self.list.html('');
-                    self.showComment(r) 
+                    self.showComment(r);
+                    Hatena.Bookmark.Star.loadStar('ul#comment-list li');
                 });
             });
         },
         showComment: function(data) {
+            console.log(data);
+            var eid = data.eid;
             var self = this;
             var bookmarks = data.bookmarks;
             var i = 0;
-            Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
-                var frag = document.createDocumentFragment();
-                for (var j = 0;  j < o.step; j++) {
-                    var b = bookmarks[i++];
+            // Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
+            var frag = document.createDocumentFragment();
+            for (var i = 0, len = bookmarks.length; i < len; i++) {
+                //for (var j = 0;  j < o.step; j++) {
+                    var b = bookmarks[i];
                     if (!b) continue;
                     var v = new User.View(b.user);
+                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d", b.user, b.timestamp.substring(0, 10).replace(/\//g, ''), eid);
                     var li = Utils.createElementFromString(
-                        '<li><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="http://example.com/?XXX">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
                          data: {
+                             permalink: permalink,
                              icon: v.icon,
                              user: b.user,
                              comment: b.comment,
@@ -209,12 +215,11 @@ var View = {
                          }
                      });
                     frag.appendChild(li);
-                }
-                self.list.append(frag);
-            });
+                //}
+            }
+            self.list.append(frag);
+            //});
             this.inited = true;
-            // "timestamp":"2009/11/04 19:26:11","comment":"","user":"wao_xx","tags":[]},
-            // this.container.text(JSON.stringify(data));
         }
     },
     bookmark: {
