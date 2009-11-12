@@ -196,6 +196,8 @@ setInterval(function() {
     UserManager.login();
 }, 1000 * 60 * 15);
 
+// console.log(openDatabase('hoge999', '1.0', 'hogehoge2', 1024 * 20));
+
 // debug
 /*
 chrome.tabs.create({
