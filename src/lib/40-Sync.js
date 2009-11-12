@@ -37,7 +37,7 @@ jQuery.extend(Sync, {
             return;
         }
 
-        var items = Config.get("sync.oneTimeItmes") || 200;
+        var step = Config.get("sync.oneTimeItmes") || 500;
         var waitTime = Config.get("sync.syncWait") || 1000;
 
         var commentRe = new RegExp('\\s+$','');
@@ -46,9 +46,53 @@ jQuery.extend(Sync, {
         var infos = tmp[1];
         delete tmp;
         p(sprintf('start: %d data', infos.length));
-        var now = Timer.now;
-        p('start');
-        var len = infos.length;
+
+        if (infos.length <= 0) {
+            Sync._complete();
+            return;
+        }
+
+        var i = infos.length;
+
+        var executer = function() {
+            Bookmark.database.transaction(function() {
+                for (var j = 0;  j < step; j++) {
+                    if (i <= 0) break;
+                    i--;
+                    var bi = i * 3;
+                    var timestamp = infos[i].split("\t", 2)[1];
+                    var title = bookmarks[bi];
+                    var comment = bookmarks[bi+1];
+                    var url = bookmarks[bi+2];
+                    if (timestamp) {
+                        var b = new Bookmark;
+                        b.title = title;
+                        b.comment = (comment || '').replace(commentRe, '');
+                        b.url = url;
+                        b.set('date', Utils.strToDate(timestamp) / 1000);
+                        if (url) {
+                            try {
+                                b.save().error(function(e) {
+                                    console.error('error: ' + [e.toString(), url, title, comment, timestamp].toString());
+                                });
+                            } catch(e) {
+                            }
+                        } else {
+                        }
+                    };
+                }
+                console.log('sync execute: index:' + i + ' ' + title);
+            }).next(function() {
+                if (i >= 0) {
+                    executer();
+                } else {
+                    Sync._complete();
+                }
+            }).error(Sync.errorback);
+        }
+        executer();
+
+        /*
         Bookmark.database.transaction(function() {
             for (var i = len - 1;  i >= 0; i--) {
                 var bi = i * 3;
@@ -74,25 +118,13 @@ jQuery.extend(Sync, {
                 if (i && (i % items == 0)) {
                     console.log('' + i + title);
                 }
-                /*
-                if (i && (i % items == 0)) {
-                    Sync.dispatch('progress', { value: (len-i)/len*100|0 });
-                    Sync.db.commitTransaction();
-                    if (i % (items * 10) == 0) {
-                        // 大量に件数があるときに、しょっちゅう BookmarksUpdated を発行すると重くなるため
-                        $(document).trigger("BookmarksUpdated");
-                    }
-                    // async.wait(waitTime);
-                    Sync.db.beginTransaction();
-                    p('wait: ' + (Date.now() - now));
-                }
-                */
             }
         }).next(function () {
             Sync._complete();
             p('complete:', infos.length);
             p('time: ' + (Timer.now - now));
         }).error(Sync.errorback);
+        */
     },
     _complete: function() {
         Sync._syncing = false;

@@ -137,6 +137,22 @@ $.extend(Manager, {
     },
 });
 
+var ConnectMessenger = $({});
+
+ConnectMessenger = $({});
+
+ConnectMessenger.bind('login_check', function(data) {
+    console.log('login by url: ' + data.url);
+    UserManager.loginWithRetry(15 * 1000);
+});
+
+ConnectMessenger.bind('logout', function(data) {
+    console.log('logout by url: ' + data.url);
+    setTimeout(function() {
+        UserManager.logout();
+    }, 200);
+});
+
 UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
 });
@@ -152,7 +168,7 @@ $(document).bind('BookmarksUpdated', function() {
 
 $(document).ready(function() {
     console.log('ready');
-    UserManager.login();
+    UserManager.loginWithRetry(15 * 1000);
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, opt) {
@@ -168,16 +184,29 @@ chrome.pageAction.onClicked.addListener(function() {
     Manager.editBookmarkCurrentTab();
 });
 
+chrome.self.onConnect.addListener(function(port,name) {
+  port.onMessage.addListener(function(info,con) {
+      if (info.message)
+          ConnectMessenger.trigger(info.message, [info.data]);
+  });
+});
+
+// login check
+setInterval(function() {
+    UserManager.login();
+}, 1000 * 60 * 15);
+
 // debug
+/*
 chrome.tabs.create({
-    url: '/background/popup.html?url=http://example.com/'
-    //url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
+    url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
+    // url: '/background/popup.html?url=http://example.com/'
     // url: '/background/popup.html?url=http://a.hatena.ne.jp/'
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
-chrome.tabs.create({
-    url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
-});
+*/
+
+
 /*
 setTimeout(function() {
 chrome.windows.create({url:'../tests/test.html'});

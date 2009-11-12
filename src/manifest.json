@@ -28,9 +28,39 @@
   //   "icons": ["images/chrome-b-plus.png"],
   //   "popup": { "path": "background/bookmarkedit.html", "height": 400, "width": 400 }
   // },
-  "background_page": "background/background.html"
   // "background_page": "background/test.html"
 
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "js": [
+        "content/login_check.js"
+      ],
+      "matches": [
+        "http://www.hatena.ne.jp/login",
+        "https://www.hatena.ne.jp/login",
+        "http://www.hatena.ne.jp/login*",
+        "https://www.hatena.ne.jp/login*"
+      ]
+    }
+  ],
+
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "js": [
+        "content/logout.js"
+      ],
+      "matches": [
+        "http://www.hatena.ne.jp/logout",
+        "https://www.hatena.ne.jp/logout",
+        "http://www.hatena.ne.jp/logout*",
+        "https://www.hatena.ne.jp/logout*"
+      ]
+    }
+  ],
+
+  // ]
   // "content_scripts": [
   //   {
   //     "run_at": "document_start",
@@ -65,4 +95,5 @@
   //     "icons": ["images/icon.png"]
   //   }
   // ]
+  "background_page": "background/background.html"
 }

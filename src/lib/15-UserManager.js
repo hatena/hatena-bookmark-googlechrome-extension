@@ -3,6 +3,14 @@ var UserManager = $({});
 UserManager.MY_NAME_URL = B_HTTP + 'my.name';
 
 $.extend(UserManager, {
+    loginWithRetry: function(wait) {
+        UserManager.login();
+        var current = UserManager.user;
+        setTimeout(function() {
+            // retry;
+            if (!UserManager.user) UserManager.login();
+        }, wait || 15 * 1000);
+    },
     login: function() {
         $.getJSON(UserManager.MY_NAME_URL).next(UserManager.loginHandler).error(UserManager.loginErrorHandler);
     },
@@ -96,7 +104,12 @@ User.prototype = {
         return B_HTTP + this.name + '/' + name;
     },
     get database() {
-        return new Database('hatenabookmark-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
+        return new Database('hatenabookmark5-' + this.name, {
+            estimatedSize: 10 * 1024 * 1024
+        });
+        /*
+        return new Database('hatenabookmark2-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
+        */
     },
     get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
     // get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
