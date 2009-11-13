@@ -393,7 +393,7 @@ test('Model Bookmark/Tag', function(d) {
     var bDate = new Bookmark();
     bDate.date = new Date(1255519120 * 1000);
     equals(bDate.get('date'), 1255519120 , 'date proxy');
-    // Database.debugMessage = true;
+    Database.debugMessage = true;
     Model.initialize(true).next(function() {
         ok(true, 'initialize model');
         var bookmark = new Bookmark({

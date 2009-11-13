@@ -37,7 +37,7 @@ jQuery.extend(Sync, {
             return;
         }
 
-        var step = Config.get("sync.oneTimeItmes") || 500;
+        var step = Config.get("sync.oneTimeItmes") || 100;
         var waitTime = Config.get("sync.syncWait") || 1000;
 
         var commentRe = new RegExp('\\s+$','');
@@ -83,7 +83,7 @@ jQuery.extend(Sync, {
                 }
                 console.log('sync execute: index:' + i + ' ' + title);
             }).next(function() {
-                if (i >= 0) {
+                if (i > 0) {
                     executer();
                 } else {
                     Sync._complete();

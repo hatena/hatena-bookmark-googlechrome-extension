@@ -7,8 +7,8 @@ Model.initialize = function(force) {
     // return Bookmark.initialize();//.next(Bookmark.destroyAll());
     if (force) {
         return Deferred.parallel([
-            Bookmark.dropTable(force).next(Bookmark.initialize),
-            Tag.dropTable(force).next(Tag.initialize)
+            Bookmark.dropTable(force).next(Bookmark.initialize).error(Bookmark.initialize),
+            Tag.dropTable(force).next(Tag.initialize).error(Tag.initialize)
         ]);//.next(Bookmark.destroyAll());
     } else {
         return Deferred.parallel([

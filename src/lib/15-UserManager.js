@@ -104,8 +104,8 @@ User.prototype = {
         return B_HTTP + this.name + '/' + name;
     },
     get database() {
-        return new Database('hatenabookmark12-' + this.name, {
-            estimatedSize: 20 * 1024
+        return new Database('hatenabookmark22-' + this.name, {
+            estimatedSize: 50 * 1024
         });
         /*
         return new Database('hatenabookmark2-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
