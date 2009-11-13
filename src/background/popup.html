@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../lib/51-HatenaStarLoader.js"></script>
 <link rel="stylesheet" href="popup.css" type="text/css" />
 </head>
-<body style="min-width:400px;" class="data-loading">
+<body class="data-loading">
 <div id="header">
   <div class="table-row">
     <div id="header-left">
@@ -23,10 +23,14 @@
       </ul>
     </div>
     <div id="header-right">
-      <form id="search-form">
-        <input type="image" src="/images/searchbutton.gif" width=16 height=16 />
-        <input id="search-word" type="text" />
-      </form>
+      <ul class="tab-ui">
+        <li id="search-tab">
+            <form id="search-form">
+              <input type="image" src="/images/searchbutton.gif" width=16 height=16 />
+              <input id="search-word" type="text" />
+            </form>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

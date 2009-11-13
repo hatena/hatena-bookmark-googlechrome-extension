@@ -197,14 +197,12 @@ setInterval(function() {
 }, 1000 * 60 * 15);
 
 // debug
-/*
 chrome.tabs.create({
     url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
     // url: '/background/popup.html?url=http://example.com/'
     // url: '/background/popup.html?url=http://a.hatena.ne.jp/'
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
-*/
 
 /*
 setTimeout(function() {

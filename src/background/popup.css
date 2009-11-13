@@ -56,11 +56,12 @@ ul.tab-ui li {
   padding: 5px 10px 5px 10px;
   background-color:#EEE;
   cursor: pointer;
+  -webkit-border-top-left-radius: 7px;
+  -webkit-border-top-right-radius: 7px;
 }
 
 ul.tab-ui li.current {
   background-color:#FFF;
-  border-color: #000;
 }
 
 #bookmark-edit-header {
@@ -81,7 +82,7 @@ ul.tab-ui li.current {
     display: table;
     background: #EEE url('/images/logo-text.png') no-repeat 10px center;
     */
-    padding: 5px;
+    padding: 5px 5px 0px 5px;
     font-size: 90%;
 }
 
@@ -202,6 +203,10 @@ ul.tab-ui li.current {
 
 .none {
     display: none;
+}
+
+#search-form {
+  display: inline;
 }
 
 #bookmark-container,

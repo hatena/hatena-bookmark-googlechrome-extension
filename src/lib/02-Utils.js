@@ -59,10 +59,30 @@ var Utils = {
             dateStr.substr(12,2)
         );
     },
+    entryURL: function(url) {
+        return B_HTTP + 'entry/' + url.replace('#', '%23');
+    },
+    entryImage: function(url) {
+        return B_STATIC_HTTP + 'entry/image/' + url.replace('#', '%23');
+    },
+    faviconUrl: function(url) {
+        return 'http://favicon.hatena.ne.jp/?url=' + encodeURIComponent(url.replace('#', '%23'));
+    },
     editBookmarkCurrent: function(winId) {
         chrome.tabs.getSelected(winId, function(tabs) {
             chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tabs.id);
         });
+    },
+    createElementSimply: function(name, attr) {
+        var children = Array.prototype.slice.call(arguments, 2);
+        var e = document.createElement(name);
+        if (attr)
+            for (var key in attr)
+                e[key] = attr[key];
+
+        children.map(function(el) { return el.nodeType > 0 ? el : document.createTextNode(el) }).
+            forEach(function(el) { return e.appendChild(el) });
+        return e;
     },
     createElementFromString: function (str, opts) {
         // original code by cho45 - http://gist.github.com/3239
@@ -108,6 +128,8 @@ var Utils = {
         return root;
     }
 }
+
+Utils.createElementSimply.t = function(text) { return document.createTextNode(text) }
 
 if (typeof Deferred != 'undefined') {
     if (Deferred.WebDatabase) {

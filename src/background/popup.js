@@ -156,6 +156,32 @@ function searchFormSubmitHandler(ev) {
     return false;
 }
 
+var E = Utils.createElementSimply;
+
+var createBookmarkList = function(bookmark) {
+    var html = E('li', {className: 'bookmark'});
+    html.appendChild(
+       html.head = E('h3', {className: 'entry-search'},
+           E('img', {src: Utils.faviconUrl(bookmark.url)}),
+           html.link = E('a', { target: '_blank' }, bookmark.title))
+    );
+    html.appendChild(
+       html.commentDiv = E('div', {className: 'comment'},
+         html.tags      = E('span', {className: 'tags'}, bookmark.tags.join(', ')), ' ',
+         html.comment   = E('span', {className: 'comment'}, bookmark.body)
+       )
+    );
+    html.appendChild(
+       html.urlDiv = E('div', {className: 'infos'},
+         html.url = E('a', {className: 'url'}, bookmark.url), ' ',
+         ' ', E('a', {href: Utils.entryURL(bookmark.url)}, E('img', {src: Utils.entryImage(bookmark.url), height:'13'}))
+       )
+    );
+    html.url.href = html.link.href = bookmark.url;
+    return html;
+};
+
+
 var View = {
     search: {
         get container() {
@@ -164,16 +190,25 @@ var View = {
         get list() {
             return $('#search-result');
         },
+        get tab() {
+            return $('#search-tab');
+        },
         init: function() {
         },
         search: function(word) {
             ViewManager.show('search');
             var list = this.list;
             list.empty();
-            Model.Bookmark.search(word, 0, 100).next(function(res) {
+            Model.Bookmark.search(word, {
+                limit: 100,
+                offset: 0,
+            }).next(function(res) {
                 res.forEach(function(r) {
-                    var m = $('<li/>').text(r.title + r.url);
-                    m.appendTo(list);
+                    try {
+                    list.append(createBookmarkList(r));
+                    } catch(e) { p(e) }
+                    // var m = $('<li/>').text(r.title + r.url);
+                    // m.appendTo(list);
                 });
             });
             // this.container.text('search:' + word);
