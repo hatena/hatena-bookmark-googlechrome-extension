@@ -42,10 +42,7 @@
         "http://www.hatena.ne.jp/login*",
         "https://www.hatena.ne.jp/login*"
       ]
-    }
-  ],
-
-  "content_scripts": [
+    },
     {
       "run_at": "document_end",
       "js": [
