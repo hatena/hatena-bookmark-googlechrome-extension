@@ -209,9 +209,9 @@ chrome.tabs.create({
 */
 
 
-setTimeout(function() {
-chrome.windows.create({url:'../tests/test.html'});
-}, 10);
+// setTimeout(function() {
+// chrome.windows.create({url:'../tests/test.html'});
+// }, 10);
 
 
 

@@ -37,7 +37,7 @@ jQuery.extend(Sync, {
             return;
         }
 
-        var step = Config.get("sync.oneTimeItmes") || 100;
+        var step = Config.get("sync.oneTimeItmes") || 500;
         var waitTime = Config.get("sync.syncWait") || 1000;
 
         var commentRe = new RegExp('\\s+$','');
@@ -53,6 +53,8 @@ jQuery.extend(Sync, {
         }
 
         var i = infos.length;
+
+        i = Math.min(i, 4000); // WebDatabase の 5M 制約のため暫定
 
         var executer = function() {
             Bookmark.database.transaction(function() {

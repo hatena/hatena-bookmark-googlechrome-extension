@@ -74,7 +74,8 @@ function setEntry(entry) {
 
 function closeWin() {
     if (popupMode) {
-        BG.chrome.experimental.extension.getPopupView().close();
+        window.close();
+        // BG.chrome.experimental.extension.getPopupView().close();
     } else {
         Deferred.chrome.windows.getCurrent().next(function(win) {
             saveWindowPositions(win);
