@@ -161,11 +161,22 @@ var View = {
         get container() {
             return $('#search-container');
         },
+        get list() {
+            return $('#search-result');
+        },
         init: function() {
         },
         search: function(word) {
             ViewManager.show('search');
-            this.container.text('search:' + word);
+            var list = this.list;
+            list.empty();
+            Model.Bookmark.search(word, 0, 100).next(function(res) {
+                res.forEach(function(r) {
+                    var m = $('<li/>').text(r.title + r.url);
+                    m.appendTo(list);
+                });
+            });
+            // this.container.text('search:' + word);
         }
     },
     comment: {
@@ -183,6 +194,7 @@ var View = {
             var self = this;
             getInformation().next(function(info) {
                 HTTPCache.comment.get(info.url).next(function(r) {
+                    self.list.empty();
                     self.list.html('');
                     self.showComment(r);
                 });

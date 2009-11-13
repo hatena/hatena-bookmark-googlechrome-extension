@@ -138,6 +138,7 @@ User.prototype = {
                 if (b) {
                     // XXX: remove tag
                     p('delete bookmarked - ' + url);
+                    HTTPCache.clearCached(url);
                     b.destroy().next(function() {
                          $(document).trigger('BookmarksUpdated');
                     });
@@ -184,6 +185,7 @@ User.prototype = {
          }
          var self = this;
          Model.Bookmark.findByUrl(url).next(function(b) {
+             HTTPCache.clearCached(url);
              if (b) {
                  b.set('comment', data.comment_raw || '');
                  Model.getDatabase().transaction(function() {

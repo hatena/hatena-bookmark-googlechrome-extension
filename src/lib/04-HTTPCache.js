@@ -113,3 +113,9 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     encoder: HTTPCache.encodeBookmarkURL,
 });
 
+HTTPCache.clearCached = function(url) {
+    HTTPCache.entry.clear(url);
+    HTTPCache.counter.clear(url);
+    HTTPCache.comment.clear(url);
+}
+
