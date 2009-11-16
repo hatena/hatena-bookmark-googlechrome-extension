@@ -217,6 +217,10 @@ ul.tab-ui li.current {
     font-size: 90%;
 }
 
+#recommend-tags-container dd .tag, #all-tags-container dd .tag{
+  margin-right: 3px;
+}
+
 #title {
     font-weight: bold;
 }
