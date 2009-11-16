@@ -34,10 +34,30 @@
     </div>
   </div>
 </div>
+<div id="login-container">
+  <div id="bookmark-login-header">
+     ログインしていません
+  </div>
+  <div id="bookmark-register">
+    <p>
+    はてなブックマーク拡張のセットアップをしましょう。
+    </p>
+    <p>
+    まずユーザー登録(無料)を行います。
+    </p>
+    <p>
+    <a href="https://www.hatena.ne.jp/register?via=200041&location=http%3A%2F%2Fb.hatena.ne.jp%2Fguide%2Ffirefox_start_2"><img src="/images/step1_register_button.gif"></a>
+    </p>
+    <p>
+    すでにユーザー登録がお済みの場合は<a href="http://www.hatena.ne.jp/login">こちらからログイン</a>して下さい 
+    </p>
+  </div>
+</div>
 <div id="bookmark-container">
   <div id="bookmark-edit-header">
       ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
   </div>
+  <div id="bookmark-message" class="none"></div>
   <div id="bookmarked-notice" class="none"></div>
   <form id="form">
   <div id="edit">
@@ -152,6 +172,7 @@
         </div>
       </div>
   </h3>
+  <div id="comment-message"><img id="comment-loading-icon" src="/images/loading.gif" />コメントをロードしています…</div>
   <ul id="comment-list"></ul>
 </div>
 <div id="search-container">

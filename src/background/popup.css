@@ -5,7 +5,6 @@
 }
 
 body {
-  width: 500px;
 }
 
 pre {
@@ -64,6 +63,7 @@ ul.tab-ui li.current {
   background-color:#EEE;
 }
 
+#bookmark-login-header,
 #bookmark-edit-header {
     width:100%;
     display: table;
@@ -71,6 +71,11 @@ ul.tab-ui li.current {
     text-align: right;
     padding: 5px;
     font-size: 90%;
+}
+
+#bookmark-register {
+  text-align: center;
+  padding 10px;
 }
 
 #comment-header {
@@ -221,6 +226,7 @@ ul.tab-ui li.current {
   margin-right: 3px;
 }
 
+
 #title {
     font-weight: bold;
 }
@@ -233,6 +239,7 @@ ul.tab-ui li.current {
   display: inline;
 }
 
+#login-container,
 #bookmark-container,
 #comment-container,
 #search-container {
@@ -244,6 +251,12 @@ ul.tab-ui li.current {
   max-height: 500px;
   overflow-y:scroll;
   word-break:break-all;
+}
+
+#bookmark-message,
+#comment-message {
+  text-align: center;
+  padding: 20px 10px 20px 10px;
 }
 
 #comment-list li {

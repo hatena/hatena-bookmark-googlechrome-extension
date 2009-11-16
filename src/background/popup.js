@@ -16,8 +16,13 @@ if (popupMode) {
 
 
 function initBookmark() {
+    var user = UserManager.user;
+    if (!UserManager.user) {
+       $('#bookmark-container').hide();
+       $('#login-container').show();
+    }
+
     getInformation().next(function(info) {
-        var user = UserManager.user;
         $('#usericon').attr('src', user.view.icon);
         $('#username').text(user.name);
         if (user.plususer) {
@@ -29,9 +34,17 @@ function initBookmark() {
         $('#favicon').attr('src', info.faviconUrl);
 
         var url = info.url;
-        if (!url) return;
+
+        if (!url || info.url.indexOf('http') != 0) {
+            $('#form').hide();
+            $('#bookmark-message').text('この URL ははてなブックマークに追加できません');
+            $('#bookmark-message').show();
+            return;
+        }
+
         setURL(url);
 
+        $('#form').show();
         $('#comment').focus();
         HTTPCache.entry.get(url).next(setEntry);
         Model.Bookmark.findByUrl(url).next(setByBookmark);
@@ -242,20 +255,26 @@ var View = {
         get commentCount()    { return $('#comment-count-detail') },
         get commentInfos()    { return $('#comment-infos') },
         get commentToggle()   { return $('#comment-toggle') },
+        get commentMessage()   { return $('#comment-message') },
 
         init: function() {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
                 var title = self.title;
-                title.text(info.text);
+                title.text(info.title || info.url);
                 self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 HTTPCache.comment.get(info.url).next(function(r) {
-                    title.text(Utils.truncate(r.title, 60));
-                    title.attr('title', r.title);
-                    self.list.empty();
-                    self.list.html('');
-                    self.showComment(r);
+                    if (r) {
+                        self.commentMessage.hide();
+                        title.text(Utils.truncate(r.title, 60));
+                        title.attr('title', r.title);
+                        self.list.empty();
+                        self.list.html('');
+                        self.showComment(r);
+                    } else {
+                        self.commentMessage.text('表示できるブックマークコメントはありません');
+                    }
                 });
             });
         },
@@ -376,6 +395,7 @@ var ViewManager = {
                 setTimeout(function() {
                     var current = View[name];
                     current.container.show();
+                    Config.set('popup.lastView', name);
                     if (current.tab) current.tab.addClass('current');
                     current.init();
                 }, 0);
@@ -384,25 +404,38 @@ var ViewManager = {
     }
 }
 
+// var currentWin;
+// Deferred.chrome.windows.getCurrent().next(function(win) {
+//     currentWin = win;
+//     loadWindowPosition(win);
+// }).error(function(e) { console.log(e) });
 
-// $(document).bind('click', function(ev) {
-//     ev.metaKey = true;
-// });
-
-var currentWin;
-Deferred.chrome.windows.getCurrent().next(function(win) {
-    currentWin = win;
-    loadWindowPosition(win);
-}).error(function(e) { console.log(e) });
+/*
+if (popupMode) {
+    chrome.windows.getCurrent(function(win) {
+        BG.console.log(win);
+        var height = Math.max(300, win.height - 150);
+        document.getElementById('comment-list').style.maxHeight = sprintf('%spx', height);
+        document.getElementById('search-container').style.maxHeight = sprintf('%spx', height);
+    });
+}
+*/
 
 $(document).bind('ready', function() {
+    if (popupMode) {
+        document.body.style.width = '500px';
+    }
     $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);
     $('a').live('click', function() {
         this.target = '_blank';
     });
     // $('a').each(function() { this.target = '_blank' });
-    ViewManager.show('comment');
+    if (Config.get('popup.lastView') == 'bookmark') {
+        ViewManager.show('bookmark');
+    } else {
+        ViewManager.show('comment');
+    }
 });
 
 
