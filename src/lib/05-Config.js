@@ -1,11 +1,31 @@
 
-// XXX: now Mock ...
 var Config = {
     _dict: {},
-    get: function(key) {
-        return Config._dict[key];
+    get: function(oKey) {
+        var key = 'Config-' + oKey;
+        if (typeof localStorage[key] == 'undefined') {
+            return Config.getDefault(oKey);
+        } else {
+            return JSON.parse(localStorage[key]);
+        }
+    },
+    getDefault: function(key) {
+        if (typeof Config.DEFAULT[key] == 'undefined') {
+            return;
+        } else {
+            return Config.DEFAULT[key];
+        }
     },
     set: function(key, value) {
-        Config._dict[key] = value;
+        key = 'Config-' + key;
+        localStorage[key] = JSON.stringify(value);
     }
 };
+
+Config.DEFAULT = {
+    'commentviewer.autoSize': true,
+    'commentviewer.autoHideComment': true,
+    'commentviewer.autoHideCommentSize': 15,
+}
+
+

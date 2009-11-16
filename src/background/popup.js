@@ -232,28 +232,23 @@ var View = {
         }
     },
     comment: {
-        get container() {
-            return $('#comment-container');
-        },
-        get list() {
-            return $('#comment-list');
-        },
-        get tab() {
-            return $('#comment-tab');
-        },
-        get title() {
-            return $('#comment-title');
-        },
-        get starIcon() {
-            return $('#star-loading-icon');
-        },
+        get container()       { return $('#comment-container') },
+        get list()            { return $('#comment-list') },
+        get tab()             { return $('#comment-tab') },
+        get title()           { return $('#comment-title') },
+        get titleContainer()  { return $('#comment-title-container') },
+        get starLoadingIcon() { return $('#star-loading-icon') },
+        get commentUsers()    { return $('#comment-users') },
+        get commentCount()    { return $('#comment-count-detail') },
+        get commentInfos()    { return $('#comment-infos') },
+
         init: function() {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
                 var title = self.title;
                 title.text(info.text);
-                title.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
+                self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 HTTPCache.comment.get(info.url).next(function(r) {
                     title.text(Utils.truncate(r.title, 60));
                     title.attr('title', r.title);
@@ -263,20 +258,39 @@ var View = {
                 });
             });
         },
+        showNoComment: function() {
+            this.list.removeClass('hide-nocomment');
+        },
+        hideNoComment: function() {
+            this.list.addClass('hide-nocomment');
+        },
         showComment: function(data) {
             var eid = data.eid;
             var self = this;
             var bookmarks = data.bookmarks;
+            var publicLen = bookmarks.length;
+
+            self.commentUsers.text(sprintf('%d %s', data.count, data.count > 1 ? 'users' : 'user'));
+            self.commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
+            self.commentInfos.show();
+
+            this.hideNoComment();
+
             var i = 0;
             var step = 100;
-            var publicLen = bookmarks.length;
             var starLoaded = 0;
             var starLoadedCheck = function(entriesLen) {
                 starLoaded++;
                 if (publicLen/step <= starLoaded) {
-                    self.starIcon.hide();
+                    self.starLoadingIcon.hide();
                 }
             }
+
+            var options = {
+                title: data.title,
+                uri: data.url,
+            };
+
             Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
                 var elements = [];
@@ -289,12 +303,13 @@ var View = {
                                             eid);
 
                     var li = Utils.createElementFromString(
-                        '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        '<li class="#{klass}"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
                          data: {
                              permalink: permalink,
                              icon: v.icon,
                              user: b.user,
+                             klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
                              comment: b.comment,
                              timestamp: b.timestamp.substring(0, 10),
                              document: document
@@ -303,7 +318,7 @@ var View = {
                     frag.appendChild(li);
                     elements.push(li);
                 }
-                Hatena.Bookmark.Star.loadElements(elements).next(starLoadedCheck);
+                Hatena.Bookmark.Star.loadElements(elements, (n == 0 ? options : null)).next(starLoadedCheck);
                 self.list.append(frag);
                 return Deferred.wait(0.25);
             });

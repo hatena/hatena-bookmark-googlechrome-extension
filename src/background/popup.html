@@ -106,13 +106,15 @@
 <div id="comment-container">
   <h3 id="comment-header">
       <div class="table-row">
-        <div id="comment-title">
-          タイトルほげ
+        <div id="comment-title-container">
+          <span id="comment-title"></span>
         </div>
         <div id="comment-title-right">
-          <img src="/images/star_my.gif" alt="はてなスターのデータをロードしています…" title="はてなスターのデータをロードしています…" id="star-loading-icon" />
-          <span id="comment-users">11 users</span><span id="comment-count-detail">(8 + 3)</span>
-          <img id="comment-toggle" src="/images/comment-viewer-toggle-off.png" />
+          <div id="comment-infos"
+            <img src="/images/star_my.gif" alt="はてなスターをロードしています…" title="はてなスターをロードしています…" id="star-loading-icon" />
+            <span id="comment-users"></span><span id="comment-count-detail"></span>
+            <img onclick="View.comment.viewerToggle();" id="comment-toggle" src="/images/comment-viewer-toggle-off.png" />
+          </div>
         </div>
       </div>
   </h3>

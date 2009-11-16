@@ -10,14 +10,20 @@ Hatena.Bookmark.Star = {
         if (!elements) return;
         Hatena.Bookmark.Star.loadElements( elements );
     },
-    loadElements: function(elements) {
+    loadElements: function(elements, options) {
         var entries = [];
+        if (options) {
+            var title = document.getElementById('comment-title-container');
+            var entry = {
+                title: options,
+                uri: options.uri 
+            };
+            this.addStarElement(entry, title);
+            entries.push(entry);
+        }
         for (var i = 0;  i < elements.length; i++) {
             var element = elements[i];
             var entry = new Hatena.Bookmark.Star.createCommentEntry(element)
-            if (!(entry && entry.uri)) {
-                entry = new Hatena.Bookmark.Star.createArticleEntry(element);
-            }
             if (entry && entry.uri)
                 entries.push(entry);
         }
@@ -39,18 +45,6 @@ Hatena.Bookmark.Star = {
         }
         return Hatena.Bookmark.Star.getStarEntries(entries, starElements);
     },
-    createArticleEntry: function(el) {
-        var entry = {};
-        var a = el.getElementsByTagName('a')[0];
-        if (!a) return;
-    
-        entry.uri = a.href;
-        var title = Ten.DOM.scrapeText(el);
-        entry.title = title;
-    
-        Hatena.Bookmark.Star.addStarElement(entry, el);
-        return entry;
-    },
     createCommentEntry: function(el) {
         // コメントの li に対する Entry の作成
         var entry = {};
@@ -71,7 +65,6 @@ Hatena.Bookmark.Star = {
             title =  Ten.DOM.scrapeText(a) + 'のブックマーク';
         }
         entry.title = title;
-    
         Hatena.Bookmark.Star.addStarElement(entry, el);
         return entry;
     },
@@ -85,7 +78,8 @@ Hatena.Bookmark.Star = {
     createByArticleTitle: function() {
     },
     createByEntryTitle: function() {
-        if (document.getElementById('entry_star_count')) {
+        var title = document.getElementById('comment-title');
+        if (title) {
             var li = document.getElementById('entry_star_count');
             var h2 = Ten.DOM.getElementsByTagAndClassName('h2', 'entrytitle', document)[0];
             var entries = [];

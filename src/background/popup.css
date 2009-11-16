@@ -102,14 +102,18 @@ ul.tab-ui li.current {
 }
 
 
-#comment-title,
+#comment-title-container,
 #header-left {
   display: table-cell;
 }
 
-#comment-title {
+#comment-title-container {
     background: no-repeat 0px center;
     padding-left: 22px;
+}
+
+#comment-infos {
+  display: none;
 }
 
 .usericon {
@@ -258,6 +262,11 @@ ul.tab-ui li.current {
   color: #999;
   padding-left: 5px;
 }
+
+.hide-nocomment > li {
+     display: none;
+}
+
 
 /* loading */
 .loading {
