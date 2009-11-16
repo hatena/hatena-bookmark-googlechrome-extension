@@ -74,7 +74,8 @@ Bookmark.afterTrigger('createTable', function() {
 $.extend(Bookmark, {
     SEP: "\u0002",
     beforeSave: function(b) {
-        b.search = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
+        // chrome webdatabase 5M 制限のため、search テーブルを使わない
+        // b.search = ("" + b.get('comment') + Bookmark.SEP + b.get('title') + Bookmark.SEP + b.get('url')).toUpperCase();
     },
     afterSave: function(b) {
         b.updateTags();
@@ -95,10 +96,18 @@ $.extend(Bookmark, {
             offset: 0
         }, options);
 
+        var where = [], bind =  [];
+        words.forEach(function(w) {
+            where.push('( url LIKE ? OR title LIKE ? OR comment LIKE ? )');
+            bind.push('%' + w + '%'); bind.push('%' + w + '%'); bind.push('%' + w + '%');
+        });
+        var select = Bookmark.select('*', [where.join(' OR '), bind], options);
+        /*
         var searches = words.map(function(w) { return {'like': '%' + w + '%'} });
         var select = Bookmark.select('*', {search: searches}, options);
         // XXX
         select[0] = select[0].replace(/ \? OR search/g, ' ? AND search');
+        */
 
         var klass = Bookmark;
         var d = klass.execute(select);

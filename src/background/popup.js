@@ -199,18 +199,33 @@ var View = {
             ViewManager.show('search');
             var list = this.list;
             list.empty();
-            Model.Bookmark.search(word, {
-                limit: 100,
-                offset: 0,
-            }).next(function(res) {
-                res.forEach(function(r) {
-                    try {
-                    list.append(createBookmarkList(r));
-                    } catch(e) { p(e) }
-                    // var m = $('<li/>').text(r.title + r.url);
-                    // m.appendTo(list);
+            if (this.current) {
+                this.current.cancel();
+                delete this.current;
+            }
+            var self = this;
+            var start = 0;
+
+            var loop = function() {
+                self.current = Model.Bookmark.search(word, {
+                    limit: 100,
+                    offset: start,
+                }).next(function(res) {
+                    res.forEach(function(r) {
+                        try {
+                            list.append(createBookmarkList(r));
+                        } catch(e) { p(e) }
+                        // var m = $('<li/>').text(r.title + r.url);
+                        // m.appendTo(list);
+                    });
+                    start += 100;
+                    if (start < 1000) {
+                        loop();
+                    }
                 });
-            });
+            }
+            loop();
+
             // this.container.text('search:' + word);
         }
     },

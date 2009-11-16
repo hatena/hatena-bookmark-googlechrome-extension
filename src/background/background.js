@@ -196,6 +196,10 @@ setInterval(function() {
     UserManager.login();
 }, 1000 * 60 * 15);
 
+// chrome webdatabase 5M 制限のため、tag 参照テーブルを作らない
+Model.Bookmark.afterSave = function() {
+}
+
 // debug
 chrome.tabs.create({
     url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
@@ -204,11 +208,9 @@ chrome.tabs.create({
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
 
-/*
 setTimeout(function() {
 chrome.windows.create({url:'../tests/test.html'});
 }, 10);
-*/
 
 
 

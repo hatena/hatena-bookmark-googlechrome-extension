@@ -110,7 +110,8 @@
         },
         getDatabase: function() {
             var options = this.options;
-            return (Database.global || window).openDatabase(this.dbName, options.version, options.displayName, options.estimatedSize);
+            var db = (Database.global || window).openDatabase(this.dbName, options.version, options.displayName);//, options.estimatedSize);
+            return db;
         },
         execute: function(sql, args) {
             var self = this;
