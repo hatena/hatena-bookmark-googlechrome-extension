@@ -215,6 +215,7 @@ ul.tab-ui li.current {
   display: none;
 }
 
+#search-container,
 #comment-container {
   max-height: 500px;
   overflow-y:scroll;
@@ -255,6 +256,97 @@ body.data-loading * .loading {
     display: inline;
 }
 
+#search-container h3.entry-search {
+  margin: 4px 0 0 -20px;
+  padding: 0 0 0 20px;
+  background-repeat: no-repeat;
+  background-position: left 3px;
+  text-indent: 0px;
+}
+
+#search-container li {
+}
+
+#search-container div.comment {
+  font-size: 95%;
+}
+#search-container div.infos {
+  font-size: 90%;
+}
+
+#search-container ul li {
+  list-style: none;
+  line-height: 1.4;
+  margin: 10px 0 10px 10px !important;
+}
+
+#search-container span.highlight {
+  /* background-color: yellow !important; */
+  font-weight: bold;
+}
+
+#search-container a.user {
+  text-decoration: none;
+}
+
+#search-container .tags,
+#search-container a.user-tag {
+  text-decoration: none;
+  color: #66c;
+}
+
+#search-container a.url,
+#search-container a.url:hover,
+#search-container a.url:visited,
+#search-container a.url:link
+{
+  color:green;
+  text-decoration: none;
+}
+
+#search-container div.pager {
+  float: none;
+  margin-top: 13px;
+}
+
+#search-container div.pager span {
+  text-decoration: none;
+  color: #AAA;
+}
+
+#search-container div.pager span.shown {
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
+
+#search-container div.pager span.pager-next {
+  margin-left: 8px;
+}
+
+#search-container ul.result {
+  padding-top: 5px;
+}
+
+#search-container span.timestamp {
+  color: #555;
+}
+
+#search-container div.message-container {
+  display: none;
+  clear: both;
+  margin-top: 5em;
+}
+
+#search-container div.message-container p.bookmark-search-result {
+  margin-bottom: 5px;
+}
+
+#search-container div.message-container p.message-notice {
+  color: #999;
+  font-size: 95%;
+  margin-top: 5px;
+}
 
 
 

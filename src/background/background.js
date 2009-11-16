@@ -208,10 +208,11 @@ chrome.tabs.create({
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
 
+/*
 setTimeout(function() {
 chrome.windows.create({url:'../tests/test.html'});
 }, 10);
-
+*/
 
 
 

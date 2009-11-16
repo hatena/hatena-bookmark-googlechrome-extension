@@ -161,9 +161,9 @@ var E = Utils.createElementSimply;
 var createBookmarkList = function(bookmark) {
     var html = E('li', {className: 'bookmark'});
     html.appendChild(
-       html.head = E('h3', {className: 'entry-search'},
+       html.head = E('h3', {title: bookmark.title, className: 'entry-search'},
            E('img', {src: Utils.faviconUrl(bookmark.url)}),
-           html.link = E('a', { target: '_blank' }, bookmark.title))
+           html.link = E('a', { target: '_blank' }, Utils.truncate(bookmark.title, 56)))
     );
     html.appendChild(
        html.commentDiv = E('div', {className: 'comment'},
@@ -173,7 +173,8 @@ var createBookmarkList = function(bookmark) {
     );
     html.appendChild(
        html.urlDiv = E('div', {className: 'infos'},
-         html.url = E('a', {className: 'url'}, bookmark.url), ' ',
+         html.url = E('a', {className: 'url'}, Utils.coolURL(bookmark.url)), ' ',
+         E('span', {className: 'timestamp'}, bookmark.dateYMD),
          ' ', E('a', {href: Utils.entryURL(bookmark.url)}, E('img', {src: Utils.entryImage(bookmark.url), height:'13'}))
        )
     );
@@ -212,9 +213,9 @@ var View = {
                     offset: start,
                 }).next(function(res) {
                     res.forEach(function(r) {
-                        try {
+                        // try {
                             list.append(createBookmarkList(r));
-                        } catch(e) { p(e) }
+                        // } catch(e) { p(e) }
                         // var m = $('<li/>').text(r.title + r.url);
                         // m.appendTo(list);
                     });

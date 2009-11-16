@@ -1,12 +1,12 @@
 
 // consts
+var GLOBAL = this;
 var B_HOST = 'b.hatena.ne.jp';
 var B_HTTP = 'http://' + B_HOST + '/';
 var B_STATIC_HOST = 'b.st-hatena.com';
 var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 var B_API_STATIC_HOST = 'api.b.st-hatena.com';
 var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
-var GLOBAL = this;
 
 // utility
 var p = function() {
@@ -45,6 +45,18 @@ var import = function(source, names, target) {
 var $K = function(i) { return function() { return i } };
 
 var Utils = {
+    truncate: function(str, size, suffix) {
+        if (!size) size = 32;
+        if (!suffix) suffix = '...';
+        var b = 0;
+        for (var i = 0;  i < str.length; i++) {
+            b += str.charCodeAt(i) <= 255 ? 1 : 2;
+            if (b > size) {
+                return str.substr(0, i) + suffix;
+            }
+        }
+        return str;
+    },
     isString: function(obj) {
         return typeof obj === 'string' || obj instanceof String;
     },
@@ -58,6 +70,46 @@ var Utils = {
             dateStr.substr(10,2),
             dateStr.substr(12,2)
         );
+    },
+    coolURL: function(url, len) {
+        var u = url.
+          replace(/^https?:\/\//, '').
+          replace(/\.[^\/]+$/, '');
+        return Utils.truncate(u, len || 40);
+    },
+    randomString: function(len) {
+        var str = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var sLen = str.length;
+        var res = '';
+        for (var i = 0; i < len; i++) {
+            res += str.charAt(Math.floor(Math.random() * sLen));
+        }
+        return res;
+    },
+    escapeHTML: function(str) {
+        return str.replace(/&/g, '&amp;').
+                   replace(/</g, '&lt;').
+                   replace(/>/g, '&gt;');
+    },
+    countCommentToBytes: function(comment) {
+        var bytes = 0;
+        for (var i = 0;  i < comment.length; i++) {
+            bytes += comment.charCodeAt(i) <= 255 ? 1 : 3;
+        }
+        return bytes;
+    },
+    ljust: function(str, len, char) {
+        str = str.toString();
+        char = char.toString();
+        if (char.length == 0)
+            char = '0';
+        while (str.length < len) {
+            str = char + str;
+        }
+        return str;
+    },
+    faviconURL: function(url) {
+        return "http://favicon.hatena.ne.jp/?url=" + encodeURIComponent(url);
     },
     entryURL: function(url) {
         return B_HTTP + 'entry/' + url.replace('#', '%23');
@@ -138,25 +190,6 @@ if (typeof Deferred != 'undefined') {
         var Model = Database.Model, SQL = Database.SQL;
     }
 
-    /*
-    Deferred.prototype._fire = function (okng, value) {
-        var next = "ok";
-        try {
-            value = this.callback[okng].call(this, value);
-        } catch (e) {
-            next  = "ng";
-            if (Deferred.debug) console.error(e);
-            value = e;
-        }
-        if (value instanceof Deferred) {
-            value._next = this._next;
-        } else {
-            if (this._next) this._next._fire(next, value);
-        }
-        return this;
-    }
-    */
-    // Deferred.debug = true;
     Deferred.onerror = function(e) { console.error(e);console.error(e.stack) };
 
     Deferred.retry = function(retryCount, funcDeffered/* funcDeffered() return Deferred */, options) {
