@@ -263,8 +263,29 @@ ul.tab-ui li.current {
   padding-left: 5px;
 }
 
-.hide-nocomment > li {
+.hide-nocomment > li.nocomment {
      display: none;
+}
+
+#comment-users {
+  /* 1, 2users */
+  background-color: #fdd;
+  color: red;
+  text-align: underline;
+  padding: 1px;
+}
+
+em #comment-users {
+  /* 3 users over */
+  font-weight: bold;
+}
+
+#comment-count-detail {
+  color: #555;
+}
+
+#comment-toggle {
+  cursor: pointer;
 }
 
 

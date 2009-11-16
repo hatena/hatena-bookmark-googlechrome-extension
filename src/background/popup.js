@@ -241,6 +241,7 @@ var View = {
         get commentUsers()    { return $('#comment-users') },
         get commentCount()    { return $('#comment-count-detail') },
         get commentInfos()    { return $('#comment-infos') },
+        get commentToggle()   { return $('#comment-toggle') },
 
         init: function() {
             if (this.inited) return;
@@ -260,21 +261,47 @@ var View = {
         },
         showNoComment: function() {
             this.list.removeClass('hide-nocomment');
+            this.commentToggle.attr('src', '/images/comment-viewer-toggle-on.png');
+            this.commentToggle.attr('title', 'コメントがないユーザを非表示');
+            this.commentToggle.attr('alt', 'コメントがないユーザを非表示');
         },
         hideNoComment: function() {
             this.list.addClass('hide-nocomment');
+            this.commentToggle.attr('src', '/images/comment-viewer-toggle-off.png');
+            this.commentToggle.attr('title', 'すべてのユーザを表示');
+            this.commentToggle.attr('alt', 'すべてのユーザを表示');
+        },
+        toggleNoComment: function() {
+            if (this.list.hasClass('hide-nocomment')) {
+                this.showNoComment();
+            } else {
+                this.hideNoComment();
+            }
         },
         showComment: function(data) {
             var eid = data.eid;
             var self = this;
             var bookmarks = data.bookmarks;
+
+            if (UserManager.user && UserManager.user.ignores) {
+                var ignoreRegex = UserManager.user.ignores;
+                bookmarks = bookmarks.filter(function(b) { return ! ignoreRegex.test(b.user) });
+            }
             var publicLen = bookmarks.length;
 
+            if (Config.get('commentviewer.autoHideComment') &&
+                Config.get('commentviewer.autoHideThreshold') < publicLen)
+            {
+                self.hideNoComment();
+            }
+
             self.commentUsers.text(sprintf('%d %s', data.count, data.count > 1 ? 'users' : 'user'));
+            self.commentUsers.attr('href', data.entry_url);
+            if (data.count > 3) {
+                self.commentUsers.wrap($('<em/>'));
+            }
             self.commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
             self.commentInfos.show();
-
-            this.hideNoComment();
 
             var i = 0;
             var step = 100;

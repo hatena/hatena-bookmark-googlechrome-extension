@@ -25,7 +25,7 @@ var Config = {
 Config.DEFAULT = {
     'commentviewer.autoSize': true,
     'commentviewer.autoHideComment': true,
-    'commentviewer.autoHideCommentSize': 15,
+    'commentviewer.autoHideThreshold': 15,
 }
 
 
