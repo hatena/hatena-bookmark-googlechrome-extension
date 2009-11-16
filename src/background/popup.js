@@ -53,9 +53,9 @@ function setURL(url) {
     $('#url').attr('href', url);
 
     if (!$('#favicon').attr('src')) {
-        var faviconURI = new URI('http://favicon.st-hatena.com');
-        faviconURI.param({url: url});
-        $('#favicon').attr('src', faviconURI);
+        var favicon= new URI('http://favicon.st-hatena.com');
+        favicon.param({url: url});
+        $('#favicon').attr('src', favicon);
     }
 }
 
@@ -211,6 +211,7 @@ var View = {
                 self.current = Model.Bookmark.search(word, {
                     limit: 100,
                     offset: start,
+                    order: 'date desc',
                 }).next(function(res) {
                     res.forEach(function(r) {
                         // try {
@@ -240,11 +241,22 @@ var View = {
         get tab() {
             return $('#comment-tab');
         },
+        get title() {
+            return $('#comment-title');
+        },
+        get starIcon() {
+            return $('#star-loading-icon');
+        },
         init: function() {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
+                var title = self.title;
+                title.text(info.text);
+                title.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 HTTPCache.comment.get(info.url).next(function(r) {
+                    title.text(Utils.truncate(r.title, 60));
+                    title.attr('title', r.title);
                     self.list.empty();
                     self.list.html('');
                     self.showComment(r);
@@ -256,14 +268,26 @@ var View = {
             var self = this;
             var bookmarks = data.bookmarks;
             var i = 0;
-            Deferred.loop({begin:0, end: bookmarks.length, step:100}, function(n, o) {
+            var step = 100;
+            var publicLen = bookmarks.length;
+            var starLoaded = 0;
+            var starLoadedCheck = function(entriesLen) {
+                starLoaded++;
+                if (publicLen/step <= starLoaded) {
+                    self.starIcon.hide();
+                }
+            }
+            Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
                 var elements = [];
                 for (var j = 0;  j < o.step; j++) {
                     var b = bookmarks[i++];
                     if (!b) continue;
                     var v = new User.View(b.user);
-                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d", b.user, b.timestamp.substring(0, 10).replace(/\//g, ''), eid);
+                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
+                                            b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
+                                            eid);
+
                     var li = Utils.createElementFromString(
                         '<li class="userlist"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
@@ -279,7 +303,7 @@ var View = {
                     frag.appendChild(li);
                     elements.push(li);
                 }
-                Hatena.Bookmark.Star.loadElements(elements);
+                Hatena.Bookmark.Star.loadElements(elements).next(starLoadedCheck);
                 self.list.append(frag);
                 return Deferred.wait(0.25);
             });

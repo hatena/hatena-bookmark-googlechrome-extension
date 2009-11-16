@@ -108,9 +108,6 @@ var Utils = {
         }
         return str;
     },
-    faviconURL: function(url) {
-        return "http://favicon.hatena.ne.jp/?url=" + encodeURIComponent(url);
-    },
     entryURL: function(url) {
         return B_HTTP + 'entry/' + url.replace('#', '%23');
     },

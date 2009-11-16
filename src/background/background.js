@@ -87,15 +87,16 @@ $.extend(Manager, {
         }
     },
     updateBookmarkCounter: function(tab) {
+        chrome.browserAction.setIcon({path: '/images/chrome-b-plus.png'});
         if (tab.url && tab.url.indexOf('http') == 0) {
-            /*
-            chrome.browserAction.setBadgeText({
-                text: "*'-'*",
-            });
-            chrome.browserAction.setBadgeBackgroundColor({
-                color: [255,200,200, 255],
-            });
-            */
+
+            if (UserManager.user) {
+                 UserManager.user.hasBookmark(tab.url).next(function(bool) {
+                     if (bool) {
+                         chrome.browserAction.setIcon({path: '/images/chrome-b-checked.png'});
+                     }
+                 });
+            }
 
             HTTPCache.counter.get(tab.url).next(function(count) {
                 if (count == null) {
@@ -110,7 +111,7 @@ $.extend(Manager, {
                         text: "" + count,
                     });
                     chrome.browserAction.setBadgeBackgroundColor({
-                        color: [255,0,0, 200],
+                        color: [96,255,0, 200],
                     });
                 }
             });
@@ -202,6 +203,7 @@ Model.Bookmark.afterSave = function() {
 
 // debug
 chrome.tabs.create({
+    // url: '/background/popup.html?url=http://www.google.com/chrome/intl/ja/welcome.html'
     url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
     // url: '/background/popup.html?url=http://example.com/'
     // url: '/background/popup.html?url=http://a.hatena.ne.jp/'

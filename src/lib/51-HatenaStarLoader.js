@@ -21,8 +21,11 @@ Hatena.Bookmark.Star = {
             if (entry && entry.uri)
                 entries.push(entry);
         }
-        if (entries.length)
-            Hatena.Bookmark.Star.addEntries(entries);
+        if (entries.length) {
+            return Hatena.Bookmark.Star.addEntries(entries);
+        } else {
+            return Deferred.next();
+        }
     },
     addEntries: function(entries) {
         var starElements = [];
@@ -34,26 +37,7 @@ Hatena.Bookmark.Star = {
                 starElements.push(e);
             }
         }
-        Hatena.Bookmark.Star.getStarEntries(entries, starElements);
-        /*
-        var c = Hatena.Star.EntryLoader;
-        var entries_org = c.entries;
-        c.entries = null;
-        c.entries = [];
-        if (entries && typeof(entries.length) == 'number') {
-            var len = entries.length;
-            for (var i = 0; i < len; i++) {
-                var e = new Hatena.Star.Entry(entries[i]);
-                e.showButtons();
-                c.entries.push(e);
-            }
-        }
-        c.getStarEntries(entries);
-        if (entries_org) {
-            c.entries.push(entries_org);
-            c.entries = Ten.Array.flatten(c.entries);
-        }
-        */
+        return Hatena.Bookmark.Star.getStarEntries(entries, starElements);
     },
     createArticleEntry: function(el) {
         var entry = {};
@@ -120,8 +104,6 @@ Hatena.Bookmark.Star = {
     receiveStarEntries: function(res, starElements) {
         var entries = res.entries;
         if (!entries) entries = [];
-        p(entries.length);
-        p(starElements.length);
         for (var i = 0, cLen = starElements.length ; i < cLen ; i++) {
             var e = starElements[i];
             if (e.starEntry) continue;
@@ -160,10 +142,11 @@ Hatena.Bookmark.Star = {
         for (var i = 0; i < len; i++) {
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
-        p('star load start: ' + url.substring(0, 100));
-        jQuery.get(url).next(function(res) {
-            p('* - star data loaded: ' + url.substring(0, 100));
-            Hatena.Bookmark.Star.receiveStarEntries(JSON.parse(res), starElements);
+        return jQuery.get(url).next(function(res) {
+            res = JSON.parse(res);
+            var len = res.entries ? res.entries.length : 0;
+            Hatena.Bookmark.Star.receiveStarEntries(res, starElements);
+            return len;
         });
     }
 }

@@ -19,7 +19,7 @@
   },
   */
   "browser_action": {
-    "default_icon": "images/chrome-b-search.png",
+    "default_icon": "images/chrome-b-plus.png",
     "default_title": "HatenaBookmark Counter",
     "popup": "background/popup.html"
   },
