@@ -78,6 +78,7 @@ ul.tab-ui li.current {
   padding 10px;
 }
 
+#search-header,
 #comment-header {
     width:100%;
     display: table;
@@ -100,6 +101,7 @@ ul.tab-ui li.current {
     font-size: 90%;
 }
 
+#search-header-right,
 #comment-title-right,
 #header-right {
   text-align: right;
