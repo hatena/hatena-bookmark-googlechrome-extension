@@ -16,13 +16,6 @@
 <body class="data-loading">
 
   <div id="header">
-    <div id="bookmark-edit-header">
-      <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
-      <div class="edit-cell">
-        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
-        </div>
-
-    </div>
     <div id="header-left">
       <ul class="tab-ui">
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab"><img src="/images/chrome-b-plus.png">ブックマーク</li>
@@ -62,6 +55,12 @@
     </div>
   </div>
   <div id="bookmark-edit-container">
+    <div id="bookmark-edit-header">
+      <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
+      <div class="edit-cell">
+        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
+      </div>
+    </div>
     <div id="bookmark-message" class="none"></div>
     <div id="bookmarked-notice" class="none"></div>
     <form id="form">
@@ -184,15 +183,12 @@
   <ul id="comment-list"></ul>
 </div>
 <div id="search-container">
-  <h3 id="search-header">
-      <div class="table-row">
-        <div>
-        </div>
-        <div id="search-header-right">
-          <a href="http://example.com/XXX">検索結果を別ページで開く</a>
-        </div>
-      </div>
-  </h3>
+  <div id="search-header">
+    <div class="edit-cell"> </div>
+    <div class="edit-cell" id="search-header-right">
+      <a href="http://example.com/XXX">検索結果を別ページで開く</a>
+    </div>
+  </div>
   <ul id="search-result"></ul>
 </div>
 </body>
