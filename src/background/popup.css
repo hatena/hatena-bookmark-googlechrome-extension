@@ -55,23 +55,22 @@ a#users-count:visited {
     linear, 
     left top, 
     left bottom, 
-    from(#f3f8fe), 
-    to(#d3e3f7)
-    /*
-    color-stop(0.5, #f3f8fe), 
-    color-stop(0.5, #d3e3f7)
-    */
+    from(#427DC4), 
+    to(#2C6EBD), 
+    color-stop(0.5, #427DC4), 
+    color-stop(0.5, #2C6EBD)
     );
     border-bottom: 1px solid #bbb;
     -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
     margin-bottom: 10px;
+    -webkit-border-radius: 4px;
 }
 
 #header-left {
   display: table-cell;
   width: 100%;
   white-space: nowrap;
-  padding: 5px;
+  padding: 4px;
 }
 
 #header-right {
@@ -79,7 +78,7 @@ a#users-count:visited {
   width: 100%;
   text-align: right;
   white-space: nowrap;
-  padding: 5px;
+  padding: 4px;
 }
 
 ul.tab-ui li {
@@ -88,13 +87,14 @@ ul.tab-ui li {
     linear, 
     left top, 
     left bottom, 
-    from(#f1f7fd), 
-    to(#e2ecf9)
+    from(rgba(255,255,255,1)), 
+    to(rgba(255,255,255,0.8)),
+    color-stop(0.5, rgba(255,255,255,0.9)), 
+    color-stop(0.5, rgba(255,255,255,0.8))
     );
 
   padding: 4px 6px;
-  margin: 0px 0px 0px 0px;
-
+  margin: 0px;
   border-top: 1px solid  #fff;
   border-left: 1px solid  #fff;
   -webkit-border-radius: 4px;
@@ -110,20 +110,21 @@ ul.tab-ui li {
 }
 
 #header-right ul.tab-ui li input[type='image'] {
-  vertical-align: text-bottom;
+  vertical-align: middle;
+  margin-top: -3px;
+  border: none;
 }
 
 ul.tab-ui li.current {
-  background: #f0f3f8;
+  background: #fff;
   border-top: 1px solid  rgba(0,0,0,0.2);
   border-left: 1px solid  rgba(0,0,0,0.2);
-  border-right: 1px solid  rgba(255,255,255,0.6);
-  border-bottom: 1px solid  rgba(255,255,255,0.6);
   -webkit-box-shadow: 0px 0px 1px rgba(0,0,0,0.1);
 }
 
 ul.tab-ui li img {
-  margin-right: 3px;
+  margin-top: -1px;
+  margin-right: 1px;
 }
 
 
@@ -208,6 +209,11 @@ a.username {
 #bookmark-edit-header {
   display: table-row;
   width: 100%;
+  color: #fff;
+}
+
+#bookmark-edit-header a {
+  color: #fff;
 }
 
 #bookmark-edit-header div.edit-cell {
@@ -219,7 +225,6 @@ a.username {
 }
 
 #edit {
-    padding: 8px 8px 0 8px;
     width:100%;
     display: table;
 }
@@ -245,12 +250,12 @@ a.username {
     font-size: 90%;
     font-weight: bold;
     width: 1%;
+    white-space: nowrap;
 }
 
 .edit-cell {
   padding: 5px;
   display: table-cell;
-  white-space: nowrap;
 }
 
 /* }}} */
