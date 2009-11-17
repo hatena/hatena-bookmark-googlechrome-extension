@@ -40,9 +40,11 @@ a#users-count:visited {
     font-weight: bold;
 }
 
+#favicon,
+.usericon,
 #usericon {
   vertical-align:text-bottom;
-  margin:0 2px;
+  margin:0 2px 0 0;
 }
 
 /* }}} */
