@@ -14,8 +14,15 @@
 <link rel="stylesheet" href="popup.css" type="text/css" />
 </head>
 <body class="data-loading">
-<div id="header">
-  <div class="table-row">
+
+  <div id="header">
+    <div id="bookmark-edit-header">
+      <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
+      <div class="edit-cell">
+        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
+        </div>
+
+    </div>
     <div id="header-left">
       <ul class="tab-ui">
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab"><img src="/images/chrome-b-plus.png">ブックマーク</li>
@@ -25,15 +32,15 @@
     <div id="header-right">
       <ul class="tab-ui">
         <li id="search-tab">
-            <form id="search-form">
-              <input type="image" src="/images/searchbutton.gif" width=16 height=16 />
-              <input id="search-word" type="text" />
-            </form>
+        <form id="search-form">
+          <input type="image" src="/images/searchbutton.gif" width=16 height=16 />
+          <input id="search-word" type="text" />
+        </form>
         </li>
       </ul>
     </div>
   </div>
-</div>
+
 <div id="bookmark-container">
   <div id="login-container">
     <div id="bookmark-login-header">
@@ -55,9 +62,6 @@
     </div>
   </div>
   <div id="bookmark-edit-container">
-    <div id="bookmark-edit-header">
-        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
-    </div>
     <div id="bookmark-message" class="none"></div>
     <div id="bookmarked-notice" class="none"></div>
     <form id="form">
@@ -78,6 +82,7 @@
                 </div>
             </div>
         </div>
+
         <div class="table-row">
             <div class="edit-left edit-cell">コメント:</div>
             <div class="edit-cell" id="bookmark-options">
@@ -147,7 +152,6 @@
             <div class="edit-cell">
                 <input class="none" onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
             </div>
-            <div id="buttons-spacer" class="edit-cell"></div>
             <div class="edit-cell">
                 <input type="submit" value="追加" />
             </div>
@@ -159,6 +163,7 @@
     </form>
   </div>
 </div>
+
 <div id="comment-container">
   <h3 id="comment-header">
       <div class="table-row">
@@ -168,7 +173,8 @@
         <div id="comment-title-right">
           <div id="comment-infos"
             <img src="/images/star_my.gif" alt="はてなスターをロードしています…" title="はてなスターをロードしています…" id="star-loading-icon" />
-            <a id="comment-users"></a><span id="comment-count-detail"></span>
+            <a id="comment-users"></a>
+            <span id="comment-count-detail"></span>
             <img onclick="View.comment.toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
           </div>
         </div>
