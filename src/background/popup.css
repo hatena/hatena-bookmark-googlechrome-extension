@@ -41,7 +41,7 @@ a#users-count:visited {
 }
 
 #usericon {
-  vertical-align:baseline;
+  vertical-align:text-bottom;
   margin:0 2px;
 }
 
@@ -218,6 +218,8 @@ a.username {
 
 #bookmark-edit-header div.edit-cell {
   padding-bottom: 0;
+  padding-top: 2px;
+  vertical-align: middle;
 }
 
 #bookmark-edit-header .edit-cell:last-child {
@@ -538,6 +540,24 @@ em a:hover,
 em a:visited {
   color: #FF6666 !important;
   background: #FFF0F0 !important;
+}
+
+/* }}} */
+
+/* register {{{ */
+#bookmark-register {
+  text-align: center;
+}
+
+#bookmark-login-header {
+  font-weight: bold;
+  background: #f9efcf;
+  border: 1px solid #ede2c2;
+  width: 300px;
+  margin: 10px auto;
+  font-size: 120%;
+  padding: 7px;
+  -webkit-border-radius: 4px;
 }
 
 /* }}} */
