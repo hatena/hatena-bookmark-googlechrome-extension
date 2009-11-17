@@ -18,8 +18,9 @@ if (popupMode) {
 function initBookmark() {
     var user = UserManager.user;
     if (!UserManager.user) {
-       $('#bookmark-container').hide();
+       $('#bookmark-edit-container').hide();
        $('#login-container').show();
+        return;
     }
 
     getInformation().next(function(info) {
