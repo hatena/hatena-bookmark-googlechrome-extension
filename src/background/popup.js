@@ -357,10 +357,9 @@ var View = {
             this.tagCompleter.register(this.commentEL, {
                 updatedHandler: function(inputLine) {
                     // darty...
-                    var m = inputLine.tags.join('[');
-                    m = '[' + m;
+                    var m = inputLine.value;
                     $('dd span.tag').each(function(i, el) {
-                        if (m.indexOf('[' + el.textContent) == -1) {
+                        if (m.indexOf('[' + el.textContent + ']') == -1) {
                             $(el).removeClass('selected');
                         } else {
                             $(el).addClass('selected');
