@@ -54,7 +54,6 @@ $.extend(UserManager, {
 
 var User = function(name, options) {
     this._name = name;
-    this._database = new LocalStorageBookmark(name, window.localStorage);
     this.view = new User.View(name);
     this.options = options || {};
 };
@@ -104,15 +103,11 @@ User.prototype = {
     getEndPoint: function(name) {
         return B_HTTP + this.name + '/' + name;
     },
-    get searcher() {
-        return this._database.createSearcher();
-    },
     get database() {
-        return this._database;
-        /*
         return new Database('hatenabookmark22-' + this.name, {
             estimatedSize: 50 * 1024
         });
+        /*
         return new Database('hatenabookmark2-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
         */
     },
@@ -214,7 +209,6 @@ User.prototype = {
          });
     },
     clear: function user_clear() {
-        delete this._database;
     }
 };
 

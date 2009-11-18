@@ -1,7 +1,4 @@
 
-/*
- * WebDatabase 利用版。WebDatabase が利用できなくなったので Stable では使わない
- */
 var Sync = $({});
 jQuery.extend(Sync, {
     init: function Sync_init() {
