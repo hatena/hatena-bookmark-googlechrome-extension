@@ -28,6 +28,9 @@ Config.DEFAULT = {
     'commentviewer.autoHideThreshold': 15,
     'tags.recommendTags.enabled': true,
     'tags.allTags.enabled': true,
+    'tags.complete.enabled': true,
+    'tags.complete.enabled': true,
+    'tags.tagMaxResult': 10,
 }
 
 
