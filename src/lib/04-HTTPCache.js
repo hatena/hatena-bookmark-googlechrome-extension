@@ -153,9 +153,7 @@ HTTPCache.usertags = new HTTPCache('usertagsCache', {
             }
         });
 
-        res.tagsCountSortedKeys = res.tagsCountSortedKeys.map(function(e) { e[0] });
-
-        res.tagsKeys.sort(function(a, b) {
+        var keySortFunc = function(a, b) {
             if (a.toUpperCase() > b.toUpperCase() ) {
                 return 1;
             } else if (a.toUpperCase() < b.toUpperCase() ) {
@@ -163,7 +161,11 @@ HTTPCache.usertags = new HTTPCache('usertagsCache', {
             } else {
                 return 0;
             }
-        });
+        }
+
+        res.tagsCountSortedKeys = res.tagsCountSortedKeys.map(function(e) { return e[0] });
+        res.tagsCountSortedKeys.sort(keySortFunc);
+        res.tagsKeys.sort(keySortFunc);
         return res;
     },
     createURL: function(name) {

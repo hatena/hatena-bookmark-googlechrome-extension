@@ -312,6 +312,10 @@ var View = {
         get form() { return $('#form') },
         get message() { return $('#bookmark-message') },
         get comment() { return $('#comment') },
+        get allTagsContainer() { return $('#all-tags-container') },
+        get allTags() { return $('#all-tags') },
+        get recommendTagsContainer() { return $('#recommend-tags-container') },
+        get recommendTags() { return $('#recommend-tags') },
         init: function() {
             var user = UserManager.user;
             if (!UserManager.user) {
@@ -351,9 +355,11 @@ var View = {
             this.form.show();
             this.comment.focus();
             var self = this;
-            HTTPCache.usertags.get(user.name).next(function(res) {
-                self.setUserTags(res)
-            });
+            if (Config.get('tags.allTags.enabled')) {
+                HTTPCache.usertags.get(user.name).next(function(res) {
+                    self.setUserTags(res)
+                });
+            }
             HTTPCache.entry.get(url).next(function(res) { self.setEntry(res) });
             Model.Bookmark.findByUrl(url).next(function(res) { self.setByBookmark(res) });
         },
@@ -362,13 +368,30 @@ var View = {
             if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
 
             if (Config.get('tags.showAll')) {
-                this.showUserTags(tags.tagsKeys);
+                var target = tags.tagsKeys;
             } else {
-                this.showUserTags(tags.tagsCountSortedKeys.splice(0, 20));
+                var target = tags.tagsCountSortedKeys.splice(0, 20);
            }
+           this.showTags(target, this.allTagsContainer, this.allTags);
         },
 
-        showUserTags: function(tags) {
+        setRecomendTags: function(tags) {
+           this.showTags(tags, this.recommendTagsContainer, this.recommendTags);
+        },
+
+        showTags: function(tags, container, tagsList) {
+            var len = tags.length;
+            if (len) {
+                container.show();
+                tagsList.empty();
+                var frag = document.createDocumentFragment();
+                for (var i = 0; i < len; i++) {
+                    frag.appendChild(E('span', {
+                        className: 'tag',
+                    }, tags[i]));
+                }
+                tagsList.get(0).appendChild(frag);
+            }
         },
 
         setByBookmark: function(b) {
@@ -396,6 +419,8 @@ var View = {
             $('body').removeClass('data-loading');
             if (entry.title) this.titleText.text(entry.title);
             this.setURL(entry.original_url);
+            if (Config.get('tags.recommendTags.enabled'))
+                this.setRecomendTags(entry.recommend_tags);
             var count = parseInt(entry.count);
             if (count) {
                 var uc = $('#users-count');
