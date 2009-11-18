@@ -311,7 +311,7 @@ var View = {
         get faviconEL() { return $('#favicon') },
         get form() { return $('#form') },
         get message() { return $('#bookmark-message') },
-        get comment() { return $('#comment') },
+        get commentEL() { return $('#comment') },
         get allTagsContainer() { return $('#all-tags-container') },
         get allTags() { return $('#all-tags') },
         get recommendTagsContainer() { return $('#recommend-tags-container') },
@@ -330,6 +330,8 @@ var View = {
             });
         },
         loadByInformation: function(info) {
+            var self = this;
+
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
             this.usernameEL.text(user.name);
@@ -351,15 +353,39 @@ var View = {
             }
 
             this.setURL(url);
+            this.tagCompleter = TagCompleter;
+            this.tagCompleter.register(this.commentEL, {
+                updatedHandler: function(inputLine) {
+                    // darty...
+                    var m = inputLine.tags.join('[');
+                    m = '[' + m;
+                    $('dd span.tag').each(function(i, el) {
+                        if (m.indexOf('[' + el.textContent) == -1) {
+                            $(el).removeClass('selected');
+                        } else {
+                            $(el).addClass('selected');
+                        }
+                    });
+                }
+            });
+
+            $('dd span.tag').live('click', function() {
+                if (this.className.indexOf('selected') == -1) {
+                    self.tagCompleter.inputLine.addTag(this.textContent);
+                } else {
+                    self.tagCompleter.inputLine.deleteTag(this.textContent);
+                }
+            });
 
             this.form.show();
-            this.comment.focus();
-            var self = this;
+            this.commentEL.focus();
             if (Config.get('tags.allTags.enabled')) {
                 HTTPCache.usertags.get(user.name).next(function(res) {
+                    self.tagCompleter.addSuggestTags(res.tagsKeys);
                     self.setUserTags(res)
                 });
             }
+
             HTTPCache.entry.get(url).next(function(res) { self.setEntry(res) });
             Model.Bookmark.findByUrl(url).next(function(res) { self.setByBookmark(res) });
         },
@@ -380,6 +406,7 @@ var View = {
         },
 
         showTags: function(tags, container, tagsList) {
+            tags.push('test');
             var len = tags.length;
             if (len) {
                 container.show();
@@ -394,13 +421,24 @@ var View = {
             }
         },
 
+        getMatchedTextNode: function(text, target) {
+            return document.evaluate(
+               'descendant::text()[contains(., "' + text.replace(/"/g, '\\"') + '")]',
+               target || document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+            ).singleNodeValue;
+        },
+
         setByBookmark: function(b) {
             if (b) {
                 $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
                 .removeClass('none');
                 $('#delete-button').removeClass('none');
-                $('#comment').attr('value', b.comment);
+                this.updateComment(b.comment);
             }
+        },
+
+        updateComment: function(text) {
+            this.tagCompleter.updateComment(text);
         },
 
         setURL: function(url) {

@@ -1,248 +1,463 @@
 
 var E = Utils.createElementSimply;
 
-/*
- * ToDo: 毎回 addPanel 呼び出されると作られるため重い
- */
+var TagCompleter = $({});
 
-var TagCompleter = {
-    reloadTags: function() {
+$.extend(TagCompleter, {
+    register: function(input, options) {
+        this.options = options || {};
+        this.input = input;
         var self = this;
-        var dTags =  model('Tag').findDistinctTags();
-        var tags = [];
-        var tagsCount = {};
-        dTags.forEach(function(e) { tags.push(e.name);tagsCount[e.name] = e.count;});
-        self.tagCache.set('tags', tags);
-        self.tagCache.set('tagsCount', tagsCount);
+        TagCompleter.InputLine.prototype.__defineSetter__('value', function(text) {
+            this._text = text;
+            self.input.attr('value', text);
+            if (self.options.updatedHandler) self.options.updatedHandler(this);
+        });
+        this.inputLine = new TagCompleter.InputLine('', []);
+        input.bind('keydown', function(ev) {
+            setTimeout(function() {
+                var val = ev.target.value;
+                if (val != self.inputLine.value)
+                    self.inputLine.value = val;
+            }, 0);
+        });
     },
-    clearCache: function clearCache() {
-        this.tagCache._tags = null;
-        this.tagCache.tagsCount = null;
+    addSuggestTags: function(tags) {
+        this.tags = tags;
+        this.inputLine.suggestTags = tags; // XXX
     },
-    get tagCache() {
-        if (!shared.has('tagCache')) {
-            shared.set('tagCache', new ExpireCache('tagcache', 30 * 60));
-        }
-        return shared.get('tagCache');
+    updateComment: function(text) {
+        this.inputLine.value = text;
     },
-    get tagsCount() {
-        return this.tagCache.get('tagsCount');
-    },
-    get tags() {
-        var t = this.tagCache.get('tags');
-        if (!t) {
-            this.reloadTags();
-            return this.tagCache.get('tags');
-        }
-        return t;
-    }
-};
+});
 
-TagCompleter.List = {
-    clear: function() {
-        list.selectedIndex = -1;
-        while(list.firstChild) list.removeChild(list.firstChild);
+/*
+$.extend(TagComplete, {
+    addTags: function(tags) {
+        for (var tag in tags) {
+            if (tags[tag].count) {
+                this.tagsArray.push([tag, parseInt(tags[tag].count), tags[tag].timestamp]);
+                this.tags[tag] = tags[tag];
+                this.tagsKeys.push(tag);
+            }
+        }
+        this.tagsKeys.sort(function(a, b) {
+            if (a.toUpperCase() > b.toUpperCase() ) {
+                return 1;
+            } else if (a.toUpperCase() < b.toUpperCase() ) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    },
+    observeInput: function(element) {
+        if (this.keydownObserver) return;
+        this.targetInput = element;
+        this.keyupObserver = new Ten.Observer(element, 'onkeyup', this, 'keyupHandler');
+
+        if ((Ten.Browser.isFirefox && Ten.Browser.isOSX) || Ten.Browser.isOpera) {
+            this.keypressObserver = new Ten.Observer(element, 'onkeypress', this, 'keydownHandler');
+            //this.keypressObserver = new Ten.Observer(element, 'onkeypress', this, 'keypressHandler');
+        } else {
+            this.keydownObserver = new Ten.Observer(element, 'onkeydown', this, 'keydownHandler');
+        }
+
+        this.registerInputTags(element.value);
+    },
+    registerInputTags: function(str) {
+        var lastInputTags = this.inputedTags.join('_');
+        var r = Hatena.Bookmark.StringHelper.cutoffComment(str);
+        var comment = r[0];
+        this.inputedTags = r[1];
+        this.commentByteCounter(comment);
+        var nowInputTags = this.inputedTags.join('_');
+        if (nowInputTags != lastInputTags) {
+            this.dispatchEvent('update_input_tags', this.inputedTags);
+            this.targetInput.focus();
+        }
+    },
+    commentByteCounter: function(comment) {
+        var bytes = Hatena.Bookmark.StringHelper.countCommentToBytes(comment);
+        this.dispatchEvent('update_comment_byte', Math.ceil(bytes/3));
+    },
+    updateInputedTags: function() {
+        this.registerInputTags(this.targetInput.value);
+    },
+    suggest: function() {
+        this.updateInputedTags();
+
+        if (this.getInputValue().indexOf('[') == -1) {
+            this.finish();
+            return;
+        }
+
+        var pos = this.getTargetWordPos();
+        if (pos[0] == -1) {
+            this.finish();
+            return;
+        }
+        var val = this.getInputValue();
+        var word = val.substring(pos[0], pos[1]);
+        word = word.replace(/\]$/, '');
+        this.suggestWord(word);
+    },
+    suggestWord: function(word) {
+        if (word && word.indexOf('[') == -1) {
+            if (word == this.lastWord) return;
+            this.lastWord = word;
+            this.currentWords = this.createWords(word, 10);
+            if (!this.hasCaret())
+                this.caret = -1;
+            p('suggest words', word);
+            this.dispatchEvent('suggest', this.currentWords);
+            if (word.indexOf(']') >= 0) {
+                this.finish();
+            }
+        } else {
+            this.finish();
+        }
+    },
+    hasCaret: function() {
+        return ('caret' in this);
+    },
+    createWords: function(word, limit) {
+        var words = [];
+        var w = word.toUpperCase();
+
+        var spaceMatched = function(tKey, index, ws, first) {
+            if (ws.length == 0) return true;
+            var i;
+            if (((i = tKey.indexOf(ws.shift(), index)) >= 0) && !(first && i != 0)) {
+                return spaceMatched(tKey, i+2, ws, false);
+            }
+            return false;
+        }
+
+        var sep = w.split(/\s+/);
+        var ws = [];
+        for (var i = 0;  i < sep.length; i++) {
+            if (sep[i]) ws.push(sep[i]);
+        }
+
+        for (var i = 0, len = this.tagsKeys.length;  i < len; i++) {
+            var tKey = this.tagsKeys[i];
+
+            if (spaceMatched(tKey.toUpperCase(), 0, Array.prototype.slice.apply(ws), true)) {
+                words.push({
+                    name: tKey,
+                    count: this.tags[tKey].count
+                });
+            }
+            if (words.length >= limit) break;
+        }
+        return words;
+    },
+    getTextCaretPos: function() {
+        var element = this.targetInput;
+        var add = this.oneMode() ? 1 : 0;
+        if (document.all) {
+            var range = document.selection.createRange();
+            var textRange = element.createTextRange();
+            textRange.setEndPoint('EndToStart', range);
+            return textRange.text.length + add;
+        } else if(document.getElementById) {
+            return element.selectionStart + add;
+        }
+    },
+    updateCaret: function(pos) {
+        if (this.hasCaret()) {
+            if (this.caret != pos) {
+                this.caret = pos;
+                this.dispatchEvent('update', this.caret);
+            }
+        }
+    },
+    caretNext: function() {
+        if (this.hasCaret()) {
+            var caret = this.caret;
+            caret++;
+            if (caret >= this.currentWords.length) caret = 0;
+            this.updateCaret(caret);
+        }
+    },
+    caretPrev: function() {
+        if (this.hasCaret()) {
+            var caret = this.caret;
+            caret--;
+            if (caret < 0) caret = this.currentWords.length - 1;
+            this.updateCaret(caret);
+        }
+    },
+    getInputValue: function() {
+        var value = this.targetInput.value;
+        if (this.oneMode())
+            return '[' + value;
+        return value;
+    },
+    oneMode: function() {
+        return this.mode == 'onetag';
+    },
+    appendTag: function(tagName) {
+        var val = this.targetInput.value;
+        var lastIndex = val.lastIndexOf(']');
+        if (lastIndex == -1) {
+            this.targetInput.value = '[' + tagName + ']' + val;
+        } else {
+            var prefix = val.substring(0, lastIndex + 1);
+            var suffix = val.substr(lastIndex + 1);
+            this.targetInput.value = prefix + '[' + tagName + ']' + suffix;
+        }
+        this.updateInputedTags();
+    },
+    removeTag: function(tagName) {
+        var val = this.targetInput.value;
+        this.targetInput.value = val.replace(new RegExp('\\[' + tagName.replace(/([\|\-\^\$\+\*\(\)\{\}])/g, "\\$1") + '\\]', 'gi'), '');
+        this.updateInputedTags();
+    },
+    complete: function() {
+        var val = this.getInputValue();
+        var pos = this.getTargetWordPos();
+        if (this.hasCaret() ) {
+            word = this.currentWords[this.caret] || this.currentWords[0];
+            if (!word) {
+                if (this.oneMode()) delete this.caret;
+                return;
+            }
+
+            word = word.name;
+            var prefix = val.substring(0, pos[0]);
+            var suffix = val.substr(pos[1]);
+            p('complete', word, prefix, suffix);
+            var newValue = prefix + word + ']' + suffix;
+            if (this.oneMode())
+                newValue = newValue.replace(/\[/g, '').replace(/\]/g, '');
+
+            if (Ten.Browser.isFirefox && Ten.Browser.isOSX) {
+                setTimeout(Ten.Function.bind(function() {
+                    this.targetInput.value = newValue;
+                    this.targetInput.select();
+                    this.moveInputCaret((prefix + word).length + 1);
+                    this.finish();
+                    this.dispatchEvent('complete');
+                    this.targetInput.focus();
+                    if (this.oneMode()) delete this.caret;
+                }, this), 1);
+            } else {
+                this.targetInput.value = newValue;
+                this.targetInput.select();
+                this.moveInputCaret((prefix + word).length + 1);
+                this.finish();
+                this.dispatchEvent('complete');
+                this.targetInput.focus();
+                    if (this.oneMode()) delete this.caret;
+            }
+        }
+    },
+    moveInputCaret: function(index) {
+        if (document.all) {
+            var range = this.targetInput.createTextRange();
+            range.collapse();
+            range.move('character', index);
+            range.select();
+        } else {
+           this.targetInput.setSelectionRange(index, index);
+        }
+    },
+    finish: function() {
+        delete this.caret;
+        delete this.currentWords;
+        delete this.lastWord;
+        this.dispatchEvent('suggest_hide');
+    },
+    keydownHandler: function(e) {
+        //if (this.hasCaret() && (e.isKey('enter') || e.isKey('tab'))) {
+        if (this.hasCaret()) {
+            var keyCode = e.event.keyCode;
+            switch( keyCode ) {
+                case 13: // enter
+                    this.complete();
+                    e.stop();
+                    break;
+                case 9: // tab
+                    if (this.currentWords.length == 1) {
+                        this.complete();
+                    } else if (e.shiftKey) {
+                        this.caretPrev();
+                    } else {
+                        this.caretNext();
+                    }
+                    if ( !this.lastWord && this.oneMode() ) {
+                        //
+                    } else if( this.lastWord && this.lastWord.indexOf(']') >= 0 ) { // XXX...
+                        //
+                    } else {
+                        e.stop();
+                    }
+                    if (Ten.Browser.isOpera) {
+                        setTimeout(function() {
+                            e.target.focus();
+                        }, 10);
+                    }
+                    break;
+                case 38: // cursor up
+                    this.caretPrev();
+                    e.stop();
+                    break;
+                case 40: // cursor down
+                    this.caretNext();
+                    e.stop();
+                    break;
+            }
+        }
+    },
+    keyupHandler: function(e) {
+        if (!e.isKey('enter'))
+            this.suggest();
+    }
+});
+
+Hatena.Bookmark.TagComplete.FlatList = new Hatena.Bookmark.Class({
+    initialize: function(tagComplete, tagList) {
+        this.constructor.SUPER.call(this);
+        this.tagComplete = tagComplete;
+        this.list = tagList;
+        this.applyTagCompleteInput();
+        this.registerEventListeners(tagComplete);
+    }
+}, {
+    applyTagCompleteInput: function() {
+        if (this.tagComplete.inputedTags) this.update(this.tagComplete.inputedTags);
+    },
+    registerEventListeners: function(target) {
+        var self = this;
+        new Ten.Observer(this.list, 'onclick', this, 'listClickHandler');
+        target.oldAddEventListener('update_input_tags', function(tags) { self.update(tags); });
     },
     listClickHandler: function(e) {
-        e.stopPropagation();
-        list.selectedItem = e.currentTarget;
-        var ev = document.createEvent('UIEvents');
-        ev.initEvent('complete', true, false);
-        list.dispatchEvent(ev);
+        if (Ten.DOM.hasClassName(e.target, 'tag')) {
+            var t = e.target;
+            if (Ten.DOM.hasClassName(t, 'tag-selected')) {
+                this.tagComplete.removeTag(Ten.DOM.scrapeText(t));
+            } else {
+                this.tagComplete.appendTag(Ten.DOM.scrapeText(t));
+            }
+        }
     },
-    showTags: function(tags, el) {
-        this.clear();
-        var tagsCount = TagCompleter.tagsCount;
+    update: function(tags) {
+        var tTags = this.list.getElementsByTagName('span');
+        for (var i = 0;  i < tTags.length; i++) {
+            var tag = tTags[i];
+            var flag = false;
+            for (var j = 0;  j < tags.length; j++) {
+                if (Ten.DOM.scrapeText(tag).toUpperCase() == tags[j].toUpperCase()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                Ten.DOM.addClassName(tag, 'tag-selected');
+            } else {
+                Ten.DOM.removeClassName(tag, 'tag-selected');
+            }
+        }
+    }
+});
+
+Hatena.Bookmark.TagComplete.DropDownList = new Hatena.Bookmark.Class({
+    initialize: function(tagComplete) {
+        this.constructor.SUPER.call(this);
+        this.tagComplete = tagComplete;
+        this.registerEventListeners(tagComplete);
+    }
+}, {
+    registerEventListeners: function(target) {
         var self = this;
-        tags.forEach(function(tag) {
-            var item = E('richlistitem', {flex:1, 'class': 'hBookmark-tagcomplete-listitem', value:tag},
-                E('hbox', {flex:1}, 
-
-                    E('label', {'class': 'hBookmark-tagcomplete-tagname', value: tag}),
-                    E('spacer', {flex: 1}),
-                    E('label', {'class': 'hBookmark-tagcomplete-tagcount', value: tagsCount[tag] || 0})
-                )
-            );
-            item.addEventListener('click', method(self, 'listClickHandler'), false);
-            item.addEventListener('mouseover', method(self, 'listMousemoveHandler'), false);
-            list.appendChild(item);
+        target.oldAddEventListener('suggest', function(words) {
+            self.suggestWord(words);
         });
-        this.show(el);
+        target.oldAddEventListener('suggest_hide', function() { self.hide(); });
+        target.oldAddEventListener('update', function(pos) { self.update(pos); });
     },
-    listMousemoveHandler: function(e) {
-
-        list.selectedItem = e.currentTarget;
+    suggestWord: function(words) {
+        if (words.length) {
+            this.showSuggest(words);
+        } else {
+            this.hide();
+        }
     },
-    isOne: function() {
-        return list.getRowCount() == 1;
-    },
-    get shown() { return panel.state == 'open' },
-    show: function(el) {
-        panel.openPopup(el, 'after_start', 0, 0,false,false);
+    show: function() {
+        if (this.list) this.list.style.display = 'block';
     },
     hide: function() {
-        panel.hidePopup();
+        if (this.list) this.list.style.display = 'none';
     },
-    next: function() {
-        if (list.selectedIndex == list.getRowCount() - 1) {
-            this.first();
-        } else {
-            list.selectedIndex = list.selectedIndex + 1;
-        }
-    },
-    prev: function() {
-        if (list.selectedIndex == 0) {
-            this.last();
-        } else {
-            list.selectedIndex = list.selectedIndex - 1;
-        }
-    },
-    first: function() {
-        list.selectedIndex = 0;
-        list.ensureIndexIsVisible(list.selectedIndex);
-    },
-    last: function() {
-        list.selectedIndex = list.getRowCount() - 1;
-        list.ensureIndexIsVisible(list.selectedIndex);
-    },
-    getCurrentTag: function(force) {
-        var item = list.selectedItem;
-        if (!item && force) {
-            item = list.getItemAtIndex(0);
-        }
-        return item ? item.value : null;
-    }
-}
+    update: function(pos) {
+        var list = this.list;
+        if (!list) return;
 
-TagCompleter.InputHandler = function(input) {
-    this.input = input;
-    this.inputLine = new TagCompleter.InputLine('', []);
-    delete this.inputLine['suggestTags'];
-    // this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
-    this.inputLine.__defineGetter__('suggestTags', method(this, 'suggestTags'));
-    this.tagCompleteEnabled = Config.get('tags.complete.enabled');
-    this.prevValue = this.input.value;
-    input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
-    input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
-    input.addEventListener('input', method(this, 'inputInputHandler'), false);
-    list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
-}
-
-TagCompleter.InputHandler.prototype = {
-    get textbox() { return document.getBindingParent(this.input) },
-    get addPanel() { document.getBindingParent(this.textbox) },
-    updateRecommendedTags: function(tags) {
-        delete this._suggestTags;
-        this.recommendTags = tags;
-    },
-    suggestTags: function() {
-        if (!this._suggestTags) {
-            if (this.recommendTags && this.recommendTags.length) {
-                var t = Array.slice(this.recommendTags).concat(TagCompleter.tags).sort();
-                this._suggestTags = t;
+        for (var i = 0;  i < list.childNodes.length; i++) {
+            var li = list.childNodes[i];
+            if (pos == i) {
+                li.className = 'hatena-bookmark-suggest-curret';
             } else {
-                return TagCompleter.tags;
+                li.className = '';
             }
         }
-        return this._suggestTags;
     },
-    updateLineValue: function() { return this.inputLine.value = this.input.value },
-    updateValue: function() { return this.prevValue = this.input.value = this.inputLine.value },
-    lastCaretPos: null,
-    inputKeyupHandler: function(ev) {
-        var caretPos = this.caretPos;
-        if (caretPos == this.lastCaretPos) return;
-        this.lastCaretPos = caretPos;
-        this.updateLineValue();
-        if (!this.tagCompleteEnabled) return;
-        var words = this.inputLine.suggest(caretPos);
-        if (words.length) {
-            TagCompleter.List.showTags(words, this.input);
-        } else {
-            TagCompleter.List.hide();
+    showSuggest: function(words) {
+        this.createList();
+        this.show();
+        this.updatePosition();
+        this.replaceList(words);
+    },
+    clearList: function() {
+        Ten.DOM.removeAllChildren(this.list);
+    },
+    replaceList: function(words) {
+        this.clearList();
+        var E = Ten.Element;
+        for (var i = 0;  i < words.length; i++) {
+            var word = words[i];
+            var li = E('li', {}, 
+                E('span', {className: 'hatena-bookmark-suggest-count'}, word.count), 
+                word.name
+            );
+            this.list.appendChild(li);
         }
     },
-    get caretPos() { return this.textbox.selectionEnd },
-    inputKeydownHandler: function(ev) {
-        var tList = TagCompleter.List;
-        var keyCode = ev.keyCode;
-        if (tList.shown) {
-            var caret = this.text
-            var stopEvent = false;
-            if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
-                this.insert(true);
-                stopEvent = true;
-            } else if (keyCode == ev.DOM_VK_TAB) {
-                if (tList.isOne()) {
-                    this.insert(true);
-                } else if (ev.shiftKey) {
-                    tList.prev();
-                } else {
-                    tList.next();
-                }
-                stopEvent = true;
-            } else if (keyCode == ev.DOM_VK_UP) {
-                tList.prev();
-                stopEvent = true;
-            } else if (keyCode == ev.DOM_VK_DOWN) {
-                tList.next();
-                stopEvent = true;
+    createList: function() {
+        if (!this.list) {
+            this.list = Ten.Element('ul', {className: 'hatena-bookmark-tag-list'});
+            document.body.appendChild(this.list);
+            this.mouseoverObserver = new Ten.Observer(this.list, 'onmouseover', this, 'mouseoverHandler');
+            this.mousedownObserver = new Ten.Observer(this.list, 'onmousedown', this, 'mousedownHandler');
+            this.keydownObserver = new Ten.Observer(this.list, 'onkeydown', this.tagComplete, 'keydownHandler');
+        }
+        return this.list;
+    },
+    mousedownHandler: function(e) {
+        this.tagComplete.complete();
+    },
+    mouseoverHandler: function(e) {
+        var target = e.target;
+        var list = this.list;
+        for (var i = 0;  i < list.childNodes.length; i++) {
+            var li = list.childNodes[i];
+             if (li == target || li == target.parentNode) {
+                this.tagComplete.updateCaret(i);
             }
-
-            if (stopEvent) {
-                ev.stopPropagation();
-                ev.preventDefault();
-            }
-        } else {
-            // submit
-            // 本来はここではすべきでない
-
-            // EnterキーのハンドリングはFirefox側が行う
-            //if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
-            //    this.addPanel.saveBookmark();
-            //}
         }
     },
-    inputInputHandler: function(ev) {
-        this.updateLineValue();
-        var tagsRE = /^(?:\[[^?%\/\[\]]+\])*/;
-        var currentValue = this.input.value;
-        var prevTags = this.prevValue.match(tagsRE)[0];
-        var currentTags = currentValue.match(tagsRE)[0];
-        this.prevValue = currentValue;
-        if (prevTags != currentTags)
-            this.fireTagChangeEvent();
-    },
-    listCompleteHandler: function(ev) {
-        this.insert(true);
-    },
-    insert: function(force) {
-        var tag = TagCompleter.List.getCurrentTag(force);
-        var line = this.inputLine;
-        if (tag) {
-            if (IS_OSX) {
-                // OSX では、タイミングをずらさないと IME 入力時 input.value 代入が空になる
-                setTimeout(function(self) {
-                    var pos = line.insertionTag(tag, self.caretPos);
-                    self.updateValue();
-                    self.textbox.setSelectionRange(pos + 0, pos + 0);
-                    self.fireTagChangeEvent();
-                }, 0, this);
-            } else {
-                var pos = line.insertionTag(tag, this.caretPos);
-                this.updateValue();
-                this.textbox.setSelectionRange(pos + 0, pos + 0);
-                this.fireTagChangeEvent();
-            }
-        }
-        TagCompleter.List.hide();
-    },
-    fireTagChangeEvent: function() {
-        var ev = document.createEvent('UIEvent');
-        ev.initUIEvent('HB_TagChange', true, false, window, 0);
-        this.input.dispatchEvent(ev);
+    updatePosition: function() {
+        var list = this.list;
+        var target = this.tagComplete.targetInput;
+        var pos = Ten.Geometry.getElementPosition(target);
+        list.style.top = pos.y + target.offsetHeight + 'px';
+        list.style.left = pos.x + 'px';
     }
-}
+});
+*/
 
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
@@ -251,14 +466,6 @@ TagCompleter.InputLine = function(value, tags) {
 }
 
 TagCompleter.InputLine.prototype = {
-    /*
-    get prefs() {
-        if (this._prefs) {
-            this._prefs = new Prefs('extensions.hatenabookmark.addPanel.');
-        }
-        return this._prefs;
-    },
-    */
     get value() { return this._text },
     set value(val) {
         this._text = val;
@@ -301,24 +508,11 @@ TagCompleter.InputLine.prototype = {
         }
         return val;
     },
-    migemoSuggest: function(word) {
-        var regex = new RegExp(XMigemoTextUtils.getANDFindRegExpFromTerms(XMigemoCore.getRegExps(word, 'gi')));
-        var words = [];
-        var suggestTags = this.suggestTags;
-        var limit = this.maxSuggest;
-        for (var i = 0, len = suggestTags.length;  i < len; i++) {
-            var tKey = suggestTags[i];
-            if (regex.test(tKey)) {
-                if (!words.some(function(w) {return w == tKey}))
-                    words.push(tKey);
-            }
-            if (words.length >= limit) break;
-        }
-        return words;
-    },
     suggest: function(pos) {
         var word = this.posWord(pos);
         if (!word) return [];
+
+        if (!this.suggestTags) return;
 
         var limit = this.maxSuggest;
         var words = [];
