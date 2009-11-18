@@ -104,8 +104,10 @@ Deferred.prototype.method = function(name) {
 
 Deferred.register('test', Deferred.test);
 
+/*
 var Database = Deferred.WebDatabase;
 var Model = Database.Model, SQL = Database.SQL;
+*/
 
 Deferred.
 test("utils", function(d) {
@@ -387,6 +389,9 @@ test('HTTPCache(s)', function(d) {
 }, 12, 1000).
 
 test('Model Bookmark/Tag', function(d) {
+    ok('skip WebDatabase test...');
+    return d.call();
+
     var db = new Database('testModelBookmarkTag');
     Model.getDatabase = function() { return db };
 
@@ -439,7 +444,7 @@ test('Model Bookmark/Tag', function(d) {
             });
         });
     });
-}, 14, 5000).
+}, 1, 5000).
 
 test('UserView', function(d) {
     var view = new User.View('nagayama');
@@ -448,7 +453,7 @@ test('UserView', function(d) {
 
     d.call();
 }).
-test('UserManeger', function(d) {
+test('UserManager', function(d) {
     // UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
     UserManager.deferred('bind', 'UserChange').next(function(ev, user) {
         ok(true, 'Loggin!');
@@ -456,7 +461,8 @@ test('UserManeger', function(d) {
         equals(user.name, 'hatenatest');
         ok(user.ignores instanceof RegExp, 'ignores regexp list');
         ok(user.public != user.private, 'public/private');
-        ok(user.database instanceof Database, 'database instance');
+        // ok(user.database instanceof Database, 'database instance');
+        ok(user.database instanceof LocalStorageBookmark, 'database instance');
         UserManager.clearUser();
         ok(UserManager.user != user, 'no user');
         d.call();
@@ -466,7 +472,33 @@ test('UserManeger', function(d) {
     UserManager.login();
 }, 7, 1000).
 
-test('sync sync sync', function(d) {
+test('sync - LocalStorage', function(d) {
+    Timer.__defineGetter__('now', function() { return 1255663923100 });
+    var user = new User('hatenatest', {});
+    var db = user.database;
+    UserManager.user = user; // XXX
+    Sync.getDataURL = function() {
+        return user.dataURL;
+    }
+
+    Sync.deferred('bind', 'progress').next(function(ev, obj) {
+        if (obj.value !== null && obj.value == 0) {
+            ok(true, 'progress start');
+        }
+    });
+
+    Sync.deferred('bind', 'complete').next(function() {
+        ok(true, 'Sync!');
+        ok(db.totalCount, 518, 'totalCount');
+        Sync.unbind('complete');
+    });
+
+    Sync.init();
+}, 1000, 1000).
+
+test('sync with database', function(d) {
+    ok(true, 'skip WebDatabase test...');
+    return d.call();
     Timer.__defineGetter__('now', function() { return 1255663923100 });
     var db = new Database('SyncTest');
     Model.getDatabase = function() { return db };
@@ -512,7 +544,7 @@ test('sync sync sync', function(d) {
     Model.initialize(true).next(function() {
         Sync.init();
     });
-}, 12, 10000).
+}, 1, 10000).
 
 test('finished', function(d) {
     ok(true, 'finished!!!');
