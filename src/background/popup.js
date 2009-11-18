@@ -15,77 +15,6 @@ if (popupMode) {
 }
 
 
-function initBookmark() {
-    var user = UserManager.user;
-    if (!UserManager.user) {
-       $('#bookmark-edit-container').hide();
-       $('#login-container').show();
-        return;
-    }
-
-    getInformation().next(function(info) {
-        $('#usericon').attr('src', user.view.icon);
-        $('#username').text(user.name);
-        if (user.plususer) {
-            $('#plus-inputs').removeClass('none');
-        } else {
-            $('#plus-inputs').remove();
-        }
-        $('#title-text').text(info.title);
-        $('#favicon').attr('src', info.faviconUrl);
-
-        var url = info.url;
-
-        if (!url || info.url.indexOf('http') != 0) {
-            $('#form').hide();
-            $('#bookmark-message').text('この URL ははてなブックマークに追加できません');
-            $('#bookmark-message').show();
-            return;
-        }
-
-        setURL(url);
-
-        $('#form').show();
-        $('#comment').focus();
-        HTTPCache.entry.get(url).next(setEntry);
-        Model.Bookmark.findByUrl(url).next(setByBookmark);
-    });
-}
-
-function setByBookmark(b) {
-    if (b) {
-        $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
-        .removeClass('none');
-        $('#delete-button').removeClass('none');
-        $('#comment').attr('value', b.comment);
-    }
-}
-
-function setURL(url) {
-    $('#input-url').attr('value', url);
-    $('#url').text(url);
-    $('#url').attr('href', url);
-
-    if (!$('#favicon').attr('src')) {
-        var favicon= new URI('http://favicon.st-hatena.com');
-        favicon.param({url: url});
-        $('#favicon').attr('src', favicon);
-    }
-}
-
-function setEntry(entry) {
-    $('body').removeClass('data-loading');
-    if (entry.title) $('#title-text').text(entry.title);
-    setURL(entry.original_url);
-    var count = parseInt(entry.count);
-    if (count) {
-        var uc = $('#users-count');
-        uc.text(String(count) + (count == 1 ? ' user' : ' users'));
-        uc.attr('href', entry.entry_url);
-        $('#users-count-container').removeClass('none');
-    }
-}
-
 function closeWin() {
     if (popupMode) {
         window.close();
@@ -373,14 +302,107 @@ var View = {
         }
     },
     bookmark: {
-        get container() {
-            return $('#bookmark-container');
-        },
-        get tab() {
-            return $('#bookmark-tab');
-        },
+        get container() { return $('#bookmark-container'); },
+        get tab() { return $('#bookmark-tab'); },
+        get usericon() { return $('#usericon') },
+        get usernameEL() { return $('#username') },
+        get plusInputs() { return $('#plus-inputs') },
+        get titleText() { return $('#title-text') },
+        get faviconEL() { return $('#favicon') },
+        get form() { return $('#form') },
+        get message() { return $('#bookmark-message') },
+        get comment() { return $('#comment') },
         init: function() {
-            initBookmark();
+            var user = UserManager.user;
+            if (!UserManager.user) {
+               $('#bookmark-edit-container').hide();
+               $('#login-container').show();
+                return;
+            }
+
+            var self = this;
+            getInformation().next(function(info) {
+                self.loadByInformation(info);
+            });
+        },
+        loadByInformation: function(info) {
+            var user = UserManager.user;
+            this.usericon.attr('src', user.view.icon);
+            this.usernameEL.text(user.name);
+            if (user.plususer) {
+                this.plusInputs.removeClass('none');
+            } else {
+                this.plusInputs.remove();
+            }
+            this.titleText.text(info.title);
+            this.faviconEL.attr('src', info.faviconUrl);
+
+            var url = info.url;
+
+            if (!url || info.url.indexOf('http') != 0) {
+                this.form.hide();
+                this.message.text('この URL ははてなブックマークに追加できません');
+                this.message.show();
+                return;
+            }
+
+            this.setURL(url);
+
+            this.form.show();
+            this.comment.focus();
+            var self = this;
+            HTTPCache.usertags.get(user.name).next(function(res) {
+                self.setUserTags(res)
+            });
+            HTTPCache.entry.get(url).next(function(res) { self.setEntry(res) });
+            Model.Bookmark.findByUrl(url).next(function(res) { self.setByBookmark(res) });
+        },
+
+        setUserTags: function(tags) {
+            if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
+
+            if (Config.get('tags.showAll')) {
+                this.showUserTags(tags.tagsKeys);
+            } else {
+                this.showUserTags(tags.tagsCountSortedKeys.splice(0, 20));
+           }
+        },
+
+        showUserTags: function(tags) {
+        },
+
+        setByBookmark: function(b) {
+            if (b) {
+                $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
+                .removeClass('none');
+                $('#delete-button').removeClass('none');
+                $('#comment').attr('value', b.comment);
+            }
+        },
+
+        setURL: function(url) {
+            $('#input-url').attr('value', url);
+            $('#url').text(url);
+            $('#url').attr('href', url);
+
+            if (!$('#favicon').attr('src')) {
+                var favicon= new URI('http://favicon.st-hatena.com');
+                favicon.param({url: url});
+                this.faviconEL.attr('src', favicon);
+            }
+        },
+
+        setEntry: function(entry) {
+            $('body').removeClass('data-loading');
+            if (entry.title) this.titleText.text(entry.title);
+            this.setURL(entry.original_url);
+            var count = parseInt(entry.count);
+            if (count) {
+                var uc = $('#users-count');
+                uc.text(String(count) + (count == 1 ? ' user' : ' users'));
+                uc.attr('href', entry.entry_url);
+                $('#users-count-container').removeClass('none');
+            }
         },
     }
 };

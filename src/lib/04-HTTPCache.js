@@ -9,7 +9,11 @@ HTTPCache.prototype = {
     createURL: function HTTPCache_createURL (url) {
         if (this.options.encoder)
             url = this.options.encoder(url);
-        return (this.options.baseURL || '') + url;
+        if (this.options.createURL) {
+            return this.options.createURL(url);
+        } else {
+            return (this.options.baseURL || '') + url;
+        }
     },
     isValid: function(url) {
         return true;
@@ -46,7 +50,11 @@ HTTPCache.prototype = {
             }
             val = JSON.parse(val);
         }
-        cache.set(url, val);
+        if (this.options.beforeSetFilter) {
+            cache.set(url, this.options.beforeSetFilter(val));
+        } else {
+            cache.set(url, val);
+        }
         p('http not using cache: ' + url);
         return cache.get(url);
     },
@@ -111,6 +119,56 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     seriarizer: 'JSON',
     json: true,
     encoder: HTTPCache.encodeBookmarkURL,
+});
+
+HTTPCache.usertags = new HTTPCache('usertagsCache', {
+    expire: 60 * 60 * 24,
+    seriarizer: 'JSON',
+    json: true,
+    beforeSetFilter: function(val) {
+        var tags = val.tags || [];
+        var res = {
+            tagsArray: [],
+            tags: {},
+            tagsKeys: [],
+            tagsCountSortedKeys: [],
+        }
+
+        for (var tag in tags) {
+            if (tags[tag].count) {
+                res.tagsArray.push([tag, parseInt(tags[tag].count), tags[tag].timestamp]);
+                res.tags[tag] = tags[tag];
+                res.tagsKeys.push(tag);
+                res.tagsCountSortedKeys.push([tag, parseInt(tags[tag].count)]);
+            }
+        }
+
+        res.tagsCountSortedKeys.sort(function(a, b) {
+            if (a[1] > b[1]) {
+                return -1;
+            } else if (a[1] < b[1]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        res.tagsCountSortedKeys = res.tagsCountSortedKeys.map(function(e) { e[0] });
+
+        res.tagsKeys.sort(function(a, b) {
+            if (a.toUpperCase() > b.toUpperCase() ) {
+                return 1;
+            } else if (a.toUpperCase() < b.toUpperCase() ) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return res;
+    },
+    createURL: function(name) {
+        return sprintf('%s%s/tags.json', B_HTTP, name);
+    }
 });
 
 HTTPCache.clearCached = function(url) {
