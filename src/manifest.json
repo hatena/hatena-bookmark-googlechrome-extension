@@ -54,6 +54,19 @@
         "http://www.hatena.ne.jp/logout*",
         "https://www.hatena.ne.jp/logout*"
       ]
+    },
+    {
+      "run_at": "document_end",
+      "js": [
+        "content/widget_embedder.js"
+      ],
+      "css": [
+        "css/hbookmark_embedded_widgets.css"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
     }
   ],
 
