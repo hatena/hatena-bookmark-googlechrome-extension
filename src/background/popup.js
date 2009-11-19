@@ -85,6 +85,7 @@ function deleteBookmark() {
 
 function formSubmitHandler(ev) {
     var form = $(this);
+    console.log('form submit!');
 
     var user = UserManager.user;
     user.saveBookmark(form.serialize());
