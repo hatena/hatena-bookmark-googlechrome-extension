@@ -80,7 +80,7 @@ $.extend(SiteinfoManager, {
         var self = SiteinfoManager;
         var url = urls.shift();
         $.get(url).next(function (data) {
-            var data = JSON.parse(data.responseText);
+            data = JSON.parse(data);
             console.log('load siteinfo from ' + url);
             details.isLoading = false;
             if (details.converter)
