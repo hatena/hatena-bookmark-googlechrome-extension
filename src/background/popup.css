@@ -8,6 +8,7 @@
 
 body {
   overflow-x: hidden;
+  color: #222;
 }
 
 img {
@@ -335,12 +336,15 @@ a.username {
   cursor: pointer;
   white-space: nowrap;
   display: inline-block;
+  border: 1px solid #E7F0FC;
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
-  background-color: #2C6EBD;
+  background-color: #559be6;
   color: #FFF;
-  -webkit-border-radius: 2px;
+  border: 1px solid #35618f;
+  border-right-color: #bcd8f5;
+  border-bottom-color: #bcd8f5;
 }
 
 #title {
