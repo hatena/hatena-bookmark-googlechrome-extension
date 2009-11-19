@@ -329,8 +329,20 @@ var View = {
                 self.loadByInformation(info);
             });
         },
+        clearView: function() {
+            this.container.empty();
+            this.container.append(this.defaultHTML);
+        },
         loadByInformation: function(info) {
+            if (this.lastLoadedURL && this.lastLoadedURL != info.url) {
+                this.clearView();
+            } else if (this.lastLoadedURL == info.url) {
+                return;
+            }
             var self = this;
+            this.lastLoadedURL = info.url;
+            if (!this.defaultHTML)
+                this.defaultHTML = this.container.get(0).cloneNode(true);
 
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
@@ -454,7 +466,6 @@ var View = {
         },
 
         setEntry: function(entry) {
-            console.log(entry);
             $('body').removeClass('data-loading');
             if (entry.title) this.titleText.text(entry.title);
             this.setURL(entry.original_url);
