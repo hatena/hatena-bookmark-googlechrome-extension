@@ -303,6 +303,7 @@ var View = {
         }
     },
     bookmark: {
+        get confirmBookmark() { return $('#confirm-bookmark'); },
         get container() { return $('#bookmark-container'); },
         get tab() { return $('#bookmark-tab'); },
         get usericon() { return $('#usericon') },
@@ -364,6 +365,13 @@ var View = {
                 this.message.show();
                 return;
             }
+
+            if (Config.get('input.confirmBookmark')) {
+                this.confirmBookmark.attr('checked', 'checked');
+            }
+            this.confirmBookmark.bind('change', function() {
+                Config.set('input.confirmBookmark', this.checked);
+            });
 
             this.setURL(url);
             this.tagCompleter = TagCompleter;

@@ -46,6 +46,7 @@ Config.DEFAULT = {
     'commentviewer.autoSize': true,
     'commentviewer.autoHideComment': true,
     'commentviewer.autoHideThreshold': 15,
+    'input.confirmBookmark': false,
     'tags.recommendTags.enabled': true,
     'tags.allTags.enabled': true,
     'tags.showAllTags': false,
