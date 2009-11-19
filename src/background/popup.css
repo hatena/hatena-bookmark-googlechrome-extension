@@ -153,6 +153,7 @@ ul.tab-ui li img {
   padding: 0 10px 10px 10px;
   background: #fff;
   -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
 #comment-title-container {
@@ -195,13 +196,13 @@ a.username {
 }
 
 #comment-title-container {
-  display: table-cell;
-  width: 100%;
+  display: inline-block;
 }
 
 #comment-title-right {
-  display: table-cell;
-  white-space: nowrap;
+  float: right;
+  display: inline-block;
+  margin-top: 2px;
 }
 
 /* }}} */
