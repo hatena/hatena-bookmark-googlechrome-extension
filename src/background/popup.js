@@ -405,12 +405,31 @@ var View = {
         setUserTags: function(tags) {
             if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
 
-            if (Config.get('tags.showAll')) {
-                var target = tags.tagsKeys;
-            } else {
-                var target = tags.tagsCountSortedKeys.splice(0, 20);
-           }
-           this.showTags(target, this.allTagsContainer, this.allTags);
+            var toggle = $('#show-all-tags-toggle');
+            var conf = Config.bind('tags.showAllTags');
+            var updateText = function() {
+                toggle.text(conf.get() ? '一部のタグのみ表示' : 'すべてのタグを表示');
+            };
+
+            var self = this;
+            var update = function() {
+                if (conf.get()) {
+                    var target = tags.tagsKeys;
+                } else {
+                    var target = tags.tagsCountSortedKeys.splice(0, 20);
+                }
+                self.showTags(target, self.allTagsContainer, self.allTags);
+            }
+
+            toggle.bind('click', function() {
+                conf.set(!conf.get());
+                updateText();
+                update();
+                self.tagCompleter.update();
+            });
+
+            updateText();
+            update();
         },
 
         setRecomendTags: function(tags) {

@@ -99,6 +99,9 @@ $.extend(TagCompleter, {
     updateComment: function(text) {
         this.inputLine.value = text;
     },
+    update: function() {
+        if (this.options.updatedHandler) this.options.updatedHandler(this.inputLine);
+    }
 });
 
 
