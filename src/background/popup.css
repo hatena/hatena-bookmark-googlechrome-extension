@@ -471,8 +471,9 @@ body.data-loading * .loading {
 #search-container div.comment {
   font-size: 95%;
 }
-#search-container div.infos {
-  font-size: 90%;
+
+#search-container div.infos a.url {
+  font-size: 85%;
 }
 
 #search-container ul li {
