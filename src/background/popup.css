@@ -166,7 +166,6 @@ ul.tab-ui li img {
 }
 
 #comment-list {
-  border-top: 1px solid #ccc;
   padding: 5px 0;
 }
 
@@ -354,7 +353,7 @@ a.username {
 #search-container,
 #comment-list {
   max-height: 450px;
-  overflow-y:scroll;
+  overflow-y: auto;
   word-break:break-all;
 }
 
