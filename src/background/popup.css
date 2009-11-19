@@ -113,7 +113,7 @@ ul.tab-ui li.tab-link {
 }
 
 ul.tab-ui li.tab-link a {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   -webkit-border-radius: 4px;
   display: inline-block !important;
@@ -410,7 +410,6 @@ dd#all-tags {
 }
 
 #header-usericon img {
-  border: 1px solid #FFF;
 }
 
 #show-all-tags-toggle {
@@ -684,3 +683,7 @@ em a:visited {
 
 /* }}} */
 
+
+#favorites a img {
+  margin:0 1px;
+}
