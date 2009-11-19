@@ -409,6 +409,18 @@ dd#all-tags {
   display: none;
 }
 
+#header-usericon img {
+  border: 1px solid #FFF;
+}
+
+#show-all-tags-toggle {
+  padding-left: 10px;
+  font-size: 90%;
+  color: #555;
+  text-decoration: underline;
+  cursor:pointer;
+}
+
 #login-container,
 #bookmark-container,
 #comment-container,
