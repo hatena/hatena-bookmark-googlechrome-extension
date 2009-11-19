@@ -418,7 +418,7 @@ var View = {
         },
 
         showTags: function(tags, container, tagsList) {
-            tags.push('test');
+            if (!tags) return;
             var len = tags.length;
             if (len) {
                 container.show();

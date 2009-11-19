@@ -215,7 +215,7 @@ Model.Bookmark.afterSave = function() {
 chrome.tabs.create({
     // url: '/background/popup.html?url=http://www.google.com/chrome/intl/ja/welcome.html'
     // url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
-    url: '/background/popup.html?url=http://example.com/'
+    url: '/background/popup.html?url=' + encodeURIComponent('http://twitter.com/#home')
     // url: '/background/popup.html?url=http://a.hatena.ne.jp/'
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
