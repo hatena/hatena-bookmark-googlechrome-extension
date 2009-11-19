@@ -310,6 +310,7 @@ a.username {
 }
 
 #recommend-tags-container, #all-tags-container {
+    display: none;
     padding:0px 8px 0px 8px;
 }
 
@@ -327,9 +328,15 @@ a.username {
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
-  margin-right: 3px;
+  margin-right: 4px;
+  padding: 1px 3px 1px 3px;
+  cursor: pointer;
 }
 
+#recommend-tags-container dd .selected, #all-tags-container dd .selected {
+  background-color: #2C6EBD;
+  color: #FFF;
+}
 
 #title {
     font-weight: bold;

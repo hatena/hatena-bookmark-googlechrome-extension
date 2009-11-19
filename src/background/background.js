@@ -154,6 +154,16 @@ ConnectMessenger.bind('logout', function(data) {
     }, 200);
 });
 
+ConnectMessenger.bind('get_siteinfo_for_url', function(event, data, port) {
+    console.log('got request of siteinfo for ' + data.url);
+    SiteinfoManager.sendSiteinfoForURL(data.url, port);
+});
+
+ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
+    console.log('got request of siteinfos whose domain is XPath');
+    SiteinfoManager.sendSiteinfosWithXPath(port);
+});
+
 UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
 });
@@ -188,7 +198,7 @@ chrome.pageAction.onClicked.addListener(function() {
 chrome.self.onConnect.addListener(function(port,name) {
   port.onMessage.addListener(function(info,con) {
       if (info.message)
-          ConnectMessenger.trigger(info.message, [info.data]);
+          ConnectMessenger.trigger(info.message, [info.data, con]);
   });
 });
 

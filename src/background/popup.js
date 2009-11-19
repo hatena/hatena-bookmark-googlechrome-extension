@@ -15,77 +15,6 @@ if (popupMode) {
 }
 
 
-function initBookmark() {
-    var user = UserManager.user;
-    if (!UserManager.user) {
-       $('#bookmark-edit-container').hide();
-       $('#login-container').show();
-        return;
-    }
-
-    getInformation().next(function(info) {
-        $('#usericon').attr('src', user.view.icon);
-        $('#username').text(user.name);
-        if (user.plususer) {
-            $('#plus-inputs').removeClass('none');
-        } else {
-            $('#plus-inputs').remove();
-        }
-        $('#title-text').text(info.title);
-        $('#favicon').attr('src', info.faviconUrl);
-
-        var url = info.url;
-
-        if (!url || info.url.indexOf('http') != 0) {
-            $('#form').hide();
-            $('#bookmark-message').text('この URL ははてなブックマークに追加できません');
-            $('#bookmark-message').show();
-            return;
-        }
-
-        setURL(url);
-
-        $('#form').show();
-        $('#comment').focus();
-        HTTPCache.entry.get(url).next(setEntry);
-        Model.Bookmark.findByUrl(url).next(setByBookmark);
-    });
-}
-
-function setByBookmark(b) {
-    if (b) {
-        $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
-        .removeClass('none');
-        $('#delete-button').removeClass('none');
-        $('#comment').attr('value', b.comment);
-    }
-}
-
-function setURL(url) {
-    $('#input-url').attr('value', url);
-    $('#url').text(url);
-    $('#url').attr('href', url);
-
-    if (!$('#favicon').attr('src')) {
-        var favicon= new URI('http://favicon.st-hatena.com');
-        favicon.param({url: url});
-        $('#favicon').attr('src', favicon);
-    }
-}
-
-function setEntry(entry) {
-    $('body').removeClass('data-loading');
-    if (entry.title) $('#title-text').text(entry.title);
-    setURL(entry.original_url);
-    var count = parseInt(entry.count);
-    if (count) {
-        var uc = $('#users-count');
-        uc.text(String(count) + (count == 1 ? ' user' : ' users'));
-        uc.attr('href', entry.entry_url);
-        $('#users-count-container').removeClass('none');
-    }
-}
-
 function closeWin() {
     if (popupMode) {
         window.close();
@@ -373,14 +302,193 @@ var View = {
         }
     },
     bookmark: {
-        get container() {
-            return $('#bookmark-container');
-        },
-        get tab() {
-            return $('#bookmark-tab');
-        },
+        get container() { return $('#bookmark-container'); },
+        get tab() { return $('#bookmark-tab'); },
+        get usericon() { return $('#usericon') },
+        get usernameEL() { return $('#username') },
+        get plusInputs() { return $('#plus-inputs') },
+        get titleText() { return $('#title-text') },
+        get faviconEL() { return $('#favicon') },
+        get form() { return $('#form') },
+        get message() { return $('#bookmark-message') },
+        get commentEL() { return $('#comment') },
+        get allTagsContainer() { return $('#all-tags-container') },
+        get allTags() { return $('#all-tags') },
+        get recommendTagsContainer() { return $('#recommend-tags-container') },
+        get recommendTags() { return $('#recommend-tags') },
         init: function() {
-            initBookmark();
+            var user = UserManager.user;
+            if (!UserManager.user) {
+               $('#bookmark-edit-container').hide();
+               $('#login-container').show();
+                return;
+            }
+
+            var self = this;
+            getInformation().next(function(info) {
+                self.loadByInformation(info);
+            });
+        },
+        loadByInformation: function(info) {
+            var self = this;
+
+            var user = UserManager.user;
+            this.usericon.attr('src', user.view.icon);
+            this.usernameEL.text(user.name);
+            if (user.plususer) {
+                this.plusInputs.removeClass('none');
+            } else {
+                this.plusInputs.remove();
+            }
+            this.titleText.text(info.title);
+            this.faviconEL.attr('src', info.faviconUrl);
+
+            var url = info.url;
+
+            if (!url || info.url.indexOf('http') != 0) {
+                this.form.hide();
+                this.message.text('この URL ははてなブックマークに追加できません');
+                this.message.show();
+                return;
+            }
+
+            this.setURL(url);
+            this.tagCompleter = TagCompleter;
+            this.tagCompleter.register(this.commentEL, {
+                updatedHandler: function(inputLine) {
+                    // darty...
+                    var m = inputLine.value;
+                    $('dd span.tag').each(function(i, el) {
+                        if (m.indexOf('[' + el.textContent + ']') == -1) {
+                            $(el).removeClass('selected');
+                        } else {
+                            $(el).addClass('selected');
+                        }
+                    });
+                }
+            });
+
+            $('dd span.tag').live('click', function() {
+                if (this.className.indexOf('selected') == -1) {
+                    self.tagCompleter.inputLine.addTag(this.textContent);
+                } else {
+                    self.tagCompleter.inputLine.deleteTag(this.textContent);
+                }
+            });
+
+            this.form.show();
+            this.commentEL.focus();
+            if (Config.get('tags.allTags.enabled')) {
+                HTTPCache.usertags.get(user.name).next(function(res) {
+                    self.tagCompleter.addSuggestTags(res.tagsKeys);
+                    self.setUserTags(res)
+                });
+            }
+
+            HTTPCache.entry.get(url).next(function(res) { self.setEntry(res) });
+            Model.Bookmark.findByUrl(url).next(function(res) { self.setByBookmark(res) });
+        },
+
+        setUserTags: function(tags) {
+            if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
+
+            if (Config.get('tags.showAll')) {
+                var target = tags.tagsKeys;
+            } else {
+                var target = tags.tagsCountSortedKeys.splice(0, 20);
+           }
+           this.showTags(target, this.allTagsContainer, this.allTags);
+        },
+
+        setRecomendTags: function(tags) {
+           this.showTags(tags, this.recommendTagsContainer, this.recommendTags);
+        },
+
+        showTags: function(tags, container, tagsList) {
+            tags.push('test');
+            var len = tags.length;
+            if (len) {
+                container.show();
+                tagsList.empty();
+                var frag = document.createDocumentFragment();
+                for (var i = 0; i < len; i++) {
+                    frag.appendChild(E('span', {
+                        className: 'tag',
+                    }, tags[i]));
+                }
+                tagsList.get(0).appendChild(frag);
+            }
+        },
+
+        getMatchedTextNode: function(text, target) {
+            return document.evaluate(
+               'descendant::text()[contains(., "' + text.replace(/"/g, '\\"') + '")]',
+               target || document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+            ).singleNodeValue;
+        },
+
+        setByBookmark: function(b) {
+            if (b) {
+                $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
+                .removeClass('none');
+                $('#delete-button').removeClass('none');
+                this.updateComment(b.comment);
+            }
+        },
+
+        updateComment: function(text) {
+            this.tagCompleter.updateComment(text);
+        },
+
+        setURL: function(url) {
+            $('#input-url').attr('value', url);
+            $('#url').text(Utils.truncate(url, 60));
+            $('#url').attr('title', url);
+            $('#url').attr('href', url);
+
+            if (!$('#favicon').attr('src')) {
+                var favicon= new URI('http://favicon.st-hatena.com');
+                favicon.param({url: url});
+                this.faviconEL.attr('src', favicon);
+            }
+        },
+
+        setEntry: function(entry) {
+            console.log(entry);
+            $('body').removeClass('data-loading');
+            if (entry.title) this.titleText.text(entry.title);
+            this.setURL(entry.original_url);
+            if (Config.get('tags.recommendTags.enabled'))
+                this.setRecomendTags(entry.recommend_tags);
+            var count = parseInt(entry.count);
+            if (count) {
+                var uc = $('#users-count');
+                uc.text(String(count) + (count == 1 ? ' user' : ' users'));
+                uc.attr('href', entry.entry_url);
+                $('#users-count-container').removeClass('none');
+            }
+            if (entry.favorites && entry.favorites.length) {
+                var f = $('#favorites');
+                entry.favorites.reverse().forEach(function(fav) {
+                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
+                                            fav.name, fav.timestamp.replace(/\//g, ''),
+                                            entry.eid);
+
+                    var title = sprintf('%s: %s', fav.name, fav.body);
+                    var link = Utils.createElementFromString(
+                        '<a href="#{permalink}"><img title="#{title}" alt="#{title}" src="#{icon}" /></a>',
+                    {
+                        data: {
+                            permalink: permalink,
+                            icon: User.View.prototype.getProfileIcon(fav.name),
+                            title:title
+                        }
+                    });
+                    // ToDo: Tooltip にする
+                    f.append(link);
+                });
+                f.show();
+            }
         },
     }
 };

@@ -1,0 +1,12 @@
+.hBookmark-widget-counter {
+    background: none !important;
+    text-decoration: none !important;
+    margin: 0 0 0 2px;
+    border: none !important;
+    display: inline !important;
+}
+
+.hBookmark-widget-counter > img {
+    border: none;
+    vertical-align: middle;
+}
