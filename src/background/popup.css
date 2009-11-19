@@ -106,6 +106,16 @@ ul.tab-ui li {
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
 }
 
+ul.tab-ui li.tab-link {
+  background: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+}
+
+ul.tab-ui li.tab-link img {
+  margin-right: 4px;
+}
+
 #header-right ul.tab-ui li {
   background: transparent;
   border: none;
