@@ -394,6 +394,7 @@ var View = {
             if (Config.get('tags.allTags.enabled')) {
                 HTTPCache.usertags.get(user.name).next(function(res) {
                     self.tagCompleter.addSuggestTags(res.tagsKeys);
+                    self.tagCompleter.tagsObject = res.tags;
                     self.setUserTags(res)
                 });
             }
@@ -416,7 +417,7 @@ var View = {
                 if (conf.get()) {
                     var target = tags.tagsKeys;
                 } else {
-                    var target = tags.tagsCountSortedKeys.splice(0, 20);
+                    var target = tags.tagsCountSortedKeys.slice(0, 20);
                 }
                 self.showTags(target, self.allTagsContainer, self.allTags);
             }
@@ -434,6 +435,7 @@ var View = {
 
         setRecomendTags: function(tags) {
            this.showTags(tags, this.recommendTagsContainer, this.recommendTags);
+           this.tagCompleter.update();
         },
 
         showTags: function(tags, container, tagsList) {

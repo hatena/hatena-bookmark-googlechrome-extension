@@ -368,6 +368,42 @@ a.username {
   border-bottom-color: #bcd8f5;
 }
 
+#tag-complete-list {
+  display: none;
+  position: absolute;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #555;
+  width: 120px;
+}
+
+#tag-complete-list li:hover {
+  background-color: #B5D6FE;
+  cursor: pointer;
+}
+
+#tag-complete-list li.selected {
+  background-color: #2C6EBD;
+  color: #FFF;
+}
+
+#tag-complete-list li .complete-list-tag {
+  padding-left: 3px;
+  line-height: 1.6;
+}
+
+#tag-complete-list li .complete-list-count {
+  float: right;
+  line-height: 1.6;
+  padding-right: 3px;
+  color: #777;
+  font-weight: bold;
+}
+
+#tag-complete-list li.selected .complete-list-count {
+  color: #EEE;
+}
+
 dd#all-tags {
   max-height: 8em;
   overflow: auto;

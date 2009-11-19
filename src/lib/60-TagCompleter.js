@@ -6,15 +6,29 @@ var TagCompleter = $({});
 $.extend(TagCompleter, {
     register: function(input, options) {
         this.options = options || {};
-        this.input = input;
+        this.tagsObject = {};
+        this.list = $('#tag-complete-list');
         var self = this;
+        $('body').bind('click', function() {
+            self.list.hide();
+        });
+        $('#tag-complete-list > li').live('click', function() {
+            if (this.firstChild) {
+                self.inputLine.insertionTag(this.firstChild.textContent, self.getPos());
+                self.input.focus();
+            }
+        });
+        this.list.empty();
+        this.input = input;
         TagCompleter.InputLine.prototype.__defineSetter__('value', function(text) {
             this._text = text;
-            self.input.attr('value', text);
+            if (self.input.attr('value') != text)
+                self.input.attr('value', text);
             if (self.options.updatedHandler) self.options.updatedHandler(this);
         });
         this.inputLine = new TagCompleter.InputLine('', []);
         input.bind('keydown', function(ev) {
+            if (ev.keyCode == 38 && self.suggestWords.length) return false; // up で先頭にいくのを防ぐ
             if ((ev.keyCode == 9 || ev.keyCode == 13) && self.suggestWords.length)
                 return false; // tab or enter
         });
@@ -22,19 +36,25 @@ $.extend(TagCompleter, {
             return self.keyupHandler(ev);
         });
     },
+    getPos: function() {
+        return this.input.get(0).selectionStart;
+    },
     suggestWords: [],
     keyupHandler: function(e) {
         var self = this;
         var keyCode = e.keyCode;
         var target = e.target;
         var val = target.value;
+        var pos = this.getPos();
         if (val != self.inputLine.value) {
             self.inputLine.value = val;
         }
-        var pos = target.selectionStart;
         self.createSuggestWords(pos);
 
-        if (this.suggestWords.length == 0) return;
+        if (this.suggestWords.length == 0) {
+            this.list.hide();
+            return;
+        }
 
         switch( keyCode ) {
             case 13: // enter
@@ -64,6 +84,7 @@ $.extend(TagCompleter, {
         }
     },
     complete: function(pos) {
+        this.list.hide();
         var word = this.suggestWords[this.caretPos];
         if (word) {
             this.suggestWords = [];
@@ -77,6 +98,14 @@ $.extend(TagCompleter, {
         if (val > this.suggestWords.length-1) val = 0;
         if (val < 0) val = this.suggestWords.length-1;
         this._caretPos = val;
+        var lists = this.list.get(0).children;
+        for (var i = 0;  i < lists.length; i++) {
+            if (i == val) {
+                lists[i].className = 'selected';
+            } else {
+                lists[i].className = '';
+            }
+        }
         console.log([val, this.suggestWords[this._caretPos]]);
     },
     get caretPos() {
@@ -86,8 +115,20 @@ $.extend(TagCompleter, {
         if (this.lastSuggestPos == pos) return;
 
         this.lastSuggestPos = pos;
-        this.suggestWords = this.inputLine.suggest(pos) || [];
-        this.caretPos = 0;
+        var words = this.suggestWords = this.inputLine.suggest(pos) || [];
+        if (words.length) {
+            this.list.empty();
+            var E = Utils.createElementSimply;
+            for (var i = 0;  i < words.length; i++) {
+                var w = words[i];
+                this.list.append(E('li', {},
+                    E('span', {className:'complete-list-tag'}, w),
+                    E('span', {className:'complete-list-count'}, this.tagsObject[w] ? this.tagsObject[w].count : 0 )
+                ));
+            }
+            this.list.show();
+            this.caretPos = 0;
+        }
     },
     addSuggestTags: function(tags) {
         if (this.inputLine.suggestTags.length) {
