@@ -335,9 +335,21 @@ a.username {
 }
 
 #type-counter {
-    width: 60px;
-    padding-left: 10px;
+    width: 63px;
+    padding-left: 13px;
+    font-size: 90%;
+    color: #555;
 }
+
+#type-counter span {
+    font-size: 100%;
+}
+
+#type-counter .red {
+  color: red;
+  font-weight: bold;
+}
+
 
 #bookmark-options {
 }
@@ -439,6 +451,21 @@ dd#all-tags {
 
 #search-form {
   display: inline;
+}
+
+#search-word-preview em {
+  font-weight: bold;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #000;
+}
+
+#search-preview-sep {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#search-total-count {
 }
 
 #header-usericon {

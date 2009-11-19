@@ -129,15 +129,11 @@ var createBookmarkList = function(bookmark) {
 
 var View = {
     search: {
-        get container() {
-            return $('#search-container');
-        },
-        get list() {
-            return $('#search-result');
-        },
-        get tab() {
-            return $('#search-tab');
-        },
+        get container() { return $('#search-container'); },
+        get list() { return $('#search-result'); },
+        get tab() { return $('#search-tab'); },
+        get wordPreview() { return $('#search-word-preview'); },
+        get totalCount() { return $('#search-total-count'); },
         init: function() {
         },
         search: function(word) {
@@ -150,6 +146,9 @@ var View = {
             }
             var self = this;
             var start = 0;
+
+            self.wordPreview.empty();
+            self.wordPreview.append(E('span',{},  E('em', {}, word), 'での検索結果'));
 
             var loop = function() {
                 self.current = Model.Bookmark.search(word, {
@@ -164,8 +163,10 @@ var View = {
                         // var m = $('<li/>').text(r.title + r.url);
                         // m.appendTo(list);
                     });
+                    var rLen = list.get(0).children.length
+                    self.totalCount.text(rLen >= 199 ? '200件以上' : sprintf('%s件', rLen));
                     start += 100;
-                    if (start < 1000) {
+                    if (start < 200) {
                         loop();
                     }
                 });
@@ -193,8 +194,12 @@ var View = {
             var self = this;
             getInformation().next(function(info) {
                 var title = self.title;
-                title.text(info.title || info.url);
+                title.text(info.title || Utils.truncate(info.url, '40'));
                 self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
+                if (info.url.indexOf('http') != 0) {
+                    self.commentMessage.text('表示できるブックマークコメントはありません');
+                    return;
+                }
                 HTTPCache.comment.get(info.url).next(function(r) {
                     if (r) {
                         self.commentMessage.hide();
@@ -253,6 +258,13 @@ var View = {
             self.commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
             self.commentInfos.show();
 
+            if (publicLen == 0) {
+                self.commentMessage.text('表示できるブックマークコメントはありません');
+                self.commentMessage.show();
+                this.inited = true;
+                return;
+            }
+
             var i = 0;
             var step = 100;
             var starLoaded = 0;
@@ -274,17 +286,17 @@ var View = {
                 for (var j = 0;  j < o.step; j++) {
                     var b = bookmarks[i++];
                     if (!b) continue;
-                    var v = new User.View(b.user);
                     var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
                                             b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
                                             eid);
 
                     var li = Utils.createElementFromString(
-                        '<li class="#{klass}"><img title="#{user}" alt="#{user}" src="#{icon}" /><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                      {
                          data: {
+                             userlink: B_HTTP + b.user + '/',
                              permalink: permalink,
-                             icon: v.icon,
+                             icon: User.View.prototype.getProfileIcon(b.user),
                              user: b.user,
                              klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
                              comment: b.comment,
@@ -318,6 +330,7 @@ var View = {
         get allTags() { return $('#all-tags') },
         get recommendTagsContainer() { return $('#recommend-tags-container') },
         get recommendTags() { return $('#recommend-tags') },
+        get typeCount() { return $('#type-count') },
         init: function() {
             var user = UserManager.user;
             if (!UserManager.user) {
@@ -379,6 +392,14 @@ var View = {
                 updatedHandler: function(inputLine) {
                     // darty...
                     var m = inputLine.value;
+                    var byte = Utils.countCommentToBytes(m);
+                    byte = Math.floor(byte / 3);
+                    self.typeCount.text(byte);
+                    if (byte > 100) {
+                        self.typeCount.addClass('red');
+                    } else {
+                        self.typeCount.removeClass('red');
+                    }
                     $('dd span.tag').each(function(i, el) {
                         if (m.indexOf('[' + el.textContent + ']') == -1) {
                             $(el).removeClass('selected');

@@ -22,7 +22,7 @@
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
         <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
         <li class="tab-link">
-        <a id="hatena-bookmark-link-top" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" /></a>
+        <a id="hatena-bookmark-link-top" title="はてなブックマークトップページ" alt="はてなブックマークトップページ" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" /></a>
         <a id="header-usericon" href="http://b.hatena.ne.jp/my"></a>
         </li>
       </ul>
@@ -92,12 +92,9 @@
             <div class="edit-cell" id="bookmark-options">
                 <div id="comment-area" class="table-row">
                     <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
-                    <span class="edit-cell" id="type-counter">0/100</span>
+                    <span class="edit-cell" id="type-counter"><span id="type-count">0</span> / 100</span>
                   </div>
                   <ul id="tag-complete-list">
-                    <li><span class="complete-list-tag">foo</span><span class="complete-list-count">10</span></li>
-                    <li><span class="complete-list-tag">bar</span><span class="complete-list-count">30</span></li>
-                    <li><span class="complete-list-tag">baz</span><span class="complete-list-count">20</span></li>
                   </ul>
                 <div id="checkbox-options">
                     <input type="hidden" id="input-url" name="url" />
@@ -160,8 +157,6 @@
         <img onclick="View.comment.toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
       </div>
     </div>
-    
-
 
 
   </h3>
@@ -170,9 +165,9 @@
 </div>
 <div id="search-container">
   <div id="search-header">
-    <div class="edit-cell"> </div>
+    <div class="edit-cell"><span id="search-word-preview"></span><span id="search-preview-sep">-</span><span id="search-total-count"></span></div>
     <div class="edit-cell" id="search-header-right">
-      <a href="http://example.com/XXX">検索結果を別ページで開く</a>
+      <a href="/background/search.html">検索結果を別ページで開く</a>
     </div>
   </div>
   <ul id="search-result"></ul>
