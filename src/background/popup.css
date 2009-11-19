@@ -113,14 +113,14 @@ ul.tab-ui li.tab-link {
 }
 
 ul.tab-ui li.tab-link a {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  -webkit-border-radius: 4px;
   display: inline-block !important;
 }
 
 ul.tab-ui li.tab-link img {
-  margin: 2px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  -webkit-border-radius: 4px;
+  padding: 2px;
   display: inline-block;
 }
 
