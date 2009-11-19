@@ -102,8 +102,8 @@ User.prototype = {
             return (res ? true : false);
         });
     },
-    getEndPoint: function(name) {
-        return B_HTTP + this.name + '/' + name;
+    link: function(path) {
+        return B_HTTP + this.name + '/' + (path || '');
     },
     get database() {
         return new Database('hatenabookmark22-' + this.name, {
@@ -124,7 +124,7 @@ User.prototype = {
             url: url,
             rks: this.rks,
         };
-        var endpoint = this.getEndPoint('api.delete_bookmark.json');
+        var endpoint = this.link('api.delete_bookmark.json');
         var self = this;
 
         Deferred.retry(3, function() {
@@ -155,7 +155,7 @@ User.prototype = {
         // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1"]
         var data = URI.parseQuery(data);
         data.rks = this.rks;
-        var endpoint = this.getEndPoint('add.edit.json');
+        var endpoint = this.link('add.edit.json');
         var self = this;
 
         p(data);

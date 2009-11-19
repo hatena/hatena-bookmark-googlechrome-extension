@@ -369,6 +369,14 @@ a.username {
   display: inline;
 }
 
+#header-usericon {
+  display: none;
+}
+
+#header-usericon img {
+  border: 1px solid #FFF;
+}
+
 #login-container,
 #bookmark-container,
 #comment-container,

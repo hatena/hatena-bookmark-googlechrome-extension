@@ -546,6 +546,18 @@ $(document).bind('ready', function() {
     if (popupMode) {
         document.body.style.width = '500px';
     }
+    var user = UserManager.user;
+    if (user) {
+        var hicon = $('#header-usericon');
+        hicon.append(E('img', {
+            title: user.name,
+            alt: user.name,
+            src: user.view.icon,
+            width: 16,
+            height: 16,
+        }));
+        hicon.show();
+    }
     $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);
     $('a').live('click', function() {
