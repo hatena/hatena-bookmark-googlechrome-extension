@@ -2,7 +2,7 @@ var SiteinfoManager = $({});
 
 $.extend(SiteinfoManager, {
     init: function SM_init() {
-        console.log('SiteinfoManager loaded');
+        // console.log('SiteinfoManager loaded');
         var self = SiteinfoManager;
         self.timerId = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
     },
@@ -34,7 +34,7 @@ $.extend(SiteinfoManager, {
                 }
             }
         }
-        console.log(result);
+        // console.log(result);
         port.postMessage({ siteinfo: result });
     },
 
@@ -79,7 +79,8 @@ $.extend(SiteinfoManager, {
         details.isLoading = true;
         var self = SiteinfoManager;
         var url = urls.shift();
-        $.getJSON(url).next(function (data) {
+        $.get(url).next(function (data) {
+            data = JSON.parse(data);
             console.log('load siteinfo from ' + url);
             details.isLoading = false;
             if (details.converter)

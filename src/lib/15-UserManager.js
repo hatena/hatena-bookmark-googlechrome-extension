@@ -12,7 +12,9 @@ $.extend(UserManager, {
         }, wait || 15 * 1000);
     },
     login: function() {
-        $.getJSON(UserManager.MY_NAME_URL).next(UserManager.loginHandler).error(UserManager.loginErrorHandler);
+        $.get(UserManager.MY_NAME_URL).next(function(data) {
+            UserManager.loginHandler(JSON.parse(data));
+        }).error(UserManager.loginErrorHandler);
     },
     loginHandler: function(res) {
         p('loginHandler');
