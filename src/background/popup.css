@@ -368,6 +368,11 @@ a.username {
   border-bottom-color: #bcd8f5;
 }
 
+dd#all-tags {
+  max-height: 8em;
+  overflow: auto;
+}
+
 #title {
     font-weight: bold;
 }
