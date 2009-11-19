@@ -442,7 +442,8 @@ var View = {
 
         setURL: function(url) {
             $('#input-url').attr('value', url);
-            $('#url').text(url);
+            $('#url').text(Utils.truncate(url, 60));
+            $('#url').attr('title', url);
             $('#url').attr('href', url);
 
             if (!$('#favicon').attr('src')) {
@@ -453,6 +454,7 @@ var View = {
         },
 
         setEntry: function(entry) {
+            console.log(entry);
             $('body').removeClass('data-loading');
             if (entry.title) this.titleText.text(entry.title);
             this.setURL(entry.original_url);
@@ -464,6 +466,28 @@ var View = {
                 uc.text(String(count) + (count == 1 ? ' user' : ' users'));
                 uc.attr('href', entry.entry_url);
                 $('#users-count-container').removeClass('none');
+            }
+            if (entry.favorites && entry.favorites.length) {
+                var f = $('#favorites');
+                entry.favorites.reverse().forEach(function(fav) {
+                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
+                                            fav.name, fav.timestamp.replace(/\//g, ''),
+                                            entry.eid);
+
+                    var title = sprintf('%s: %s', fav.name, fav.body);
+                    var link = Utils.createElementFromString(
+                        '<a href="#{permalink}"><img title="#{title}" alt="#{title}" src="#{icon}" /></a>',
+                    {
+                        data: {
+                            permalink: permalink,
+                            icon: User.View.prototype.getProfileIcon(fav.name),
+                            title:title
+                        }
+                    });
+                    // ToDo: Tooltip にする
+                    f.append(link);
+                });
+                f.show();
             }
         },
     }
