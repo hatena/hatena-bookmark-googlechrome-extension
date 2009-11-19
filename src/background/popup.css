@@ -326,17 +326,21 @@ a.username {
     border-radius: 3px;
     padding: 6px;
     font-size: 90%;
+    line-height: 1.8;
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
   margin-right: 4px;
   padding: 1px 3px 1px 3px;
   cursor: pointer;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
   background-color: #2C6EBD;
   color: #FFF;
+  -webkit-border-radius: 2px;
 }
 
 #title {
