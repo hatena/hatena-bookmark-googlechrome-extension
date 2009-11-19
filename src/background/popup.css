@@ -85,6 +85,7 @@ a#users-count:visited {
 }
 
 ul.tab-ui li {
+  font-weight: bold;
   display: inline-block;
     background: -webkit-gradient(
     linear, 
@@ -135,8 +136,27 @@ ul.tab-ui li.tab-link img {
   border: none;
 }
 
+#bookmark-tab,
+#comment-tab {
+  background-image: url(/images/chrome-b-append_off.png);
+  background-position: 3px 5px;
+  background-repeat: no-repeat;
+  padding-left: 25px;
+}
+
+#comment-tab {
+  background-image: url(/images/serif_list_off.png);
+}
+
+#bookmark-tab.current {
+  background-image: url(/images/chrome-b-append.png);
+}
+
+#comment-tab.current {
+  background-image: url(/images/serif_list.png);
+}
+
 ul.tab-ui li.current {
-  font-weight: bold;
   color: #2C6EBD;
   text-shadow: 0px 1px 0px #fff;
   background: #fff;
@@ -651,3 +671,4 @@ em a:visited {
 }
 
 /* }}} */
+
