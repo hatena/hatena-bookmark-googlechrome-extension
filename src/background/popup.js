@@ -85,6 +85,7 @@ function deleteBookmark() {
 
 function formSubmitHandler(ev) {
     var form = $(this);
+    console.log('form submit!');
 
     var user = UserManager.user;
     user.saveBookmark(form.serialize());
@@ -417,7 +418,7 @@ var View = {
         },
 
         showTags: function(tags, container, tagsList) {
-            tags.push('test');
+            if (!tags) return;
             var len = tags.length;
             if (len) {
                 container.show();
@@ -544,6 +545,18 @@ if (popupMode) {
 $(document).bind('ready', function() {
     if (popupMode) {
         document.body.style.width = '500px';
+    }
+    var user = UserManager.user;
+    if (user) {
+        var hicon = $('#header-usericon');
+        hicon.append(E('img', {
+            title: user.name,
+            alt: user.name,
+            src: user.view.icon,
+            width: 16,
+            height: 16,
+        }));
+        hicon.show();
     }
     $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);

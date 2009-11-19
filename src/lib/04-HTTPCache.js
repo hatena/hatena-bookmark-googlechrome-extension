@@ -9,6 +9,7 @@ HTTPCache.prototype = {
     createURL: function HTTPCache_createURL (url) {
         if (this.options.encoder)
             url = this.options.encoder(url);
+
         if (this.options.createURL) {
             return this.options.createURL(url);
         } else {
@@ -71,13 +72,15 @@ HTTPCache.prototype = {
 }
 
 HTTPCache.encodeBookmarkURL = function(url) {
+    console.log(encodeURIComponent((url || '').replace(/#/, '%23')));
     return encodeURIComponent((url || '').replace(/#/, '%23'));
 }
 
 HTTPCache.counter = new HTTPCache('counterCache', {
     expire: 60 * 15,
     baseURL: B_API_STATIC_HTTP + 'entry.count?url=',
-    encoder: HTTPCache.encodeBookmarkURL,
+    // encoder: HTTPCache.encodeBookmarkURL,
+    encoder: encodeURIComponent,
 });
 
 HTTPCache.counter.isValid = function(url) {
@@ -110,7 +113,8 @@ HTTPCache.comment = new HTTPCache('commentCache', {
     baseURL: B_HTTP + 'entry/jsonlite/?url=',
     seriarizer: 'JSON',
     json: true,
-    encoder: HTTPCache.encodeBookmarkURL,
+    // encoder: HTTPCache.encodeBookmarkURL,
+    encoder: encodeURIComponent,
 });
 
 HTTPCache.entry = new HTTPCache('entryCache', {
@@ -118,7 +122,8 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     baseURL: B_HTTP + 'my.entry?url=',
     seriarizer: 'JSON',
     json: true,
-    encoder: HTTPCache.encodeBookmarkURL,
+    // encoder: HTTPCache.encodeBookmarkURL,
+    encoder: encodeURIComponent,
 });
 
 HTTPCache.usertags = new HTTPCache('usertagsCache', {
