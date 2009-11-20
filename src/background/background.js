@@ -252,24 +252,13 @@ setInterval(function() {
 Model.Bookmark.afterSave = function() {
 }
 
-setTimeout(function() {
-    console.log(chrome.extension.getViews());
-}, 10);
-
-// setTimeout(function() {
-//     experimental.popup.show('/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807');
-// });
-
 // debug
-/*
-chrome.tabs.create({
-    // url: '/background/popup.html?url=http://www.google.com/chrome/intl/ja/welcome.html'
-    url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
-    //url: '/background/popup.html?url=http://b.hatena.ne.jp/grapefruit/'
-    // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
-});
-*/
-
+setTimeout(function() {
+    var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
+    chrome.tabs.create({
+        url: '/background/popup.html?debug=1&url=' + encodeURIComponent(url),
+    });
+}, 10);
 
 /*
 setTimeout(function() {

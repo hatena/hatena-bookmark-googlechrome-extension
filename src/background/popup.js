@@ -12,6 +12,7 @@ if (popupMode) {
     p = function(msg) {
         BG.console.log(JSON.stringify(Array.prototype.slice.call(arguments, 0, arguments.length)));
     }
+} else if (request_uri.param('debug')) {
 } else {
     chrome.tabs.getSelected(null, function(tab) {
         chrome.windows.get(tab.windowId, function(win) {
@@ -30,7 +31,6 @@ if (popupMode) {
     });
     chrome.self.onConnect.addListener(function(port, name) {
         port.onMessage.addListener(function(info, con) {
-            console.log(info.message);
             if (info.message == 'popup-reload') {
                 if (info.data.url) {
                     // XXX
@@ -61,6 +61,7 @@ function closeWin() {
 }
 
 function saveWindowPositions(win) {
+    if (request_uri.param('debug')) return;
     localStorage.bookmarkEditWindowPositions = JSON.stringify({
         left: win.left,
         top: win.top,
@@ -70,6 +71,7 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
+    if (request_uri.param('debug')) return;
     var pos;
     try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
     if (!pos) {
