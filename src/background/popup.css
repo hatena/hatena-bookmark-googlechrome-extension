@@ -177,35 +177,43 @@ ul.tab-ui li img {
 /* commnet {{{ */
 
 #comment-title-container {
-  background: no-repeat 0px center;
+  background: no-repeat 0px 2px;
   padding-left: 22px;
+  display: table-cell;
+  /*
+  display: inline-block;
+  */
 }
 
 #comment-infos {
   display: none;
+  padding-bottom: 3px;
+}
+
+#star-loading-icon {
+  margin-left: -3px;
 }
 
 #comment-container {
   padding: 0;
   background: #fff;
-  margin-top: 10px;
-} 
-
-#comment-header {
-  padding: 0 10px 10px 10px;
-  background: #fff;
-  -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
-  overflow: hidden;
 }
 
-#comment-title-container {
-  background: no-repeat 0px 2px;
-  padding-left: 22px;
+#comment-header {
+  /*
+  background: #fff;
+  -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+  */
+  display: table;
+  width: 100%;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  padding: 3px 10px 3px 10px;
 }
 
 #comment-title {
-  font-weight: bold;
-  font-size: 120%;
+  font-size: 100%;
 }
 
 #comment-list {
@@ -237,13 +245,13 @@ a.username {
 
 }
 
-#comment-title-container {
-  display: inline-block;
-}
-
 #comment-title-right {
-  float: right;
+  display: table-cell;
+  width: 180px;
+  text-align: right;
+  /*
   display: inline-block;
+  */
   margin-top: 2px;
 }
 
@@ -543,6 +551,7 @@ em #comment-users {
 
 #comment-toggle {
   cursor: pointer;
+  margin-right: 4px;
 }
 
 

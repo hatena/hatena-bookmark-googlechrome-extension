@@ -13,10 +13,10 @@ Hatena.Bookmark.Star = {
     loadElements: function(elements, options) {
         var entries = [];
         if (options) {
-            var title = document.getElementById('comment-title-container');
+            var title = document.getElementById('comment-title-star-container');
             var entry = {
                 title: options,
-                uri: options.uri 
+                uri: options.uri
             };
             this.addStarElement(entry, title);
             entries.push(entry);
