@@ -191,12 +191,53 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId) {
     Manager.updateCurrentTab();
 });
 
-chrome.pageAction.onClicked.addListener(function() {
-    Manager.editBookmarkCurrentTab();
+chrome.browserAction.onClicked.addListener(function(tab) {
+    var url = tab.url;
+    var info = window.popupWinInfo
+    if (info) {
+        chrome.windows.getAll(null, function(allWindows) {
+            var flag = false;
+            for (var i = 0;  i < allWindows.length; i++) {
+                if (parseInt(allWindows[i].id) == parseInt(info.windowId)) {
+                    flag = allWindows[i];
+                    break;
+                }
+            }
+            if (flag) {
+                chrome.tabs.get(info.tabId, function(tab) {
+                    if (URI.parse(tab.url).param('url') != url) {
+                        var port = chrome.tabs.connect(window.popupWinInfo.tabId);
+                        port.postMessage({
+                            message: 'popup-reload',
+                            data: {
+                                url: url,
+                            }
+                        });
+                    }
+                    flag.focus();
+                });
+            } else {
+                delete window.popupWinInfo;
+                setTimeout(function() {
+                    window.open('/background/popup.html?url=' + encodeURIComponent(url));
+                }, 10);
+            }
+        });
+    } else {
+        setTimeout(function() {
+            window.open('/background/popup.html?url=' + encodeURIComponent(url));
+        }, 10);
+    }
 });
 
-chrome.self.onConnect.addListener(function(port,name) {
-  port.onMessage.addListener(function(info,con) {
+/*
+chrome.browserAction.onClicked.addListener(function(tab) {
+    Manager.editBookmarkTab(tab);
+});
+*/
+
+chrome.self.onConnect.addListener(function(port, name) {
+  port.onMessage.addListener(function(info, con) {
       if (info.message)
           ConnectMessenger.trigger(info.message, [info.data, con]);
   });
@@ -211,15 +252,24 @@ setInterval(function() {
 Model.Bookmark.afterSave = function() {
 }
 
+setTimeout(function() {
+    console.log(chrome.extension.getViews());
+}, 10);
+
+// setTimeout(function() {
+//     experimental.popup.show('/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807');
+// });
+
 // debug
+/*
 chrome.tabs.create({
     // url: '/background/popup.html?url=http://www.google.com/chrome/intl/ja/welcome.html'
     url: '/background/popup.html?url=http://d.hatena.ne.jp/HolyGrail/20091107/1257607807'
     //url: '/background/popup.html?url=http://b.hatena.ne.jp/grapefruit/'
     // url: '/background/popup.html?url=http://b.hatena.ne.jp/'
 });
-/*
 */
+
 
 /*
 setTimeout(function() {

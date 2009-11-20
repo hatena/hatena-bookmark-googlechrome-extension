@@ -26,8 +26,8 @@
   },
   "browser_action": {
     "default_icon": "images/chrome-b-plus.png",
-    "default_title": "HatenaBookmark Counter",
-    "popup": "background/popup.html"
+    "default_title": "HatenaBookmark Counter"
+    ,"popup": "background/popup.html"
   },
   // "browser_action": {
   //   "name": "addbookmark",

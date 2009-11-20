@@ -12,6 +12,38 @@ if (popupMode) {
     p = function(msg) {
         BG.console.log(JSON.stringify(Array.prototype.slice.call(arguments, 0, arguments.length)));
     }
+} else {
+    chrome.tabs.getSelected(null, function(tab) {
+        chrome.windows.get(tab.windowId, function(win) {
+            window.currentWin = win;
+            BG.popupWinInfo = {
+                windowId: win.id,
+                tabId: tab.id,
+            }
+            loadWindowPosition(win);
+        });
+    });
+    chrome.windows.onRemoved.addListener(function(windowId) {
+        if (BG.popupWinInfo)
+            delete BG.popupWinInfo;
+        delete window.currentWin;
+    });
+    chrome.self.onConnect.addListener(function(port, name) {
+        port.onMessage.addListener(function(info, con) {
+            console.log(info.message);
+            if (info.message == 'popup-reload') {
+                if (info.data.url) {
+                    // XXX
+                    location.href = '/background/popup.html?url=' + encodeURIComponent(info.data.url);
+                }
+            }
+        });
+    });
+    setInterval(function() {
+        chrome.windows.get(currentWin.id, function(win) {
+            saveWindowPositions(win);
+        });
+    }, 50);
 }
 
 
@@ -20,9 +52,10 @@ function closeWin() {
         window.close();
         // BG.chrome.experimental.extension.getPopupView().close();
     } else {
-        Deferred.chrome.windows.getCurrent().next(function(win) {
+        chrome.windows.get(currentWin.id, function(win) {
+            delete BG.popupWinInfo;
             saveWindowPositions(win);
-            // chrome.windows.remove(currentWin.id);
+            chrome.windows.remove(currentWin.id);
         });
     }
 }
@@ -46,8 +79,8 @@ function loadWindowPosition(win) {
         }
     }
 
-    // Deferred.chrome.windows.update(win.id, pos).next();
-}
+    chrome.windows.update(win.id, pos);
+};
 
 function getInformation() {
     var d = new Deferred();
@@ -575,12 +608,6 @@ var ViewManager = {
     }
 }
 
-// var currentWin;
-// Deferred.chrome.windows.getCurrent().next(function(win) {
-//     currentWin = win;
-//     loadWindowPosition(win);
-// }).error(function(e) { console.log(e) });
-
 /*
 if (popupMode) {
     chrome.windows.getCurrent(function(win) {
@@ -592,8 +619,9 @@ if (popupMode) {
 }
 */
 
-$(document).bind('ready', function() {
-    if (popupMode) {
+
+var ready = function() {
+    if (window.popupMode) {
         document.body.style.width = '500px';
     }
     var user = UserManager.user;
@@ -619,8 +647,9 @@ $(document).bind('ready', function() {
     } else {
         ViewManager.show('comment');
     }
-});
+};
 
+$(document).bind('ready', ready);
 
 
 
