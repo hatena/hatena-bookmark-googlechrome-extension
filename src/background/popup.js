@@ -303,6 +303,7 @@ var View = {
             var i = 0;
             var step = 100;
             var starLoaded = 0;
+            self.starLoadingIcon.show();
             var starLoadedCheck = function(entriesLen) {
                 starLoaded++;
                 if (publicLen/step <= starLoaded) {

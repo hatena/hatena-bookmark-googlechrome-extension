@@ -192,6 +192,7 @@ ul.tab-ui li img {
 
 #star-loading-icon {
   margin-left: -3px;
+  display: none;
 }
 
 #comment-container {
