@@ -181,12 +181,11 @@ test("Config", function(d) {
     Config.set('booltest', '0');
     is(Config.get('booltest'), false);
 
-    Config.clearALL();
-
     Config.append('inttest', {
         'default': 10,
         type: 'int'
     });
+    Config.clearALL();
     is(Config.get('inttest'), 10);
     Config.set('inttest', '100px');
     is(Config.get('inttest'), 100);
@@ -211,6 +210,20 @@ test("Config", function(d) {
     Config.set('number', '-100.01');
     is(Config.get('number'), -100.01);
 
+    Config.append('intbitween', {
+        'default': 100,
+        type: 'int',
+        normalizer: {
+            name: 'between',
+            options: [10, 200],
+        }
+    });
+    Config.clearALL();
+    is(Config.get('intbitween'), 100);
+    Config.set('intbitween', '500px');
+    is(Config.get('intbitween'), 200);
+    Config.set('intbitween', 5);
+    is(Config.get('intbitween'), 10);
 
     d.call();
 }).

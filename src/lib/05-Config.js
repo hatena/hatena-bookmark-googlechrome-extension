@@ -4,7 +4,7 @@ var Config = {
     configs: {},
     listeners: {},
     localStorage: localStorage,
-    normalizers: {
+    typeConversions: {
         boolean: function(value) {
             if (isFinite(value)) {
                 return !!parseInt(value);
@@ -21,6 +21,13 @@ var Config = {
         },
         number: function(value) {
             return Number(value);
+        },
+    },
+    normalizers: {
+        between: function(value, options) {
+            var min = Math.min.apply(Math, options);
+            var max = Math.max.apply(Math, options);
+            return Math.max(min, Math.min(value, max));
         }
     },
     get: function(oKey) {
@@ -44,6 +51,7 @@ var Config = {
         this.keyCheck(oKey);
         var key = this.PREFIX + oKey;
 
+        value = this.typeConversion(oKey, value);
         value = this.normalize(oKey, value);
         if (this.validation(oKey, value)) {
             this.localStorage[key] = JSON.stringify(value);
@@ -54,15 +62,27 @@ var Config = {
     keyCheck: function(key) {
         if (!this.configs[key]) throw 'key undefined!: ' + key;
     },
-    normalize: function(key, value) {
-        var normalizer = this.configs[key].type;
-        if (typeof normalizer == 'function') {
+    typeConversion: function(key, value) {
+        var config = this.configs[key];
+        var type = config.type;
+        if (typeof type == 'function') {
             //
-        } else if (normalizer && this.normalizers[normalizer]) {
-            normalizer = this.normalizers[normalizer];
+        } else if (type && this.typeConversions[type]) {
+            type = this.typeConversions[type];
         }
-        if (normalizer) {
+        if (type) {
+            return type(value);
+        } else {
+            return value;
+        }
+    },
+    normalize: function(key, value) {
+        var config = this.configs[key];
+        var normalizer = config.normalizer;
+        if (typeof normalizer == 'function') {
             return normalizer(value);
+        } else if (normalizer && this.normalizers[normalizer.name]) {
+            return this.normalizers[normalizer.name](value, normalizer.options);
         } else {
             return value;
         }
@@ -108,7 +128,7 @@ var Config = {
 /*
 Config.configs = {
     'main.size.auto': {
-        default: 
+        default: true,
     },
     'main.size.height': 500,
     'commentviewer.autoHideComment': true,
