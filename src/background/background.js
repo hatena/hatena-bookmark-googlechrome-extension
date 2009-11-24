@@ -253,21 +253,21 @@ Model.Bookmark.afterSave = function() {
 }
 
 // debug
-/*
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
     chrome.tabs.create({
         url: '/background/popup.html?debug=1&url=' + encodeURIComponent(url),
     });
 }, 10);
-*/
 
+/*
 setTimeout(function() {
     var url = '/tests/test.html';
     chrome.tabs.create({
         url: url,
     });
 }, 10);
+*/
 
 /*
 setTimeout(function() {

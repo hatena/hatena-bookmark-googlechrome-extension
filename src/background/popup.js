@@ -76,7 +76,7 @@ function loadWindowPosition(win) {
     try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
     if (!pos) {
         pos = {
-            width: 500,
+            width: Config.get('popup.window.height'),
             height: 400,
         }
     }
@@ -228,7 +228,6 @@ var View = {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
-                BG.console.log(info);
                 self.setTitle(info.title || info.url);
                 self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 if (info.url.indexOf('http') != 0) {
@@ -282,8 +281,8 @@ var View = {
             }
             var publicLen = bookmarks.length;
 
-            if (Config.get('commentviewer.autoHideComment') &&
-                Config.get('commentviewer.autoHideThreshold') < publicLen)
+            if (Config.get('popup.commentviewer.autodetect.enabled') &&
+                Config.get('popup.commentviewer.autodetect.threshold') < publicLen)
             {
                 self.hideNoComment();
             }
@@ -418,11 +417,11 @@ var View = {
                 return;
             }
 
-            if (Config.get('input.confirmBookmark')) {
+            if (Config.get('popup.bookmark.confirmBookmark')) {
                 this.confirmBookmark.attr('checked', 'checked');
             }
             this.confirmBookmark.bind('change', function() {
-                Config.set('input.confirmBookmark', this.checked);
+                Config.set('popup.bookmark.confirmBookmark', this.checked);
             });
 
             this.setURL(url);
@@ -459,7 +458,7 @@ var View = {
 
             this.form.show();
             this.commentEL.focus();
-            if (Config.get('tags.allTags.enabled')) {
+            if (Config.get('popup.tags.allTags.enabled')) {
                 HTTPCache.usertags.get(user.name).next(function(res) {
                     self.tagCompleter.addSuggestTags(res.tagsKeys);
                     self.tagCompleter.tagsObject = res.tags;
@@ -475,7 +474,7 @@ var View = {
             if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
 
             var toggle = $('#show-all-tags-toggle');
-            var conf = Config.bind('tags.showAllTags');
+            var conf = Config.bind('popup.tags.showAllTags');
             var updateText = function() {
                 toggle.text(conf.get() ? '一部のタグのみ表示' : 'すべてのタグを表示');
             };
@@ -564,7 +563,7 @@ var View = {
             $('body').removeClass('data-loading');
             if (entry.title) this.setTitle(entry.title);
             this.setURL(entry.original_url);
-            if (Config.get('tags.recommendTags.enabled'))
+            if (Config.get('popup.tags.recommendTags.enabled'))
                 this.setRecomendTags(entry.recommend_tags);
             var count = parseInt(entry.count);
             if (count) {
@@ -633,7 +632,10 @@ if (popupMode) {
 
 var ready = function() {
     if (window.popupMode) {
-        document.body.style.width = '500px';
+        document.body.style.width = '' + Config.get('popup.window.width') + 'px';
+                self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
+        $('#search-container').css('max-height', '' + Config.get('popup.window.height') + 'px');
+        $('#comment-list').css('max-height', '' + Config.get('popup.window.height') + 'px');
     }
     var user = UserManager.user;
     if (user) {

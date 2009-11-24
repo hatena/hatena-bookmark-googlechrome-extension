@@ -70,7 +70,7 @@ var Config = {
         } else if (type && this.typeConversions[type]) {
             type = this.typeConversions[type];
         }
-        if (type) {
+        if (type && typeof type == 'function') {
             return type(value);
         } else {
             return value;
@@ -94,7 +94,6 @@ var Config = {
     append: function(key, options) {
         if (typeof options != 'object')
             options = this.typeDetect(options);
-        console.log(options);
         this.configs[key] = options;
     },
     typeDetect: function(value) {
