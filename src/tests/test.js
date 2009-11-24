@@ -162,6 +162,7 @@ test("jQuery classlike", function(d) {
 }, 4).
 
 test("Config", function(d) {
+    var key;
     try {
         Config.get('booltest');
     } catch(e) {
@@ -224,6 +225,14 @@ test("Config", function(d) {
     is(Config.get('intbitween'), 200);
     Config.set('intbitween', 5);
     is(Config.get('intbitween'), 10);
+
+    // auto detect
+    key = 'int1';
+    Config.append(key, 10)
+    Config.clearALL();
+    is(Config.get(key), 10);
+    Config.set(key, '100px');
+    is(Config.get(key), 100);
 
     d.call();
 }).

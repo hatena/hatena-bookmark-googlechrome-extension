@@ -92,7 +92,32 @@ var Config = {
         return true;
     },
     append: function(key, options) {
+        if (typeof options != 'object')
+            options = this.typeDetect(options);
+        console.log(options);
         this.configs[key] = options;
+    },
+    typeDetect: function(value) {
+        var type;
+        switch(typeof value) {
+            case 'number':
+                if (value.toString().indexOf('.') == -1) {
+                    type = 'int';
+                } else {
+                    type = 'number';
+                }
+                break;
+            case 'boolean':
+                type = 'boolean';
+                break;
+            default:
+                type = 'object';
+                break;
+        }
+        return {
+            'default': value,
+            type: type,
+        }
     },
     clear: function(key) {
         this.keyCheck(key);
