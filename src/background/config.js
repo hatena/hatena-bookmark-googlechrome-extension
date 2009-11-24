@@ -77,6 +77,19 @@ Config.View = {
                     }
                 }, 10);
             });
+        },
+        'popup.commentviewer.autodetect.enabled' : function(key) {
+            var val = Config.get(key);
+            $("input.commentviewer-autodetect-input").each(function() {
+                var el = this;
+                setTimeout(function() {
+                    if (!val) {
+                        el.setAttribute('disabled', true);
+                    } else {
+                        el.removeAttribute('disabled');
+                    }
+                }, 10);
+            });
         }
     },
 

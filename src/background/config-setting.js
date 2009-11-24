@@ -38,6 +38,7 @@
         'popup.tags.showAllTags': false,
         'popup.tags.complete.enabled': true,
         'popup.lastView': 'comment',
+        'content.countview.enabled': true,
     };
     Object.keys(defaults).forEach(function(key) {
         Config.append(key, defaults[key]);
