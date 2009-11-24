@@ -91,6 +91,8 @@ $.extend(TagCompleter, {
             this._caretPos = 0;
             delete this.lastSuggestPos;
             var index = this.inputLine.insertionTag(word, pos);
+            console.log(this.inputLine.value);
+            console.log(this.inputLine._text);
             this.input.get(0).setSelectionRange(index, index);
         }
     },
@@ -148,7 +150,7 @@ $.extend(TagCompleter, {
 
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
-    this.value = value;
+    this._text = value;
     this.maxSuggest = 10;
 }
 

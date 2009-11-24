@@ -52,11 +52,13 @@ function closeWin() {
         window.close();
         // BG.chrome.experimental.extension.getPopupView().close();
     } else {
-        chrome.windows.get(currentWin.id, function(win) {
-            delete BG.popupWinInfo;
-            saveWindowPositions(win);
-            chrome.windows.remove(currentWin.id);
-        });
+        if (currentWin) {
+            chrome.windows.get(currentWin.id, function(win) {
+                delete BG.popupWinInfo;
+                saveWindowPositions(win);
+                chrome.windows.remove(currentWin.id);
+            });
+        }
     }
 }
 
@@ -476,11 +478,15 @@ var View = {
 
             this.form.show();
             this.commentEL.focus();
-            if (Config.get('popup.tags.allTags.enabled')) {
+            if (Config.get('popup.tags.allTags.enabled') || Config.get('popup.tags.complete.enabled')) {
                 HTTPCache.usertags.get(user.name).next(function(res) {
-                    self.tagCompleter.addSuggestTags(res.tagsKeys);
-                    self.tagCompleter.tagsObject = res.tags;
-                    self.setUserTags(res)
+                    if (Config.get('popup.tags.complete.enabled')) {
+                        self.tagCompleter.addSuggestTags(res.tagsKeys);
+                        self.tagCompleter.tagsObject = res.tags;
+                    }
+                    if (Config.get('popup.tags.allTags.enabled')) {
+                        self.setUserTags(res)
+                    }
                 });
             }
 
