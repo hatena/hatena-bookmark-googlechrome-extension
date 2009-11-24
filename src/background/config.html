@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="../lib/jquery-1.3.2.js"></script>
+<script type="text/javascript" src="../lib/jsdeferred.js"></script>
+<script type="text/javascript" src="../lib/jsdeferred.jquery.js"></script>
+<script type="text/javascript" src="../lib/jsdeferred.googlechrome.js"></script>
+<script type="text/javascript" src="../lib/02-Utils.js"></script>
+<script type="text/javascript" src="../lib/05-Config.js"></script>
+<script type="text/javascript" src="config-setting.js"></script>
+<script type="text/javascript" src="config.js"></script>
+<link rel="stylesheet" href="config.css" type="text/css" />
+</head>
+<body style="display:none">
+<form onsubmit="update();return false;">
+  <h2>全般</h2>
+  <fieldset>
+    <legend>ポップアップウィンドウのサイズ</legend>
+    <input type="radio" value="1" id="popup.window.autosize-enable" name="popup.window.autosize"/>
+    <label for="popup.window.autosize-enable">自動調整</label>
+    <input type="radio" value="0" id="popup.window.autosize-disable" name="popup.window.autosize"/>
+    <label for="popup.window.autosize-disable">固定</label>
+    縦: <input class="popup-input-size" type="text" id="popup.window.height" name="popup.window.height" />px
+    横: <input class="popup-input-size" type="text" id="popup.window.width" name="popup.window.width" />px
+  </fieldset>
+</form>
+</body>
+</html>

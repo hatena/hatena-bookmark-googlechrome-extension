@@ -631,11 +631,10 @@ if (popupMode) {
 
 
 var ready = function() {
-    if (window.popupMode) {
+    if (true || window.popupMode) {
         document.body.style.width = '' + Config.get('popup.window.width') + 'px';
-                self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
-        $('#search-container').css('max-height', '' + Config.get('popup.window.height') + 'px');
-        $('#comment-list').css('max-height', '' + Config.get('popup.window.height') + 'px');
+        document.getElementById('search-container').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
+        document.getElementById('comment-list').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
     }
     var user = UserManager.user;
     if (user) {
