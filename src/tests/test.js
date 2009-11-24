@@ -174,13 +174,14 @@ test("Config", function(d) {
     });
     Config.clearALL();
 
-    is(Config.get('booltest'), true);
-    Config.set('booltest', false);
-    is(Config.get('booltest'), false);
-    Config.set('booltest', 1);
-    is(Config.get('booltest'), true);
-    Config.set('booltest', '0');
-    is(Config.get('booltest'), false);
+    key = 'booltest';
+    is(Config.get(key), true);
+    Config.set(key, false);
+    is(Config.get(key), false);
+    Config.set(key, 1);
+    is(Config.get(key), true);
+    Config.set(key, '0');
+    is(Config.get(key), false);
 
     Config.append('inttest', {
         'default': 10,
@@ -227,15 +228,27 @@ test("Config", function(d) {
     is(Config.get('intbitween'), 10);
 
     // auto detect
-    key = 'int1';
+    key = 'bool.autodetect';
+    Config.append(key, true)
+    is(Config.get(key), true);
+    Config.set(key, false);
+    is(Config.get(key), false);
+    Config.set(key, 1);
+    is(Config.get(key), true);
+    Config.set(key, '0');
+    is(Config.get(key), false);
+
+    // auto detect
+    key = 'int.autodetect';
     Config.append(key, 10)
     Config.clearALL();
     is(Config.get(key), 10);
     Config.set(key, '100px');
     is(Config.get(key), 100);
 
+    Config.clearALL();
     d.call();
-}).
+}, 20).
 
 test("TagCompleter", function(d) {
     this.__defineGetter__('TestTags', function() {
