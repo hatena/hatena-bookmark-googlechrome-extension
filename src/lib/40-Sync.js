@@ -37,8 +37,8 @@ jQuery.extend(Sync, {
             return;
         }
 
-        var step = Config.get("sync.oneTimeItmes") || 500;
-        var waitTime = Config.get("sync.syncWait") || 1000;
+        var step = 500;
+        var waitTime = 1000;
 
         var commentRe = new RegExp('\\s+$','');
         var tmp = Sync.createDataStructure(text);

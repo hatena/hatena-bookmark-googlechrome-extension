@@ -149,7 +149,7 @@ $.extend(TagCompleter, {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
-    this.maxSuggest = Config.get('tags.tagMaxResult');
+    this.maxSuggest = 10;
 }
 
 TagCompleter.InputLine.prototype = {
