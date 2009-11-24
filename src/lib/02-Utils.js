@@ -46,6 +46,7 @@ var $K = function(i) { return function() { return i } };
 
 var Utils = {
     truncate: function(str, size, suffix) {
+        if (!str) str = '';
         if (!size) size = 32;
         if (!suffix) suffix = '...';
         var b = 0;

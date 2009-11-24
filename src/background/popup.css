@@ -9,6 +9,7 @@
 body {
   overflow-x: hidden;
   color: #222;
+  min-height: 70px;
 }
 
 img {
@@ -248,7 +249,7 @@ a.username {
 
 #comment-title-right {
   display: table-cell;
-  width: 180px;
+  width: 190px;
   text-align: right;
   /*
   display: inline-block;

@@ -228,8 +228,8 @@ var View = {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
-                var title = self.title;
-                title.text(info.title || Utils.truncate(info.url, '40'));
+                BG.console.log(info);
+                self.setTitle(info.title || info.url);
                 self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 if (info.url.indexOf('http') != 0) {
                     self.commentMessage.text('表示できるブックマークコメントはありません');
@@ -238,8 +238,7 @@ var View = {
                 HTTPCache.comment.get(info.url).next(function(r) {
                     if (r) {
                         self.commentMessage.hide();
-                        title.text(Utils.truncate(r.title, 60));
-                        title.attr('title', r.title);
+                        self.setTitle(r.title);
                         self.list.empty();
                         self.list.html('');
                         self.showComment(r);
@@ -248,6 +247,10 @@ var View = {
                     }
                 });
             });
+        },
+        setTitle: function(title) {
+            this.title.text(Utils.truncate(title, 60));
+            this.title.attr('title', title);
         },
         showNoComment: function() {
             this.list.removeClass('hide-nocomment');
@@ -403,7 +406,7 @@ var View = {
             } else {
                 this.plusInputs.remove();
             }
-            this.titleText.text(info.title);
+            this.setTitle(info.title || info.url);
             this.faviconEL.attr('src', info.faviconUrl);
 
             var url = info.url;
@@ -552,9 +555,14 @@ var View = {
             }
         },
 
+        setTitle: function(title) {
+            this.titleText.text(Utils.truncate(title, 60));
+            this.titleText.attr('title', title);
+        },
+
         setEntry: function(entry) {
             $('body').removeClass('data-loading');
-            if (entry.title) this.titleText.text(entry.title);
+            if (entry.title) this.setTitle(entry.title);
             this.setURL(entry.original_url);
             if (Config.get('tags.recommendTags.enabled'))
                 this.setRecomendTags(entry.recommend_tags);
