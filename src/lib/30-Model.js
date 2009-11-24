@@ -101,7 +101,7 @@ $.extend(Bookmark, {
             where.push('( url LIKE ? OR title LIKE ? OR comment LIKE ? )');
             bind.push('%' + w + '%'); bind.push('%' + w + '%'); bind.push('%' + w + '%');
         });
-        var select = Bookmark.select('*', [where.join(' OR '), bind], options);
+        var select = Bookmark.select('*', [where.join(' AND '), bind], options);
         /*
         var searches = words.map(function(w) { return {'like': '%' + w + '%'} });
         var select = Bookmark.select('*', {search: searches}, options);

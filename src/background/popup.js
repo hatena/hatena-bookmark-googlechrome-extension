@@ -120,7 +120,6 @@ function deleteBookmark() {
 
 function formSubmitHandler(ev) {
     var form = $(this);
-    console.log('form submit!');
 
     var user = UserManager.user;
     user.saveBookmark(form.serialize());
@@ -132,6 +131,16 @@ function formSubmitHandler(ev) {
 
 function searchFormSubmitHandler(ev) {
     View.search.search($('#search-word').attr('value'));
+    return false;
+}
+
+var _searchIncD = null;
+function searchIncSearchHandler(ev) {
+    if (_searchIncD) _searchIncD.cancel();
+    _searchIncD = Deferred.wait(0.2).next(function() {
+        _searchIncD = null;
+        View.search.search($('#search-word').attr('value'));
+    });
     return false;
 }
 
@@ -172,6 +181,8 @@ var View = {
         init: function() {
         },
         search: function(word) {
+            Config.set('popup.search.lastWord', word);
+            document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
             ViewManager.show('search');
             var list = this.list;
             list.empty();
@@ -185,6 +196,8 @@ var View = {
             self.wordPreview.empty();
             self.wordPreview.append(E('span',{},  E('em', {}, word), 'での検索結果'));
 
+            var max = Config.get('popup.search.result.threshold');
+            var el = list.get(0);
             var loop = function() {
                 self.current = Model.Bookmark.search(word, {
                     limit: 100,
@@ -193,15 +206,16 @@ var View = {
                 }).next(function(res) {
                     res.forEach(function(r) {
                         // try {
-                            list.append(createBookmarkList(r));
+                            if (el.children.length < max)
+                                list.append(createBookmarkList(r));
                         // } catch(e) { p(e) }
                         // var m = $('<li/>').text(r.title + r.url);
                         // m.appendTo(list);
                     });
-                    var rLen = list.get(0).children.length
-                    self.totalCount.text(rLen >= 199 ? '200件以上' : sprintf('%s件', rLen));
+                    var rLen = el.children.length;
+                    self.totalCount.text(rLen >= (max-1) ? sprintf('%d件以上', max) : sprintf('%d件', rLen));
                     start += 100;
-                    if (start < 200) {
+                    if (start < max && !(rLen >= (max-1))) {
                         loop();
                     }
                 });
@@ -654,12 +668,18 @@ var ready = function() {
     }
     $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);
+    if (Config.get('popup.search.incsearch')) {
+        $('#search-word').bind('keyup', searchIncSearchHandler);
+    }
     $('a').live('click', function() {
         this.target = '_blank';
     });
     // $('a').each(function() { this.target = '_blank' });
     if (Config.get('popup.lastView') == 'bookmark') {
         ViewManager.show('bookmark');
+    } else if (Config.get('popup.lastView') == 'search' && Config.get('popup.search.lastWord')) {
+        document.getElementById('search-word').value = Config.get('popup.search.lastWord');
+        View.search.search($('#search-word').attr('value'));
     } else {
         ViewManager.show('comment');
     }

@@ -30,6 +30,7 @@
             },
         },
         'popup.search.incsearch': false,
+        'popup.search.lastWord': '',
         'popup.commentviewer.autodetect.enabled': true,
         'popup.commentviewer.autodetect.threshold': 15,
         'popup.commentviewer.togglehide': false,
