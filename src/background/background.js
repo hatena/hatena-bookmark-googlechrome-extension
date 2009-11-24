@@ -155,13 +155,17 @@ ConnectMessenger.bind('logout', function(data) {
 });
 
 ConnectMessenger.bind('get_siteinfo_for_url', function(event, data, port) {
-    console.log('got request of siteinfo for ' + data.url);
-    SiteinfoManager.sendSiteinfoForURL(data.url, port);
+    if (Config.get('content.webinfo.enabled')) {
+        console.log('got request of siteinfo for ' + data.url);
+        SiteinfoManager.sendSiteinfoForURL(data.url, port);
+    }
 });
 
 ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
-    console.log('got request of siteinfos whose domain is XPath');
-    SiteinfoManager.sendSiteinfosWithXPath(port);
+    if (Config.get('content.webinfo.enabled')) {
+        console.log('got request of siteinfos whose domain is XPath');
+        SiteinfoManager.sendSiteinfosWithXPath(port);
+    }
 });
 
 UserManager.bind('UserChange', function() {
