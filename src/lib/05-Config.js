@@ -6,6 +6,8 @@ var Config = {
     localStorage: localStorage,
     typeConversions: {
         boolean: function(value) {
+            if (typeof value == 'boolean') return value;
+
             if (isFinite(value)) {
                 return !!parseInt(value);
             } else {

@@ -253,12 +253,14 @@ var View = {
         },
         showNoComment: function() {
             this.list.removeClass('hide-nocomment');
+            Config.set('popup.commentviewer.togglehide', true);
             this.commentToggle.attr('src', '/images/comment-viewer-toggle-on.png');
             this.commentToggle.attr('title', 'コメントがないユーザを非表示');
             this.commentToggle.attr('alt', 'コメントがないユーザを非表示');
         },
         hideNoComment: function() {
             this.list.addClass('hide-nocomment');
+            Config.set('popup.commentviewer.togglehide', false);
             this.commentToggle.attr('src', '/images/comment-viewer-toggle-off.png');
             this.commentToggle.attr('title', 'すべてのユーザを表示');
             this.commentToggle.attr('alt', 'すべてのユーザを表示');
@@ -281,9 +283,11 @@ var View = {
             }
             var publicLen = bookmarks.length;
 
-            if (Config.get('popup.commentviewer.autodetect.enabled') &&
-                Config.get('popup.commentviewer.autodetect.threshold') < publicLen)
-            {
+            if (Config.get('popup.commentviewer.autodetect.enabled')) {
+                if (Config.get('popup.commentviewer.autodetect.threshold') < publicLen) {
+                    self.hideNoComment();
+                }
+            } else if (!Config.get('popup.commentviewer.togglehide')) {
                 self.hideNoComment();
             }
 
