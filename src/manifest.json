@@ -75,41 +75,6 @@
       ]
     }
   ],
-
-  // ]
-  // "content_scripts": [
-  //   {
-  //     "run_at": "document_start",
-  //     "js": [
-  //       "content/bookmark.js"
-  //     ],
-  //     "matches": [
-  //       "http://b.hatena.ne.jp/*"
-  //     ]
-  //   }
-  // ]
-  // "content_scripts": [
-  //   {
-  //     "run_at": "document_start",
-  //     "js": [
-  //       "content/main.js"
-  //     ],
-  //     "css": [
-  //       "content/main.css"
-  //     ],
-  //     "matches": [
-  //       "http://*/*",
-  //       "https://*/*",
-  //       "file://*"
-  //     ]
-  //   }
-  // ],
-  // "page_actions": [
-  //   {
-  //     "id": "hatena-bookmark_page_action",
-  //     "name": "hatena-bookmark_page_action",
-  //     "icons": ["images/icon.png"]
-  //   }
-  // ]
+  "options_page": "background/config.html",
   "background_page": "background/background.html"
 }

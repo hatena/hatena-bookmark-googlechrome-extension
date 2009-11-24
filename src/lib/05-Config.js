@@ -1,49 +1,116 @@
 
 var Config = {
-    _dict: {},
+    PREFIX: 'Config-',
+    configs: {},
+    listeners: {},
+    localStorage: localStorage,
+    normalizers: {
+        boolean: function(value) {
+            if (isFinite(value)) {
+                return !!parseInt(value);
+            } else {
+                return !!value;
+            }
+        },
+        int: function(value) {
+            return parseInt(value);
+        },
+        unsignedInt: function(value) {
+            value = parseInt(value)
+            return (value < 0) ? 0 : value;
+        },
+        number: function(value) {
+            return Number(value);
+        }
+    },
     get: function(oKey) {
-        var key = 'Config-' + oKey;
-        if (typeof localStorage[key] == 'undefined') {
-            return Config.getDefault(oKey);
+        this.keyCheck(oKey);
+
+        var key = this.PREFIX + oKey;
+        if (typeof this.localStorage[key] == 'undefined') {
+            return this.getDefault(oKey);
         } else {
-            return JSON.parse(localStorage[key]);
+            return JSON.parse(this.localStorage[key]);
         }
     },
     getDefault: function(key) {
-        if (typeof Config.DEFAULT[key] == 'undefined') {
+        if (typeof this.configs[key] == 'undefined') {
             return;
         } else {
-            return Config.DEFAULT[key];
+            return this.configs[key]['default'];
         }
     },
-    set: function(key, value) {
-        key = 'Config-' + key;
-        if (value == null || typeof value == 'undefined') {
-            delete localStorage[key];
+    set: function(oKey, value) {
+        this.keyCheck(oKey);
+        var key = this.PREFIX + oKey;
+
+        value = this.normalize(oKey, value);
+        if (this.validation(oKey, value)) {
+            this.localStorage[key] = JSON.stringify(value);
         } else {
-            localStorage[key] = JSON.stringify(value);
+            // ToDo
         }
+    },
+    keyCheck: function(key) {
+        if (!this.configs[key]) throw 'key undefined!: ' + key;
+    },
+    normalize: function(key, value) {
+        var normalizer = this.configs[key].type;
+        if (typeof normalizer == 'function') {
+            //
+        } else if (normalizer && this.normalizers[normalizer]) {
+            normalizer = this.normalizers[normalizer];
+        }
+        if (normalizer) {
+            return normalizer(value);
+        } else {
+            return value;
+        }
+    },
+    validation: function(key, value) {
+        // ToDo
+        return true;
+    },
+    append: function(key, options) {
+        this.configs[key] = options;
     },
     clear: function(key) {
-        Config.set(key);
+        this.keyCheck(key);
+        key = this.PREFIX + key;
+        this.localStorage.removeItem(key);
+    },
+    clearALL: function() {
+        var self = this;
+        Object.keys(this.configs).forEach(function(key) {
+            self.clear(key);
+        });
+    },
+    addListener: function(key, func) {
+    },
+    removeListener: function(key) {
     },
     bind: function(key) {
+        var self = this;
         return {
             get: function() {
-                return Config.get(key);
+                return self.get(key);
             },
             set: function(val) {
-                return Config.set(key, val);
+                return self.set(key, val);
             },
             clear: function() {
-                return Config.clear(key);
+                return self.clear(key);
             }
         }
     }
 };
 
-Config.DEFAULT = {
-    'commentviewer.autoSize': true,
+/*
+Config.configs = {
+    'main.size.auto': {
+        default: 
+    },
+    'main.size.height': 500,
     'commentviewer.autoHideComment': true,
     'commentviewer.autoHideThreshold': 15,
     'input.confirmBookmark': false,
@@ -53,5 +120,6 @@ Config.DEFAULT = {
     'tags.complete.enabled': true,
     'tags.tagMaxResult': 10,
 }
+*/
 
 

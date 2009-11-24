@@ -161,6 +161,60 @@ test("jQuery classlike", function(d) {
     d.call();
 }, 4).
 
+test("Config", function(d) {
+    try {
+        Config.get('booltest');
+    } catch(e) {
+        ok(true, "Config.get('booltest') is 'undefined'");
+    }
+    Config.append('booltest', {
+        'default': true,
+        type: 'boolean'
+    });
+    Config.clearALL();
+
+    is(Config.get('booltest'), true);
+    Config.set('booltest', false);
+    is(Config.get('booltest'), false);
+    Config.set('booltest', 1);
+    is(Config.get('booltest'), true);
+    Config.set('booltest', '0');
+    is(Config.get('booltest'), false);
+
+    Config.clearALL();
+
+    Config.append('inttest', {
+        'default': 10,
+        type: 'int'
+    });
+    is(Config.get('inttest'), 10);
+    Config.set('inttest', '100px');
+    is(Config.get('inttest'), 100);
+
+    Config.append('uinttest', {
+        'default': 10,
+        type: 'unsignedInt'
+    });
+    Config.clearALL();
+
+    is(Config.get('uinttest'), 10);
+    Config.set('uinttest', '-100px');
+    is(Config.get('uinttest'), 0);
+
+    Config.append('number', {
+        'default': 3.333,
+        type: 'number'
+    });
+    Config.clearALL();
+
+    is(Config.get('number'), 3.333);
+    Config.set('number', '-100.01');
+    is(Config.get('number'), -100.01);
+
+
+    d.call();
+}).
+
 test("TagCompleter", function(d) {
     this.__defineGetter__('TestTags', function() {
         // 毎回生成する
