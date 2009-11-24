@@ -67,7 +67,7 @@
         "content/widget_embedder.js"
       ],
       "css": [
-        "css/hbookmark_embedded_widgets.css"
+        "content/widget_embedder.css"
       ],
       "matches": [
         "http://*/*",
