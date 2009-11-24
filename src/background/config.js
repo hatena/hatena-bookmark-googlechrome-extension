@@ -68,15 +68,25 @@ Config.View = {
         'popup.window.autosize' : function(key) {
             var val = Config.get(key);
             $("input.popup-input-size").each(function() {
-                if (!val) {
-                    this.setAttribute('disabled', val);
-                } else {
-                    this.removeAttribute('disabled', val);
-                }
+                var el = this;
+                setTimeout(function() {
+                    if (val) {
+                        el.setAttribute('disabled', true);
+                    } else {
+                        el.removeAttribute('disabled');
+                    }
+                }, 10);
             });
         }
     },
 
+}
+
+function resetAll() {
+    if (window.confirm('初期設定に戻します。よろしいですか？')) {
+        Config.clearALL();
+        location.reload();
+    }
 }
 
 $(document).ready(function() {

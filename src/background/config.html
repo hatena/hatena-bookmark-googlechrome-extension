@@ -14,7 +14,8 @@
 </head>
 <body style="display:none">
 <form onsubmit="update();return false;">
-  <h2>全般</h2>
+  <h1>設定</h1>
+  <span class="notice">※設定は自動で保存されます</span>
   <fieldset>
     <legend>ポップアップウィンドウのサイズ</legend>
     <input type="radio" value="1" id="popup.window.autosize-enable" name="popup.window.autosize"/>
@@ -25,5 +26,6 @@
     横: <input class="popup-input-size" type="text" id="popup.window.width" name="popup.window.width" />px
   </fieldset>
 </form>
+<input type="button" onclick="resetAll();" value="初期設定に戻す" />
 </body>
 </html>
