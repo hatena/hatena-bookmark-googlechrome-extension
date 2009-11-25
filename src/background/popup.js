@@ -489,14 +489,12 @@ var View = {
             });
 
             // debug
-            /*
             setTimeout(function() {
                 self.updatePageData({
                     'canonical': 'http://www.hatena.ne.jp/',
                     'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
                 });
             }, 100);
-            */
 
             if (!url || info.url.indexOf('http') != 0) {
                 this.form.hide();

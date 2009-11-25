@@ -87,6 +87,14 @@ a#users-count:visited {
   padding: 5px 10px 5px 10px;
   margin: 5px 3px 5px 3px;
   background-color: #FFF9C5;
+  border-radius: 6px;
+}
+
+#canonical-tips {
+  background-repeat: no-repeat;
+  background-position: left 5px;
+  background-image: url('/images/caution.png');
+  padding-left: 20px;
 }
 
 #header-left {
