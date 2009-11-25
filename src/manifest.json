@@ -39,6 +39,18 @@
   "content_scripts": [
     {
       "run_at": "document_end",
+      "all_frames": false,
+      "js": [
+        "content/bookmarkedit_bridge.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    },
+    {
+      "run_at": "document_end",
+      "all_frames": false,
       "js": [
         "content/login_check.js"
       ],
@@ -51,6 +63,7 @@
     },
     {
       "run_at": "document_end",
+      "all_frames": false,
       "js": [
         "content/logout.js"
       ],
@@ -63,6 +76,7 @@
     },
     {
       "run_at": "document_end",
+      "all_frames": false,
       "js": [
         "content/widget_embedder.js"
       ],

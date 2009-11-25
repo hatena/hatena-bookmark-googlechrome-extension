@@ -168,6 +168,38 @@ ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
     }
 });
 
+var bookmarkeditBridgePorts = {};
+ConnectMessenger.bind('bookmarkedit_bridge_set', function(event, data, port) {
+    var url = data.url;
+    var disconnectHandler = function() {
+        port.onDisconnect.removeListener(disconnectHandler);
+        delete bookmarkeditBridgePorts[url];
+    }
+    bookmarkeditBridgePorts[url] = port;
+    port.onDisconnect.addListener(disconnectHandler);
+});
+
+ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
+    console.log('!get' + data.url);
+    var url = data.url;
+    console.log(bookmarkeditBridgePorts);
+    var bridgePort = bookmarkeditBridgePorts[url];
+    if (bridgePort) {
+        bridgePort.onMessage.addListener(function(info, con) {
+            console.log('recieve');
+            if (info.message == 'bookmarkedit_bridge_recieve' && data.url == url) {
+                console.log('recieve!!');
+                console.log(data);
+            }
+        });
+
+        bridgePort.postMessage({
+            message: 'get',
+            data: {}
+        });
+    }
+});
+
 UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
 });
@@ -259,8 +291,10 @@ Model.Bookmark.afterSave = function() {
 // debug
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
+    url = '/background/popup.html?debug=1&url=' + encodeURIComponent(url);
+    var url = 'http://www.hatena.ne.jp/';
     chrome.tabs.create({
-        url: '/background/popup.html?debug=1&url=' + encodeURIComponent(url),
+        url: url,
     });
 }, 10);
 

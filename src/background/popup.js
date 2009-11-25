@@ -433,6 +433,14 @@ var View = {
 
             var url = info.url;
 
+            var port = chrome.extension.connect();
+            port.postMessage({
+                message: 'bookmarkedit_bridge_get',
+                data: {
+                    url: url,
+                }
+            });
+
             if (!url || info.url.indexOf('http') != 0) {
                 this.form.hide();
                 this.message.text('この URL ははてなブックマークに追加できません');
