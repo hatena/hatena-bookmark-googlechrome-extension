@@ -7,12 +7,9 @@ $.extend(SiteinfoManager, {
         self.updateTimer = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
     },
 
-    sendSiteinfoForURL: function SM_sendSiteinfoForURL(url, port) {
-        console.log('received siteinfo request for ' + url);
+    getSiteinfoForURL: function SM_getSiteinfoForURL(url) {
         var self = SiteinfoManager;
-        var result = null;
         var list = self.siteinfosList;
-        SEARCH:
         for (var i = 0; i < list.length; i++) {
             var siteinfos = list[i].data;
             for (var j = 0, n = siteinfos.length; j < n; j++) {
@@ -20,7 +17,8 @@ $.extend(SiteinfoManager, {
                 var pattern = siteinfo.domainPattern;
                 if (!pattern) {
                     try {
-                        pattern = siteinfo.domainPattern = new RegExp(siteinfo.domain);
+                        pattern = siteinfo.domainPattern =
+                            new RegExp(siteinfo.domain);
                     } catch (ex) {
                         siteinfos.splice(j, 1);
                         j--;
@@ -28,26 +26,36 @@ $.extend(SiteinfoManager, {
                         continue;
                     }
                 }
-                if (pattern.test(url)) {
-                    result = siteinfo;
-                    break SEARCH;
-                }
+                if (pattern.test(url))
+                    return siteinfo;
             }
         }
-        // console.log(result);
-        port.postMessage({ message: 'siteinfo_for_url', siteinfo: result });
+        return null;
+    },
+
+    getSiteinfosWithXPath: function SM_getSiteinfosWithXPath() {
+        var self = SiteinfoManager;
+        var a = [];
+        return a.concat.apply(a, self.siteinfosList.map(function (details) {
+            return details.xpathData || a;
+        }));
+    },
+
+    sendSiteinfoForURL: function SM_sendSiteinfoForURL(url, port) {
+        console.log('received siteinfo request for ' + url);
+        var self = SiteinfoManager;
+        port.postMessage({
+            message: 'siteinfo_for_url',
+            siteinfo: self.getSiteinfoForURL(url),
+        });
     },
 
     sendSiteinfosWithXPath: function SM_sendSiteinfosWithXPath(port) {
         var self = SiteinfoManager;
-        var result = [];
-        var list = self.siteinfosList;
-        for (var i = 0; i < list.length; i++) {
-            var details = list[i];
-            if (details.xpathData)
-                result = result.concat(details.xpathData);
-        }
-        port.postMessage({ message: 'siteinfos_with_xpath', siteinfos: result });
+        port.postMessage({
+            message: 'siteinfos_with_xpath',
+            siteinfos: self.getSiteinfosWithXPath(),
+        });
     },
 
     siteinfosList: [],

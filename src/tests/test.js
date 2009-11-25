@@ -622,6 +622,73 @@ test('HTTPCache(s)', function(d) {
     ]) }).next(function() { d.call(); });
 }, 12, 1000).
 
+test('SiteinfoManager', function(d) {
+    SiteinfoManager.storage = {};
+    var data = [
+        { domain: '^http://example\\.org/',
+          paragraph: '//p',
+          link: 'a' },
+        { domain: '^http://([\\w-]+\\.)+example\\.org/',
+          paragraph: '//div',
+          link: 'descendant::a[@href]' },
+    ];
+    SiteinfoManager.addSiteinfos({ data: data });
+    var siteinfo = SiteinfoManager.getSiteinfoForURL('http://foo.example.org/bar');
+    equals(siteinfo.domain, data[1].domain, 'get siteinfo')
+    equals(SiteinfoManager.getSiteinfosWithXPath.length, 0, 'get siteinfos with XPath');
+    d.call();
+}, 2, 1000).
+
+test('SiteinfoManager.LDRizeConverter', function(d) {
+    var originalData = [
+        { domain: '^http://example\\.org/',
+          paragraph: '//p',
+          link: 'a[@href]' },
+        { domain: '//div[@class="page_with_characteristic_structure"]',
+          paragraph: '//div[@class="paragraph"]',
+          link: 'h2/a' },
+    ];
+    var details = {
+        data: originalData.map(function (d) { return { data: d }; }),
+    };
+    var data = SiteinfoManager.LDRizeConverter.convert(details.data, details);
+    equals(data.length, 1, 'length of converted data');
+    equals(data[0].domain, originalData[0].domain, 'converted data');
+    equals(details.xpathData.length, 1, 'length of data with XPath');
+    equals(details.xpathData[0].domain, originalData[1].domain, 'data with XPath');
+
+    details.data = data;
+    SiteinfoManager.addSiteinfos(details);
+    var siteinfos = SiteinfoManager.getSiteinfosWithXPath();
+    equals(siteinfos.length, 1, 'length of siteinfos with XPath');
+    equals(siteinfos[0].domain, originalData[1].domain, 'siteinfos with XPath');
+    d.call();
+}, 6, 1000).
+
+test('SiteinfoManager.SiteconfigConverter', function(d) {
+    var originalData = {
+        'www.example.org': [
+            {
+                path: '^/',
+                entryNodes: {
+                    'body': {
+                        uri: 'window.location',
+                        title: 'a',
+                        container: 'p:nth-child(2)'
+                    }
+                }
+            },
+        ]
+    };
+    var data = SiteinfoManager.SiteconfigConverter.convert(originalData);
+    equals(data.length, 1, 'length of converted data');
+    equals(data[0].domain, '^https?://www\\.example\\.org/', 'converted domain');
+    equals(data[0].paragraph, 'descendant::body', 'converted paragraph');
+    equals(data[0].link, '__location__', 'converted link');
+    equals(data[0].annotation, 'descendant::p[count(preceding-sibling::*) = 1]', 'converted annotation');
+    d.call();
+}, 5, 1000).
+
 test('Model Bookmark/Tag', function(d) {
     var db = new Database('testModelBookmarkTag');
     Model.getDatabase = function() { return db };
