@@ -88,16 +88,6 @@ a#users-count:visited {
 ul.tab-ui li {
   font-weight: bold;
   display: inline-block;
-    background: -webkit-gradient(
-    linear, 
-    left top, 
-    left bottom, 
-    from(#5e94d6), 
-    to(#2260aa), 
-    color-stop(0.5, #427DC4), 
-    color-stop(0.5, #2C6EBD)
-    );
-
   padding: 4px 6px;
   margin: 0px;
   -webkit-border-radius: 4px;
@@ -105,6 +95,11 @@ ul.tab-ui li {
   color: rgba(255,255,255,0.8);
   border: 1px solid #427DC4;
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+
+ul.tab-ui li:hover {
+  background: rgba(255,225,255,0.1);
+  border: 1px solid #427DC4;
 }
 
 ul.tab-ui li.tab-link {

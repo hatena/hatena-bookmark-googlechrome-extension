@@ -2,10 +2,82 @@
 /*
  */
 body {
-  font-size: 87%;
   font-family: Helvetica, Arial, sans-serif;
-  margin: 10px;
-  min-width: 47em;
+  margin: 0px;
+  padding: 0;
+  font-size: 90%;
+  width: 100%;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 160%;
+  background: 
+  padding-left: 37px;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+    background:
+    -webkit-gradient(
+    linear, 
+    left top, 
+    left bottom, 
+    from(#427DC4), 
+    to(#2C6EBD), 
+    color-stop(0.5, #427DC4), 
+    color-stop(0.5, #2C6EBD)
+    );
+    border-bottom: 1px solid #bbb;
+    -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+    -webkit-border-bottom-left-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    padding: 5px;
 }
 
 
+fieldset {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+}
+
+table {
+  margin: 0 10px;
+  padding: 5px;
+  border-collapse: collapse;
+  border-top:  1px solid #D6E0F2;
+}
+
+tr {
+}
+
+th,td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #D6E0F2;
+  vertical-align: top;
+}
+
+th {
+  text-align: left;
+  font-weight: bold;
+  background: #F7F9FD;
+  white-space: nowrap;
+  width: 1%;
+}
+
+td {
+}
+
+div.notice {
+  text-align: right;
+  font-size: 80%;
+  color: #999;
+  padding: 5px;
+}
+
+
+input[type='text'] {
+  width: 2em;
+  text-align: right;
+}
