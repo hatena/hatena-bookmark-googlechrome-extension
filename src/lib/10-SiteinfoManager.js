@@ -52,8 +52,21 @@ $.extend(SiteinfoManager, {
 
     siteinfosList: [],
 
+    CACHE_KEY_PREFIX: 'SiteinfoCache.',
+
     addSiteinfos: function SM_addSiteinfos(details) {
         var self = SiteinfoManager;
+        if (details.key) {
+            var cache = localStorage[self.CACHE_KEY_PREFIX + details.key];
+            if (cache) {
+                cache = JSON.parse(cache);
+                details.data = cache.data;
+                details.lastUpdated = cache.lastUpdated;
+                if (cache.xpathData)
+                    details.xpathData = cache.xpathData;
+                console.log('load siteinfo from cache ' + details.key);
+            }
+        }
         if (!details.data)
             details.data = [];
         self.siteinfosList.push(details);
@@ -87,6 +100,10 @@ $.extend(SiteinfoManager, {
                 data = details.converter.convert(data, details);
             details.data = data;
             details.lastUpdated = Date.now();
+            if (details.key) {
+                localStorage[self.CACHE_KEY_PREFIX + details.key] =
+                    JSON.stringify(details);
+            }
         }).error(function () {
             details.isLoading = false;
             if (urls.length)
@@ -235,6 +252,7 @@ SiteinfoManager.addSiteinfos({
         'http://b.st-hatena.com/file/HatenaBookmarkUsersCount.items.json',
     ],
     converter: SiteinfoManager.LDRizeConverter,
+    key: 'HatenaBookmarkUsersCount',
 });
 
 
@@ -245,6 +263,7 @@ SiteinfoManager.addSiteinfos({
         'http://b.st-hatena.com/file/LDRize.items.json',
     ],
     converter: SiteinfoManager.LDRizeConverter,
+    key: 'LDRizeSiteinfo',
 });
 
 SiteinfoManager.addSiteinfos({
@@ -252,6 +271,7 @@ SiteinfoManager.addSiteinfos({
         'http://s.hatena.ne.jp/siteconfig.json',
     ],
     converter: SiteinfoManager.SiteconfigConverter,
+    key: 'HatenaStarSiteConfig',
 });
 
 
