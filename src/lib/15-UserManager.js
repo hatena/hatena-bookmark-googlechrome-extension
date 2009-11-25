@@ -97,6 +97,11 @@ User.prototype = {
         }
         return null;
     },
+    resetDatabase: function() {
+        Model.initialize(true).next(function() {
+            Sync.sync();
+        });
+    },
     hasBookmark: function user_hasBookmark(url) {
         return Model.Bookmark.findByUrl(url).next(function(res) {
             return (res ? true : false);
@@ -106,8 +111,8 @@ User.prototype = {
         return B_HTTP + this.name + '/' + (path || '');
     },
     get database() {
-        return new Database('hatenabookmark22-' + this.name, {
-            estimatedSize: 50 * 1024
+        return new Database('hatenabookmark-' + this.name, {
+            estimatedSize: 50 * 1024 * 1024
         });
         /*
         return new Database('hatenabookmark2-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
