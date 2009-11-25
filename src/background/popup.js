@@ -178,12 +178,15 @@ var View = {
         get container() { return $('#search-container'); },
         get list() { return $('#search-result'); },
         get tab() { return $('#search-tab'); },
+        get searchWord() { return $('#search-word'); },
         get wordPreview() { return $('#search-word-preview'); },
         get totalCount() { return $('#search-total-count'); },
         init: function() {
         },
         search: function(word) {
             Config.set('popup.search.lastWord', word);
+            this.searchWord.focus();
+
             document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
             ViewManager.show('search');
             var list = this.list;
@@ -655,7 +658,7 @@ if (popupMode) {
 
 
 var ready = function() {
-    if (true || window.popupMode) {
+    if (window.popupMode) {
         document.body.style.width = '' + Config.get('popup.window.width') + 'px';
         document.getElementById('search-container').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
         document.getElementById('comment-list').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
