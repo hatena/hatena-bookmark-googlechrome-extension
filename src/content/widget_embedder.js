@@ -328,4 +328,5 @@ function getEntryURL(url) {
 }
 
 
-SiteinfoRequestor.init();
+if (window.top == window.self)
+    SiteinfoRequestor.init();
