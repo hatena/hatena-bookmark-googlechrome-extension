@@ -184,6 +184,11 @@ var View = {
         init: function() {
         },
         search: function(word) {
+            if (!UserManager.user) {
+                this.container.hide();
+                $('#login-container').show();
+                return;
+            }
             Config.set('popup.search.lastWord', word);
             this.searchWord.focus();
 
@@ -376,22 +381,59 @@ var View = {
         }
     },
     bookmark: {
-        get confirmBookmark() { return $('#confirm-bookmark'); },
-        get container() { return $('#bookmark-container'); },
-        get tab() { return $('#bookmark-tab'); },
-        get usericon() { return $('#usericon') },
-        get usernameEL() { return $('#username') },
-        get plusInputs() { return $('#plus-inputs') },
-        get titleText() { return $('#title-text') },
-        get faviconEL() { return $('#favicon') },
-        get form() { return $('#form') },
-        get message() { return $('#bookmark-message') },
-        get commentEL() { return $('#comment') },
-        get allTagsContainer() { return $('#all-tags-container') },
-        get allTags() { return $('#all-tags') },
+        get confirmBookmark()        { return $('#confirm-bookmark'); },
+        get container()              { return $('#bookmark-container'); },
+        get tab()                    { return $('#bookmark-tab'); },
+        get usericon()               { return $('#usericon') },
+        get usernameEL()             { return $('#username') },
+        get plusInputs()             { return $('#plus-inputs') },
+        get titleText()              { return $('#title-text') },
+        get faviconEL()              { return $('#favicon') },
+        get form()                   { return $('#form') },
+        get message()                { return $('#bookmark-message') },
+        get commentEL()              { return $('#comment') },
+        get allTagsContainer()       { return $('#all-tags-container') },
+        get allTags()                { return $('#all-tags') },
         get recommendTagsContainer() { return $('#recommend-tags-container') },
-        get recommendTags() { return $('#recommend-tags') },
-        get typeCount() { return $('#type-count') },
+        get recommendTags()          { return $('#recommend-tags') },
+        get typeCount()              { return $('#type-count') },
+        get port() {
+            if (!this._port) {
+                var self = this;
+                var _port = chrome.extension.connect();
+                _port.onMessage.addListener(function(info, con) {
+                    if (info.message == 'bookmarkedit_bridge_recieve')
+                        self.updatePageData(info.data);
+                });
+                this._port = _port;
+            }
+            return this._port;
+        },
+        updatePageData: function(data) {
+            if (data.images) {
+                this.setImages(data.images);
+            }
+            if (data.canonical) {
+                this.setCanonical(data.canonical);
+            }
+            if (data.title) {
+                this.setTitle(data.title);
+            }
+        },
+        setImages: function() {
+        },
+        setCanonical: function(url) {
+            $('#link-canonical').attr('href', url).text(Utils.truncate(url, 40)).attr('title', url);
+            $('#canonical-users').empty().attr('href', Utils.entryURL(url)).append(
+                $('<img/>').attr('src', Utils.entryImage(url))
+            );
+            $('#bookmark-canonical').show();
+        },
+        canonicalClick: function() {
+            this.loadByInformation({
+                url: $('#link-canonical').attr('href')
+            });
+        },
         init: function() {
             var user = UserManager.user;
             if (!UserManager.user) {
@@ -417,8 +459,10 @@ var View = {
             }
             var self = this;
             this.lastLoadedURL = info.url;
-            if (!this.defaultHTML)
+            if (!this.defaultHTML) {
                 this.defaultHTML = this.container.get(0).cloneNode(true);
+                this.titleLoaded = false;
+            }
 
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
@@ -428,18 +472,31 @@ var View = {
             } else {
                 this.plusInputs.remove();
             }
-            this.setTitle(info.title || info.url);
+            if (info.title) {
+                this.setTitle(info.title);
+            } else {
+                this.setTitleByURL(info.url);
+            }
             this.faviconEL.attr('src', info.faviconUrl);
 
             var url = info.url;
 
-            var port = chrome.extension.connect();
-            port.postMessage({
+            this.port.postMessage({
                 message: 'bookmarkedit_bridge_get',
                 data: {
                     url: url,
                 }
             });
+
+            // debug
+            /*
+            setTimeout(function() {
+                self.updatePageData({
+                    'canonical': 'http://www.hatena.ne.jp/',
+                    'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
+                });
+            }, 100);
+            */
 
             if (!url || info.url.indexOf('http') != 0) {
                 this.form.hide();
@@ -578,9 +635,7 @@ var View = {
 
         setURL: function(url) {
             $('#input-url').attr('value', url);
-            $('#url').text(Utils.truncate(url, 60));
-            $('#url').attr('title', url);
-            $('#url').attr('href', url);
+            $('#url').text(Utils.truncate(url, 50)).attr('title', url).attr('href', url);
 
             if (!$('#favicon').attr('src')) {
                 var favicon= new URI('http://favicon.st-hatena.com');
@@ -589,14 +644,22 @@ var View = {
             }
         },
 
-        setTitle: function(title) {
-            this.titleText.text(Utils.truncate(title, 60));
+        setTitle: function(title, force) {
+            if (force || !this.titleLoaded) {
+                this.titleText.text(Utils.truncate(title, 60));
+                this.titleText.attr('title', title);
+            }
+            this.titleLoaded = true;
+        },
+
+        setTitleByURL: function(title) {
+            this.titleText.text(Utils.truncate(title, 70));
             this.titleText.attr('title', title);
         },
 
         setEntry: function(entry) {
             $('body').removeClass('data-loading');
-            if (entry.title) this.setTitle(entry.title);
+            if (entry.title) this.setTitle(entry.title, true);
             this.setURL(entry.original_url);
             if (Config.get('popup.tags.recommendTags.enabled'))
                 this.setRecomendTags(entry.recommend_tags);
@@ -635,6 +698,7 @@ var View = {
 
 var ViewManager = {
     show: function (name) {
+        $('#login-container').hide();
         Object.keys(View).forEach(function(key) {
             if (key != name) {
                 var current = View[key];

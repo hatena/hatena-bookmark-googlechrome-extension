@@ -40,26 +40,27 @@
     </div>
   </div>
 
-<div id="bookmark-container">
-  <div id="login-container">
-    <div id="bookmark-login-header">
-      ログインしていません
-    </div>
-    <div id="bookmark-register">
-      <p class="center">
-      はてなブックマーク拡張のセットアップをしましょう。<br />
-      <a href="https://www.hatena.ne.jp/register?via=200041&location=http%3A%2F%2Fb.hatena.ne.jp%2Fguide%2Ffirefox_start_2"><img src="/images/step1_register_button.gif"></a>
-      <br />
-      すでにユーザー登録がお済みの場合は<a href="http://www.hatena.ne.jp/login">こちらからログイン</a>して下さい 
-      </p>
-
-      <p id="bookmark-register-intro">
-      <span class="image"><img src="/images/register-title.png" alt="" /></span>
-      はてなブックマークはオンラインでブックマークを保存・管理・共有できる、オンラインブックマークサービスです。自宅のブラウザに保存するだけだったブックマークを、インターネット上に保存して管理・公開することができます。
-      <span class="more"><a href="http://b.hatena.ne.jp/guide">もっとくわしく</a></span>
-      </p>
-    </div>
+<div id="login-container">
+  <div id="bookmark-login-header">
+    ログインしていません
   </div>
+  <div id="bookmark-register">
+    <p class="center">
+    はてなブックマークに追加するには、はてなへのユーザ登録(無料)が必要です。<br /><br />
+    <a id="register-link" href="https://www.hatena.ne.jp/register?via=200048&location=http%3A%2F%2Fb.hatena.ne.jp%2Fguide%2Fchrome_register"><img src="/images/step1_register_button.gif"></a>
+    <br /><br />
+    すでにユーザー登録がお済みの場合は<a href="http://www.hatena.ne.jp/login?location=http%3A%2F%2Fb.hatena.ne.jp%2Fguide%2Fchrome_logined">こちらからログイン</a>して下さい
+    </p>
+
+    <p id="bookmark-register-intro">
+    <span class="image"><img src="/images/register-title.png" alt="" /></span>
+    はてなブックマークはオンラインでブックマークを保存・管理・共有できる、オンラインブックマークサービスです。自宅のブラウザに保存するだけだったブックマークを、インターネット上に保存して管理・公開することができます。
+    <span class="more"><a href="http://b.hatena.ne.jp/guide?via=200048">もっとくわしく</a></span>
+    </p>
+  </div>
+</div>
+
+<div id="bookmark-container">
   <div id="bookmark-edit-container">
     <div id="bookmark-edit-header">
       <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
@@ -68,6 +69,14 @@
       </div>
     </div>
     <div id="bookmark-message" class="none"></div>
+    <div id="bookmark-canonical" class="none">
+      <div class="table-row">
+         <div class="table-left">このページには別のURLが提示されています。</div><div class="table-right"><input type="button" onclick="View.bookmark.canonicalClick();" value=" 以下の URL に変更 " /></div>
+      </div>
+      <div class="table-row">
+        <div class="table-left"><a id="link-canonical"></a></div><div class="table-right"><img src="/images/page.gif"> <a id="canonical-users"></a></div>
+      </div>
+    </div>
     <div id="bookmarked-notice" class="none"></div>
     <form id="form">
     <div id="edit">

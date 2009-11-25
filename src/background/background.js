@@ -186,10 +186,12 @@ ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
     var bridgePort = bookmarkeditBridgePorts[url];
     if (bridgePort) {
         bridgePort.onMessage.addListener(function(info, con) {
-            console.log('recieve');
             if (info.message == 'bookmarkedit_bridge_recieve' && data.url == url) {
                 console.log('recieve!!');
-                console.log(data);
+                port.postMessage({
+                    message: info.message,
+                    data: info.data
+                });
             }
         });
 
@@ -292,7 +294,7 @@ Model.Bookmark.afterSave = function() {
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
     url = '/background/popup.html?debug=1&url=' + encodeURIComponent(url);
-    var url = 'http://www.hatena.ne.jp/';
+    // var url = 'http://www.hatena.ne.jp/';
     chrome.tabs.create({
         url: url,
     });

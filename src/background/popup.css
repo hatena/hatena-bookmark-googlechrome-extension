@@ -70,6 +70,25 @@ a#users-count:visited {
     -webkit-border-top-right-radius: 4px;
 }
 
+.table {
+  display: table;
+}
+
+.table-left {
+  display: table-cell;
+  width: 100%;
+}
+
+.table-right {
+  display: table-cell;
+}
+
+#bookmark-canonical {
+  padding: 5px 10px 5px 10px;
+  margin: 5px 3px 5px 3px;
+  background-color: #FFF9C5;
+}
+
 #header-left {
   display: table-cell;
   width: 100%;
@@ -487,6 +506,7 @@ dd#all-tags {
   text-decoration: underline;
   cursor:pointer;
 }
+
 
 #login-container,
 #bookmark-container,

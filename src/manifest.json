@@ -55,6 +55,8 @@
         "content/login_check.js"
       ],
       "matches": [
+        "http://b.hatena.ne.jp/guide/chrome_register",
+        "http://b.hatena.ne.jp/guide/chrome_register*",
         "http://www.hatena.ne.jp/login",
         "https://www.hatena.ne.jp/login",
         "http://www.hatena.ne.jp/login*",

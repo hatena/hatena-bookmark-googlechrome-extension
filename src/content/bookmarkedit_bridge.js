@@ -21,10 +21,19 @@ function onMessage(info) {
     if (images && images.length)
         data.images = images;
 
+    var title = getTitle();
+    if (title) data.title = title;
+
     port.postMessage({
         message: 'bookmarkedit_bridge_recieve',
         data: data,
     });
+}
+
+function getTitle() {
+    var title = document.querySelector('title');
+    if (title && title.textContent) return title.textContent;
+    return null;
 }
 
 function getCannonical() {
