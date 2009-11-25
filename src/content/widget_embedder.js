@@ -71,7 +71,23 @@ function WidgetEmbedder(siteinfo) {
 extend(WidgetEmbedder, {
     INITIAL_DELAY:   30,
     MUTATION_DELAY: 200,
+
+    locales: {
+        en: {
+            COUNTER_TEXT: '[Show on Hatena Bookmark]',
+            COUNTER_TITLE: 'Show This Entry on Hatena Bookmark',
+        },
+        ja: {
+            COUNTER_TEXT: '[はてなブックマークで表示]',
+            COUNTER_TITLE: 'このエントリーをはてなブックマークで表示',
+        },
+    },
 });
+
+WidgetEmbedder.messages =
+    WidgetEmbedder.locales[navigator.language] ||
+    WidgetEmbedder.locales[navigator.language.substring(0, 2)] ||
+    WidgetEmbedder.locales['en'];
 
 extend(WidgetEmbedder.prototype, {
     embedLater: function WE_embedLater(delay) {
@@ -214,12 +230,13 @@ extend(WidgetEmbedder.prototype, {
         var sharpEscapedURL = url.replace(/#/g, '%23');
         var img = E('img', {
             src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL,
-            alt: '',
+            alt: WidgetEmbedder.messages.COUNTER_TEXT,
             style: 'display: none;',
         });
         img.addEventListener('load', this._onImageLoad, false);
         widgets.appendChild(E('a', {
             href: getEntryURL(url),
+            title: WidgetEmbedder.messages.COUNTER_TITLE,
             'class': 'hBookmark-widget-counter'
         }, img));
         return widgets;
