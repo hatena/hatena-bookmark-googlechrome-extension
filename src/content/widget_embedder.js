@@ -24,13 +24,13 @@ var SiteinfoRequestor = {
 
     onMessage: function SR_onMessage(info) {
         var self = SiteinfoRequestor;
-        if ('siteinfo' in info) {
+        switch (info.message) {
+        case 'siteinfo_for_url':
             self.onGotSiteinfo(info.siteinfo);
-            return;
-        }
-        if ('siteinfos' in info) {
+            break;
+        case 'siteinfos_with_xpath':
             self.onGotXPathSiteinfos(info.siteinfos);
-            return;
+            break;
         }
     },
 

@@ -4,7 +4,7 @@ $.extend(SiteinfoManager, {
     init: function SM_init() {
         // console.log('SiteinfoManager loaded');
         var self = SiteinfoManager;
-        self.timerId = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
+        self.updateTimer = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
     },
 
     sendSiteinfoForURL: function SM_sendSiteinfoForURL(url, port) {
@@ -35,7 +35,7 @@ $.extend(SiteinfoManager, {
             }
         }
         // console.log(result);
-        port.postMessage({ siteinfo: result });
+        port.postMessage({ message: 'siteinfo_for_url', siteinfo: result });
     },
 
     sendSiteinfosWithXPath: function SM_sendSiteinfosWithXPath(port) {
@@ -47,7 +47,7 @@ $.extend(SiteinfoManager, {
             if (details.xpathData)
                 result = result.concat(details.xpathData);
         }
-        port.postMessage({ siteinfos: result });
+        port.postMessage({ message: 'siteinfos_with_xpath', siteinfos: result });
     },
 
     siteinfosList: [],
