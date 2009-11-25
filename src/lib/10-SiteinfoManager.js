@@ -68,6 +68,7 @@ $.extend(SiteinfoManager, {
         if (details.key) {
             var cache = self.storage[self.CACHE_KEY_PREFIX + details.key];
             if (cache) {
+                console.log(details.key + ' cache size: ' + cache.length);
                 cache = JSON.parse(cache);
                 details.data = cache.data;
                 details.lastUpdated = cache.lastUpdated;
