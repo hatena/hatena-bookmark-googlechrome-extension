@@ -420,7 +420,46 @@ var View = {
                 this.setTitle(data.title);
             }
         },
-        setImages: function() {
+        setImages: function(images) {
+            if (this.images) {
+                this.images = this.images.concat(images);
+            } else {
+                this.images = images;
+            }
+            $('#image-table-container').show();
+        },
+        imageDetectClose: function() {
+            $('#image-detect-container').hide();
+        },
+        imageSelect: function(img) {
+            this.updateCurrentImage(img.src);
+            this.imageDetectClose();
+        },
+        updateCurrentImage: function(src) {
+            $('#current-image').attr('src', src);
+        },
+        imageDetect: function() {
+            var images = this.images;
+            if (images && images.length) {
+                images = $.unique(images.concat(['/images/noimages.png']));
+                var list = $('#image-detect-container-list').empty();
+                images.forEach(function(image) {
+                    list.append($('<img/>').attr('src', image));
+                });
+                $('#image-detect-container').show();
+            }
+        },
+        setCurrentImage: function(url, lastEditor) {
+            $('#current-image').attr('src', url);
+            if (this.images) {
+                this.images.push(url);
+            } else {
+                this.images = [url];
+            }
+            if (lastEditor) {
+                $('#image-detect-notice-user-container').text('最終変更: ').append(createUserLink(lastEditor)).
+                show();
+            }
         },
         setCanonical: function(url) {
             $('#link-canonical').attr('href', url).text(Utils.truncate(url, 40)).attr('title', url);
@@ -461,6 +500,9 @@ var View = {
             this.lastLoadedURL = info.url;
             if (!this.defaultHTML) {
                 this.defaultHTML = this.container.get(0).cloneNode(true);
+                this.images = null;
+                this.selectedImage = null;
+                this.currentEntry = null;
                 this.titleLoaded = false;
             }
 
@@ -492,7 +534,7 @@ var View = {
             setTimeout(function() {
                 self.updatePageData({
                     'canonical': 'http://www.hatena.ne.jp/',
-                    'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
+                    'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
                 });
             }, 100);
 
@@ -656,6 +698,7 @@ var View = {
         },
 
         setEntry: function(entry) {
+            this.currentEntry = entry;
             $('body').removeClass('data-loading');
             if (entry.title) this.setTitle(entry.title, true);
             this.setURL(entry.original_url);
@@ -667,6 +710,9 @@ var View = {
                 uc.text(String(count) + (count == 1 ? ' user' : ' users'));
                 uc.attr('href', entry.entry_url);
                 $('#users-count-container').removeClass('none');
+            }
+            if (entry.image_url) {
+                this.setCurrentImage(entry.image_url, entry.image_last_editor);
             }
             if (entry.favorites && entry.favorites.length) {
                 var f = $('#favorites');
@@ -693,6 +739,20 @@ var View = {
         },
     }
 };
+
+function createUserLink(username) {
+    var permalink = sprintf("http://b.hatena.ne.jp/%s/", username);
+    return Utils.createElementFromString(
+        '<span><img class="usericon" title="#{title}" alt="#{title}" src="#{icon}" /> <a href="#{permalink}">#{username}</a></span>',
+    {
+        data: {
+            permalink: permalink,
+            icon: User.View.prototype.getProfileIcon(username),
+            username: username,
+            title: username
+        }
+    });
+}
 
 var ViewManager = {
     show: function (name) {
@@ -750,6 +810,9 @@ var ready = function() {
     if (Config.get('popup.search.incsearch')) {
         $('#search-word').bind('keyup', searchIncSearchHandler);
     }
+    $('#image-detect-container-list img').live('click', function() {
+        View.bookmark.imageSelect(this);
+    });
     $('a').live('click', function() {
         this.target = '_blank';
     });

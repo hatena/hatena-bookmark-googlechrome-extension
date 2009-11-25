@@ -83,9 +83,11 @@ a#users-count:visited {
   display: table-cell;
 }
 
-.noimage {
+#current-image {
   background-color: #EEE;
   padding: 3px;
+  width: 50px;
+  height: 50px;
 }
 
 #image-container {
@@ -96,7 +98,38 @@ a#users-count:visited {
   background-color: #EEE;
   border: 1px solid #BBB;
   padding: 3px;
+  cursor: pointer;
 }
+
+#image-detect-container {
+  position: fixed;
+  right:0px;
+  margin-right: 20px;
+  margin-top: 50px;
+  max-width: 340px;
+  background-color: #FFF;
+  border: 1px solid #777;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+}
+
+#image-detect-container-list {
+}
+
+#image-detect-container-list img {
+  max-width: 50px;
+  max-height: 50px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#image-detect-notice {
+  color: #333;
+  background-color: #EEE;
+  border-top: 1px solid #AAA;
+  padding: 3px;
+  padding-left: 5px;
+}
+
 
 #bookmark-canonical {
   padding: 5px 10px 5px 10px;
