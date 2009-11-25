@@ -4,15 +4,12 @@ $.extend(SiteinfoManager, {
     init: function SM_init() {
         // console.log('SiteinfoManager loaded');
         var self = SiteinfoManager;
-        self.timerId = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
+        self.updateTimer = setInterval(self.updateSiteinfos, 10 * 60 * 1000);
     },
 
-    sendSiteinfoForURL: function SM_sendSiteinfoForURL(url, port) {
-        console.log('received siteinfo request for ' + url);
+    getSiteinfoForURL: function SM_getSiteinfoForURL(url) {
         var self = SiteinfoManager;
-        var result = null;
         var list = self.siteinfosList;
-        SEARCH:
         for (var i = 0; i < list.length; i++) {
             var siteinfos = list[i].data;
             for (var j = 0, n = siteinfos.length; j < n; j++) {
@@ -20,7 +17,8 @@ $.extend(SiteinfoManager, {
                 var pattern = siteinfo.domainPattern;
                 if (!pattern) {
                     try {
-                        pattern = siteinfo.domainPattern = new RegExp(siteinfo.domain);
+                        pattern = siteinfo.domainPattern =
+                            new RegExp(siteinfo.domain);
                     } catch (ex) {
                         siteinfos.splice(j, 1);
                         j--;
@@ -28,32 +26,57 @@ $.extend(SiteinfoManager, {
                         continue;
                     }
                 }
-                if (pattern.test(url)) {
-                    result = siteinfo;
-                    break SEARCH;
-                }
+                if (pattern.test(url))
+                    return siteinfo;
             }
         }
-        // console.log(result);
-        port.postMessage({ siteinfo: result });
+        return null;
+    },
+
+    getSiteinfosWithXPath: function SM_getSiteinfosWithXPath() {
+        var self = SiteinfoManager;
+        var a = [];
+        return a.concat.apply(a, self.siteinfosList.map(function (details) {
+            return details.xpathData || a;
+        }));
+    },
+
+    sendSiteinfoForURL: function SM_sendSiteinfoForURL(url, port) {
+        console.log('received siteinfo request for ' + url);
+        var self = SiteinfoManager;
+        port.postMessage({
+            message: 'siteinfo_for_url',
+            siteinfo: self.getSiteinfoForURL(url),
+        });
     },
 
     sendSiteinfosWithXPath: function SM_sendSiteinfosWithXPath(port) {
         var self = SiteinfoManager;
-        var result = [];
-        var list = self.siteinfosList;
-        for (var i = 0; i < list.length; i++) {
-            var details = list[i];
-            if (details.xpathData)
-                result = result.concat(details.xpathData);
-        }
-        port.postMessage({ siteinfos: result });
+        port.postMessage({
+            message: 'siteinfos_with_xpath',
+            siteinfos: self.getSiteinfosWithXPath(),
+        });
     },
 
     siteinfosList: [],
+    storage: localStorage,
+
+    CACHE_KEY_PREFIX: 'SiteinfoCache.',
 
     addSiteinfos: function SM_addSiteinfos(details) {
         var self = SiteinfoManager;
+        if (details.key) {
+            var cache = self.storage[self.CACHE_KEY_PREFIX + details.key];
+            if (cache) {
+                console.log(details.key + ' cache size: ' + cache.length);
+                cache = JSON.parse(cache);
+                details.data = cache.data;
+                details.lastUpdated = cache.lastUpdated;
+                if (cache.xpathData)
+                    details.xpathData = cache.xpathData;
+                console.log('load siteinfo from cache ' + details.key);
+            }
+        }
         if (!details.data)
             details.data = [];
         self.siteinfosList.push(details);
@@ -87,6 +110,10 @@ $.extend(SiteinfoManager, {
                 data = details.converter.convert(data, details);
             details.data = data;
             details.lastUpdated = Date.now();
+            if (details.key) {
+                self.storage[self.CACHE_KEY_PREFIX + details.key] =
+                    JSON.stringify(details);
+            }
         }).error(function () {
             details.isLoading = false;
             if (urls.length)
@@ -211,48 +238,6 @@ SiteinfoManager.SiteconfigConverter = {
         }
     },
 };
-
-
-SiteinfoManager.addSiteinfos({
-    data: [
-        { // Google Web Search
-            domain:     '^http://www\\.google(?:\\.\\w+){1,2}/search\\?',
-            paragraph:  'descendant::div[@id = "res"]/div/ol/li[contains(concat(" ", @class, " "), " g ")]',
-            link:       'descendant::a[contains(concat(" ", @class, " "), " l ")]',
-            annotation: 'descendant::span[contains(concat(" ", @class, " "), " gl ")]',
-            annotationPosition: 'after',
-        },
-        {
-            domain:  '^http://b\\.hatena\\.ne\\.jp/',
-            disable: true,
-        },
-    ],
-});
-
-SiteinfoManager.addSiteinfos({
-    urls: [
-        'http://wedata.net/databases/HatenaBookmarkUsersCount/items.json',
-        'http://b.st-hatena.com/file/HatenaBookmarkUsersCount.items.json',
-    ],
-    converter: SiteinfoManager.LDRizeConverter,
-});
-
-
-
-SiteinfoManager.addSiteinfos({
-    urls: [
-        'http://wedata.net/databases/LDRize/items.json',
-        'http://b.st-hatena.com/file/LDRize.items.json',
-    ],
-    converter: SiteinfoManager.LDRizeConverter,
-});
-
-SiteinfoManager.addSiteinfos({
-    urls: [
-        'http://s.hatena.ne.jp/siteconfig.json',
-    ],
-    converter: SiteinfoManager.SiteconfigConverter,
-});
 
 
 SiteinfoManager.init();

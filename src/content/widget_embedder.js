@@ -24,13 +24,13 @@ var SiteinfoRequestor = {
 
     onMessage: function SR_onMessage(info) {
         var self = SiteinfoRequestor;
-        if ('siteinfo' in info) {
+        switch (info.message) {
+        case 'siteinfo_for_url':
             self.onGotSiteinfo(info.siteinfo);
-            return;
-        }
-        if ('siteinfos' in info) {
+            break;
+        case 'siteinfos_with_xpath':
             self.onGotXPathSiteinfos(info.siteinfos);
-            return;
+            break;
         }
     },
 
@@ -69,9 +69,25 @@ function WidgetEmbedder(siteinfo) {
 }
 
 extend(WidgetEmbedder, {
-    INITIAL_DELAY:   30,
-    MUTATION_DELAY: 200,
+    INITIAL_DELAY:   20,
+    MUTATION_DELAY: 100,
+
+    locales: {
+        en: {
+            SHOW_ENTRY_TEXT:  '[Show on Hatena Bookmark]',
+            SHOW_ENTRY_TITLE: 'Show This Entry on Hatena Bookmark',
+        },
+        ja: {
+            SHOW_ENTRY_TEXT:  '[はてなブックマークで表示]',
+            SHOW_ENTRY_TITLE: 'このエントリーをはてなブックマークで表示',
+        },
+    },
 });
+
+WidgetEmbedder.messages =
+    WidgetEmbedder.locales[navigator.language] ||
+    WidgetEmbedder.locales[navigator.language.substring(0, 2)] ||
+    WidgetEmbedder.locales['en'];
 
 extend(WidgetEmbedder.prototype, {
     embedLater: function WE_embedLater(delay) {
@@ -92,7 +108,7 @@ extend(WidgetEmbedder.prototype, {
         paragraph._hb_isWidgetEmbedded = true;
 
         var link = this.getLink(paragraph);
-        if (!link) return;
+        if (!link || !/^https?:/.test(link.href)) return;
         var point = this.getAnnotationPoint(paragraph, link);
         if (!point) return;
         var widgets = this.createWidgets(link);
@@ -212,13 +228,25 @@ extend(WidgetEmbedder.prototype, {
         widgets.appendChild(document.createTextNode(' '));
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
-        widgets.appendChild(
-            E('a',
-              { href: getEntryURL(url), 'class': 'hBookmark-widget-counter' },
-              E('img',
-                { src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL, alt: '' }))
-        );
+        var img = E('img', {
+            src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL,
+            alt: WidgetEmbedder.messages.SHOW_ENTRY_TEXT,
+            style: 'display: none;',
+        });
+        img.addEventListener('load', this._onImageLoad, false);
+        widgets.appendChild(E('a', {
+            href: getEntryURL(url),
+            title: WidgetEmbedder.messages.SHOW_ENTRY_TITLE,
+            'class': 'hBookmark-widget-counter'
+        }, img));
         return widgets;
+    },
+
+    _onImageLoad: function WE__onImageLoad(event) {
+        var img = event.target;
+        if (img.naturalWidth > 1)
+            img.style.display = '';
+        img.removeEventListener('load', arguments.callee, false);
     },
 
     handleEvent: function WE_handleEvent(event) {
