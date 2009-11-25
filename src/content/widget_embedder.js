@@ -212,13 +212,24 @@ extend(WidgetEmbedder.prototype, {
         widgets.appendChild(document.createTextNode(' '));
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
-        widgets.appendChild(
-            E('a',
-              { href: getEntryURL(url), 'class': 'hBookmark-widget-counter' },
-              E('img',
-                { src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL, alt: '' }))
-        );
+        var img = E('img', {
+            src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL,
+            alt: '',
+            style: 'display: none;',
+        });
+        img.addEventListener('load', this._onImageLoad, false);
+        widgets.appendChild(E('a', {
+            href: getEntryURL(url),
+            'class': 'hBookmark-widget-counter'
+        }, img));
         return widgets;
+    },
+
+    _onImageLoad: function WE__onImageLoad(event) {
+        var img = event.target;
+        if (img.naturalWidth > 1)
+            img.style.display = '';
+        img.removeEventListener('load', arguments.callee, false);
     },
 
     handleEvent: function WE_handleEvent(event) {
