@@ -88,7 +88,7 @@ $.extend(Manager, {
     },
     updateBookmarkCounter: function(tab) {
         chrome.browserAction.setIcon({path: '/images/chrome-b-plus.png'});
-        if (tab.url && tab.url.indexOf('http') == 0) {
+        if (tab.url && tab.url.indexOf('http') == 0 && Config.get('background.bookmarkcounter.enabled')) {
 
             if (UserManager.user) {
                  UserManager.user.hasBookmark(tab.url).next(function(bool) {
