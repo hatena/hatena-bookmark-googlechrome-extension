@@ -1,4 +1,7 @@
 
+var BG = chrome.extension.getBackgroundPage();
+var user = BG.UserManager.user;
+
 Config.View = {
     autoObserve: function() {
         var self = this;
@@ -95,6 +98,17 @@ Config.View = {
 
 }
 
+function showInitDB() {
+    $('#db-username').text(user.name);
+    $('#init-db').show();
+}
+
+function resetDB() {
+    if (window.confirm(sprintf('ユーザー『%s』のローカルデータベースを再同期します。よろしいですか？', user.name))) {
+        user.resetDatabase();
+    }
+}
+
 function resetAll() {
     if (window.confirm('初期設定に戻します。よろしいですか？')) {
         Config.clearALL();
@@ -105,4 +119,8 @@ function resetAll() {
 $(document).ready(function() {
     Config.View.autoObserve();
     $('body').show();
+    if (user) showInitDB();
 });
+
+
+

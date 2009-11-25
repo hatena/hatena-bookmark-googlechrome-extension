@@ -15,6 +15,7 @@
 <body style="display:none">
 <form onsubmit="return false;">
   <h1>はてなブックマーク設定</h1>
+  <h2>全般</h2>
   <div class="notice">※設定は自動で保存されます</div>
   <table>
     <tr>
@@ -54,7 +55,6 @@
     <tr>
       <th>タグ</th>
       <td>
-        <legend></legend>
         <input type="radio" value="1" id="popup.tags.allTags.enabled-enable" name="popup.tags.allTags.enabled"/>
         <label for="popup.tags.allTags.enabled-enable">タグを表示する</label>
         <br>
@@ -93,12 +93,35 @@
       </td>
     </tr>
     <tr>
-      <th>リセット</th>
+      <th>ブックマークカウンター</th>
       <td>
+        <p class="notice">※B! アイコン上のカウンターの設定です。https のページでは、『表示する』を選択してもサーバに情報を送信しません。</p>
+        <input type="radio" value="1" id="background.bookmarkcounter.enabled-enable" name="background.bookmarkcounter.enabled"/>
+        <label for="background.bookmarkcounter.enabled-enable">ブックマークカウンターを表示する</label>
+        <br>
+        <input type="radio" value="0" id="background.bookmarkcounter.enabled-disable" name="background.bookmarkcounter.enabled"/>
+        <label for="background.bookmarkcounter.enabled-disable">ブックマークカウンターを表示しない</label>
+      </td>
+    </tr>
+  </table>
+
+  <h2>初期化</h2>
+  <table>
+    <tr>
+      <th>初期設定に戻す</th>
+      <td>
+        <p class="notice">※設定項目全般をデフォルト値に戻します</p>
         <input type="button" onclick="resetAll();" value="初期設定に戻す" />
       </td>
     </tr>
-</table>
+    <tr id="init-db">
+      <th>データの同期</th>
+      <td>
+        <p class="notice">※ユーザー 『<span id="db-username"></span>』 のはてなブックマークのデータを再同期します。Web 上のはてなブックマークとのデータに差違が出た場合にご利用ください。</p>
+        <input type="button" onclick="resetDB();" value="再同期する" />
+      </td>
+    </tr>
+  </table>
 
 </form>
 </body>

@@ -41,6 +41,7 @@
         'popup.tags.complete.enabled': true,
         'popup.lastView': 'comment',
         'content.webinfo.enabled': true,
+        'background.bookmarkcounter.enabled': true,
     };
     Object.keys(defaults).forEach(function(key) {
         Config.append(key, defaults[key]);

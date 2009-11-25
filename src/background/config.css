@@ -42,11 +42,17 @@ fieldset {
   -webkit-border-radius: 4px;
 }
 
+h2 {
+  font-size: 100%;
+  margin-left: 1em;
+}
+
 table {
-  margin: 0 10px;
+  margin: 0 20px;
   padding: 5px;
   border-collapse: collapse;
   border-top:  1px solid #D6E0F2;
+  margin-bottom: 20px;
 }
 
 tr {
@@ -64,16 +70,25 @@ th {
   background: #F7F9FD;
   white-space: nowrap;
   width: 1%;
+  min-width: 150px;
 }
 
 td {
 }
 
 div.notice {
-  text-align: right;
-  font-size: 80%;
-  color: #999;
+  text-align: left;
+  font-size: 90%;
+  color: #777;
   padding: 5px;
+}
+
+p.notice {
+  margin: 0px;
+  text-align: left;
+  font-size: 80%;
+  color: #555;
+  padding: 3px;
 }
 
 
