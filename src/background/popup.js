@@ -39,11 +39,13 @@ if (popupMode) {
             }
         });
     });
-    setInterval(function() {
-        chrome.windows.get(currentWin.id, function(win) {
-            saveWindowPositions(win);
-        });
-    }, 50);
+    if (window.currentWin) {
+        setInterval(function() {
+            chrome.windows.get(currentWin.id, function(win) {
+                saveWindowPositions(win);
+            });
+        }, 50);
+    }
 }
 
 
@@ -555,12 +557,14 @@ var View = {
             });
 
             // debug
+            /*
             setTimeout(function() {
                 self.updatePageData({
                     'canonical': 'http://www.hatena.ne.jp/',
                     'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
                 });
             }, 100);
+            */
 
             if (!url || info.url.indexOf('http') != 0) {
                 this.form.hide();
@@ -708,10 +712,31 @@ var View = {
             }
         },
 
+        titleEditToggle: function() {
+            var img = $('#title-editable-toggle');
+            if (img.attr('src').indexOf('/images/edit-lock.png') == -1) {
+                img.attr('src', '/images/edit-lock.png');
+                $('#title-text-container').show();
+                $('#title-input').hide().attr('disabled', 'disabled');
+                $('#title-notice').hide();
+            } else {
+                img.attr('src', '/images/edit-cancel.png');
+                $('#title-text-container').hide();
+                $('#title-input').show().attr('disabled', null);
+                $('#title-notice').show();
+                console.log(this.currentEntry);
+                if (this.currentEntry && this.currentEntry.title_last_editor) {
+                    $('#title-notice-user-container').text('最終変更: ').append(createUserLink(this.currentEntry.title_last_editor)).
+                    show();
+                }
+            }
+        },
+
         setTitle: function(title, force) {
             if (force || !this.titleLoaded) {
                 this.titleText.text(Utils.truncate(title, 60));
                 this.titleText.attr('title', title);
+               $('#title-input').attr('value', title);
             }
             this.titleLoaded = true;
         },
@@ -719,6 +744,7 @@ var View = {
         setTitleByURL: function(title) {
             this.titleText.text(Utils.truncate(title, 70));
             this.titleText.attr('title', title);
+           $('#title-input').attr('value', title);
         },
 
         setEntry: function(entry) {

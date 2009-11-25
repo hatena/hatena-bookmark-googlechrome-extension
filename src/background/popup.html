@@ -99,9 +99,27 @@
         <div class="table-left">
           <div class="table-row">
             <div class="edit-left edit-cell">タイトル:</div>
-            <div id="title" class="edit-cell loaded"><img id="favicon" width="16" height="16"><span id="title-text"></span></div>
+            <div id="title" class="edit-cell loaded">
+              <div>
+                <span id="title-text-container">
+                <img id="favicon" width="16" height="16"><span id="title-text"></span>
+                </span>
+                <input type="text" class="none" id="title-input" name="title" disabled="disabled" />
+                <img onclick="
+              View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle"></div>
+                <div class="none" id="title-notice">
+                  <p>
+                  <img src="/images/caution.png"> タイトルは全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_title">タイトル変更のガイドライン</a>
+                  </p>
+                  <p class="none" id="title-notice-user-container">
+                  </p>
+                </div>
+              </div>
+
             <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16" class="usericon">データをロードしています…</div>
           </div>
+
+
           <div class="table-row">
             <div class="edit-left edit-cell">URL:</div>
             <div class="edit-cell">
