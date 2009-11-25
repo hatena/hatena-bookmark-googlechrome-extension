@@ -702,18 +702,44 @@ em a:visited {
 
 /* register {{{ */
 #bookmark-register {
-  text-align: center;
+  padding: 0 0 10px 0;
+  margin: auto;
 }
 
 #bookmark-login-header {
   font-weight: bold;
   background: #f9efcf;
   border: 1px solid #ede2c2;
-  width: 300px;
-  margin: 10px auto;
-  font-size: 120%;
-  padding: 7px;
+  margin: 0 0px 10px 0;
+  padding: 5px;
   -webkit-border-radius: 4px;
+  color: #71590c;
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.bookmark-register-button {
+  text-align: center;
+  padding: 20px 0 0 0;
+}
+
+#bookmark-register-intro {
+  width: 80%;
+  margin: 20px auto;
+  background: #fafafa;
+  padding: 10px;
+  border: 1px solid #eee;
+  -webkit-border-radius: 4px;
+  line-height: 1.5;
+}
+
+#bookmark-register-intro span.image {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 /* }}} */
