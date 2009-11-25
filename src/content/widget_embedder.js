@@ -108,7 +108,7 @@ extend(WidgetEmbedder.prototype, {
         paragraph._hb_isWidgetEmbedded = true;
 
         var link = this.getLink(paragraph);
-        if (!link) return;
+        if (!link || !/^https?:/.test(link.href)) return;
         var point = this.getAnnotationPoint(paragraph, link);
         if (!point) return;
         var widgets = this.createWidgets(link);
