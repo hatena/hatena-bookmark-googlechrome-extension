@@ -78,48 +78,58 @@
       </div>
     </div>
     <div id="bookmarked-notice" class="none"></div>
+
     <form id="form">
     <div id="edit">
-        <div class="table-row">
+      <div class="table-row">
+        <div class="table-left">
+          <div class="table-row">
             <div class="edit-left edit-cell">タイトル:</div>
             <div id="title" class="edit-cell loaded"><img id="favicon" width="16" height="16"><span id="title-text"></span></div>
             <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16" class="usericon">データをロードしています…</div>
-        </div>
-        <div class="table-row">
+          </div>
+          <div class="table-row">
             <div class="edit-left edit-cell">URL:</div>
             <div class="edit-cell">
-                <div>
-                    <a href="" id="url"></a>
-                </div>
-                <div>
-                    <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
-                </div>
+              <div>
+                <a href="" id="url"></a>
+              </div>
+              <div>
+                <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
+              </div>
             </div>
-        </div>
-
-        <div class="table-row">
+          </div>
+          <div class="table-row">
             <div class="edit-left edit-cell">コメント:</div>
             <div class="edit-cell" id="bookmark-options">
-                <div id="comment-area" class="table-row">
-                    <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
-                    <span class="edit-cell" id="type-counter"><span id="type-count">0</span> / 100</span>
-                  </div>
-                  <ul id="tag-complete-list">
-                  </ul>
-                <div id="checkbox-options">
-                    <input type="hidden" id="input-url" name="url" />
-                    <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
-                    <label for="confirm-bookmark">ブックマークを確認</label>
-                    <span id="plus-inputs" class="none">
-                        <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
-                        <input value="1" type="checkbox" id="private" name="private" />
-                        <label for="private">公開しない</label>
-                        <input value="1" type="checkbox" id="send_mail" name="send_mail" />
-                        <label for="send_mail">メールする</label>
-                    </span>
-                </div>
-           </div>
+              <div id="comment-area" class="table-row">
+                <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
+                <span class="edit-cell" id="type-counter"><span id="type-count">0</span> / 100</span>
+              </div>
+              <ul id="tag-complete-list">
+              </ul>
+              <div id="checkbox-options">
+                <input type="hidden" id="input-url" name="url" />
+                <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
+                <label for="confirm-bookmark">ブックマークを確認</label>
+                <span id="plus-inputs" class="none">
+                  <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
+                  <input value="1" type="checkbox" id="private" name="private" />
+                  <label for="private">公開しない</label>
+                  <input value="1" type="checkbox" id="send_mail" name="send_mail" />
+                  <label for="send_mail">メールする</label>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+        <div id="image-table-container" class="table-right none">
+          <div id="image-container">
+            <div id="image-current-container"><img class="noimage" id="noimage" src="/images/noimages.png" /></div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <dl id="recommend-tags-container">
         <dt>おすすめタグ<dt>
