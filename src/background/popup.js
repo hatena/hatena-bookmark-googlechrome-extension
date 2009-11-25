@@ -773,7 +773,12 @@ var View = {
                                             fav.name, fav.timestamp.replace(/\//g, ''),
                                             entry.eid);
 
-                    var title = sprintf('%s: %s', fav.name, fav.body);
+                    var title;
+                    if (fav.body) {
+                        title = sprintf('%s: %s', fav.name, fav.body);
+                    } else {
+                        title = sprintf('%s', fav.name);
+                    }
                     var link = Utils.createElementFromString(
                         '<a href="#{permalink}"><img title="#{title}" alt="#{title}" src="#{icon}" /></a>',
                     {
