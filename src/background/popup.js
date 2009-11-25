@@ -124,7 +124,10 @@ function formSubmitHandler(ev) {
     var form = $(this);
 
     var user = UserManager.user;
-    user.saveBookmark(form.serialize());
+    var url= form.serialize();
+    url = View.bookmark.setSubmitData(url);
+
+    user.saveBookmark(url);
     setTimeout(function() {
         closeWin();
     }, 0);
@@ -401,6 +404,7 @@ var View = {
             if (!this._port) {
                 var self = this;
                 var _port = chrome.extension.connect();
+                // ToDO もう一段階簡略化できそう
                 _port.onMessage.addListener(function(info, con) {
                     if (info.message == 'bookmarkedit_bridge_recieve')
                         self.updatePageData(info.data);
@@ -428,6 +432,25 @@ var View = {
             }
             $('#image-table-container').show();
         },
+        setSubmitData: function(data) {
+            var selectedImage = $('#current-image').attr('updated');
+            if (selectedImage) {
+                var noImage = selectedImage.indexOf('/images/noimages') != -1;
+                if (noImage) selectedImage = '/images/noimages.gif'; // set const noimage
+                if (this.currentEntry && this.currentEntry.image_url) {
+                    // 元画像がある
+                    if (this.currentEntry.image_url != selectedImage ||
+                        noImage) {
+                        // 変更があった
+                        data += '&image=' + encodeURIComponent(selectedImage);
+                    }
+                } else if (!noImage) {
+                    // 元画像が無く、変更があった
+                    data += '&image=' + encodeURIComponent(selectedImage);
+                }
+            }
+            return data;
+        },
         imageDetectClose: function() {
             $('#image-detect-container').hide();
         },
@@ -437,6 +460,7 @@ var View = {
         },
         updateCurrentImage: function(src) {
             $('#current-image').attr('src', src);
+            $('#current-image').attr('updated', src);
         },
         imageDetect: function() {
             var images = this.images;
