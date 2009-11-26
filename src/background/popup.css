@@ -706,7 +706,7 @@ body.data-loading * .loading {
 /* search-container {{{ */
 
 #search-container h3.entry-search {
-  margin: 4px 0 0 -20px;
+  margin: 0 0 0 -20px;
   padding: 0 0 0 20px;
   background-repeat: no-repeat;
   background-position: left 3px;
@@ -724,10 +724,14 @@ body.data-loading * .loading {
   font-size: 85%;
 }
 
+#search-container ul {
+ padding-top: 5px;
+}
+
 #search-container ul li {
   list-style: none;
   line-height: 1.4;
-  margin: 10px 0 10px 10px !important;
+  margin: 5px 0 0px 10px !important;
 }
 
 #search-container span.highlight {
@@ -886,6 +890,8 @@ em a:visited {
 }
 
 #search-result li.bookmark {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
   padding-left: 20px;
 }
 
