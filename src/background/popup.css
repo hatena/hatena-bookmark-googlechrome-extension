@@ -77,19 +77,32 @@ a#users-count:visited {
 .table-left {
   display: table-cell;
   width: 100%;
+  vertical-align: top;
 }
 
 .table-right {
   display: table-cell;
+  vertical-align: top;
 }
 
 #title-editable-toggle {
   cursor: pointer;
 }
 
-#title-input {
-  width: 80%;
+#title-text-container {
+  width: 1%;
+  white-space: nowrap;
 }
+
+#title-text-edit-container {
+  width: 100%;
+}
+
+#title-input {
+  display: table-cell;
+  width: 100%;
+}
+
 
 #current-image {
   background-color: #EEE;
@@ -111,22 +124,26 @@ a#users-count:visited {
 
 #image-detect-container {
   position: fixed;
-  right:0px;
-  margin-right: 20px;
-  margin-top: 20px;
+  right: 20px;
+  top: 90px;
+  bottom: 10px;
   max-width: 400px;
   background-color: #FFF;
   border: 1px solid #777;
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+  overflow: hidden;
+  padding-bottom: 46px;
 }
 
 #image-detect-container-list {
+  overflow: auto;
+  height: 100%;
 }
 
 #image-detect-container-list img {
   max-width: 50px;
   max-height: 50px;
-  padding: 8px;
+  padding: 5px;
   cursor: pointer;
 }
 
@@ -141,6 +158,12 @@ a#users-count:visited {
 }
 
 #image-detect-notice {
+  position: absolute;
+  display: table-cell;
+  height: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   color: #333;
   background-color: #EEE;
   border-top: 1px solid #AAA;
@@ -345,6 +368,26 @@ a.username {
   margin-top: 2px;
 }
 
+#image-detect-notice-user-container {
+  text-align: right;
+  font-size: 90%;
+}
+
+#image-detect-image-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#image-detect-image-container img {
+  cursor: pointer;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+  -webkit-border-bottom-left-radius: 4px;
+  padding: 2px;
+  border: 1px solid #eee;
+}
+
 /* }}} */
 
 /* edit {{{ */
@@ -418,7 +461,6 @@ a.username {
 
 #comment-area {
     width: 100%;
-    display: table;
 }
 
 #bookmarked-notice {
@@ -433,10 +475,11 @@ a.username {
 }
 
 #type-counter {
-    width: 63px;
     padding-left: 13px;
     font-size: 90%;
     color: #555;
+    width: 1%;
+    white-space: nowrap;
 }
 
 #type-counter span {
@@ -876,3 +919,5 @@ em a:visited {
 #favorites a img {
   margin:0 1px;
 }
+
+

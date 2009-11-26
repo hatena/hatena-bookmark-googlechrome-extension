@@ -80,16 +80,14 @@
     <div id="bookmarked-notice" class="none"></div>
 
     <div id="image-detect-container" class="none">
-      <img onclick="View.bookmark.imageDetectClose();"
-      style="cursor:pointer; padding: 3px;float:right;" src="/images/close.gif">
+      <div id="image-detect-image-container">
+      <img onclick="View.bookmark.imageDetectClose();" src="/images/close.gif">
+      </div>
       <div id="image-detect-container-list">
       </div>
       <div id="image-detect-notice">
-        <p>
-        <img src="/images/caution.png"> エントリーの画像は全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_image">ガイドライン</a>
-        </p>
-        <p class="none" id="image-detect-notice-user-container">
-        </p>
+        <p><img src="/images/caution.png"> エントリーの画像は全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_image">ガイドライン</a></p>
+        <p class="none" id="image-detect-notice-user-container"> </p>
       </div>
     </div>
 
@@ -100,13 +98,22 @@
           <div class="table-row">
             <div class="edit-left edit-cell">タイトル:</div>
             <div id="title" class="edit-cell loaded">
-              <div>
-                <span id="title-text-container">
+
+              <div style="display:table;width: 100%;">
+                <span class="edit-cell" id="title-text-container">
                 <img id="favicon" width="16" height="16"><span id="title-text"></span>
                 </span>
-                <input type="text" class="none" id="title-input" name="title" disabled="disabled" />
-                <img onclick="
-              View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle"></div>
+
+                <div class="edit-cell none" id="title-text-edit-container">
+                  <input type="text" id="title-input" name="title" disabled="disabled" />
+                </div>
+
+                <div class="edit-cell" style="padding-right: 30px;">
+                  <img onclick="
+                  View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
+                </div>
+              </div>
+
                 <div class="none" id="title-notice">
                   <p>
                   <img src="/images/caution.png"> タイトルは全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_title">タイトル変更のガイドライン</a>
@@ -114,6 +121,7 @@
                   <p class="none" id="title-notice-user-container">
                   </p>
                 </div>
+
               </div>
 
             <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16" class="usericon">データをロードしています…</div>
@@ -134,7 +142,7 @@
           <div class="table-row">
             <div class="edit-left edit-cell">コメント:</div>
             <div class="edit-cell" id="bookmark-options">
-              <div id="comment-area" class="table-row">
+              <div id="comment-area" class="table">
                 <input autocomplete="off" class="edit-cell" type="text" id="comment" name="comment">
                 <span class="edit-cell" id="type-counter"><span id="type-count">0</span> / 100</span>
               </div>
@@ -155,6 +163,7 @@
             </div>
           </div>
         </div>
+
         <div id="image-table-container" class="table-right none">
           <div id="image-container">
             <div id="image-current-container" onclick="View.bookmark.imageDetect();" ><img id="current-image" src="/images/noimages.png" /></div>

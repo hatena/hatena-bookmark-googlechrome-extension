@@ -717,12 +717,14 @@ var View = {
             if (img.attr('src').indexOf('/images/edit-lock.png') == -1) {
                 img.attr('src', '/images/edit-lock.png');
                 $('#title-text-container').show();
-                $('#title-input').hide().attr('disabled', 'disabled');
+                $('#title-text-edit-container').addClass('none');
+                $('#title-input').attr('disabled', 'disabled');
                 $('#title-notice').hide();
             } else {
                 img.attr('src', '/images/edit-cancel.png');
                 $('#title-text-container').hide();
-                $('#title-input').show().attr('disabled', null);
+                $('#title-text-edit-container').removeClass('none');
+                $('#title-input').attr('disabled', null);
                 $('#title-notice').show();
                 console.log(this.currentEntry);
                 if (this.currentEntry && this.currentEntry.title_last_editor) {
