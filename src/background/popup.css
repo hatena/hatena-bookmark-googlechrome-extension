@@ -525,6 +525,7 @@ a.username {
     width: 100%;
 }
 
+#bookmark-error,
 #bookmarked-notice {
     text-align: center;
     padding: 5px;

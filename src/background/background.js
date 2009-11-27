@@ -31,8 +31,12 @@ $.extend(Manager, {
     editBookmarkCurrentTab: function() {
         chrome.tabs.getSelected(null, Manager.editBookmarkTab);
     },
-    editBookmarkError: function(data) {
+    saveBookmarkError: function(data) {
         console.error(data);
+        var url = '/background/popup.html?error=1&url=' + encodeURIComponent(data.url) + '&comment=' + data.comment;
+        chrome.tabs.create({
+            url: url,
+        });
     },
     deleteBookmarkError: function(data) {
         console.error(data);
@@ -211,7 +215,7 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId) {
 
 chrome.browserAction.onClicked.addListener(function(tab) {
     var url = tab.url;
-    var info = window.popupWinInfo
+    var info = window.popupWinInfo;
     if (info) {
         chrome.windows.getAll(null, function(allWindows) {
             var flag = false;

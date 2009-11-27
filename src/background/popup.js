@@ -54,13 +54,15 @@ function closeWin() {
         window.close();
         // BG.chrome.experimental.extension.getPopupView().close();
     } else {
-        if (window.currentWin) {
-            chrome.windows.get(currentWin.id, function(win) {
-                delete BG.popupWinInfo;
-                saveWindowPositions(win);
-                chrome.windows.remove(currentWin.id);
-            });
-        }
+        // if (window.currentWin) {
+        //     chrome.windows.get(currentWin.id, function(win) {
+        //         delete BG.popupWinInfo;
+        //         saveWindowPositions(win);
+        //         chrome.windows.remove(currentWin.id);
+        //     });
+        // } else {
+            window.close();
+        // }
     }
 }
 
@@ -563,6 +565,12 @@ var View = {
                 this.commentEL.attr('value', lastCommentValueConf.comment);
             }
 
+            if (request_uri.param('error')) {
+                $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
+                .removeClass('none');
+                this.commentEL.attr('value', request_uri.param('comment'));
+            }
+
             // debug
             /*
             setTimeout(function() {
@@ -925,6 +933,11 @@ var ready = function() {
         this.target = '_blank';
     });
     // $('a').each(function() { this.target = '_blank' });
+    if (request_uri.param('error')) {
+        ViewManager.show('bookmark');
+        return;
+    }
+
     if (Config.get('popup.lastView') == 'bookmark') {
         ViewManager.show('bookmark');
     } else if (Config.get('popup.lastView') == 'search' && Config.get('popup.search.lastWord')) {
