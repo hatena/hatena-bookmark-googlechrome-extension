@@ -843,8 +843,21 @@ if (popupMode) {
 }
 */
 
+var eulaAccept = function() {
+    localStorage.eula = true;
+    $('#eula').hide();
+    ready();
+}
 
 var ready = function() {
+    if (!localStorage.eula) {
+        setTimeout(function() {
+        $('#eula').show();
+        }, 200)
+        return;
+    }
+    $('#main').show();
+
     if (window.popupMode) {
         document.body.style.width = '' + Config.get('popup.window.width') + 'px';
         document.getElementById('search-container').style.maxHeight = '' + Config.get('popup.window.height') + 'px';

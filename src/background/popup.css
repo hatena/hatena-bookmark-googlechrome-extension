@@ -6,6 +6,41 @@
     font-size: small;
 }
 
+#main {
+  display: none;
+}
+
+#eula {
+  max-width: 450px;
+  display: none;
+  margin: 10px;
+}
+
+#eula p {
+  padding: 5px 5px 0 5px;
+}
+
+.eula-accept {
+  padding: 4px 4px 4px 10px;
+  text-align: center;
+}
+
+.eula-accept input {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
+#eula blockquote {
+  margin: 20px 20px 5px 20px;
+  overflow: auto;
+  height: 15em;
+  border: 1px solid #999;
+}
+
+#eula pre {
+}
+
 body {
   overflow-x: hidden;
   color: #222;
@@ -102,7 +137,6 @@ a#users-count:visited {
   display: table-cell;
   width: 100%;
 }
-
 
 #current-image {
   background-color: #EEE;

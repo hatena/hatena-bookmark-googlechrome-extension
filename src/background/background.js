@@ -63,30 +63,10 @@ $.extend(Manager, {
     },
     updateBookmarkIcon: function(tab) {
         return;
-
-        var tabId = tab.id;
-        if (tab.url && tab.url.indexOf('http') == 0) {
-            chrome.pageAction.setIcon({
-                tabId: tabId,
-                imageData: Manager.getIconData('bookmark-add-icon')
-            });
-            chrome.pageAction.show(tabId);
-            if (UserManager.user) {
-                UserManager.user.hasBookmark(tab.url).next(function(has) {
-                    if (has) {
-                        chrome.pageAction.setIcon({
-                            tabId: tabId,
-                            imageData: Manager.getIconData('bookmark-added-icon')
-                        });
-                        chrome.pageAction.show(tabId);
-                    }
-                });
-            }
-        } else {
-            chrome.pageAction.hide(tabId);
-        }
     },
     updateBookmarkCounter: function(tab) {
+        if (!localStorage.eula) return;
+
         chrome.browserAction.setIcon({path: '/images/chrome-b-plus.png'});
         if (tab.url && tab.url.indexOf('http') == 0 && Config.get('background.bookmarkcounter.enabled')) {
 
@@ -276,6 +256,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 chrome.self.onConnect.addListener(function(port, name) {
   port.onMessage.addListener(function(info, con) {
+      if (!localStorage.eula) return;
+
       if (info.message)
           ConnectMessenger.trigger(info.message, [info.data, con]);
   });
@@ -291,6 +273,7 @@ Model.Bookmark.afterSave = function() {
 }
 
 // debug
+/*
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
     url = 'http://b.hatena.ne.jp/articles/200911/598';
