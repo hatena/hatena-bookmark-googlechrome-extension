@@ -54,7 +54,7 @@ function closeWin() {
         window.close();
         // BG.chrome.experimental.extension.getPopupView().close();
     } else {
-        if (currentWin) {
+        if (window.currentWin) {
             chrome.windows.get(currentWin.id, function(win) {
                 delete BG.popupWinInfo;
                 saveWindowPositions(win);
@@ -129,6 +129,7 @@ function formSubmitHandler(ev) {
     var url= form.serialize();
     url = View.bookmark.setSubmitData(url);
 
+    console.log(url);
     user.saveBookmark(url);
     setTimeout(function() {
         closeWin();
@@ -693,6 +694,7 @@ var View = {
                 $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
                 .removeClass('none');
                 $('#delete-button').removeClass('none');
+                $('#edit-submit').attr('value', '編集');
                 this.updateComment(b.comment);
             }
         },
@@ -726,7 +728,6 @@ var View = {
                 $('#title-text-edit-container').removeClass('none');
                 $('#title-input').attr('disabled', null);
                 $('#title-notice').show();
-                console.log(this.currentEntry);
                 if (this.currentEntry && this.currentEntry.title_last_editor) {
                     $('#title-notice-user-container').text('最終変更: ').append(createUserLink(this.currentEntry.title_last_editor)).
                     show();
@@ -773,7 +774,12 @@ var View = {
                                             fav.name, fav.timestamp.replace(/\//g, ''),
                                             entry.eid);
 
-                    var title = sprintf('%s: %s', fav.name, fav.body);
+                    var title;
+                    if (fav.body) {
+                        title = sprintf('%s: %s', fav.name, fav.body);
+                    } else {
+                        title = sprintf('%s', fav.name);
+                    }
                     var link = Utils.createElementFromString(
                         '<a href="#{permalink}"><img title="#{title}" alt="#{title}" src="#{icon}" /></a>',
                     {
@@ -787,6 +793,23 @@ var View = {
                     f.append(link);
                 });
                 f.show();
+            }
+            if (entry.is_private) {
+                $('#private').attr('checked', 'true');
+            }
+            if (entry.has_asin) {
+                console.log(entry);
+                var addAsin = $('#add-asin').attr('disabled', null);
+                $('#asin').attr('disabled', null).attr('value', entry.asin);
+
+                if (Config.get('popup.bookmark.addAsin')) {
+                    addAsin.attr('checked', 'checked');
+                }
+                addAsin.bind('change', function() {
+                    Config.set('popup.bookmark.addAsin', this.checked);
+                });
+
+                $('#asin-container').show();
             }
         },
     }
@@ -838,8 +861,25 @@ if (popupMode) {
 }
 */
 
+var eulaAccept = function() {
+    localStorage.eula = true;
+    $('#eula').hide();
+    ready();
+    setTimeout(function() {
+        $('#main').show();
+    }, 20);
+}
 
 var ready = function() {
+    if (!localStorage.eula) {
+        $('#main').hide();
+        // 何故かレンダリングされないタイミングがあるのでずらす
+        setTimeout(function() {
+            $('#eula').show();
+        }, 20);
+        return;
+    }
+
     if (window.popupMode) {
         document.body.style.width = '' + Config.get('popup.window.width') + 'px';
         document.getElementById('search-container').style.maxHeight = '' + Config.get('popup.window.height') + 'px';

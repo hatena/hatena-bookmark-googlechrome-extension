@@ -35,6 +35,7 @@
         'popup.commentviewer.autodetect.threshold': 15,
         'popup.commentviewer.togglehide': false,
         'popup.bookmark.confirmBookmark': false,
+        'popup.bookmark.addAsin': false,
         'popup.tags.recommendTags.enabled': true,
         'popup.tags.allTags.enabled': true,
         'popup.tags.showAllTags': false,
