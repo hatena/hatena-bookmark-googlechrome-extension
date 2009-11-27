@@ -847,16 +847,20 @@ var eulaAccept = function() {
     localStorage.eula = true;
     $('#eula').hide();
     ready();
+    setTimeout(function() {
+        $('#main').show();
+    }, 20);
 }
 
 var ready = function() {
     if (!localStorage.eula) {
+        $('#main').hide();
+        // 何故かレンダリングされないタイミングがあるのでずらす
         setTimeout(function() {
-        $('#eula').show();
-        }, 200)
+            $('#eula').show();
+        }, 20);
         return;
     }
-    $('#main').show();
 
     if (window.popupMode) {
         document.body.style.width = '' + Config.get('popup.window.width') + 'px';
