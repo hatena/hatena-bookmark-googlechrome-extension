@@ -36,6 +36,7 @@
         'popup.commentviewer.togglehide': false,
         'popup.bookmark.confirmBookmark': false,
         'popup.bookmark.addAsin': false,
+        'popup.bookmark.lastCommentValue': {},
         'popup.tags.recommendTags.enabled': true,
         'popup.tags.allTags.enabled': true,
         'popup.tags.showAllTags': false,

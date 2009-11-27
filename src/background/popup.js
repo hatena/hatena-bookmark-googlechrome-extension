@@ -557,6 +557,12 @@ var View = {
                 }
             });
 
+            var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
+            if (lastCommentValueConf && lastCommentValueConf.url == url) {
+                Config.set('popup.bookmark.lastCommentValue', {});
+                this.commentEL.attr('value', lastCommentValueConf.comment);
+            }
+
             // debug
             /*
             setTimeout(function() {
@@ -601,6 +607,17 @@ var View = {
                         } else {
                             $(el).addClass('selected');
                         }
+                    });
+                }
+            });
+
+            var lastCommentValue;
+            this.commentEL.keypress(function() {
+                if (lastCommentValue != this.value) {
+                    lastCommentValue = this.value;
+                    Config.set('popup.bookmark.lastCommentValue', {
+                        url: url,
+                        comment: lastCommentValue,
                     });
                 }
             });
@@ -798,7 +815,6 @@ var View = {
                 $('#private').attr('checked', 'true');
             }
             if (entry.has_asin) {
-                console.log(entry);
                 var addAsin = $('#add-asin').attr('disabled', null);
                 $('#asin').attr('disabled', null).attr('value', entry.asin);
 
