@@ -294,7 +294,7 @@ Model.Bookmark.afterSave = function() {
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
     url = 'http://b.hatena.ne.jp/articles/200911/598';
-    url = 'http://example.com/#101';
+    url = 'http://gihyo.jp/design/serial/01/gihyojp-key-person/0002';
     url = '/background/popup.html?debug=1&url=' + encodeURIComponent(url);
     // var url = 'http://www.hatena.ne.jp/';
     chrome.tabs.create({

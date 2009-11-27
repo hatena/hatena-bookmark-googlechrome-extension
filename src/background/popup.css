@@ -453,6 +453,27 @@ a.username {
   display: table-cell;
 }
 
+#edit .edit-cell {
+  padding: 3px 5px;
+}
+
+#title .edit-cell {
+  padding: 0px;
+}
+
+#title-toggle-button.edit-cell {
+  padding-right: 30px;
+  padding-left: 10px;
+}
+#type-counter.edit-cell {
+  padding-left: 20px;
+}
+
+#url-container {
+  padding-top: 0;
+}
+
+
 /* }}} */
 
 #comment {

@@ -108,7 +108,7 @@
                   <input type="text" id="title-input" name="title" disabled="disabled" />
                 </div>
 
-                <div class="edit-cell" style="padding-right: 30px;">
+                <div id="title-toggle-button" class="edit-cell">
                   <img onclick="
                   View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
                 </div>
@@ -130,7 +130,7 @@
 
           <div class="table-row">
             <div class="edit-left edit-cell">URL:</div>
-            <div class="edit-cell">
+            <div class="edit-cell" id="url-container">
               <div>
                 <a href="" id="url"></a>
               </div>
