@@ -588,6 +588,16 @@ var View = {
                 return;
             }
 
+            if (url.indexOf('http://b.hatena.ne.jp/entry/') == 0) {
+                var canURL = url;
+                if (url.indexOf('http://b.hatena.ne.jp/entry/s/') == 0) {
+                    canURL = canURL.replace('/s/', '/').replace('http://', 'https://');
+                }
+                canURL = canURL.replace('b.hatena.ne.jp/entry/', '');
+                $('#canonical-tips').text('エントリーページをブックマークしようとしています。');
+                this.setCanonical(canURL);
+            }
+
             if (Config.get('popup.bookmark.confirmBookmark')) {
                 this.confirmBookmark.attr('checked', 'checked');
             }
@@ -778,8 +788,17 @@ var View = {
         setEntry: function(entry) {
             this.currentEntry = entry;
             $('body').removeClass('data-loading');
+            if (entry.bookmarked_data && !$('#bookmarked-notice').text()) {
+                var data = entry.bookmarked_data;
+                data = {
+                    dateYMDHM: data.timestamp,
+                    comment: data.comment_raw,
+                }
+                this.setByBookmark(data);
+            }
+
             if (entry.title) this.setTitle(entry.title, true);
-            this.setURL(entry.original_url);
+            this.setURL(entry.url);
             if (Config.get('popup.tags.recommendTags.enabled'))
                 this.setRecomendTags(entry.recommend_tags);
             var count = parseInt(entry.count);
