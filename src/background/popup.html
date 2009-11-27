@@ -216,13 +216,18 @@
               <div id="checkbox-options">
                 <input type="hidden" id="input-url" name="url" />
                 <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
-                <label for="confirm-bookmark">ブックマークを確認</label>
+                <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します">ブックマークを確認</label>
+                <span id="asin-container">
+                  <input value="" type="hidden" id="asin" name="asin" disabled />
+                  <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled />
+                  <label for="add-asin">コレクションに追加</label>
+                </span>
                 <span id="plus-inputs" class="none">
                   <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
                   <input value="1" type="checkbox" id="private" name="private" />
-                  <label for="private">公開しない</label>
+                  <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">公開しない</label>
                   <input value="1" type="checkbox" id="send_mail" name="send_mail" />
-                  <label for="send_mail">メールする</label>
+                  <label for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">メールする</label>
                 </span>
               </div>
             </div>
@@ -253,7 +258,7 @@
                 <input class="none" onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
             </div>
             <div class="edit-cell">
-                <input type="submit" value="追加" />
+                <input id="edit-submit" type="submit" value="追加" />
             </div>
             <div class="edit-cell">
                 <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />

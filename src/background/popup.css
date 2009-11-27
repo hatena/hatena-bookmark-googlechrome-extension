@@ -937,6 +937,15 @@ em a:visited {
   margin-bottom: 10px;
 }
 
+#private-label {
+  background: url(/images/noshare.gif) no-repeat 0% 50%;
+  padding-left: 12px;
+}
+
+#asin-container {
+  display: none;
+
+
 /* }}} */
 
 /* search {{{ */
