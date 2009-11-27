@@ -392,6 +392,10 @@ a.username {
 
 /* edit {{{ */
 
+#form {
+  margin-top: 5px;
+}
+
 #bookmark-edit-header {
   display: table;
   width: 100%;
