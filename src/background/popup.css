@@ -38,6 +38,10 @@
 }
 
 #eula pre {
+  white-space: pre-wrap;
+  font-size: 90%;
+  line-height: 1.7;
+  padding: 1em;
 }
 
 body {
