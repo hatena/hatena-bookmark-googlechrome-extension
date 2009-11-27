@@ -624,6 +624,8 @@ var View = {
                             $(el).removeClass('selected');
                         } else {
                             $(el).addClass('selected');
+                            console.log(el.parentNode);
+                            console.log(el.className);
                         }
                     });
                 }
@@ -646,6 +648,7 @@ var View = {
                 } else {
                     self.tagCompleter.inputLine.deleteTag(this.textContent);
                 }
+                return false;
             });
 
             this.form.show();
@@ -913,6 +916,16 @@ var eulaAccept = function() {
     }, 20);
 }
 
+/*
+var setWindowSize = function(w, h) {
+    document.getElementById('search-container').style.maxHeight = '' + h + 'px';
+    document.getElementById('comment-list').style.maxHeight = '' + h + 'px';
+
+    document.getElementById('search-container').style.maxWidth = '' + w + 'px';
+    document.getElementById('comment-list').style.maxWidth = '' + w + 'px';
+}
+*/
+
 var ready = function() {
     if (!localStorage.eula) {
         $('#main').hide();
@@ -923,10 +936,24 @@ var ready = function() {
         return;
     }
 
-    if (window.popupMode) {
-        document.body.style.width = '' + Config.get('popup.window.width') + 'px';
-        document.getElementById('search-container').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
-        document.getElementById('comment-list').style.maxHeight = '' + Config.get('popup.window.height') + 'px';
+    if (window.popupMode || true) {
+        if (Config.get('popup.window.autosize')) {
+            document.body.style.width = '' + 500 + 'px';
+        } else {
+            document.body.style.width = '' + Math.max(100, Config.get('popup.window.width')) + 'px';
+        }
+        /*
+        if (Config.get('popup.window.autosize')) {
+            chrome.windows.getLastFocused(function(w) {
+                var width = 500;
+                var height = w.height - 300;
+                height = Math.max(height, 300);
+                setWindowSize(width, height);
+            });
+        } else {
+            setWindowSize(Config.get('popup.window.width'), Config.get('popup.window.height'));
+        }
+        */
     }
     var user = UserManager.user;
     if (user) {

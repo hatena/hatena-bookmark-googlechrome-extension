@@ -11,6 +11,7 @@
 
 #eula {
   max-width: 450px;
+  min-width: 400px;
   display: none;
   margin: 10px;
 }
@@ -700,7 +701,7 @@ dd#all-tags {
 
 #search-container,
 #comment-list {
-  max-height: 450px;
+  max-height: 500px;
   overflow-y: auto;
   word-break:break-all;
 }

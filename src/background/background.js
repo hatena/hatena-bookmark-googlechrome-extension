@@ -246,9 +246,11 @@ chrome.browserAction.onClicked.addListener(function(tab) {
             }
         });
     } else {
-        setTimeout(function() {
-            window.open('/background/popup.html?url=' + encodeURIComponent(url));
-        }, 10);
+        chrome.windows.getCurrent(function(w) {
+            setTimeout(function() {
+                window.open('/background/popup.html?url=' + encodeURIComponent(url));
+            }, 10);
+        });
     }
 });
 
@@ -282,6 +284,7 @@ setTimeout(function() {
     url = 'http://b.hatena.ne.jp/articles/200911/598';
     url = 'http://www.amazon.co.jp/exec/obidos/ASIN/B002T9VBP8/hatena-uk-22/ref=nosim';
     url = 'http://b.hatena.ne.jp/entry/s/addons.mozilla.org/ja/firefox/addon/1843';
+    url = 'https://addons.mozilla.org/ja/firefox/addon/1843';
     url = '/background/popup.html?debug=1&url=' + encodeURIComponent(url);
     // var url = 'http://www.hatena.ne.jp/';
     chrome.tabs.create({
