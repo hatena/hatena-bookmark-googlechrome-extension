@@ -279,6 +279,7 @@ Model.Bookmark.afterSave = function() {
 }
 
 // debug
+/*
 setTimeout(function() {
     var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
     url = 'http://b.hatena.ne.jp/articles/200911/598';
