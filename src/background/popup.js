@@ -125,12 +125,13 @@ function deleteBookmark() {
 }
 
 function formSubmitHandler(ev) {
-    var form = $(this);
+    var form = $('#form');
 
     var user = UserManager.user;
-    var url= form.serialize();
+    var url = form.serialize();
     url = View.bookmark.setSubmitData(url);
 
+    url = url.replace(new RegExp('\\+', 'g'), '%20'); // for title
     console.log(url);
     user.saveBookmark(url);
     setTimeout(function() {
@@ -571,7 +572,7 @@ var View = {
                 this.commentEL.attr('value', request_uri.param('comment'));
             }
 
-            // debug
+            // debug /
             /*
             setTimeout(function() {
                 self.updatePageData({
@@ -967,7 +968,6 @@ var ready = function() {
         }));
         hicon.show();
     }
-    $('#form').bind('submit', formSubmitHandler);
     $('#search-form').bind('submit', searchFormSubmitHandler);
     if (Config.get('popup.search.incsearch')) {
         $('#search-word').bind('keyup', searchIncSearchHandler);
