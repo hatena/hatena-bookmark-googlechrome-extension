@@ -165,20 +165,20 @@
             <div class="edit-left edit-cell">タイトル:</div>
             <div id="title" class="edit-cell loaded">
 
-              <div style="display:table;width: 100%;">
-                <span class="edit-cell" id="title-text-container">
-                <img id="favicon" width="16" height="16"><span id="title-text"></span>
-                </span>
-
-                <div class="edit-cell none" id="title-text-edit-container">
-                  <input type="text" id="title-input" name="title" disabled="disabled" />
-                </div>
-
-                <div id="title-toggle-button" class="edit-cell">
+              <div style="width: 100%; display: table-cell;">
+                <span id="title-toggle-button" class="edit-cell">
                   <img onclick="
                   View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
-                </div>
-              </div>
+                </span>
+
+                <span class="edit-cell" id="title-text-container">
+                  <img id="favicon" width="16" height="16"><span id="title-text"></span>
+                </span>
+
+                <span class="none" id="title-text-edit-container">
+                  <input type="text" id="title-input" name="title" disabled="disabled" />
+                </span>
+
 
                 <div class="none" id="title-notice">
                   <p>
@@ -187,6 +187,7 @@
                   <p class="none" id="title-notice-user-container">
                   </p>
                 </div>
+              </div>
 
               </div>
 

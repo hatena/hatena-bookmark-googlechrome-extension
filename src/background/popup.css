@@ -128,15 +128,16 @@ a#users-count:visited {
 }
 
 #title-text-container {
+  display: inline;
 }
 
 #title-text-edit-container {
-  width: 100%;
+  position: relative;
+  width: auto;
 }
 
 #title-input {
-  display: table-cell;
-  width: 100%;
+  width: 80%;
 }
 
 #current-image {
@@ -163,6 +164,7 @@ a#users-count:visited {
   top: 90px;
   bottom: 10px;
   max-width: 400px;
+  min-width: 350px;
   background-color: #FFF;
   border: 1px solid #777;
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
@@ -503,7 +505,10 @@ a.username {
 #title-toggle-button.edit-cell {
   padding-right: 30px;
   padding-left: 10px;
+  display: inline;
+  float: right;
 }
+
 #type-counter.edit-cell {
   padding-left: 20px;
 }
