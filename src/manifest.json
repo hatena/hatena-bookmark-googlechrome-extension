@@ -2,7 +2,7 @@
   "name": "hatena-bookmark",
   "id": "d9554fb8837640f492ca1891a0288270",
   "description": "HatenaBookmark extension",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "update_url": "http://localhost/example/update.xml",
   "permissions": [
     "http://*/*",
