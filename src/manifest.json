@@ -1,23 +1,14 @@
 {
   "name": "hatena-bookmark",
   "id": "d9554fb8837640f492ca1891a0288270",
-  "description": "HatenaBookmark extension",
+  "description": "Hatena Bookmark extension",
   "version": "0.0.3",
-  "update_url": "http://localhost/example/update.xml",
   "permissions": [
     "http://*/*",
     "https://*/*",
     "tabs",
     "bookmarks"
   ],
-  /*
-  "toolstrips": [
-    "toolstrips/toolstrip.html"
-  ],
-  "page_action": {
-    "default_title": "B!"
-  },
-  */
   "icons": {
       "16": "images/favicon32.png",
       "32": "images/favicon32.png",
@@ -29,13 +20,6 @@
     "default_title": "Hatena Bookmark"
     ,"popup": "background/popup.html"
   },
-  // "browser_action": {
-  //   "name": "addbookmark",
-  //   "icons": ["images/chrome-b-plus.png"],
-  //   "popup": { "path": "background/bookmarkedit.html", "height": 400, "width": 400 }
-  // },
-  // "background_page": "background/test.html"
-
   "content_scripts": [
     {
       "run_at": "document_end",

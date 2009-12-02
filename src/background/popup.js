@@ -937,7 +937,7 @@ var ready = function() {
         return;
     }
 
-    if (window.popupMode || true) {
+    if (window.popupMode && !request_uri.param('error')) {
         if (Config.get('popup.window.autosize')) {
             document.body.style.width = '' + 500 + 'px';
         } else {
