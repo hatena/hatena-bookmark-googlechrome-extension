@@ -2767,6 +2767,7 @@ Hatena.Star.Star = new Ten.Class({
         if (!Hatena.Visitor.RKS) return;
         this.deleteTimer = setTimeout(function() {
             self.deleteTimer = null;
+            return; // Chrome popup window crash..
             var uri = Hatena.Star.BaseURL + 'star.deletable.json?name='
                 + self.name;
             new Ten.JSONP(uri, self, 'confirmDeletable');
