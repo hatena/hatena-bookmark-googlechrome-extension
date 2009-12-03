@@ -1,6 +1,0 @@
-
-function editBookmark() {
-    Utils.editBookmarkCurrent();
-}
-
-
