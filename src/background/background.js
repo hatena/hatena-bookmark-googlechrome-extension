@@ -1,4 +1,8 @@
 
+var isEuraAgreed = function() {
+    return !!localStorage.eula;
+}
+
 var Manager = $({});
 
 $.extend(Manager, {
@@ -172,7 +176,7 @@ ConnectMessenger.bind('bookmarkedit_bridge_set', function(event, data, port) {
 ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
     // console.log('!get' + data.url);
     var url = data.url;
-    console.log(bookmarkeditBridgePorts);
+    // console.log(bookmarkeditBridgePorts);
     var bridgePort = bookmarkeditBridgePorts[url];
     if (bridgePort) {
         bridgePort.onMessage.addListener(function(info, con) {
@@ -207,7 +211,9 @@ $(document).bind('BookmarksUpdated', function() {
 
 $(document).ready(function() {
     // console.log('ready');
-    UserManager.loginWithRetry(15 * 1000);
+    if (isEuraAgreed()) {
+        UserManager.loginWithRetry(15 * 1000);
+    }
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, opt) {
@@ -277,7 +283,9 @@ chrome.self.onConnect.addListener(function(port, name) {
 
 // login check
 setInterval(function() {
-    UserManager.login();
+    if (isEuraAgreed()) {
+        UserManager.login();
+    }
 }, 1000 * 60 * 15);
 
 // chrome webdatabase 5M 制限のため、tag 参照テーブルを作らない

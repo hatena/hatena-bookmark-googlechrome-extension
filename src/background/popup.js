@@ -910,11 +910,14 @@ if (popupMode) {
 
 var eulaAccept = function() {
     localStorage.eula = true;
+    UserManager.loginWithRetry(15 * 1000);
     $('#eula').hide();
-    ready();
     setTimeout(function() {
-        $('#main').show();
-    }, 20);
+        ready();
+        setTimeout(function() {
+            $('#main').show();
+        }, 20);
+    }, 1000);
 }
 
 /*

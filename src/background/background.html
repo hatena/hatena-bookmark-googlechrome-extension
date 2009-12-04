@@ -36,4 +36,18 @@
 <script type="text/javascript">window.open('../tests/webdatabase/test/test.html');</script>
 <script type="text/javascript">window.open('db.html');</script>
 -->
+<script type="text/javascript">
+if (isEuraAgreed()) {
+    window.gaJsHost = "https://ssl.";
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+<script type="text/javascript">
+try {
+    if (isEuraAgreed()) {
+        var pageTracker = _gat._getTracker("UA-441387-42");
+        pageTracker._trackPageview();
+    }
+} catch(err) { console.error(err) }
+</script>
 </html>
