@@ -72,38 +72,38 @@ $.extend(Manager, {
         if (!localStorage.eula) return;
 
         chrome.browserAction.setIcon({path: '/images/chrome-b-plus.png'});
-        if (tab.url && tab.url.indexOf('http') == 0 && Config.get('background.bookmarkcounter.enabled')) {
+        if (tab && tab.url && tab.url.indexOf('http') == 0 && Config.get('background.bookmarkcounter.enabled')) {
 
             if (UserManager.user) {
                  UserManager.user.hasBookmark(tab.url).next(function(bool) {
                      if (bool) {
-                         chrome.browserAction.setIcon({path: '/images/chrome-b-checked.png'});
+                         chrome.browserAction.setIcon({tabId: tab.id, path: '/images/chrome-b-checked.png'});
                      }
                  });
             }
 
             HTTPCache.counter.get(tab.url).next(function(count) {
                 if (count == null) {
-                    chrome.browserAction.setBadgeText({
+                    chrome.browserAction.setBadgeText({tabId: tab.id, 
                         text: '-',
                     });
-                    chrome.browserAction.setBadgeBackgroundColor({
+                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
                         color: [200,200,200, 255],
                     });
                 } else {
-                    chrome.browserAction.setBadgeText({
+                    chrome.browserAction.setBadgeText({tabId: tab.id, 
                         text: "" + count,
                     });
-                    chrome.browserAction.setBadgeBackgroundColor({
+                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
                         color: [96,255,0, 200],
                     });
                 }
             });
         } else {
-            chrome.browserAction.setBadgeText({
+            chrome.browserAction.setBadgeText({tabId: tab.id, 
                 text: '',
             });
-            chrome.browserAction.setBadgeBackgroundColor({
+            chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
                 color: [99,99,99, 255],
             });
         }
@@ -118,7 +118,13 @@ $.extend(Manager, {
         });
     },
     updateCurrentTab: function() {
-        chrome.tabs.getSelected(null, Manager.updateTab);
+        chrome.tabs.getSelected(null, function(t) {
+            chrome.windows.getCurrent(function(w) {
+                if (t && w && w.id == t.windowId) {
+                    Manager.updateTab(t);
+                }
+            });
+        });
     },
 });
 
@@ -127,12 +133,12 @@ var ConnectMessenger = $({});
 ConnectMessenger = $({});
 
 ConnectMessenger.bind('login_check', function(data) {
-    console.log('login by url: ' + data.url);
+    // console.log('login by url: ' + data.url);
     UserManager.loginWithRetry(15 * 1000);
 });
 
 ConnectMessenger.bind('logout', function(data) {
-    console.log('logout by url: ' + data.url);
+    // console.log('logout by url: ' + data.url);
     setTimeout(function() {
         UserManager.logout();
     }, 200);
@@ -140,14 +146,14 @@ ConnectMessenger.bind('logout', function(data) {
 
 ConnectMessenger.bind('get_siteinfo_for_url', function(event, data, port) {
     if (Config.get('content.webinfo.enabled')) {
-        console.log('got request of siteinfo for ' + data.url);
+        // console.log('got request of siteinfo for ' + data.url);
         SiteinfoManager.sendSiteinfoForURL(data.url, port);
     }
 });
 
 ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
     if (Config.get('content.webinfo.enabled')) {
-        console.log('got request of siteinfos whose domain is XPath');
+        // console.log('got request of siteinfos whose domain is XPath');
         SiteinfoManager.sendSiteinfosWithXPath(port);
     }
 });
@@ -164,7 +170,7 @@ ConnectMessenger.bind('bookmarkedit_bridge_set', function(event, data, port) {
 });
 
 ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
-    console.log('!get' + data.url);
+    // console.log('!get' + data.url);
     var url = data.url;
     console.log(bookmarkeditBridgePorts);
     var bridgePort = bookmarkeditBridgePorts[url];
@@ -200,7 +206,7 @@ $(document).bind('BookmarksUpdated', function() {
 });
 
 $(document).ready(function() {
-    console.log('ready');
+    // console.log('ready');
     UserManager.loginWithRetry(15 * 1000);
 });
 
