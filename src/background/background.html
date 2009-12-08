@@ -46,7 +46,9 @@ if (isEuraAgreed()) {
 try {
     if (isEuraAgreed()) {
         var pageTracker = _gat._getTracker("UA-441387-42");
+        pageTracker._setDomainName('none');
         pageTracker._trackPageview();
+        pageTracker._trackEvent('chrome-extension', 'use', '');
     }
 } catch(err) { console.error(err) }
 </script>
