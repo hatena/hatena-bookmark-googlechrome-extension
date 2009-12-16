@@ -614,7 +614,8 @@ a.username {
   list-style: none;
   background-color: #fff;
   border: 1px solid #555;
-  width: 120px;
+  min-width: 125px;
+  max-width: 200px;
 }
 
 #tag-complete-list li:hover {
