@@ -77,7 +77,7 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
-    if (request_uri.param('debug')) return;
+    if (request_uri.param('debug') || request_uri.param('error')) return;
     var pos;
     try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
     if (!pos) {
@@ -940,24 +940,28 @@ var ready = function() {
         return;
     }
 
-    if (window.popupMode && !request_uri.param('error')) {
-        if (Config.get('popup.window.autosize')) {
-            document.body.style.width = '' + 500 + 'px';
+    if (window.popupMode) {
+        if (request_uri.param('error')) {
+            //
         } else {
-            document.body.style.width = '' + Math.max(100, Config.get('popup.window.width')) + 'px';
+            if (Config.get('popup.window.autosize')) {
+                document.body.style.width = '' + 500 + 'px';
+            } else {
+                document.body.style.width = '' + Math.max(100, Config.get('popup.window.width')) + 'px';
+            }
+            /*
+            if (Config.get('popup.window.autosize')) {
+                chrome.windows.getLastFocused(function(w) {
+                    var width = 500;
+                    var height = w.height - 300;
+                    height = Math.max(height, 300);
+                    setWindowSize(width, height);
+                });
+            } else {
+                setWindowSize(Config.get('popup.window.width'), Config.get('popup.window.height'));
+            }
+            */
         }
-        /*
-        if (Config.get('popup.window.autosize')) {
-            chrome.windows.getLastFocused(function(w) {
-                var width = 500;
-                var height = w.height - 300;
-                height = Math.max(height, 300);
-                setWindowSize(width, height);
-            });
-        } else {
-            setWindowSize(Config.get('popup.window.width'), Config.get('popup.window.height'));
-        }
-        */
     }
     var user = UserManager.user;
     if (user) {
