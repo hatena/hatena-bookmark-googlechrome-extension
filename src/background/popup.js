@@ -562,7 +562,7 @@ var View = {
 
             var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
             if (lastCommentValueConf && lastCommentValueConf.url == url) {
-                Config.set('popup.bookmark.lastCommentValue', {});
+                // Config.set('popup.bookmark.lastCommentValue', {});
                 this.commentEL.attr('value', lastCommentValueConf.comment);
             }
 
