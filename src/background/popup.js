@@ -355,6 +355,7 @@ var View = {
                 uri: data.url,
             };
 
+            var httpRegexp = /(.*?)((?:https?):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+)(.*)/;
             Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
                 var elements = [];
@@ -367,18 +368,43 @@ var View = {
 
                     var li = Utils.createElementFromString(
                         '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
-                     {
-                         data: {
-                             userlink: B_HTTP + b.user + '/',
-                             permalink: permalink,
-                             icon: User.View.prototype.getProfileIcon(b.user),
-                             user: b.user,
-                             klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
-                             comment: b.comment,
-                             timestamp: b.timestamp.substring(0, 10),
-                             document: document
-                         }
-                     });
+                    {
+                        data: {
+                            userlink: B_HTTP + b.user + '/',
+                            permalink: permalink,
+                            icon: User.View.prototype.getProfileIcon(b.user),
+                            user: b.user,
+                            klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
+                            comment: b.comment,
+                            timestamp: b.timestamp.substring(0, 10),
+                            document: document
+                        }
+                    });
+                    if (httpRegexp.test(b.comment)) {
+                        var matches = [];
+                        var match;
+                        var str = b.comment;
+                        while (str && (match = httpRegexp.exec(str))) {
+                            matches.push(match[1]);
+                            matches.push(match[2]);
+                            str = match[3] || '';
+                        }
+                        if (str) matches.push(str);
+                        var cEL = li.comment;
+                        cEL.innerHTML = '';
+                        matches.forEach(function(match) {
+                            if (httpRegexp.test(match)) {
+                                var link = E('a', {
+                                    target: '_blank',
+                                    href: match,
+                                }, match);
+                                cEL.appendChild(link);
+                            } else {
+                                cEL.appendChild(document.createTextNode(match));
+                            }
+                        });
+                        console.log(matches);
+                    }
                     frag.appendChild(li);
                     elements.push(li);
                 }
