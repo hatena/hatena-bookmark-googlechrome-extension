@@ -629,6 +629,9 @@ var View = {
                             console.log(el.className);
                         }
                     });
+                    setTimeout(function() {
+                        self.commentEL.focus();
+                    }, 10);
                 }
             });
 

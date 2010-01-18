@@ -93,40 +93,6 @@ jQuery.extend(Sync, {
             }).error(Sync.errorback);
         }
         executer();
-
-        /*
-        Bookmark.database.transaction(function() {
-            for (var i = len - 1;  i >= 0; i--) {
-                var bi = i * 3;
-                var timestamp = infos[i].split("\t", 2)[1];
-                var title = bookmarks[bi];
-                var comment = bookmarks[bi+1];
-                var url = bookmarks[bi+2];
-                if (!timestamp) { continue; };
-                var b = new Bookmark;
-                b.title = title;
-                b.comment = (comment || '').replace(commentRe, '');
-                b.url = url;
-                b.set('date', Utils.strToDate(timestamp) / 1000);
-                if (url) {
-                    try {
-                        b.save().error(function(e) {
-                            console.error('error: ' + [e.toString(), url, title, comment, timestamp].toString());
-                        });
-                    } catch(e) {
-                    }
-                } else {
-                }
-                if (i && (i % items == 0)) {
-                    console.log('' + i + title);
-                }
-            }
-        }).next(function () {
-            Sync._complete();
-            p('complete:', infos.length);
-            p('time: ' + (Timer.now - now));
-        }).error(Sync.errorback);
-        */
     },
     _complete: function() {
         Sync._syncing = false;
