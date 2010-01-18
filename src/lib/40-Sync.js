@@ -54,7 +54,7 @@ jQuery.extend(Sync, {
 
         var i = infos.length;
 
-        i = Math.min(i, 10000); // WebDatabase の 5M 制約のため暫定
+        i = Math.min(i, 100000); // WebDatabase の 50M 制約のため暫定
 
         var executer = function() {
             Bookmark.database.transaction(function() {
