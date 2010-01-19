@@ -1,8 +1,8 @@
 {
   "name": "Hatena Bookmark",
   "id": "d9554fb8837640f492ca1891a0288270",
-  "description": "Hatena Bookmark extensions",
-  "version": "0.1.2",
+  "description": "Hatena Bookmark GoogleCHrome extensions",
+  "version": "1.0.0",
   "permissions": [
     "http://*/*",
     "https://*/*",

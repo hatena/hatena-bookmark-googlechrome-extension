@@ -236,7 +236,7 @@ a#users-count:visited {
   width: 100%;
   text-align: right;
   white-space: nowrap;
-  padding: 4px;
+  padding: 4px 4px 4px 0;
 }
 
 ul.tab-ui li {
@@ -256,10 +256,12 @@ ul.tab-ui li:hover {
   border: 1px solid #427DC4;
 }
 
+
 ul.tab-ui li.tab-link {
   background: transparent;
   border: none;
   -webkit-box-shadow: none;
+  padding-right: 0;
 }
 
 ul.tab-ui li.tab-link a {
@@ -659,7 +661,8 @@ dd#all-tags {
 }
 
 #search-form {
-  display: inline;
+  display: inline-block;
+  -webkit-box-flex: 1;
 }
 
 #search-word-preview em {
@@ -667,6 +670,10 @@ dd#all-tags {
   padding-left: 5px;
   padding-right: 5px;
   color: #000;
+}
+
+#search-word {
+  -webkit-box-flex: 1;
 }
 
 #search-preview-sep {
@@ -1004,4 +1011,6 @@ em a:visited {
   margin:0 1px;
 }
 
-
+#search-tab {
+  padding-left: 0;
+}
