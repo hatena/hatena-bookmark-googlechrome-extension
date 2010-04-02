@@ -1,7 +1,8 @@
 {
-  "name": "Hatena Bookmark GoogleChrome extension",
   "id": "d9554fb8837640f492ca1891a0288270",
-  "description": "Hatena Bookmark GoogleChrome extension",
+  "default_locale": "ja",
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
   "version": "1.0.2",
   "permissions": [
     "http://*/*",
