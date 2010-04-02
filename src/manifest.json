@@ -3,7 +3,7 @@
   "default_locale": "ja",
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "permissions": [
     "http://*/*",
     "https://*/*",
