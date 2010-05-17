@@ -958,6 +958,11 @@ em a:visited {
   margin-bottom: 10px;
 }
 
+#post-twitter-label {
+  background: url(http://favicon.hatena.ne.jp/?url=http://twitter.com/) no-repeat 0% 50%; /* XXX 後で適切な画像を設定する */
+  padding-left: 18px;
+}
+
 #private-label {
   background: url(/images/noshare.gif) no-repeat 0% 50%;
   padding-left: 12px;
