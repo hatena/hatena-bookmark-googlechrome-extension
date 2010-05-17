@@ -417,6 +417,7 @@ var View = {
     },
     bookmark: {
         get confirmBookmark()        { return $('#confirm-bookmark'); },
+        get postTwitter()            { return $('#post-twitter'); },
         get container()              { return $('#bookmark-container'); },
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
@@ -632,6 +633,16 @@ var View = {
                 Config.set('popup.bookmark.confirmBookmark', this.checked);
             });
 
+            if (Config.get('popup.bookmark.postTwitter')) {
+                this.postTwitter.attr('checked', 'checked');
+            }
+            this.postTwitter.bind('change', function() {
+                Config.set('popup.bookmark.postTwitter', this.checked);
+            });
+            if (!user.canUseTwitter) {
+                this.postTwitter.attr('disabled', 'disabled');
+            }
+
             this.setURL(url);
             this.tagCompleter = TagCompleter;
             this.tagCompleter.register(this.commentEL, {
@@ -752,7 +763,7 @@ var View = {
 
         getMatchedTextNode: function(text, target) {
             return document.evaluate(
-               'descendant::text()[contains(., "' + text.replace(/"/g, '\\"') + '")]',
+               'descendant::text()[contains(., "' + text.replace(/\"/g, '\\"') + '")]',
                target || document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
             ).singleNodeValue;
         },
