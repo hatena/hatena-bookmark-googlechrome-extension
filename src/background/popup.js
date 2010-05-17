@@ -417,12 +417,15 @@ var View = {
     },
     bookmark: {
         get confirmBookmark()        { return $('#confirm-bookmark'); },
+        get postTwitterContainer()   { return $('#post-twitter-container'); },
         get postTwitter()            { return $('#post-twitter'); },
+        get postTwitterHelp()        { return $('#post-twitter-help'); },
         get container()              { return $('#bookmark-container'); },
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
         get usernameEL()             { return $('#username') },
         get plusInputs()             { return $('#plus-inputs') },
+        get privateHelp()            { return $('#private-help') },
         get titleText()              { return $('#title-text') },
         get faviconEL()              { return $('#favicon') },
         get form()                   { return $('#form') },
@@ -568,8 +571,20 @@ var View = {
             this.usernameEL.text(user.name);
             if (user.plususer) {
                 this.plusInputs.removeClass('none');
+                this.privateHelp.remove();
             } else {
                 this.plusInputs.remove();
+            }
+            if (user.canUseTwitter) {
+                if (Config.get('popup.bookmark.postTwitter')) {
+                    this.postTwitter.attr('checked', 'checked');
+                }
+                this.postTwitter.bind('change', function() {
+                    Config.set('popup.bookmark.postTwitter', this.checked);
+                });
+                this.postTwitterHelp.remove();
+            } else {
+                this.postTwitterContainer.remove();
             }
             if (info.title) {
                 this.setTitle(info.title);
@@ -632,16 +647,6 @@ var View = {
             this.confirmBookmark.bind('change', function() {
                 Config.set('popup.bookmark.confirmBookmark', this.checked);
             });
-
-            if (Config.get('popup.bookmark.postTwitter')) {
-                this.postTwitter.attr('checked', 'checked');
-            }
-            this.postTwitter.bind('change', function() {
-                Config.set('popup.bookmark.postTwitter', this.checked);
-            });
-            if (!user.canUseTwitter) {
-                this.postTwitter.attr('disabled', 'disabled');
-            }
 
             this.setURL(url);
             this.tagCompleter = TagCompleter;

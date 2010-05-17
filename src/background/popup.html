@@ -220,8 +220,10 @@
                 <input type="hidden" id="input-url" name="url" />
                 <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
                 <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します">ブックマークを確認</label>
-                <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
-                <label for="post-twitter">Twitter に投稿</label>
+                <span id="post-twitter-container">
+                  <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
+                  <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter にも投稿する場合はチェックを入れてください。">Twitter に投稿</label>
+                </span>
                 <span id="asin-container">
                   <input value="" type="hidden" id="asin" name="asin" disabled />
                   <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled />
@@ -234,6 +236,8 @@
                   <input value="1" type="checkbox" id="send_mail" name="send_mail" />
                   <label for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">メールする</label>
                 </span>
+                <a id="post-twitter-help" class="option-help" href="http://b.hatena.ne.jp/help/" title="ブックマークするとき、その内容を Twitter に投稿できます。"><img src="http://favicon.hatena.ne.jp/?url=http://twitter.com/" alt="[Twitter]"><!-- XXX 後で適切なリンク先と画像を指定する。 --></a>
+                <a id="private-help" class="option-help" href="http://b.hatena.ne.jp/help/plus_private" title="はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開せずにブックマークできるようになります。"><img src="http://b.st-hatena.com/images/noshare.gif" alt="[非公開]"><!-- XXX 後で適切な画像を指定する。 --></a>
               </div>
             </div>
           </div>
