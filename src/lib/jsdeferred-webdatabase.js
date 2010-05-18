@@ -34,7 +34,7 @@
         this.options = extend({
             version: '1.0',
             displayName: dbName,
-            estimatedSize: 20 * 1024
+            estimatedSize: 50 * 1024 * 1024
         }, options);
 
         this.dbName = dbName;
@@ -110,7 +110,7 @@
         },
         getDatabase: function() {
             var options = this.options;
-            var db = (Database.global || window).openDatabase(this.dbName, options.version, options.displayName);//, options.estimatedSize);
+            var db = (Database.global || window).openDatabase(this.dbName, options.version, options.displayName, options.estimatedSize);
             return db;
         },
         execute: function(sql, args) {
