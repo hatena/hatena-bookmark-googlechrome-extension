@@ -958,14 +958,23 @@ em a:visited {
   margin-bottom: 10px;
 }
 
-#post-twitter-label {
-  background: url(http://favicon.hatena.ne.jp/?url=http://twitter.com/) no-repeat 0% 50%; /* XXX 後で適切な画像を設定する */
-  padding-left: 18px;
+#checkbox-options label {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-#private-label {
-  background: url(/images/noshare.gif) no-repeat 0% 50%;
-  padding-left: 12px;
+#post-twitter-label .label-text,
+#private-label .label-text {
+  background: -2px 50% no-repeat;
+  padding-left: 14px;
+}
+
+#post-twitter-label .label-text {
+  background-image: url(/images/add-twitter.png);
+}
+
+#private-label .label-text {
+  background-image: url(/images/add-private.png);
 }
 
 #asin-container {

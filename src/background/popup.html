@@ -218,26 +218,36 @@
               </ul>
               <div id="checkbox-options">
                 <input type="hidden" id="input-url" name="url" />
-                <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
-                <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します">ブックマークを確認</label>
+                <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
+                  <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
+                  ブックマークを確認
+                </label>
                 <span id="post-twitter-container">
-                  <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
-                  <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter にも投稿する場合はチェックを入れてください。">Twitter に投稿</label>
+                  <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter にも投稿する場合はチェックを入れてください。">
+                    <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
+                    <span class="label-text">Twitter に投稿</span>
+                  </label>
                 </span>
                 <span id="plus-inputs" class="none">
                   <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
-                  <input value="1" type="checkbox" id="private" name="private" />
-                  <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">公開しない</label>
-                  <input value="1" type="checkbox" id="send_mail" name="send_mail" />
-                  <label for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">メールする</label>
+                  <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
+                    <input value="1" type="checkbox" id="private" name="private" />
+                    <span class="label-text">公開しない</span>
+                  </label>
+                  <label for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
+                    <input value="1" type="checkbox" id="send_mail" name="send_mail" />
+                    メールする
+                  </label>
                 </span>
                 <span id="asin-container">
                   <input value="" type="hidden" id="asin" name="asin" disabled />
-                  <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled />
-                  <label for="add-asin">コレクションに追加</label>
+                  <label for="add-asin">
+                    <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" />
+                    コレクションに追加
+                  </label>
                 </span>
-                <a id="post-twitter-help" class="option-help" href="http://b.hatena.ne.jp/help/" title="ブックマークするとき、その内容を Twitter に投稿できます。"><img src="http://favicon.hatena.ne.jp/?url=http://twitter.com/" alt="[Twitter]"><!-- XXX 後で適切なリンク先と画像を指定する。 --></a>
-                <a id="private-help" class="option-help" href="http://b.hatena.ne.jp/help/plus_private" title="はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開せずにブックマークできるようになります。"><img src="http://b.st-hatena.com/images/noshare.gif" alt="[非公開]"><!-- XXX 後で適切な画像を指定する。 --></a>
+                <a id="post-twitter-help" class="option-help" href="http://b.hatena.ne.jp/help/" title="ブックマークするとき、その内容を Twitter に投稿できます。"><!-- XXX 後で適切なリンク先を指定する。 --><img src="/images/add-twitter.png" alt="[Twitter]"></a>
+                <a id="private-help" class="option-help" href="http://b.hatena.ne.jp/help/plus_private" title="はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開せずにブックマークできるようになります。"><img src="/images/add-private.png" alt="[非公開]"></a>
               </div>
             </div>
           </div>
