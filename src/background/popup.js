@@ -978,6 +978,14 @@ var ready = function() {
             } else {
                 document.body.style.width = '' + Math.max(100, Config.get('popup.window.width')) + 'px';
             }
+            // 同期実行だとうまく幅を調整できないので遅らせる
+            setTimeout(function () {
+                var overflow = $('#header').width() - $('body').width();
+                if (overflow > 0) {
+                    var search = $('#search-word');
+                    search.width(Math.max(search.width() - overflow, 100));
+                }
+            }, 35);
             /*
             if (Config.get('popup.window.autosize')) {
                 chrome.windows.getLastFocused(function(w) {
