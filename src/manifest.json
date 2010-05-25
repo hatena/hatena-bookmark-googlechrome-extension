@@ -11,10 +11,10 @@
     "bookmarks"
   ],
   "icons": {
-      "16": "images/favicon32.png",
+      "16": "images/favicon16.png",
       "32": "images/favicon32.png",
-      "48": "images/favicon32.png",
-      "128": "images/favicon32.png"
+      "48": "images/favicon48.png",
+      "128": "images/favicon128.png"
   },
   "browser_action": {
     "default_icon": "images/chrome-b-plus.png",
