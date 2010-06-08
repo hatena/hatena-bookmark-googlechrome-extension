@@ -426,6 +426,7 @@ var View = {
         get usernameEL()             { return $('#username') },
         get plusInputs()             { return $('#plus-inputs') },
         get privateHelp()            { return $('#private-help') },
+        get optionHelpContainer()    { return $('#option-help-container') },
         get titleText()              { return $('#title-text') },
         get faviconEL()              { return $('#favicon') },
         get form()                   { return $('#form') },
@@ -585,6 +586,9 @@ var View = {
                 this.postTwitterHelp.remove();
             } else {
                 this.postTwitterContainer.remove();
+            }
+            if (!this.privateHelp.length && !this.postTwitterHelp.length) {
+                this.optionHelpContainer.remove();
             }
             if (info.title) {
                 this.setTitle(info.title);

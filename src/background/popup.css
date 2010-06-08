@@ -149,7 +149,7 @@ a#users-count:visited {
 }
 
 #image-container {
-  margin: 5px 5px 3px 5px;
+  /* margin: 5px 5px 3px 5px; */
 }
 
 #image-current-container {
@@ -468,6 +468,23 @@ a.username {
     display: table;
 }
 
+#edit > .table-row {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+}
+
+#edit > .table-row > .table-left {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+}
+
+#edit > .table-row > .table-right {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: end;
+    padding: 5px;
+}
+
 #buttons {
     width:100%;
     display: table;
@@ -571,7 +588,42 @@ a.username {
 
 #checkbox-options label {
     margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
     cursor:pointer;
+}
+
+#post-twitter-label .label-text,
+#private-label .label-text {
+    background: -2px 50% no-repeat;
+    padding-left: 14px;
+}
+
+#post-twitter-label .label-text {
+    background-image: url(/images/add-twitter.png);
+}
+
+#private-label .label-text {
+    background-image: url(/images/add-private.png);
+}
+
+#asin-container {
+    display: none;
+}
+
+#option-help-separator {
+    visibility: hidden;
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+}
+
+#option-help-container {
+    background-color: #ccc;
+    padding: 1px 2px;
+}
+
+.option-help-marker {
+    font-weight: bold;
 }
 
 #recommend-tags-container, #all-tags-container {
@@ -956,29 +1008,6 @@ em a:visited {
   display: block;
   text-align: center;
   margin-bottom: 10px;
-}
-
-#checkbox-options label {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-#post-twitter-label .label-text,
-#private-label .label-text {
-  background: -2px 50% no-repeat;
-  padding-left: 14px;
-}
-
-#post-twitter-label .label-text {
-  background-image: url(/images/add-twitter.png);
-}
-
-#private-label .label-text {
-  background-image: url(/images/add-private.png);
-}
-
-#asin-container {
-  display: none;
 }
 
 
