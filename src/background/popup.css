@@ -618,12 +618,10 @@ a.username {
 }
 
 #option-help-container {
-    background-color: #ccc;
-    padding: 1px 2px;
-}
-
-.option-help-marker {
-    font-weight: bold;
+    background: #f3f3f3 url(/images/option-help-marker.png) left center no-repeat;
+    margin-top: 5px;
+    padding: 2px 4px 2px 22px;
+    -webkit-border-radius: 3px;
 }
 
 #recommend-tags-container, #all-tags-container {
