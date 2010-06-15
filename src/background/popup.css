@@ -545,6 +545,7 @@ a.username {
 
 #comment-area {
     width: 100%;
+    position: relative;
 }
 
 #bookmark-error,

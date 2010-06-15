@@ -19,6 +19,7 @@ $.extend(TagCompleter, {
             }
         });
         this.list.empty();
+        this.listPosition = new TagCompleter.ListPosition(input);
         this.input = input;
         TagCompleter.InputLine.prototype.__defineSetter__('value', function(text) {
             this._text = text;
@@ -113,7 +114,7 @@ $.extend(TagCompleter, {
     get caretPos() {
         return this._caretPos;
     },
-    createSuggestWords:function(pos) {
+    createSuggestWords: function(pos) {
         if (this.lastSuggestPos == pos) return;
 
         this.lastSuggestPos = pos;
@@ -128,6 +129,11 @@ $.extend(TagCompleter, {
                     E('span', {className:'complete-list-count'}, this.tagsObject[w] ? this.tagsObject[w].count : 0 )
                 ));
             }
+            var listPos = this.listPosition.guess(pos);
+            this.list.css({
+                left: (listPos.x - 3) + 'px',
+                top:  (listPos.y + 4) + 'px',
+            });
             this.list.show();
             this.caretPos = 0;
         }
@@ -276,7 +282,40 @@ TagCompleter.InputLine.prototype = {
         var comment = str.substring(lastIndex) || '';
         return [comment, tags];
     },
-}
+};
 
 
+TagCompleter.ListPosition = function(input) {
+    this.input = input[0] || input;
+    this.box = document.createElement('div');
+    this.caret = document.createElement('span');
+    this.preText = document.createTextNode('');
+    this.postText = document.createTextNode('');
+    var inputStyle = getComputedStyle(this.input, null);
+    var boxStyle = this.box.style;
+    boxStyle.cssText = 'position: absolute; white-space: pre-wrap; visibility: hidden;';
+    'paddingTop paddingRight paddingBottom paddingLeft borderTopStyle borderTopWidth borderRightStyle borderRightWidth borderBottomStyle borderBottomWidth borderLeftStyle borderLeftWidth fontSize fontFamily lineHeight'.split(' ').forEach(function (p) { boxStyle[p] = inputStyle[p]; });
+    this.widthDiff = parseFloat(inputStyle.paddingLeft) +
+                     parseFloat(inputStyle.paddingRight);
+    this.box.appendChild(this.preText);
+    this.box.appendChild(this.caret);
+    this.box.appendChild(this.postText);
+    this.input.parentNode.appendChild(this.box);
+    //console.log(boxStyle.cssText);
+};
 
+TagCompleter.ListPosition.prototype = {
+    guess: function(caretPos) {
+        var text = this.input.value;
+        var index = text.lastIndexOf('[', caretPos) + 1;
+        this.preText.nodeValue = text.substring(0, index);
+        this.postText.nodeValue = text.substring(index);
+        this.box.style.width = (this.input.clientWidth - this.widthDiff) + 'px';
+        var res = {
+            x: this.caret.offsetLeft - this.input.scrollLeft,
+            y: this.caret.offsetTop + this.caret.offsetHeight - this.input.scrollTop,
+        };
+        //console.log([res.x, res.y]);
+        return res;
+    },
+};
