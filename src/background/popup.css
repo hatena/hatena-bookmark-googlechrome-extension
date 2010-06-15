@@ -529,10 +529,6 @@ a.username {
   float: right;
 }
 
-#type-counter.edit-cell {
-  padding-left: 20px;
-}
-
 #url-container {
   padding-top: 0;
 }
@@ -542,6 +538,9 @@ a.username {
 
 #comment {
     width: 100%;
+    padding: 3px 3px 3px 5px;
+    vertical-align: top;
+    resize: vertical;
 }
 
 #comment-area {
@@ -561,10 +560,11 @@ a.username {
 }
 
 #type-counter {
+    float: right;
+    margin-top: 5px;
     padding-left: 13px;
     font-size: 90%;
     color: #555;
-    width: 1%;
     white-space: nowrap;
 }
 
