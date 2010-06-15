@@ -546,6 +546,17 @@ var View = {
             getInformation().next(function(info) {
                 self.loadByInformation(info);
             });
+
+            var form = this.form;
+            if (!form.data('keypressBound')) {
+                form.data('keypressBound', true);
+                form.keypress(function(e) {
+                    if (e.keyCode !== 13 || e.target !== self.commentEL.get(0))
+                        return;
+                    $('#edit-submit').click();
+                    return false;
+                });
+            }
         },
         clearView: function() {
             this.container.empty();
