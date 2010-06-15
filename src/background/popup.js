@@ -588,7 +588,9 @@ var View = {
                 this.plusInputs.remove();
             }
             if (user.canUseTwitter) {
-                if (Config.get('popup.bookmark.postTwitter')) {
+                if (user.postTwitterChecked === 'on' ||
+                    (user.postTwitterChecked === 'inherit' &&
+                     Config.get('popup.bookmark.postTwitter'))) {
                     this.postTwitter.attr('checked', 'checked');
                 }
                 this.postTwitter.bind('change', function() {

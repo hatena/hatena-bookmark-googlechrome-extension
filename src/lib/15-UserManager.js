@@ -84,6 +84,7 @@ User.prototype = {
     get private() { return this.options.private == 1 },
     get public() { return !this.private },
     get canUseTwitter() { return this.options.is_oauth_twitter == 1 },
+    get postTwitterChecked() { return this.options.twitter_checked || 'inherit' },
     get maxCommentLength() { return this.options.max_comment_length || 100 },
     get ignores() {
         if (this.options.ignores_regex) {
