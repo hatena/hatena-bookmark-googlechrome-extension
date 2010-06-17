@@ -28,6 +28,7 @@ $.extend(TagCompleter, {
             if (self.options.updatedHandler) self.options.updatedHandler(this);
         });
         this.inputLine = new TagCompleter.InputLine('', []);
+        this.inputLine.value = input.val();
         input.bind('keydown', function(ev) {
             if (ev.keyCode == 38 && self.suggestWords.length) return false; // up で先頭にいくのを防ぐ
             if ((ev.keyCode == 9 || ev.keyCode == 13) && self.suggestWords.length)

@@ -623,6 +623,8 @@ var View = {
             if (lastCommentValueConf && lastCommentValueConf.url == url) {
                 // Config.set('popup.bookmark.lastCommentValue', {});
                 this.commentEL.attr('value', lastCommentValueConf.comment);
+                var cLength = lastCommentValueConf.comment.length;
+                this.commentEL.get(0).setSelectionRange(cLength, cLength);
             }
 
             if (request_uri.param('error')) {
@@ -688,6 +690,7 @@ var View = {
                             console.log(el.className);
                         }
                     });
+                    rememberLastComment(m);
                     setTimeout(function() {
                         self.commentEL.focus();
                     }, 10);
@@ -695,15 +698,15 @@ var View = {
             });
 
             var lastCommentValue;
-            this.commentEL.keypress(function() {
-                if (lastCommentValue != this.value) {
-                    lastCommentValue = this.value;
+            function rememberLastComment(value) {
+                if (lastCommentValue != value) {
+                    lastCommentValue = value;
                     Config.set('popup.bookmark.lastCommentValue', {
                         url: url,
                         comment: lastCommentValue,
                     });
                 }
-            });
+            }
 
             $('dd span.tag').live('click', function() {
                 var tag = this.textContent;
