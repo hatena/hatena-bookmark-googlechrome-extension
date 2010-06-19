@@ -171,6 +171,7 @@ a#users-count:visited {
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
   overflow: hidden;
   padding-bottom: 46px;
+  z-index: 200;
 }
 
 #image-detect-container-list {
