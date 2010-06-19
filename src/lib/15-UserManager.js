@@ -39,9 +39,7 @@ $.extend(UserManager, {
         var current = UserManager.user;
         if (current) {
             if (current.name == res.name) {
-                current.options.rks = res.rks;
-                current.options.plususer = res.plususer;
-                current.options.ignores_regex = res.ignores_regex;
+                $.extend(current.options, res);
                 delete current._ignores;
                 return current;
             }
