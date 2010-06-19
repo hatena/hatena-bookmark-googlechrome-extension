@@ -110,7 +110,7 @@ User.prototype = {
         });
     },
     link: function(path) {
-        return B_HTTP + this.name + '/' + (path || '');
+        return B_HTTP + this.name + '/' + (path ? path + '?editer=craddon' : '');
     },
     get database() {
         return new Database('hatenabookmark-' + this.name, {
