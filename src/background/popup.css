@@ -597,6 +597,11 @@ a.username {
     cursor:pointer;
 }
 
+#checkbox-options label.disabled {
+    color: #aaa;
+    cursor: auto;
+}
+
 #post-twitter-label .label-text,
 #private-label .label-text {
     background: -2px 50% no-repeat;

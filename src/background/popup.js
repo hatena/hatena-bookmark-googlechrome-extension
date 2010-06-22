@@ -600,6 +600,10 @@ var View = {
             } else {
                 this.postTwitterContainer.remove();
             }
+            if (user.plususer && user.canUseTwitter) {
+                $('#private').click(Ten.Function.method(this, 'privateClickHandler'));
+                this.privateClickHandler();
+            }
             if (!this.privateHelp.length && !this.postTwitterHelp.length) {
                 this.optionHelpContainer.remove();
             }
@@ -928,6 +932,28 @@ var View = {
                 });
 
                 $('#asin-container').show();
+            }
+        },
+
+        privateClickHandler: function() {
+            var input = this.postTwitter.get(0);
+            var label = input.parentNode;
+            if (!label.enabledTitle) {
+                label.enabledTitle = label.title;
+                label.disabledTitle = label.title + '(非公開ブックマークは Twitter へ投稿されません。)';
+                input.defaultChecked = input.checked;
+            }
+            if ($('#private').get(0).checked) {
+                input.defaultChecked = input.checked;
+                input.checked = false;
+                input.disabled = true;
+                label.title = label.disabledTitle;
+                label.className = 'disabled';
+            } else {
+                input.checked = input.defaultChecked;
+                input.disabled = false;
+                label.title = label.enabledTitle;
+                label.className = '';
             }
         },
     }
