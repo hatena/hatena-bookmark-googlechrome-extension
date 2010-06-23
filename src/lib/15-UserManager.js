@@ -12,7 +12,7 @@ $.extend(UserManager, {
         }, wait || 15 * 1000);
     },
     login: function() {
-        $.get(UserManager.MY_NAME_URL).next(function(data) {
+        $.ajax({ url: UserManager.MY_NAME_URL, cache: false }).next(function(data) {
             UserManager.loginHandler(JSON.parse(data));
         }).error(UserManager.loginErrorHandler);
     },
