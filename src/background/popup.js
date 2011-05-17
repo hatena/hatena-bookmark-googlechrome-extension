@@ -546,17 +546,6 @@ var View = {
             getInformation().next(function(info) {
                 self.loadByInformation(info);
             });
-
-            var form = this.form;
-            if (!form.data('keypressBound')) {
-                form.data('keypressBound', true);
-                form.keypress(function(e) {
-                    if (e.keyCode !== 13 || e.target !== self.commentEL.get(0))
-                        return;
-                    $('#edit-submit').click();
-                    return false;
-                });
-            }
         },
         clearView: function() {
             this.container.empty();
@@ -726,6 +715,17 @@ var View = {
                 input.setSelectionRange(index, index);
                 return false;
             });
+
+            var form = this.form;
+            if (!form.data('keypressBound')) {
+                form.data('keypressBound', true);
+                form.keypress(function(e) {
+                    if (e.keyCode !== 13 || e.target !== self.commentEL.get(0))
+                        return;
+                    $('#edit-submit').click();
+                    return false;
+                });
+            }
 
             this.form.show();
             this.commentEL.focus();
