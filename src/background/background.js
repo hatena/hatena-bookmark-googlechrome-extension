@@ -286,7 +286,7 @@ setInterval(function() {
     if (isEuraAgreed()) {
         UserManager.login();
     }
-}, 1000 * 60 * 15);
+}, 1000 * 60 * 23);
 
 // chrome webdatabase 5M 制限のため、tag 参照テーブルを作らない
 Model.Bookmark.afterSave = function() {
