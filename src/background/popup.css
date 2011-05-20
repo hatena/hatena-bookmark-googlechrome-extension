@@ -603,6 +603,7 @@ a.username {
 }
 
 #post-twitter-label .label-text,
+#post-mixi-check-label .label-text,
 #private-label .label-text {
     background: -2px 50% no-repeat;
     padding-left: 14px;
@@ -610,6 +611,11 @@ a.username {
 
 #post-twitter-label .label-text {
     background-image: url(/images/add-twitter.png);
+}
+
+#post-mixi-check-label .label-text {
+    background: url(/images/icon-mixi.png) 0px 50% no-repeat;
+    padding-left: 18px;
 }
 
 #private-label .label-text {
