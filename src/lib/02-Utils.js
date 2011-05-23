@@ -113,10 +113,10 @@ var Utils = {
         return B_HTTP + 'entry/' + url.replace('#', '%23');
     },
     entryImage: function(url) {
-        return B_STATIC_HTTP + 'entry/image/' + url.replace('#', '%23');
+        return 'http://b.st-hatena.com/entry/image/' + url.replace('#', '%23');
     },
     faviconUrl: function(url) {
-        return 'http://favicon.hatena.ne.jp/?url=' + encodeURIComponent(url.replace('#', '%23'));
+        return 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(url.replace('#', '%23'));
     },
     editBookmarkCurrent: function(winId) {
         chrome.tabs.getSelected(winId, function(tabs) {
