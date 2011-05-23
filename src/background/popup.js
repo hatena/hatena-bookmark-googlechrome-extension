@@ -355,7 +355,7 @@ var View = {
                 uri: data.url,
             };
 
-            var httpRegexp = /(.*?)((?:https?):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+)(.*)/;
+            var httpRegexp = /(.*?)((?:https?):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\'*$!]|&(?!lt;|gt;|quot;))+)(.*)/;
             Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
                 var elements = [];
