@@ -3,7 +3,7 @@
 // XXX ToDo: Consider about namespaces.
 
 const B_HTTP = 'http://b.hatena.ne.jp/';
-const B_STATIC_HTTP = 'http://b.st-hatena.com/';
+const B_STATIC_HTTP = 'http://cdn-ak.b.st-hatena.com/';
 
 var SiteinfoRequestor = {
     init: function SR_init() {
@@ -174,7 +174,7 @@ extend(WidgetEmbedder.prototype, {
         const sharpEscapedURL = url.replace(/#/g, '%23');
         const entryURL = getEntryURL(url);
         const oldEntryURL = B_HTTP + 'entry/' + sharpEscapedURL;
-        const imageAPIPrefix = B_STATIC_HTTP + 'entry/image/';
+        const imageAPIPrefix = 'http://b.st-hatena.com/entry/image/';
         const oldImageAPIPrefix = B_HTTP + 'entry/image/';
         const addURL = B_HTTP + 'my/add.confirm?url=' + encodeURIComponent(url);
         const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
@@ -229,7 +229,7 @@ extend(WidgetEmbedder.prototype, {
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
         var img = E('img', {
-            src: B_STATIC_HTTP + 'entry/image/' + sharpEscapedURL,
+            src: 'http://b.st-hatena.com/entry/image/' + sharpEscapedURL,
             alt: WidgetEmbedder.messages.SHOW_ENTRY_TEXT,
             style: 'display: none;',
         });

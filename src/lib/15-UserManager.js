@@ -64,8 +64,11 @@ User.View = function(name) {
 
 User.View.prototype = {
     getProfileIcon: function(name, isLarge) {
-        return sprintf('http://www.st-hatena.com/users/%s/%s/profile%s.gif',
-                       name.substring(0, 2), name, isLarge ? '' : '_s');
+        var n = 0;
+        for (var i = 0; i < name.length; i++)
+            n += name.charCodeAt(i);
+        return sprintf('http://cdn%d.www.st-hatena.com/users/%s/%s/profile%s.gif',
+                       n % 5, name.substring(0, 2), name, isLarge ? '' : '_s');
     },
     get icon() {
         return this.getProfileIcon(this.name);

@@ -2132,8 +2132,11 @@ Hatena.Star.User = new Ten.Class({
         if (src) {
             img.src = src;
         } else {
+            var n = 0;
+            for (var i = 0; i < name.length; i++)
+                n += name.charCodeAt(i);
             var pre = name.match(/^[\w-]{2}/)[0];
-            img.src = 'http://www.st-hatena.com/users/' + pre + '/' + name + '/profile_s.gif';
+            img.src = 'http://cdn' + (n % 5) + '.www.st-hatena.com/users/' + pre + '/' + name + '/profile_s.gif';
         }
         img.setAttribute('alt', name);
         img.setAttribute('title', name);

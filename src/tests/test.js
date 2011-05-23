@@ -746,8 +746,8 @@ test('Model Bookmark/Tag', function(d) {
 
 test('UserView', function(d) {
     var view = new User.View('nagayama');
-    equals(view.icon , 'http://www.st-hatena.com/users/na/nagayama/profile_s.gif');
-    equals(view.largeIcon, 'http://www.st-hatena.com/users/na/nagayama/profile.gif');
+    ok(view.icon.match(/\/users\/na\/nagayama\/profile_s\.gif$/));
+    ok(view.largeIcon.match(/\/users\/na\/nagayama\/profile\.gif$/));
 
     d.call();
 }).

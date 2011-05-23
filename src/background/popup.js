@@ -838,7 +838,7 @@ var View = {
             $('#url').text(Utils.truncate(url, 50)).attr('title', url).attr('href', url);
 
             if (!$('#favicon').attr('src')) {
-                var favicon= new URI('http://favicon.st-hatena.com');
+                var favicon= new URI('http://cdn-ak.favicon.st-hatena.com/');
                 favicon.param({url: url});
                 this.faviconEL.attr('src', favicon);
             }
