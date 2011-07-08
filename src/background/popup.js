@@ -418,6 +418,7 @@ var View = {
     bookmark: {
         get confirmBookmark()        { return $('#confirm-bookmark'); },
         get postTwitter()            { return $('#post-twitter'); },
+        get postFacebook()           { return $('#post-facebook'); },
         get postMixiCheck()          { return $('#post-mixi-check'); },
         get container()              { return $('#bookmark-container'); },
         get tab()                    { return $('#bookmark-tab'); },
@@ -581,6 +582,18 @@ var View = {
                 }
                 this.postTwitter.bind('change', function() {
                     Config.set('popup.bookmark.postTwitter', this.checked);
+                });
+            } else {
+                // XXX Setup tooltip help
+            }
+            if (user.canUseFacebook) {
+                if (user.postFacebookChecked === 'on' ||
+                    (user.postFacebookChecked === 'inherit' &&
+                     Config.get('popup.bookmark.postFacebook'))) {
+                    this.postFacebook.attr('checked', 'checked');
+                }
+                this.postFacebook.bind('change', function() {
+                    Config.set('popup.bookmark.postFacebook', this.checked);
                 });
             } else {
                 // XXX Setup tooltip help
@@ -940,12 +953,17 @@ var View = {
         },
 
         privateClickHandler: function() {
-            [this.postTwitter[0] || null, this.postMixiCheck[0] || null].forEach(function (input) {
+            [this.postTwitter[0], this.postFacebook[0], this.postMixiCheck[0]].forEach(function (input) {
                 if (!input) return;
                 var label = input.parentNode;
                 if (!label.enabledTitle) {
                     label.enabledTitle = label.title;
-                    label.disabledTitle = label.title + '(非公開ブックマークは' + (input.name === 'post_twitter' ? ' Twitter ' : 'mixiチェック') + 'へ投稿されません。)';
+                    label.disabledTitle = label.title +
+                        '(非公開ブックマークは' + (
+                            input.name === 'post_twitter'  ? ' Twitter '  :
+                            input.name === 'post_facebook' ? ' Facebook ' :
+                                                             'mixiチェック'
+                        ) + 'へ投稿されません。)';
                     input.defaultChecked = input.checked;
                 }
                 if ($('#private').get(0).checked) {

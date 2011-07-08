@@ -596,6 +596,22 @@ a.username {
 #checkbox-options {
     padding: 3px;
     font-size: 90%;
+    line-height: 1.7;
+}
+
+#checkbox-options dt {
+    font-weight: bold;
+    margin-right: 3px;
+    display: inline;
+}
+
+#checkbox-options dd {
+    display: inline;
+}
+
+#checkbox-options dd + dt:before {
+    content: '\A';
+    white-space: pre;
 }
 
 #checkbox-options label {
@@ -611,23 +627,32 @@ a.username {
 }
 
 #post-twitter-label .label-text,
+#post-facebook-label .label-text,
 #post-mixi-check-label .label-text,
-#private-label .label-text {
-    background: -2px 50% no-repeat;
-    padding-left: 14px;
+#private-label .label-text,
+#send-mail-label .label-text {
+    background: 0px 50% no-repeat;
+    padding-left: 18px;
 }
 
 #post-twitter-label .label-text {
     background-image: url(/images/add-twitter.png);
 }
 
+#post-facebook-label .label-text {
+    background-image: url(/images/icon-facebook.png);
+}
+
 #post-mixi-check-label .label-text {
-    background: url(/images/icon-mixi.png) 0px 50% no-repeat;
-    padding-left: 18px;
+    background-image: url(/images/icon-mixi.png);
 }
 
 #private-label .label-text {
     background-image: url(/images/add-private.png);
+}
+
+#send-mail-label .label-text {
+    background-image: url(/images/icon-mail.png);
 }
 
 #asin-container {

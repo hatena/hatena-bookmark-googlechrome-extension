@@ -220,41 +220,51 @@
                 <textarea rows="2" id="comment" name="comment"></textarea>
                 <ul id="tag-complete-list">
                 </ul>
+                <input type="hidden" id="input-url" name="url" />
               </div>
               <p id="type-counter"><span id="type-count">0</span> / 100</p>
-              <div id="checkbox-options">
-                <input type="hidden" id="input-url" name="url" />
-                <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
-                  <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
-                  ブックマークを確認
-                </label>
-                <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
-                  <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
-                  <span class="label-text">Twitter へ投稿</span>
-                </label>
-                <label id="post-mixi-check-label" for="post-mixi-check" title="ブックマークしたページをmixiチェックへ投稿する場合はチェックを入れてください。">
-                  <input value="1" type="checkbox" id="post-mixi-check" name="post_mixi_check" />
-                  <span class="label-text">mixiチェックへ投稿</span>
-                </label>
-                <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
-                  <input value="1" type="checkbox" id="private" name="private" />
-                  <span class="label-text">公開しない</span>
-                </label>
-                <span id="plus-inputs" class="none">
-                  <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
-                  <label for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
-                    <input value="1" type="checkbox" id="send_mail" name="send_mail" />
-                    メールする
+              <dl id="checkbox-options">
+                <dt>共有:</dt>
+                <dd>
+                  <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
+                    <input value="1" type="checkbox" id="post-twitter" name="post_twitter" />
+                    <span class="label-text">Twitter</span>
                   </label>
-                </span>
-                <span id="asin-container">
-                  <input value="" type="hidden" id="asin" name="asin" disabled />
-                  <label for="add-asin">
-                    <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" />
-                    コレクションに追加
+                  <label id="post-facebook-label" for="post-facebook" title="ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
+                    <input value="1" type="checkbox" id="post-facebook" name="post_facebook" />
+                    <span class="label-text">Facebook</span>
                   </label>
-                </span>
-              </div>
+                  <label id="post-mixi-check-label" for="post-mixi-check" title="ブックマークしたページをmixiチェックへ投稿する場合はチェックを入れてください。">
+                    <input value="1" type="checkbox" id="post-mixi-check" name="post_mixi_check" />
+                    <span class="label-text">mixiチェック</span>
+                  </label>
+                </dd>
+                <dt>オプション:</dt>
+                <dd>
+                  <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
+                    <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" />
+                    ブックマークを確認
+                  </label>
+                  <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
+                    <input value="1" type="checkbox" id="private" name="private" />
+                    <span class="label-text">非公開</span>
+                  </label>
+                  <span id="plus-inputs" class="none">
+                    <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
+                    <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
+                      <input value="1" type="checkbox" id="send_mail" name="send_mail" />
+                      <span class="label-text">メール</span>
+                    </label>
+                  </span>
+                  <span id="asin-container">
+                    <input value="" type="hidden" id="asin" name="asin" disabled />
+                    <label for="add-asin">
+                      <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" />
+                      コレクションに追加
+                    </label>
+                  </span>
+                </dd>
+              </dl>
             </div>
           </div>
         </div>
