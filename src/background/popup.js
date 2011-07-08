@@ -417,19 +417,13 @@ var View = {
     },
     bookmark: {
         get confirmBookmark()        { return $('#confirm-bookmark'); },
-        get postTwitterContainer()   { return $('#post-twitter-container'); },
         get postTwitter()            { return $('#post-twitter'); },
-        get postTwitterHelp()        { return $('#post-twitter-help'); },
-        get postMixiCheckContainer() { return $('#post-mixi-check-container'); },
         get postMixiCheck()          { return $('#post-mixi-check'); },
-        get postMixiCheckHelp()      { return $('#post-mixi-check-help'); },
         get container()              { return $('#bookmark-container'); },
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
         get usernameEL()             { return $('#username') },
         get plusInputs()             { return $('#plus-inputs') },
-        get privateHelp()            { return $('#private-help') },
-        get optionHelpContainer()    { return $('#option-help-container') },
         get titleText()              { return $('#title-text') },
         get faviconEL()              { return $('#favicon') },
         get form()                   { return $('#form') },
@@ -575,8 +569,8 @@ var View = {
             this.usernameEL.text(user.name);
             if (user.plususer) {
                 this.plusInputs.removeClass('none');
-                this.privateHelp.remove();
             } else {
+                // XXX Setup toolitp help
                 this.plusInputs.remove();
             }
             if (user.canUseTwitter) {
@@ -588,9 +582,8 @@ var View = {
                 this.postTwitter.bind('change', function() {
                     Config.set('popup.bookmark.postTwitter', this.checked);
                 });
-                this.postTwitterHelp.remove();
             } else {
-                this.postTwitterContainer.remove();
+                // XXX Setup tooltip help
             }
             if (user.canUseMixiCheck) {
                 if (user.postMixiCheckChecked === 'on' ||
@@ -601,17 +594,12 @@ var View = {
                 this.postMixiCheck.bind('change', function() {
                     Config.set('popup.bookmark.postMixiCheck', this.checked);
                 });
-                this.postMixiCheckHelp.remove();
             } else {
-                this.postMixiCheckContainer.remove();
+                // XXX Setup tooltip help
             }
-            if (user.plususer && (user.canUseTwitter || user.canUseMixiCheck)) {
-                $('#private').click(Ten.Function.method(this, 'privateClickHandler'));
-                this.privateClickHandler();
-            }
-            if (!this.privateHelp.length && !this.postTwitterHelp.length && !this.postMixiCheckHelp.length) {
-                this.optionHelpContainer.remove();
-            }
+            $('#private').click(Ten.Function.method(this, 'privateClickHandler'));
+            this.privateClickHandler();
+
             if (info.title) {
                 this.setTitle(info.title);
             } else {
