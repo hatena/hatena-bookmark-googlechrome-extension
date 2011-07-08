@@ -695,6 +695,10 @@ a.username {
   border-bottom-color: #bcd8f5;
 }
 
+#tag-notice {
+  margin-top: 5px;
+}
+
 #tag-complete-list {
   display: none;
   position: absolute;
@@ -776,7 +780,9 @@ dd#all-tags {
 #header-usericon img {
 }
 
-#show-all-tags-toggle {
+#show-all-tags-toggle,
+#recommend-tags-container .note,
+#tag-notice .note {
   padding-left: 10px;
   font-size: 90%;
   color: #555;

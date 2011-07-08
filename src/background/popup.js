@@ -434,6 +434,7 @@ var View = {
         get allTags()                { return $('#all-tags') },
         get recommendTagsContainer() { return $('#recommend-tags-container') },
         get recommendTags()          { return $('#recommend-tags') },
+        get tagNotice()              { return $('#tag-notice') },
         get typeCount()              { return $('#type-count') },
         get port() {
             if (!this._port) {
@@ -795,6 +796,9 @@ var View = {
         setRecomendTags: function(tags) {
            this.showTags(tags, this.recommendTagsContainer, this.recommendTags);
            this.tagCompleter.update();
+           if (tags && tags.length) {
+               this.tagNotice.remove();
+           }
         },
 
         showTags: function(tags, container, tagsList) {
