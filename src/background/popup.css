@@ -467,6 +467,7 @@ a.username {
 #edit {
     width:100%;
     display: table;
+    padding: 0 3px;
 }
 
 #edit > .table-row {
@@ -476,6 +477,17 @@ a.username {
 
 #edit > .table-row > .table-left {
     display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-flex: 1;
+}
+
+#edit > .table-row > .table-left > .table-row {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+}
+
+#edit > .table-row > .table-left > .table-row > .edit-cell {
+    display: block;
     -webkit-box-flex: 1;
 }
 
@@ -528,10 +540,6 @@ a.username {
   padding-left: 10px;
   display: inline;
   float: right;
-}
-
-#url-container {
-  padding-top: 0;
 }
 
 
@@ -831,15 +839,15 @@ em #comment-users {
 
 /* loading */
 .loading {
-    display: none;
+    display: none !important;
 }
 
 body.data-loading * .loaded {
-    display: none;
+    display: none !important;
 }
 
 body.data-loading * .loading {
-    display: inline;
+    display: inline !important;
 }
 
 

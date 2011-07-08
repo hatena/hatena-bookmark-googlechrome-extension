@@ -163,13 +163,11 @@
       <div class="table-row">
         <div class="table-left">
           <div class="table-row">
-            <div class="edit-left edit-cell">タイトル:</div>
             <div id="title" class="edit-cell loaded">
 
               <div style="width: 100%; display: table-cell;">
                 <span id="title-toggle-button" class="edit-cell">
-                  <img onclick="
-                  View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
+                  <img onclick="View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
@@ -195,27 +193,41 @@
             <div class="edit-cell loading"><img src="/images/loading.gif" width="16" height="16" class="usericon">データをロードしています…</div>
           </div>
 
-
           <div class="table-row">
-            <div class="edit-left edit-cell">URL:</div>
             <div class="edit-cell" id="url-container">
               <div>
                 <a href="" id="url"></a>
               </div>
               <div>
                 <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
-                <span id="type-counter"><span id="type-count">0</span> / 100</span>
               </div>
             </div>
           </div>
+        </div>
+
+        <div id="image-table-container" class="table-right none">
+          <div id="image-container">
+            <div id="image-current-container" onclick="View.bookmark.imageDetect();" ><img id="current-image" src="/images/noimages.png" /></div>
+          </div>
+          <hr id="option-help-separator"/>
+          <div id="option-help-container" title="有効にすることで使える、より便利な機能の紹介です。">
+            <a id="post-twitter-help" class="option-help" href="http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=chrome" title="Twitter 連携機能を設定すると、ブックマーク時に Twitter へも投稿することができます。"><img src="/images/add-twitter.png" alt="[Twitter]"></a>
+            <a id="post-mixi-check-help" class="option-help" href="http://b.hatena.ne.jp/help/config_coop#mixi-check" title="mixiチェック連携機能を設定すると、ブックマーク時にmixiチェックへも投稿することができます。"><img src="/images/icon-mixi.png" alt="[mixiチェック]"></a>
+            <a id="private-help" class="option-help" href="http://b.hatena.ne.jp/guide/plus?target=append&amp;ref=chrome" title="はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。"><img src="/images/add-private.png" alt="[非公開]"></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-row">
+        <div class="table-left">
           <div class="table-row">
-            <div class="edit-left edit-cell">コメント:</div>
             <div class="edit-cell" id="bookmark-options">
               <div id="comment-area">
                 <textarea rows="2" id="comment" name="comment"></textarea>
                 <ul id="tag-complete-list">
                 </ul>
               </div>
+              <p id="type-counter"><span id="type-count">0</span> / 100</p>
               <div id="checkbox-options">
                 <input type="hidden" id="input-url" name="url" />
                 <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
@@ -254,18 +266,6 @@
                 </span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div id="image-table-container" class="table-right none">
-          <div id="image-container">
-            <div id="image-current-container" onclick="View.bookmark.imageDetect();" ><img id="current-image" src="/images/noimages.png" /></div>
-          </div>
-          <hr id="option-help-separator"/>
-          <div id="option-help-container" title="有効にすることで使える、より便利な機能の紹介です。">
-            <a id="post-twitter-help" class="option-help" href="http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=chrome" title="Twitter 連携機能を設定すると、ブックマーク時に Twitter へも投稿することができます。"><img src="/images/add-twitter.png" alt="[Twitter]"></a>
-            <a id="post-mixi-check-help" class="option-help" href="http://b.hatena.ne.jp/help/config_coop#mixi-check" title="mixiチェック連携機能を設定すると、ブックマーク時にmixiチェックへも投稿することができます。"><img src="/images/icon-mixi.png" alt="[mixiチェック]"></a>
-            <a id="private-help" class="option-help" href="http://b.hatena.ne.jp/guide/plus?target=append&amp;ref=chrome" title="はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。"><img src="/images/add-private.png" alt="[非公開]"></a>
           </div>
         </div>
       </div>
