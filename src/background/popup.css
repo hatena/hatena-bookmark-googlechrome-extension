@@ -675,6 +675,16 @@ a.username {
     display: none;
 }
 
+.option-help-tooltip {
+    background: #eee;
+    border: 1px solid #ccc;
+    position: absolute;
+    margin: 0 10px;
+    padding: 7px 10px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
 #recommend-tags-container, #all-tags-container {
     display: none;
     padding:0px 8px 0px 8px;
