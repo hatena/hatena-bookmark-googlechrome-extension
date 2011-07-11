@@ -499,8 +499,12 @@ a.username {
 }
 
 #buttons {
-    width:100%;
-    display: table;
+    text-align: right;
+}
+
+#buttons > .table-row,
+#buttons > .table-row > .edit-cell {
+    display: inline-block;
 }
 
 #buttons * input {
@@ -509,10 +513,6 @@ a.username {
     font-size: 95%;
     margin: 5px;
     padding: 1px 0 1px 0;
-}
-
-#buttons div.edit-cell:first-child {
-  width: 100%;
 }
 
 .edit-left {
@@ -569,6 +569,22 @@ a.username {
     color: #555;
     background-color: #FDD;
     border-radius: 3px;
+}
+
+#bookmarked-notice-text {
+    margin-right: 8px;
+}
+
+#delete-button {
+    -webkit-appearance: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-weight: normal;
+    color: #00d;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 #type-counter {

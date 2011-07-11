@@ -826,10 +826,9 @@ var View = {
 
         setByBookmark: function(b) {
             if (b) {
-                $('#bookmarked-notice').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました')
-                .removeClass('none');
-                $('#delete-button').removeClass('none');
-                $('#edit-submit').attr('value', '編集');
+                $('#bookmarked-notice-text').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました');
+                $('#bookmarked-notice').removeClass('none');
+                $('#edit-submit').attr('value', '保存');
                 this.updateComment(b.comment);
             }
         },
@@ -888,7 +887,7 @@ var View = {
         setEntry: function(entry) {
             this.currentEntry = entry;
             $('body').removeClass('data-loading');
-            if (entry.bookmarked_data && !$('#bookmarked-notice').text()) {
+            if (entry.bookmarked_data && !$('#bookmarked-notice-text').text()) {
                 var data = entry.bookmarked_data;
                 data = {
                     dateYMDHM: data.timestamp,

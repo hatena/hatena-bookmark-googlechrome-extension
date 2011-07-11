@@ -143,7 +143,10 @@
         <div class="table-left"><a id="link-canonical"></a></div><div class="table-right"><img src="/images/page.gif"> <a id="canonical-users"></a></div>
       </div>
     </div>
-    <div id="bookmarked-notice" class="none"></div>
+    <div id="bookmarked-notice" class="none">
+      <span id="bookmarked-notice-text"></span>
+      <input onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
+    </div>
     <div id="bookmark-error" class="none"></div>
 
     <div id="image-detect-container" class="none">
@@ -285,9 +288,6 @@
 
     <div id="buttons">
         <div class="table-row">
-            <div class="edit-cell">
-                <input class="none" onclick="deleteBookmark();" id="delete-button" type="button" value="削除" />
-            </div>
             <div class="edit-cell">
                 <input id="edit-submit" type="submit" value="追加" />
             </div>
