@@ -631,7 +631,7 @@ a.username {
 }
 
 #checkbox-options label {
-    margin-right: 5px;
+    margin-right: 7px;
     display: inline-block;
     vertical-align: middle;
     cursor:pointer;
@@ -648,7 +648,8 @@ a.username {
 #private-label .label-text,
 #send-mail-label .label-text {
     background: 0px 50% no-repeat;
-    padding-left: 18px;
+    margin-left: 2px;
+    padding-left: 17px;
 }
 
 #post-twitter-label .label-text {
