@@ -63,9 +63,6 @@ var SiteinfoRequestor = {
 function WidgetEmbedder(siteinfo) {
     this.siteinfo = siteinfo;
     this.embedLater(WidgetEmbedder.INITIAL_DELAY);
-    document.addEventListener('DOMNodeInserted', this, false);
-    document.addEventListener('AutoPagerize_DOMNodeInserted', this, false);
-    document.addEventListener('AutoPatchWork.DOMNodeInserted', this, false);
 }
 
 extend(WidgetEmbedder, {
@@ -95,6 +92,7 @@ extend(WidgetEmbedder.prototype, {
         this.timerId = setTimeout(function (self) {
             self.embed();
             self.timerId = 0;
+            document.addEventListener('DOMNodeInserted', self, false);
         }, delay, this);
     },
 
@@ -251,12 +249,8 @@ extend(WidgetEmbedder.prototype, {
 
     handleEvent: function WE_handleEvent(event) {
         switch (event.type) {
-        case 'AutoPagerize_DOMNodeInserted':
-        case 'AutoPatchWork.DOMNodeInserted':
-            document.removeEventListener('DOMNodeInserted', this, false);
-            event.target._hb_baseURL = event.newValue;
-            /* FALL THROUGH */
         case 'DOMNodeInserted':
+            document.removeEventListener('DOMNodeInserted', this, false);
             this.embedLater(WidgetEmbedder.MUTATION_DELAY);
             break;
         }
