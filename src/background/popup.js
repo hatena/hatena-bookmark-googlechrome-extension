@@ -2,7 +2,7 @@
 
 Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
-import(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model']);
+importModules(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model']);
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;

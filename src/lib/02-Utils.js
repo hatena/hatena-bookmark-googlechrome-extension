@@ -30,7 +30,7 @@ sprintf._SPRINTF_HASH = {
     '%f': parseFloat
 };
 
-var import = function(source, names, target) {
+var importModules = function(source, names, target) {
     if (!target) target = GLOBAL;
     for (var i = 0;  i < names.length; i++) {
         var name = names[i];
