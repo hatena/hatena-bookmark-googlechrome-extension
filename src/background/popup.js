@@ -900,7 +900,7 @@ var View = {
             this.setURL(entry.url);
             if (Config.get('popup.tags.recommendTags.enabled'))
                 this.setRecomendTags(entry.recommend_tags);
-            var count = parseInt(entry.count);
+            var count = parseInt(entry.count, 10);
             if (count) {
                 var uc = $('#users-count');
                 uc.text(String(count) + (count == 1 ? ' user' : ' users'));

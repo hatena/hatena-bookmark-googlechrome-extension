@@ -141,10 +141,10 @@ HTTPCache.usertags = new HTTPCache('usertagsCache', {
 
         for (var tag in tags) {
             if (tags[tag].count) {
-                res.tagsArray.push([tag, parseInt(tags[tag].count), tags[tag].timestamp]);
+                res.tagsArray.push([tag, parseInt(tags[tag].count, 10), tags[tag].timestamp]);
                 res.tags[tag] = tags[tag];
                 res.tagsKeys.push(tag);
-                res.tagsCountSortedKeys.push([tag, parseInt(tags[tag].count)]);
+                res.tagsCountSortedKeys.push([tag, parseInt(tags[tag].count, 10)]);
             }
         }
 

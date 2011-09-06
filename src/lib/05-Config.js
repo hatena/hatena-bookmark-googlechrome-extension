@@ -9,16 +9,16 @@ var Config = {
             if (typeof value == 'boolean') return value;
 
             if (isFinite(value)) {
-                return !!parseInt(value);
+                return !!parseInt(value, 10);
             } else {
                 return !!value;
             }
         },
         int: function(value) {
-            return parseInt(value);
+            return parseInt(value, 10);
         },
         unsignedInt: function(value) {
-            value = parseInt(value)
+            value = parseInt(value, 10)
             return (value < 0) ? 0 : value;
         },
         number: function(value) {

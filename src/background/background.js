@@ -232,7 +232,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         chrome.windows.getAll(null, function(allWindows) {
             var flag = false;
             for (var i = 0;  i < allWindows.length; i++) {
-                if (parseInt(allWindows[i].id) == parseInt(info.windowId)) {
+                if (parseInt(allWindows[i].id, 10) == parseInt(info.windowId, 10)) {
                     flag = allWindows[i];
                     break;
                 }

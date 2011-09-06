@@ -18,7 +18,7 @@ var sprintf = function (str) {
     return str.replace(/%0(\d+)d/g, function(m, num) {
         var r = String(args.shift());
         var c = '';
-        num = parseInt(num) - r.length;
+        num = parseInt(num, 10) - r.length;
         while (--num >= 0) c += '0';
         return c + r;
     }).replace(/%[sdf]/g, function(m) { return sprintf._SPRINTF_HASH[m](args.shift()) });
@@ -65,7 +65,7 @@ var Utils = {
         // dateStr // yyyymmddhhmmss
         return new Date(
             dateStr.substr(0,4),
-            parseInt(dateStr.substr(4,2)) - 1,
+            parseInt(dateStr.substr(4,2), 10) - 1,
             dateStr.substr(6,2),
             dateStr.substr(8,2),
             dateStr.substr(10,2),
