@@ -7,6 +7,38 @@ importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model'
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;
 
+document.addEventListener( "click", function ( evt ) {
+    var id = evt.target.id;
+    if ( id === "delete-button" ) {
+        confirmWithCallback( id, "このブックマークを削除します。 よろしいですか?", deleteBookmark );
+    }
+}, false );
+function confirmWithCallback( id, msg, callback ) {
+    var t = document.getElementById( id );
+    var prevVal = t.value;
+    t.value = "確認";
+    t.disabled = true;
+    var htmlStr = '<p class="msg"></p>' +
+        '<div><input type="button" value="OK" class="ok">' +
+        '<input type="button" value="Cancel" class="cancel">' +
+        '</div>';
+    var box = document.createElement( "div" );
+    function closeConfirmBox() {
+        t.value = prevVal;
+        t.disabled = false;
+        document.removeEventListener( "click", closeConfirmBox, false );
+        box.parentNode.removeChild( box );
+    }
+    box.className = "confirmation-balloon";
+    box.innerHTML = htmlStr;
+    box.getElementsByClassName( "msg" ).item( 0 ).textContent = msg;
+    document.addEventListener( "click", closeConfirmBox, false );
+    box.onclick = function ( evt ) { evt.stopPropagation() };
+    box.getElementsByClassName( "ok" ).item( 0 ).onclick = function () { closeConfirmBox(); callback() };
+    box.getElementsByClassName( "cancel" ).item( 0 ).onclick = function () { closeConfirmBox() };
+    t.parentNode.insertBefore( box, t.nextSibling );
+}
+
 if (popupMode) {
     // XXX
     p = function(msg) {

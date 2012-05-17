@@ -676,6 +676,7 @@ a.username {
     display: none;
 }
 
+.confirmation-balloon,
 .option-help-tooltip {
     background: #eee;
     border: 1px solid #ccc;
