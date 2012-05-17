@@ -1,5 +1,3 @@
-
-
 Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
 importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model']);
@@ -440,6 +438,9 @@ var View = {
                     frag.appendChild(li);
                     elements.push(li);
                 }
+                // Chrome 拡張の popup ウィンドウで confirm を出すとおかしくなることがあるので,
+                // 暫定処置としてカラースターの追加はできないようにする (カラースターの追加で confirm があるので)
+                Hatena.Star.AddButton.prototype.showColorPalletDelay = function doNothing() {};
                 Hatena.Bookmark.Star.loadElements(elements, (n == 0 ? options : null)).next(starLoadedCheck);
                 self.list.append(frag);
                 return Deferred.wait(0.25);
@@ -1193,6 +1194,4 @@ var ready = function() {
 };
 
 $(document).bind('ready', ready);
-
-
 
