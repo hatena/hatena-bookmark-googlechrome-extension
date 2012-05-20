@@ -39,8 +39,10 @@ function confirmWithCallback( id, msg, callback ) {
     document.addEventListener( "click", closeConfirmBox, false );
     box.onclick = function ( evt ) { evt.stopPropagation() };
     box.getElementsByClassName( "ok" ).item( 0 ).onclick = function () { closeConfirmBox(); callback() };
-    box.getElementsByClassName( "cancel" ).item( 0 ).onclick = function () { closeConfirmBox() };
+    var cancelButton = box.getElementsByClassName( "cancel" ).item( 0 );
+    cancelButton.onclick = function () { closeConfirmBox(); t.focus() };
     t.parentNode.insertBefore( box, t.nextSibling );
+    cancelButton.focus();
 }
 
 if (popupMode) {
