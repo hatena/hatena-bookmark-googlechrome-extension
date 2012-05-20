@@ -3,7 +3,7 @@ if (typeof(Ten) == 'undefined') {
 
 Ten = {};
 Ten.NAME = 'Ten';
-Ten.VERSION = 0.28;
+Ten.VERSION = 0.44;
 
 /* Ten.Class */
 Ten.Class = function(klass, prototype) {
@@ -108,6 +108,7 @@ Ten.JSONP = new Ten.Class({
         this.script = document.createElement('script');
         this.script.src = uri;
         this.script.type = 'text/javascript';
+        this.script.onerror = function () {Ten.JSONP.Callbacks = [];};
         document.getElementsByTagName('head')[0].appendChild(this.script);
     },
     addCallback: function(obj,method) {
@@ -133,7 +134,11 @@ Ten.XHR = new Ten.Class({
         this.method = 'GET';
 
         if (!uri) return;
-        
+
+        if (!Ten.XHR.isSafeUri(uri)) {
+            throw "host differs : " + uri;
+        }
+
         if (!opts) opts = {};
 
         if (opts.method) 
@@ -157,7 +162,7 @@ Ten.XHR = new Ten.Class({
             function () { return new XMLHttpRequest(); },
             function () { return new ActiveXObject('Msxml2.XMLHTTP'); },
             function () { return new ActiveXObject('Microsoft.XMLHTTP'); },
-            function () { return new ActiveXObject('Msxml2.XMLHTTP.4.0'); },
+            function () { return new ActiveXObject('Msxml2.XMLHTTP.4.0'); }
         ];
         for (var i = 0; i < tryThese.length; i++) {
             var func = tryThese[i];
@@ -170,15 +175,31 @@ Ten.XHR = new Ten.Class({
         }
         return xhr;
     },
+    isSafeUri: function(uri) {
+        if (uri.match(/^\w+:/) || uri.match(/^\/\//)) {
+            if (uri.split('/')[2] == location.host) return true;
+            else return false;
+        } else if (uri.match(/^\/[^\/]/) || uri == '/') {
+            return true;
+        } else if (!uri || uri.length == 0) {
+            return false;
+        }
+        return true;
+    },
     makePostData: function(data) {
-        var pairs = [];
         var regexp = /%20/g;
+        if (typeof data == 'string' || (data instanceof String)) {
+            return encodeURIComponent(data).replace(regexp, '+');
+        }
+        var pairs = [];
         for (var k in data) {
-            if (!data[k]) continue;
-            var v = data[k].toString();
-            var pair = encodeURIComponent(k).replace(regexp,'+') + '=' +
-                encodeURIComponent(v).replace(regexp,'+');
-            pairs.push(pair);
+            if (typeof data[k] == 'undefined') continue;
+            var prefix = encodeURIComponent(k).replace(regexp, '+') + '=';
+            var values = Array.prototype.concat(data[k]);
+            for (var i = 0; i < values.length; i++) {
+                var pair = prefix + encodeURIComponent(values[i]).replace(regexp, '+');
+                pairs.push(pair);
+            }
         }
         return pairs.join('&');
     }
@@ -436,6 +457,7 @@ Ten.DOM = new Ten.Class({
         var cname = element.className;
         if (!cname) return false;
         cname = ' ' + cname.toLowerCase() + ' ';
+        cname = cname.replace(/[\n\r\t]/g, ' ');
         className = ' ' + className.toLowerCase() + ' ';
         return (cname.indexOf(className) != -1);
     },
@@ -736,7 +758,7 @@ Ten.Selector = new Ten.Class({
         this.childNode = child;
     },
     getElementsBySelector: function(selector, parent) {
-        sels = selector.split(/\s*,\s*/);
+        var sels = selector.split(/\s*,\s*/);
         var ret = [];
         for (var i = 0; i < sels.length; i++) {
             var sel = new Ten.Selector(sels[i]);
@@ -771,7 +793,7 @@ Ten.SelectorNode = new Ten.Class({
         var f = 'getElementsBySelector';
         var t = this.selectorText;
         var match;
-        if ((match = t.match(/^(.+)\:([\w-+()]+)$/))) {
+        if ((match = t.match(/^(.+)\:([\w\-+()]+)$/))) {
             t = match[1];
             this.pseudoClass = match[2];
         }
@@ -899,7 +921,7 @@ Ten._Selector = new Ten.Class({
         this.childNode = child;
     },
     getElementsBySelector: function(selector, parent) {
-        sels = selector.split(/\s*,\s*/);
+        var sels = selector.split(/\s*,\s*/);
         var ret = [];
         for (var i = 0; i < sels.length; i++) {
             var sel = new Ten._Selector(sels[i]);
@@ -931,7 +953,7 @@ Ten._Selector = new Ten.Class({
         (function(arr) {
             for (var i = 0; i < arr.length; i++) {
                 var o = arr[i];
-                if (o instanceof Array ||
+                if ((o && o instanceof Array) ||
                     (o && typeof(o.length) === 'number' 
                        && typeof(o) != 'string'
                        && !o.tagName)){
@@ -1012,7 +1034,6 @@ Ten._SelectorNode = new Ten.Class({
 });
 
 /* Ten.querySelector */
-Ten.querySelector;
 if (document.querySelector) {
     Ten.querySelector = function (selector, elem) {
         if (elem) return (elem.querySelector) ? elem.querySelector(selector) : null;
@@ -1024,7 +1045,6 @@ if (document.querySelector) {
     }
 }
 
-Ten.querySelectorAll;
 if (document.querySelectorAll) {
     Ten.querySelectorAll = function (selector, elem) {
         var elems ;
@@ -1127,7 +1147,12 @@ Ten.Style = new Ten.Class({
         var cssText = elem.style.cssText;
         var estyle = elem.style;
         for (var prop in style) {
-            estyle[prop] = style[prop];
+            var value = style[prop];
+            if (typeof value == 'function') {
+                estyle[prop] = value.call(elem);
+            } else {
+                estyle[prop] = value;
+            }
         }
         return function() {
             elem.style.cssText = cssText;
@@ -1147,13 +1172,15 @@ Ten.Style = new Ten.Class({
                 } catch(e) {
                     continue;
                 }
-                for (var j = cssRules.length - 1; j >= 0; j--) {
-                    var rule = cssRules[j];
-                    if (rule.selectorText &&
-                        rule.selectorText.toLowerCase() == selector) {
-                            Ten.Style._cache[selector] = rule;
-                            return rule;
-                        }
+                if (cssRules) {
+                    for (var j = cssRules.length - 1; j >= 0; j--) {
+                        var rule = cssRules[j];
+                        if (rule.selectorText &&
+                            rule.selectorText.toLowerCase() == selector) {
+                                Ten.Style._cache[selector] = rule;
+                                return rule;
+                            }
+                    }
                 }
             }
         }
@@ -1204,32 +1231,28 @@ Ten.Geometry = new Ten.Class({
         var func = Ten.Geometry._functions;
         var de = document.documentElement;
         if (window.innerWidth) {
-            func.getWindowWidth = function() { return window.innerWidth; }
-            func.getWindowHeight = function() { return window.innerHeight; }
             func.getXScroll = function() { return window.pageXOffset; }
             func.getYScroll = function() { return window.pageYOffset; }
         } else if (de && de.clientWidth) {
-            func.getWindowWidth = function() { return de.clientWidth; }
-            func.getWindowHeight = function() { return de.clientHeight; }
             func.getXScroll = function() { return de.scrollLeft; }
             func.getYScroll = function() { return de.scrollTop; }
         } else if (document.body.clientWidth) {
-            func.getWindowWidth = function() { return document.body.clientWidth; }
-            func.getWindowHeight = function() { return document.body.clientHeight; }
             func.getXScroll = function() { return document.body.scrollLeft; }
             func.getYScroll = function() { return document.body.scrollTop; }
         }
-        if (window.opera) {
-            func.getDocumentHeight = function(w) { return parseInt(Ten.Style.getElementStyle(w.document.body, 'height')); }
-            func.getDocumentWidth = function(w) { return parseInt(Ten.Style.getElementStyle(w.document.body, 'width')); }
-        } else if (document.all) {
-            func.getDocumentHeight = function(w) { return w.document.body.scrollHeight; }
-            func.getDocumentWidth = function(w) { return w.document.body.scrollWidth; }
-        } else {
-            func.getDocumentHeight = function(w) { return w.document.body.offsetHeight || w.document.documentElement.scrollHeight; }
-            func.getDocumentWidth = function(w) { return w.document.body.offsetWidth || w.document.documentElement.scrollWidth; }
-        }
+
+        func.getWindowHeight = function(w) { return Ten.Geometry._getRoot(w).clientHeight; }
+        func.getWindowWidth  = function(w) { return Ten.Geometry._getRoot(w).clientWidth; }
+
+        func.getDocumentHeight = function(w) { return Ten.Geometry._getRoot(w).scrollHeight; }
+        func.getDocumentWidth  = function(w) { return Ten.Geometry._getRoot(w).scrollWidth; }
+
         Ten.Geometry._initialized = true;
+    },
+    _getRoot : function(w) {
+        if (!w) w = window;
+        var root = /BackCompat/i.test(w.document.compatMode) ? document.body : document.documentElement;
+        return root;
     },
     _initialized: false,
     _functions: {},
@@ -1386,11 +1409,21 @@ Ten.Logger = new Ten.Class({
 /* Ten.Browser */
 Ten.Browser = {
     isIE: navigator.userAgent.indexOf('MSIE') != -1,
+    isIE6 : navigator.userAgent.indexOf('MSIE 6.') != -1,
+    isIE7 : navigator.userAgent.indexOf('MSIE 7.') != -1,
+    isIE8 : navigator.userAgent.indexOf('MSIE 8.') != -1,
+    isIE9 : navigator.userAgent.indexOf('MSIE 9.') != -1,
     isMozilla: navigator.userAgent.indexOf('Mozilla') != -1 && !/compatible|WebKit/.test(navigator.userAgent),
     isOpera: !!window.opera,
-    isSafari: navigator.userAgent.indexOf('WebKit') != -1,
+    isSafari: navigator.userAgent.indexOf('WebKit') != -1 && navigator.userAgent.indexOf('Chrome/') == -1,
     isChrome : navigator.userAgent.indexOf('Chrome/') != -1,
     isFirefox : navigator.userAgent.indexOf('Firefox/') != -1,
+    isDSi : navigator.userAgent.indexOf('Nintendo DSi') != -1,
+    is3DS : navigator.userAgent.indexOf('Nintendo 3DS') != -1,
+    isWii : navigator.userAgent.indexOf('Nintendo Wii') != -1,
+    isAndroid : navigator.userAgent.indexOf('Android ') != -1,
+    isIPhone : (navigator.userAgent.indexOf('iPod;') != -1 || navigator.userAgent.indexOf('iPhone;') != -1 || navigator.userAgent.indexOf('iPhone Simulator;') != -1),
+    isIPad : navigator.userAgent.indexOf('iPad') != -1,
     isSupportsXPath : !!document.evaluate,
     version: {
         string: (/(?:Firefox\/|MSIE |Opera\/|Chrome\/|Version\/)([\d.]+)/.exec(navigator.userAgent) || []).pop(),
@@ -1398,13 +1431,15 @@ Ten.Browser = {
         toString: function() { return this.string }
     }
 };
-
+Ten.Browser.isTouch = Ten.Browser.isIPhone || Ten.Browser.isAndroid || Ten.Browser.isDSi || Ten.Browser.is3DS || Ten.Browser.isIPad;
+Ten.Browser.isSmartPhone = Ten.Browser.isIPhone || Ten.Browser.isAndroid;
 
 Ten.Deferred = (function () {
     function Deferred () { return (this instanceof Deferred) ? this.init() : new Deferred() }
     Deferred.ok = function (x) { return x };
     Deferred.ng = function (x) { throw  x };
     Deferred.prototype = {
+        
         init : function () {
             this._next    = null;
             this.callback = {
@@ -1414,11 +1449,19 @@ Ten.Deferred = (function () {
             return this;
         },
     
+        
         next  : function (fun) { return this._post("ok", fun) },
+    
+        
         error : function (fun) { return this._post("ng", fun) },
+    
+        
         call  : function (val) { return this._fire("ok", val) },
+    
+        
         fail  : function (err) { return this._fire("ng", err) },
     
+        
         cancel : function () {
             (this.canceller || function () {})();
             return this.init();
@@ -1455,14 +1498,14 @@ Ten.Deferred = (function () {
         if (fun) d.callback.ok = fun;
         return d;
     };
-    Deferred.next_faster_way_readystatechange = ((location.protocol == "http:") && !window.opera && /\bMSIE\b/.test(navigator.userAgent)) && function (fun) {
+    Deferred.next_faster_way_readystatechange = ((typeof window === 'object') && (location.protocol == "http:") && !window.opera && /\bMSIE\b/.test(navigator.userAgent)) && function (fun) {
         var d = new Deferred();
         var t = new Date().getTime();
         if (t - arguments.callee._prev_timeout_called < 150) {
             var cancel = false;
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src  = "javascript:";
+            script.src  = "data:text/javascript,";
             script.onreadystatechange = function () {
                 if (!cancel) {
                     d.canceller();
@@ -1485,7 +1528,7 @@ Ten.Deferred = (function () {
         if (fun) d.callback.ok = fun;
         return d;
     };
-    Deferred.next_faster_way_Image = ((typeof(Image) != "undefined") && document.addEventListener) && function (fun) {
+    Deferred.next_faster_way_Image = ((typeof window === 'object') && (typeof(Image) != "undefined") && !window.opera && document.addEventListener) && function (fun) {
         var d = new Deferred();
         var img = new Image();
         var handler = function () {
@@ -1498,13 +1541,45 @@ Ten.Deferred = (function () {
             img.removeEventListener("load", handler, false);
             img.removeEventListener("error", handler, false);
         };
-        img.src = "data:,/ _ / X";
+        img.src = "data:image/png," + Math.random();
         if (fun) d.callback.ok = fun;
         return d;
     };
+    Deferred.next_tick = (typeof process === 'object' && typeof process.nextTick === 'function') && function (fun) {
+        var d = new Deferred();
+        process.nextTick(function() { d.call() });
+        if (fun) d.callback.ok = fun;
+        return d;
+    }
     Deferred.next = Deferred.next_faster_way_readystatechange ||
                     Deferred.next_faster_way_Image ||
+                    Deferred.next_tick ||
                     Deferred.next_default;
+    
+    Deferred.chain = function () {
+        var chain = Deferred.next();
+        for (var i = 0, len = arguments.length; i < len; i++) (function (obj) {
+            switch (typeof obj) {
+                case "function":
+                    var name = null;
+                    try {
+                        name = obj.toString().match(/^\s*function\s+([^\s()]+)/)[1];
+                    } catch (e) { }
+                    if (name != "error") {
+                        chain = chain.next(obj);
+                    } else {
+                        chain = chain.error(obj);
+                    }
+                    break;
+                case "object":
+                    chain = chain.next(function() { return Deferred.parallel(obj) });
+                    break;
+                default:
+                    throw "unknown type in process chains";
+            }
+        })(arguments[i]);
+        return chain;
+    }
     
     Deferred.wait = function (n) {
         var d = new Deferred(), t = new Date();
@@ -1515,16 +1590,18 @@ Ten.Deferred = (function () {
         return d;
     };
     
-    Deferred.call = function (f ) {
+    Deferred.call = function (fun) {
         var args = Array.prototype.slice.call(arguments, 1);
         return Deferred.next(function () {
-            return f.apply(this, args);
+            return fun.apply(this, args);
         });
     };
     
     Deferred.parallel = function (dl) {
+        if (arguments.length > 1) dl = Array.prototype.slice.call(arguments);
         var ret = new Deferred(), values = {}, num = 0;
         for (var i in dl) if (dl.hasOwnProperty(i)) (function (d, i) {
+            if (typeof d == "function") d = Deferred.next(d);
             d.next(function (v) {
                 values[i] = v;
                 if (--num <= 0) {
@@ -1550,6 +1627,7 @@ Ten.Deferred = (function () {
     };
     
     Deferred.earlier = function (dl) {
+        if (arguments.length > 1) dl = Array.prototype.slice.call(arguments);
         var ret = new Deferred(), values = {}, num = 0;
         for (var i in dl) if (dl.hasOwnProperty(i)) (function (d, i) {
             d.next(function (v) {
@@ -1611,17 +1689,18 @@ Ten.Deferred = (function () {
     };
     
     
-    Deferred.repeat = function (n, f) {
+    Deferred.repeat = function (n, fun) {
         var i = 0, end = {}, ret = null;
         return Deferred.next(function () {
             var t = (new Date()).getTime();
             divide: {
                 do {
                     if (i >= n) break divide;
-                    ret = f(i++);
+                    ret = fun(i++);
                 } while ((new Date()).getTime() - t < 20);
                 return Deferred.call(arguments.callee);
             }
+            return null;
         });
     };
     
@@ -1636,21 +1715,32 @@ Ten.Deferred = (function () {
     
     Deferred.register("loop", Deferred.loop);
     Deferred.register("wait", Deferred.wait);
-    Deferred.Arguments = function (args) { this.args = Array.prototype.slice.call(args, 0) }
-    Deferred.connect = function (func, obj) {
-        if (!obj) obj = {};
-        var callbackArgIndex  = obj.ok;
+    
+    Deferred.connect = function (funo, options) {
+        var target, func, obj;
+        if (typeof arguments[1] == "string") {
+            target = arguments[0];
+            func   = target[arguments[1]];
+            obj    = arguments[2] || {};
+        } else {
+            func   = arguments[0];
+            obj    = arguments[1] || {};
+            target = obj.target;
+        }
+    
+        var partialArgs       = obj.args ? Array.prototype.slice.call(obj.args, 0) : [];
+        var callbackArgIndex  = isFinite(obj.ok) ? obj.ok : obj.args ? obj.args.length : undefined;
         var errorbackArgIndex = obj.ng;
-        var target            = obj.target;
     
         return function () {
-            var d = new Deferred();
+            var d = new Deferred().next(function (args) {
+                var next = this._next.callback.ok;
+                this._next.callback.ok = function () {
+                    return next.apply(this, args.args);
+                };
+            });
     
-            d.next = function (fun) { return this._post("ok", function () {
-                fun.apply(this, (arguments[0] instanceof Deferred.Arguments) ? arguments[0].args : arguments);
-            }) };
-    
-            var args = Array.prototype.slice.call(arguments, 0);
+            var args = partialArgs.concat(Array.prototype.slice.call(arguments, 0));
             if (!(isFinite(callbackArgIndex) && callbackArgIndex !== null)) {
                 callbackArgIndex = args.length;
             }
@@ -1664,14 +1754,15 @@ Ten.Deferred = (function () {
             return d;
         }
     }
+    Deferred.Arguments = function (args) { this.args = Array.prototype.slice.call(args, 0) }
     
-    Deferred.retry = function (retryCount, funcDeffered, options) {
+    Deferred.retry = function (retryCount, funcDeferred, options) {
         if (!options) options = {};
     
         var wait = options.wait || 0;
         var d = new Deferred();
         var retry = function () {
-            var m = funcDeffered(retryCount);
+            var m = funcDeferred(retryCount);
             m.
                 next(function (mes) {
                     d.call(mes);
@@ -1688,8 +1779,9 @@ Ten.Deferred = (function () {
         return d;
     }
     
+    Deferred.methods = ["parallel", "wait", "next", "call", "loop", "repeat", "chain"];
     Deferred.define = function (obj, list) {
-        if (!list) list = ["parallel", "wait", "next", "call", "loop", "repeat"];
+        if (!list) list = Deferred.methods;
         if (!obj)  obj  = (function getGlobal () { return this })();
         for (var i = 0; i < list.length; i++) {
             var n = list[i];
@@ -1697,6 +1789,8 @@ Ten.Deferred = (function () {
         }
         return Deferred;
     };
+    
+    this.Deferred = Deferred;
     return Deferred;
 })();
 
@@ -1734,7 +1828,7 @@ Ten.SubWindow = new Ten.Class({
         color: '#000',
         position: 'absolute',
         display: 'none',
-        zIndex: 2,
+        zIndex: 10002,
         left: 0,
         top: 0,
         backgroundColor: '#fff',
@@ -1774,7 +1868,7 @@ Ten.SubWindow = new Ten.Class({
         top: '0px',
         left: '0px',
         display: 'none',
-        zIndex: 1,
+        zIndex: 10001,
         overflow: 'hidden',
         width: '100%',
         height: '100%'
@@ -1821,17 +1915,15 @@ Ten.SubWindow = new Ten.Class({
     },
     show: function(pos) {
         pos = (pos.x && pos.y) ? pos : {x:0, y:0};
-        with (this.window.style) {
-            display = 'block';
-            left = pos.x + 'px';
-            top = pos.y + 'px';
-        }
+        var s = this.window.style;
+        s.display = 'block';
+        s.left = pos.x + 'px';
+        s.top = pos.y + 'px';
         if (this.screen) {
-            with (this.screen.style) {
-                display = 'block';
-                left = Ten.Geometry.getScroll().x + 'px';
-                top = Ten.Geometry.getScroll().y + 'px';
-            }
+            var ss = this.screen.style;
+            ss.display = 'block';
+            ss.left = Ten.Geometry.getScroll().x + 'px';
+            ss.top = Ten.Geometry.getScroll().y + 'px';
         }
         this.windowObserver = new Ten.Observer(document.body, 'onkeypress', this, 'handleEscape');
         this.visible = true;
@@ -2112,7 +2204,51 @@ Hatena.Star.VERSION = 1.95;
 // Hatena.Star.* classes //
 */
 Hatena.Star.BaseURL = 'http://s.hatena.ne.jp/';
+if (!Hatena.Star.BaseURLProtocol) {
+    Hatena.Star.BaseURLProtocol = ( location.protocol === "http:" ? "http:" : "https:" );
+}
+Hatena.Star.PortalURL = 'http://www.hatena.ne.jp/';
+Hatena.Star.UgoMemoURL = 'http://ugomemo.hatena.ne.jp/';
+Hatena.Star.HaikuURL   = 'http://h.hatena.ne.jp/';
+Hatena.Star.HatenaHostRegexp = /(\.hatena\.ne\.jp|\.hatelabo.jp|\.hatena\.com)$/;
 Hatena.Star.Token = null;
+Hatena.Star.UseAnimation = false;
+
+// XXX
+Ten.Browser.is3DS = navigator.userAgent.indexOf('Nintendo 3DS') != -1;
+Ten.Browser.isTouch = Ten.Browser.isTouch || Ten.Browser.is3DS;
+
+Hatena.Star.isTouchUA = Ten.Browser.isTouch;
+
+// ---- user setting ----
+Hatena.Star.Config = {
+    isColorPalletAvailable: true,
+    isStarDeletable: true,
+    isCommentButtonAvailable: true
+}
+
+Hatena.Star.Delayed = new Ten.Class({
+    initialize: function () {
+        this.waiting = [];
+    }
+}, {
+    isReady : false,
+    ready : function (value) {
+        this.value = value;
+        while (this.waiting.length) {
+            this.waiting.shift()(value);
+        }
+        this.isReady = true;
+    },
+    required : function (fun) {
+        var self = this;
+        if (typeof(this.value) == "undefined") {
+            this.waiting.push(fun);
+        } else {
+            fun(this.value);
+        }
+    }
+});
 
 /* Hatena.Star.User */
 Hatena.Star.User = new Ten.Class({
@@ -2126,36 +2262,106 @@ Hatena.Star.User = new Ten.Class({
             return this;
         }
     },
+    profileIconType: 'icon',
     getProfileIcon: function(name,src) {
         if (!name) name = 'user';
         var img = document.createElement('img');
         if (src) {
             img.src = src;
         } else {
-            var n = 0;
-            for (var i = 0; i < name.length; i++)
-                n += name.charCodeAt(i);
-            var pre = name.match(/^[\w-]{2}/)[0];
-            img.src = 'http://cdn' + (n % 5) + '.www.st-hatena.com/users/' + pre + '/' + name + '/profile_s.gif';
+            if (this.profileIconType == 'icon' &&
+                !/\@/.test(name)) {
+                var pre = name.match(/^[\w-]{2}/)[0];
+                var pp = pre + '/' + name + '/profile_s.gif';
+                if ( location.protocol == 'https:' ) {
+                    img.src = 'https://www.hatena.com/users/' + pp;
+                } else {
+                    var n = 0;
+                    for ( var i = 0; i < name.length; i++ ) { n += name.charCodeAt(i) }
+                    img.src = 'http://cdn' + (n % 5) + '.www.st-hatena.com/users/' + pp;
+                }
+            } else {
+                img.src = 'http://n.hatena.com/' + name + '/profile/image?size=16&type=' + encodeURIComponent(this.profileIconType);
+            }
         }
         img.setAttribute('alt', name);
         img.setAttribute('title', name);
         img.setAttribute('width','16px');
         img.setAttribute('height','16px');
         img.className =  'profile-icon';
-        with (img.style) {
-            margin = '0 3px';
-            border = 'none';
-            verticalAlign = 'middle';
-            width = '16px';
-            height = '16px';
-        }
+        var s = img.style;
+        s.margin = '0 3px';
+        s.border = 'none';
+        s.verticalAlign = 'middle';
+        s.width = '16px';
+        s.height = '16px';
         return img;
     },
-    _cache: {}
+    RKS : new Hatena.Star.Delayed(),
+    _cache: {},
+    _nicknames: {},
+    useHatenaUserNickname: false,
+    withNickname: function (urlName, nextCode) {
+        var cached = urlName ? Hatena.Star.User._nicknames[urlName] : null;
+        if (!urlName) {
+            cached = null;
+        } else if (!Hatena.Star.User.useHatenaUserNickname &&
+                   urlName &&
+                   !/\@/.test(urlName)) {
+            cached = urlName;
+        }
+        if (cached !== undefined) {
+            setTimeout(function () {
+                nextCode.apply(Hatena.Star.User, [cached]);
+            }, 10);
+            return;
+        }
+        this._getNickname(urlName, nextCode);
+    },
+    _getNicknames: {},
+    _getNickname: function (urlName, nextCode) {
+      this._getNicknames[urlName] = this._getNicknames[urlName] || [];
+      this._getNicknames[urlName].push(nextCode);
+      clearTimeout(this._getNicknameTimer);
+      this._getNicknameTimer = setTimeout(function () {
+        var names = Hatena.Star.User._getNicknames;
+        Hatena.Star.User._getNicknames = {};
+        var url = 'http://h1beta.hatena.com/api/friendships/show.json?url_name=sample';
+        for (var n in names) {
+          url += '&url_name=' + encodeURIComponent(n);
+        }
+        new Ten.JSONP(url, function (users) {
+          for (var n in users) {
+            var user = users[n];
+            var codes = names[n] || [];
+            for (var i = 0; i < codes.length; i++) {
+              Hatena.Star.User._nicknames[n] = user.name || null;
+              var nickname = user.name;
+              if (nickname) nickname += ' (id:' + n + ')';
+              codes[i].apply(Hatena.Star.User, [nickname]);
+            }
+          }
+        });
+      }, 500);
+    }
 },{
     userPage: function() {
-        return Hatena.Star.BaseURL + this.name + '/';
+        var hostname = location.hostname || '';
+        if (this.name.match(/@(.*)/)) {
+            if (RegExp.$1 == "DSi") {
+                return Hatena.Star.UgoMemoURL + this.name + '/';
+            } else if (RegExp.$1 == "facebook") {
+                return Hatena.Star.HaikuURL + this.name + '/';
+            } else {
+                return Hatena.Star.BaseURL + this.name + '/';
+            }
+        } else {
+            if (Hatena.Star.HatenaHostRegexp.test(hostname)) {
+                return 'http://' + location.host + '/' + this.name + '/';
+            } else {
+                return Hatena.Star.PortalURL + this.name + '/';
+            }
+        }
     }
 });
 
@@ -2221,9 +2427,16 @@ Hatena.Star.Entry = new Ten.Class({
         this.addCommentButton();
     },
     addAddButton: function() {
+        var addButtonClass =
+            this.constructor.AddButtonClass || (
+                (Hatena.Star.useSmartPhoneStar && Hatena.Star.isTouchUA)
+                    ? Hatena.Star.AddButton.SmartPhone
+                    : Hatena.Star.AddButton
+            );
+
         var sc = this.star_container;
         if (sc) {
-            this.addButton = new Hatena.Star.AddButton(this,sc);
+            this.addButton = new addButtonClass(this,sc);
             sc.appendChild(this.addButton);
         }
     },
@@ -2241,7 +2454,7 @@ Hatena.Star.Entry = new Ten.Class({
         }
     },
     showCommentButton: function() {
-        if (this.can_comment) {
+        if ( this.can_comment && Hatena.Star.Config.isCommentButtonAvailable ) {
             this.commentButton.show();
             if (this.comments.length) this.commentButton.activate();
         } else {
@@ -2249,23 +2462,23 @@ Hatena.Star.Entry = new Ten.Class({
         }
     },
     addTemporaryStar: function(args) {
-//        if (this.temporaryStar) return;
-        if (this.temporaryStar) {
-            this.star_container.removeChild(this.temporaryStar);
-        }
-        var s = new Hatena.Star.Star({
+        if (!this.temporaryStars) this.temporaryStars = [];
+        var star = new Hatena.Star.Star({
             color: 'temp',
             name: '',
             entry: this,
             container: this.star_container
-        });
-        this.temporaryStar = s.asElement();
-        this.star_container.appendChild(this.temporaryStar);
+        }).asElement();
+        this.temporaryStars.push(star);
+        this.star_container.appendChild(star);
     },
     removeTemporaryStar: function() {
-        if (!this.temporaryStar) return;
-        this.temporaryStar.style.display = 'none';
-        this.temporaryStar = null;
+        if (this.temporaryStars) {
+            var star = this.temporaryStars.shift();
+            if (star) this.star_container.removeChild(star);
+            return star;
+        }
+        return null;
     },
     addStar: function(args) {
         var star = new Hatena.Star.Star({
@@ -2276,7 +2489,11 @@ Hatena.Star.Entry = new Ten.Class({
             container: this.star_container
         });
         this.stars.push(star);
-        this.star_container.appendChild(star.asElement());
+        if (this.temporaryStars && this.temporaryStars.length) {
+            this.star_container.insertBefore(star.asElement(), this.temporaryStars[0]);
+        } else {
+            this.star_container.appendChild(star.asElement());
+        }
         this.constructor.dispatchEvent('starAdded', this);
     },
     addComment: function(com) {
@@ -2299,13 +2516,12 @@ Hatena.Star.Button = new Ten.Class({
         for (var attr in args) {
             img.setAttribute(attr, args[attr]);
         }
-        with (img.style) {
-	    cursor = 'pointer';
-	    margin = '0 3px';
-            padding = '0';
-            border = 'none';
-            verticalAlign = 'middle';
-        }
+        var s = img.style;
+        s.cursor = 'pointer';
+        s.margin = '0 3px';
+        s.padding = '0';
+        s.border = 'none';
+        s.verticalAlign = 'middle';
         return img;
     },
     getImgSrc: function(c,container) {
@@ -2344,28 +2560,35 @@ Hatena.Star.AddButton = new Ten.Class({
         this.showSelectedColorTimerId = null;
         this.hideSelectedColorTimerId = null;
         var src = Hatena.Star.Button.getImgSrc(this.constructor,container);
-        var img = Hatena.Star.Button.createButton({
+        var img = this.constructor.createButton({
             src: src,
             tabIndex: 0,
             alt: 'Add Star',
             title: 'Add Star'
         });
-        img.className = 'hatena-star-add-button';
-        new Ten.Observer(img,'onclick',this,'addStar');
-        new Ten.Observer(img,'onclick',this,'hideColorPallet');
-        new Ten.Observer(img,'onkeyup',this,'handleKeyUp');
-//        new Ten.Observer(img,'onmouseover',this,'showSelectedColor');
-        new Ten.Observer(img,'onmouseover',this,'showColorPalletDelay');
-        new Ten.Observer(img,'onmouseover',this,'copySelectedText');
-        new Ten.Observer(img,'onmouseout',this,'clearSelectedColorTimer');
-//        new Ten.Observer(img,'onmouseout',this,'hideSelectedColor');
-//        new Ten.Observer(img,'onmouseout',this,'hideSelectedColor');
+        if (!img.className) {
+            img.className = 'hatena-star-add-button';
+        }
         this.img = img;
+        this.setupObservers();
         return img;
     },
     ImgSrcSelector: '.hatena-star-add-button-image',
-    ImgSrc: Hatena.Star.BaseURL + 'images/add.gif'
+    ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/add.gif',
+    AddStarPath: 'star.add.json'
 },{
+    setupObservers: function () {
+        new Ten.Observer(this.img,'onclick',this,'addStar');
+        new Ten.Observer(this.img,'onkeyup',this,'handleKeyUp');
+        new Ten.Observer(this.img,'onmouseover',this,'copySelectedText');
+        if ( Hatena.Star.Config.isColorPalletAvailable ) {
+            new Ten.Observer(this.img,'onclick',this,'hideColorPallet');
+            new Ten.Observer(this.img,'onmouseover',this,'showColorPalletDelay');
+//          new Ten.Observer(this.img,'onmouseover',this,'showSelectedColor');
+//          new Ten.Observer(this.img,'onmouseout',this,'hideSelectedColor');
+            new Ten.Observer(this.img,'onmouseout',this,'clearSelectedColorTimer');
+        }
+    },
     handleKeyUp: function(e) {
         if (!e.isKey('enter')) return;
         this.addStar(e);
@@ -2433,24 +2656,27 @@ Hatena.Star.AddButton = new Ten.Class({
         this.pallet.showPallet(pos, this);
     },
     copySelectedText: function(e) {
+        try {
         this.selectedText = Ten.DOM.getSelectedText().substr(0,200);
+        } catch (e) {  }
     },
     addStar: function(e) {
         this.clearSelectedColorTimer();
         this.color = (this.color) ? this.color : 'yellow';
         this.entry.addTemporaryStar({color: this.color});
         this.lastPosition = e.mousePosition();
-        var quote = this.selectedText;
-        var uri = Hatena.Star.BaseURL + 'star.add.json?uri=' + encodeURIComponent(this.entry.uri) +
+        var quote = this.selectedText || '';
+        var uri = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + this.constructor.AddStarPath + '?uri=' + encodeURIComponent(this.entry.uri) +
             '&title=' + encodeURIComponent(this.entry.title) +
             '&quote=' + encodeURIComponent(quote) +
             '&location=' + encodeURIComponent(document.location.href);
         if (Hatena.Star.Token) {
             uri += '&token=' + Hatena.Star.Token;
         }
+
         if (Hatena.Visitor) {
             if (Hatena.Visitor.RKS) {
-                uri += '&rks=' + Hatena.Visitor.RKS;
+                Hatena.Star.User.RKS.ready(Hatena.Visitor.RKS);
             }
             if (Hatena.Visitor.sessionParams) {
                 var params = Hatena.Visitor.sessionParams;
@@ -2459,7 +2685,12 @@ Hatena.Star.AddButton = new Ten.Class({
                 }
             }
         }
-        new Ten.JSONP(uri, this, 'receiveResult');
+
+        var self = this;
+        Hatena.Star.User.RKS.required(function (rks) {
+            uri += '&rks=' + rks;
+            new Ten.JSONP(uri, self, 'receiveResult');
+        });
     },
     receiveResult: function(args) {
         this.entry.removeTemporaryStar();
@@ -2507,7 +2738,9 @@ Hatena.Star.Pallet = new Ten.Class({
     closeButton: null,
     draggable: false,
     SELECTED_COLOR_ELEMENT_ID: 'hatena-star-selected-color',
-    PALLET_ELEMENT_ID: 'hatena-star-color-pallet'
+    PALLET_ELEMENT_ID: 'hatena-star-color-pallet',
+    PALLET_PATH: 'colorpalette',
+    PALLET_STYLE: 'width:16px;height:51px;overflow:hidden;'
 },{
     isSelectedColor : function() {
         return (this.container && this.container.getElementById && this.container.getElementById(Hatena.Star.Pallet.SELECTED_COLOR_ELEMENT_ID)) ? true : false;
@@ -2524,7 +2757,7 @@ Hatena.Star.Pallet = new Ten.Class({
         if (Ten.Browser.isIE) iframeStyle = "width:16px;height:5px;border:1px solid #bbbbbb;";
         else iframeStyle = "width:14px;height:3px;border:1px solid #bbbbbb;";
         this.container.innerHTML = '<iframe id="' + Hatena.Star.Pallet.SELECTED_COLOR_ELEMENT_ID + '" src="' + 
-            Hatena.Star.BaseURL + 'colorpalette.selected_color?uri=' + encodeURIComponent(this.addButton.entry.uri) +
+        Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'colorpalette.selected_color?uri=' + encodeURIComponent(this.addButton.entry.uri) +
             '" frameborder="0" border="0" scrolling="no" style="' + iframeStyle + 'position:absolute;margin:0;padding:0;overflow:hidden;"/>';
         var clickhandlerStyle = {
             position: "absolute",
@@ -2555,15 +2788,16 @@ Hatena.Star.Pallet = new Ten.Class({
         this.isNowLoading = false;
         this.screen.style.display = 'none';
     },
+    getPalletFrameURL: function () {
+        return Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + this.constructor.PALLET_PATH + '?uri=' + encodeURIComponent(this.addButton.entry.uri) + '&location=' + encodeURIComponent(document.location.href);
+    },
     showPallet: function(pos, addButton) {
         this.hide();
         this.container.innerHTML = '';
         if (addButton) this.addButton = addButton;
         if (pos) this.pallet_pos = pos;
         this.addButton.clearSelectedColorTimer();
-        this.container.innerHTML = '<iframe id="' + Hatena.Star.Pallet.PALLET_ELEMENT_ID + '" src="' + 
-            Hatena.Star.BaseURL + 'colorpalette?uri=' + encodeURIComponent(this.addButton.entry.uri) +
-            '" frameborder="0" border="0" scrolling="no" style="width:16px;height:51px;overflow:hidden;"/>';
+        this.container.innerHTML = '<iframe id="' + Hatena.Star.Pallet.PALLET_ELEMENT_ID + '" src="' + this.getPalletFrameURL() + '" frameborder="0" border="0" scrolling="no" style="' + this.constructor.PALLET_STYLE +'"/>';
         this.pallet =this.container.childNodes[0];
         this.isNowLoading = true;
         this._pallet_onloaded = 0;
@@ -2604,6 +2838,562 @@ Hatena.Star.Pallet = new Ten.Class({
     }
 });
 
+/* Hatena.Star.AddButton.SmartPhone */
+Hatena.Star.AddButton.SmartPhone = new Ten.Class({
+    base: [Hatena.Star.AddButton],
+    AddStarPath: 'star.add_multi.json',
+    createButton: function (args) {
+        var a = document.createElement('a');
+        var img = this.SUPER.createButton(args);
+        img.className = 'hatena-star-add-button';
+        a.className = 'hatena-star-add-button-link-smartphone';
+        a.href = 'javascript:void(0)';
+        a.appendChild(img);
+        return a;
+    }
+}, {
+    setupObservers: function () {
+        if ( Hatena.Star.Config.isColorPalletAvailable ) {
+            new Ten.Observer(this.img, 'onclick', this, 'showColorPallet');
+            //new Ten.Observer(this.img, 'onclick', this, 'hideColorPallet');
+        }
+    },
+    receiveResult: function (args) {
+        if (args.silent_error) {
+            this.entry.removeTemporaryStar();
+            return;
+        }
+
+        if (args.stars instanceof Array) {
+            this.entry.removeTemporaryStar();
+            var stars = args.stars;
+            for (var i = 0, len = stars.length; i < len; i++) {
+                var star = stars[i];
+                for (var j = 0; j < (star.count || 1); j++) {
+                    this.entry.addStar({
+                        color: star.color,
+                        name:  star.name,
+                        quote: star.quote
+                    });
+                }
+            }
+        } else {
+            this.constructor.SUPER.prototype.receiveResult.apply(this, arguments);
+        }
+    },
+    showColorPallet: function (e) {
+        this.clearSelectedColorTimer();
+
+        if (!this.pallet) {
+            this.pallet = new Hatena.Star.Pallet.SmartPhone();
+        }
+
+        var pos = Ten.Geometry.getElementPosition(this.img);
+        pos.x = Ten.Browser.isDSi ? 5 : 15;
+        pos.y += 18;
+        this.pallet.showPallet(pos, this);
+        this.pallet.show(Hatena.Star.UseAnimation ? { x: 0, y: 0 } : pos);
+    },
+    getPalletFrameURL: function () {
+        return Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + this.constructor.PALLET_PATH + '?uri=' + encodeURIComponent(this.addButton.entry.uri) + '&location=' + encodeURIComponent(document.location.href) + '&colorscheme=' + this.constructor.getColorScheme();
+    }
+});
+
+/* Hatena.Star.Pallet.SmartPhone */
+Hatena.Star.Pallet.SmartPhone_BASE_WIDTH = Ten.Browser.isDSi ? 230 : 45 * 6 + 5 * 2;
+Hatena.Star.Pallet.SmartPhone = new Ten.Class({
+    base: [Hatena.Star.Pallet],
+    PALLET_PATH: 'colorpalette.smartphone',
+    PALLET_STYLE: 'top: 0px; left: 0px; width:100px; height:80px; overflow:hidden;' + (!Ten.Browser.isDSi ? 'background:transparent;' : ''),
+    closeButton: null,
+    style: {
+        padding: '0px',
+        textAlign: 'center',
+        border: '0px',
+        background: (!Ten.Browser.isDSi ? 'transparent' : '')
+    },
+    containerStyle: {
+        color: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('color') },
+        textAlign: 'left',
+        margin: 0,
+        padding: 0,
+        width: Hatena.Star.Pallet.SmartPhone_BASE_WIDTH + 'px',
+        height: '125px',
+        background: (!Ten.Browser.isDSi ? 'transparent' : '')
+    },
+    backgroundContainerStyle: {
+        margin: 0,
+        padding: 0,
+        width: Hatena.Star.Pallet.SmartPhone_BASE_WIDTH + 'px',
+        height: '125px',
+        background: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('backgroundContainerBackground') },
+        border: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('backgroundContainerBorder') },
+        borderRadius: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('backgroundContainerBorderRadius') },
+        MozBorderRadius: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('backgroundContainerBorderRadius') },
+        WebkitBorderRadius: function () { return Hatena.Star.Pallet.SmartPhone.getColorSchemeItem('backgroundContainerBorderRadius') },
+        position: 'absolute',
+        display: 'inline',
+        zIndex: 10000
+    },
+    closeIframeStyle: {
+        position: 'absolute',
+        zIndex: 5,
+        width: '19px',
+        height: '19px',
+        background: 'rgba(0, 0, 0, 0)',
+        border: '0px'
+    },
+    closeButtonStyle: {
+        position: 'absolute',
+        margin: 0,
+        padding: 0,
+        top: '0px',
+        left: '0px',
+        cursor: 'pointer'
+    },
+
+    // Color schems
+    // Hatena.Star.Pallet.SmartPhone.ColorScheme = 'dark';
+    COLOR_SCHEME_DEFINITIONS: {
+        dark: {
+            backgroundContainerBackground: (!Ten.Browser.isDSi ? 'rgba(10, 10, 10, 0.7)' : '#505050'),
+            color: 'white',
+            closeButtonColor: 'white',
+            closeButtonImagePadding: '0 3px 0 0',
+            closeButtonTop: '8px',
+            closeButtonRight: '10px',
+            getCloseButtonImage: function () { return Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/close_wh.png' }
+        },
+        light: {
+            backgroundContainerBackground: '#FFF',
+            backgroundContainerBorder: '1px solid #BBB',
+            backgroundContainerBorderRadius: '6px',
+            color: 'black',
+            closeButtonColor: 'rgb(187,187,187)',
+            closeButtonImagePadding: '0 1px 3px 0',
+            closeButtonTop: '5px',
+            closeButtonRight: (Ten.Browser.isDSi ? '5px' : '15px'),
+            getCloseButtonImage: function () { return Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/close.gif' }
+        }
+    },
+    DEFAULT_COLOR_SCHEME: 'light',
+    getColorScheme: function () {
+        return this.ColorScheme || this.DEFAULT_COLOR_SCHEME;
+    },
+    getColorSchemeItem: function (name) {
+        var schemeName = this.getColorScheme();
+        var scheme = this.COLOR_SCHEME_DEFINITIONS[schemeName] || this.COLOR_SCHEME_DEFINITIONS[this.DEFAULT_COLOR_SCHEME];
+        return scheme[name];
+    }
+}, {
+    showPallet: function (pos, addButton) {
+        if (Hatena.Star.UseAnimation) {
+            this.container.style.width = Ten.Geometry.getDocumentSize().w + 'px';
+            this.container.style.height = Ten.Geometry.getDocumentSize().h + 'px';
+        }
+
+        this.hide();
+        this.container.innerHTML = '';
+        if (addButton) this.addButton = addButton;
+        if (pos) this.pallet_pos = pos;
+        this.addButton.clearSelectedColorTimer();
+        this.container.innerHTML =
+            '<div id="hatena-star-pallet-container">' + 
+                '<div id="touch-instruction" class="message">' + Hatena.Star.Text.colorstar_for_smartphone + '</div>' +
+                '<div id="sending-message" class="message" style="display: none">' + Hatena.Star.Text.sending + '</div>' +
+                '<div class="pallet-container">' +
+                    '<div class="pallet">' +
+                        '<a href="#"><img src="' + Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + '/images/spacer.gif" id="hatena-star-yellow" class="star yellow post" alt="Add Yellow Star" title="Add Yellow Star" /></a>' +
+                        '<div class="star"><span class="star yellow unlimited">' + Hatena.Star.Text.unlimited + '</span></div>' +
+                    '</div>' +
+                    '<div class="iframe-loading-message">' + Hatena.Star.Text.loading + '</div>' +
+                    '<iframe id="' + Hatena.Star.Pallet.PALLET_ELEMENT_ID + '" src="' + this.getPalletFrameURL() + '" frameborder="0" border="0" scrolling="no"></iframe>' +
+                '</div>' + 
+                '<a href="' + Hatena.Star.PortalURL.replace(/http/, 'https') + '/shop/star?location=' + encodeURIComponent(location.href) + '" id="buy" target="' + (Ten.Browser.isDSi ? '_top' : '_blank' ) + '"><img src="' + Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/buy_star_cart_purple.gif" class="cart">' + Hatena.Star.Text.for_colorstar_shop + '</a>' +
+            '</div>' + 
+            '<style type="text/css">' +
+                '#hatena-star-pallet-container {' +
+                    'color: ' + (Hatena.Star.Pallet.SmartPhone.ColorScheme == 'dark' ? 'white' : 'black') + ';' +
+                '}' +
+                '#hatena-star-pallet-container .message {' +
+                    'padding: 7px 10px;' +
+                    'font-size: 14px;' +
+                '}' +
+                '#hatena-star-pallet-container .pallet-container {' +
+                    'position: relative;' + 
+                    'margin: 0 5px 0 45px;' + 
+                    'height: 65px;' +
+                    (Ten.Browser.isDSi ? 'margin: 0 10px 0 10px;' : '') +
+                '}' +
+                '#hatena-star-pallet-container .pallet {' +
+                    'position: absolute;' +
+                    'top: 0;' +
+                    'left: 0;' +
+                    'width: 39px;' +
+                    'height: 60px;' +
+                    'text-align: center;' +
+                    'color: #FECD69;' + 
+                    'font-weight: bold;' + 
+                '}' +
+                '#hatena-star-pallet-container #hatena-star-yellow {' +
+                    'background: url(' + Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + (Hatena.Star.Pallet.SmartPhone.ColorScheme == 'dark' ? '/images/add_star_for_smartphone_bk.gif' : '/images/add_star_for_smartphone_wh.gif') + ') 0 0;' +
+                    'width: 39px;' +
+                    'height: 39px;' +
+                    'border: 0;' +
+                '}' +
+                '#hatena-star-pallet-container a.active #hatena-star-yellow {' +
+                    'background: url(' + Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + (Hatena.Star.Pallet.SmartPhone.ColorScheme == 'dark' ? '/images/add_star_for_smartphone_bk.gif' : '/images/add_star_for_smartphone_wh.gif') + ') 0 39px;' +
+                    'width: 39px;' +
+                    'height: 39px;' +
+                    'border: 0;' +
+                '}' +
+                '#hatena-star-pallet-container iframe ,' +
+                '#hatena-star-pallet-container .iframe-loading-message {' +
+                    'position: absolute;' +
+                    'top: 0;' +
+                    'left: 42px;' +
+                    'width: 173px;' +
+                    'height: 65px;' +
+                '}' +
+                '#hatena-star-pallet-container .iframe-loading-message {' +
+                    'text-align: left;' +
+                    'padding: 12px 40px 12px 40px;' +
+                '}' +
+                '#hatena-star-pallet-container #buy {' +
+                    'text-align: right;' +
+                    'float: right;' +
+                    'color: #ff7000;' +
+                    'text-decoration:none;' +
+                    'margin-top: 5px;' +
+                    'margin-right: 12px;' +
+                '}' +
+            '</style>'
+        ;
+        this.pallet =this.container.getElementsByTagName('iframe')[0];
+        this.pallet.style.visibility = 'hidden';
+        this.isNowLoading = true;
+        this._pallet_onloaded = 0;
+        this.loadingMessage = Ten.querySelector('div.iframe-loading-message', this.container);
+
+        var star_yellow = document.getElementById('hatena-star-yellow');
+        new Ten.Observer(star_yellow, 'onclick', function (e) {
+            e.stop();
+            Hatena.Star.AddButton.SmartPhone.AddStarPath = 'star.add.json';
+            addButton.addStar(e);
+            Hatena.Star.AddButton.SmartPhone.AddStarPath = 'star.add_multi.json';
+        });
+        if (Ten.Browser.isDSi) {
+            var img = star_yellow;
+            new Ten.Observer(star_yellow, 'onmousedown', function (e) {
+                if (img._activeTimer) {
+                    clearTimeout(img._activeTimer);
+                }
+                img.parentNode.className = 'active';
+            });
+            new Ten.Observer(star_yellow, 'onmouseup', function (e) {
+                img._activeTimer = setTimeout(
+                    function () { img.parentNode.className = '' },
+                    100
+                );
+            });
+        }
+
+        new Ten.Observer(this.pallet, 'onload', this, 'observerSelectColor');
+
+        var self = this;
+        window.addEventListener("message", function (e) { if (e.data == 'sending') self.sending() }, false);
+
+        this.showBackgroundContainer(this.pallet_pos);
+        this.showCloseButton();
+        if (Ten.Browser.isAndroid) {
+            var self = this;
+//            var listener = function (e) {
+//                e.preventDefault();
+//                e.stopPropagation();
+//                self.hide();
+//                document.body.removeEventListener('click', listener, true);
+//            };
+//            document.body.addEventListener('click', listener, true);
+        } else {
+            this.showScreen();
+        }
+
+        if (Ten.Browser.isAndroid) {
+            var self = this;
+            setTimeout(function () { try {
+
+            // var time = new Date().getTime();
+
+            var xs = self.pallet_pos.x - document.body.scrollLeft;
+            var ys = self.pallet_pos.y - document.body.scrollTop;
+            var xe = xs + (self.container.offsetWidth  || 500);
+            var ye = ys + (self.container.offsetHeight || 300);
+
+            // alert([xs, ys, xe, ye, self.container.offsetWidth, self.container.offsetHeight, document.elementFromPoint(0, 0)]);
+
+            self._checkedElements = [];
+
+            self.backgroundContainer.style.display = 'none';
+            self.container.style.display = 'none';
+            for (var y = ys; y < ye; y += 5) {
+                for (var x = xs; x < xe; x += 5) {
+                    var e = document.elementFromPoint(x, y);
+                    if (!e) continue;
+                    if (e._checked) continue;
+
+                    if (e.nodeName == 'INPUT' || e.nodeName == 'TEXTAREA') {
+                        e._orig_disabled = e.disabled;
+                        e.disabled = true;
+                    } else
+                    if ((a = ancestor(e, 'A', 3))) {
+                        if (a._checked) continue; a._checked = true; self._checkedElements.push(a);
+                        a._orig_style = a.getAttribute('style');
+                        a.setAttribute('style', document.defaultView.getComputedStyle(a, "").cssText);
+                        // a.style.outline = "1px solid red";
+
+                        a.setAttribute('xhref', a.getAttribute('href'));
+                        a.removeAttribute('href');
+                    }
+
+                    e._checked = true; self._checkedElements.push(e);
+                }
+            }
+            self.backgroundContainer.style.display = 'block';
+            self.container.style.display = 'block';
+
+            function ancestor(e, name, deep) {
+                if (e.nodeName == name) return e;
+                if (e.parentNode) {
+                    if (deep < 0) return null;
+                    return ancestor(e.parentNode, name, deep - 1);
+                } else {
+                    return null;
+                }
+            }
+
+            // console.log((new Date()).getTime() - time + 'msec');
+            } catch (e) { alert(e) } }, 10);
+        }
+
+    },
+    hide: function (e) {
+        if (e && e.stop) {
+            e.stop();
+        }
+
+        if (Ten.Browser.isAndroid) {
+            try {
+            var links  = document.querySelectorAll('a[xhref]');
+            for (var i = 0, len = links.length; i < len; i++) {
+                var a = links[i];
+                a.setAttribute('href', a.getAttribute('xhref'));
+                a.removeAttribute('xhref');
+
+                a.setAttribute('style', a._orig_style);
+            }
+            var inputs = document.querySelectorAll('input, textarea');
+            for (var i = 0, len = inputs.length; i < len; i++) {
+                inputs[i].disabled = inputs[i]._orig_disabled;
+            }
+
+            if (this._checkedElements) for (var i = 0, len = this._checkedElements.length; i < len; i++) {
+                this._checkedElements[i]._checked = false;
+            }
+            } catch (e) { alert(e) }
+        }
+
+
+        this.hideBackgroundContainer();
+        this.hideCloseIframe();
+        this.constructor.SUPER.prototype.hide.apply(this, arguments);
+
+    },
+    showScreen: function() {
+        if (!this.screen) {
+            var c = this.constructor;
+            var screen = document.createElement('div');
+            Ten.Style.applyStyle(screen, Ten.SubWindow._baseScreenStyle);
+            Ten.Style.applyStyle(screen, c.screenStyle);
+            document.body.appendChild(screen);
+            screen.style.position = 'fixed';
+            screen.style.height = document.body.scrollHeight + 'px';
+            this.screen = screen;
+            new Ten.Observer(screen, 'click', this, 'hide');
+        } else {
+            Ten.DOM.show(this.screen);
+        }
+    },
+    hideScreen: function () {
+        if (this.screen) {
+            Ten.DOM.hide(this.screen);
+        }
+    },
+    showBackgroundContainer: function(pos) {
+        if (!this.backgroundContainer) {
+            var div = document.createElement('div');
+            Ten.Style.applyStyle(div, this.constructor.backgroundContainerStyle);
+            this.backgroundContainer = div;
+            document.body.appendChild(div);
+        }
+        this.backgroundContainer.style.left = pos.x + 'px';
+        this.backgroundContainer.style.top  = pos.y + 'px';
+        Ten.DOM.show(this.backgroundContainer);
+    },
+    hideBackgroundContainer: function() {
+        if (this.backgroundContainer) {
+            Ten.DOM.hide(this.backgroundContainer);
+        }
+    },
+    showCloseButton: function () {
+        if (!this.closeButton) {
+            var closeButton = Ten.Element(
+                'a', { href: 'javascript:void(0)' },
+                Ten.Element('img', { src: this.constructor.getColorSchemeItem('getCloseButtonImage')(), style: { verticalAlign: 'middle', padding: this.constructor.getColorSchemeItem('closeButtonImagePadding') } }),
+                Hatena.Star.Text.close || 'Close'
+            );
+            new Ten.Observer(closeButton, 'onclick', this, 'hide');
+            with (closeButton.style) {
+                overflow      = 'hidden';
+                position      = 'absolute';
+                top           = this.constructor.getColorSchemeItem('closeButtonTop');
+                right         = this.constructor.getColorSchemeItem('closeButtonRight');
+                color         = this.constructor.getColorSchemeItem('closeButtonColor');
+                verticalAlign = 'middle';
+                lineHeight    = '19px';
+                fontSize      = '12px';
+            }
+            this.window.appendChild(closeButton);
+            this.closeButton = closeButton;
+        }
+    },
+    showCloseIframe: function(pos) {
+        if (!this.closeIframes) {
+            var iframes = {  };
+            var setupIframe = function(callback) {
+                var iframe = document.createElement('iframe');
+                document.body.appendChild(iframe);
+                var doc = frames[frames.length-1].window.document;
+                doc.open();
+                doc.write('<h1>dummy</h1>');
+                Ten.DOM.removeAllChildren(doc.body);
+                if (callback) { callback(doc); };
+                doc.close();
+                return iframe;
+            };
+            var self = this;
+            // var iframe = setupIframe(function(doc) {
+            //     var btn = doc.createElement('img');
+            //     btn.src = self.constructor.getColorSchemeItem('getCloseButtonImage')();
+            //     btn.alt = 'close';
+            //     //Ten.Style.applyStyle(btn, self.constructor.closeButtonStyle);
+            //     btn.style.cursor = 'pointer';
+            //     new Ten.Observer(doc.body, 'onclick', self, 'hide');
+            //     doc.body.style.color = self.constructor.getColorSchemeItem('color');
+            //     doc.body.appendChild(btn);
+            //     doc.body.appendChild(
+            //         document.createTextNode(Hatena.Star.Text.close || 'Close')
+            //     );
+            // });
+            // iframes.button = iframe;
+            this.showCloseButton();
+            this.closeButton.style.right = Ten.Geometry.getWindowSize().w - (pos.x + Hatena.Star.Pallet.SmartPhone_BASE_WIDTH) + 'px';
+            this.closeButton.style.top = pos.y + 12 + 'px';
+            for(var i = 0;i < 4 && Hatena.Star.UseAnimation; i++) {
+                iframes[i] = setupIframe(function(doc) {
+                    new Ten.Observer(doc, 'onclick', self, 'hide');
+                });
+            }
+            this.closeIframes = iframes;
+        } else {
+            var iframes = this.closeIframes;
+        }
+        var max = function(a, b) {
+            return a > b ? a : b;
+        };
+        var docSize = {
+            w: max(Ten.Geometry.getDocumentSize().w, Ten.Geometry.getWindowSize().w),
+            h: max(Ten.Geometry.getDocumentSize().h, Ten.Geometry.getWindowSize().h)
+        };
+        var styles = [{
+            // k
+            top: '0px',
+            left: '0px',
+            width: docSize.w + 'px',
+            height: pos.y + 'px'
+        },{
+            // l
+            top: '0px',
+            left: pos.x + Hatena.Star.Pallet.SmartPhone_BASE_WIDTH + 'px',
+            width: docSize.w - Hatena.Star.Pallet.SmartPhone_BASE_WIDTH - pos.x + 'px',
+            height: docSize.h + 'px'
+        },{
+            // h
+            top: '0px',
+            left: '0px',
+            width: (Ten.Browser.isDSi ? 5 : 15 ) + 'px',
+            height: docSize.h + 'px'
+        },{
+            // j
+            top: pos.y + 140 + 'px',
+            left: '0px',
+            width: docSize.w + 'px',
+            height: docSize.h - pos.y - 140 + 'px'
+        }];
+        for (var key in iframes) if (iframes.hasOwnProperty(key)) {
+            var iframe = iframes[key];
+            if (key == 'button') {
+                Ten.Style.applyStyle(iframe, this.constructor.closeIframeStyle);
+                Ten.Style.applyStyle(iframe, {
+                    left: pos.x + Hatena.Star.Pallet.SmartPhone_BASE_WIDTH - 19 - 12 + 'px',
+                    top: pos.y + 12 + 'px'
+                });
+            } else {
+                Ten.Style.applyStyle(iframe, styles[key]);
+                Ten.Style.applyStyle(iframe, {
+                    position: 'absolute',
+                    margin: '0px',
+                    padding: '0px',
+                    border: '0px',
+                    zIndex: 100
+                });
+            }
+            Ten.DOM.show(iframe);
+        }
+        this.closeIframes = iframes;
+    },
+    hideCloseIframe: function() {
+        if (this.closeIframes) {
+            var iframes = this.closeIframes;
+            for (key in iframes) if (iframes.hasOwnProperty(key)) {
+                var iframe = iframes[key];
+                Ten.DOM.hide(iframe);
+            }
+        }
+    },
+    getPalletFrameURL: function () {
+        var pos = this.pallet_pos;
+        return this.constructor.SUPER.prototype.getPalletFrameURL.apply(this, arguments) + (Hatena.Star.UseAnimation ? '&left=' + pos.x + '&top=' + pos.y + '&anime=1' : '') + '&colorscheme=' + this.constructor.getColorScheme();
+    },
+    observerSelectColor: function (e) {
+        this.pallet.style.visibility = 'visible';
+        this.loadingMessage.style.display = 'none';
+        this._pallet_onloaded = this._pallet_onloaded ? this._pallet_onloaded : 0;
+        this._pallet_onloaded++;
+
+        this.isNowLoading = false;
+        if (this._pallet_onloaded > 1) {
+            this.addButton.addStar(e);
+        }
+
+        Ten.DOM.show(document.getElementById('touch-instruction'));
+        Ten.DOM.hide(document.getElementById('sending-message'));
+    },
+    sending : function () {
+        Ten.DOM.hide(document.getElementById('touch-instruction'));
+        Ten.DOM.show(document.getElementById('sending-message'));
+    }
+});
+
 /* Hatena.Star.CommentButton */
 Hatena.Star.CommentButton = new Ten.Class({
     base: [Hatena.Star.Button],
@@ -2625,7 +3415,7 @@ Hatena.Star.CommentButton = new Ten.Class({
         this.hide();
     },
     ImgSrcSelector: '.hatena-star-comment-button-image',
-    ImgSrc: Hatena.Star.BaseURL + 'images/comment.gif'
+    ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/comment.gif'
 }, {
     handleKeyUp: function(e) {
         if (!e.isKey('enter')) return;
@@ -2659,7 +3449,7 @@ Hatena.Star.CommentButton = new Ten.Class({
 Hatena.Star.CommentButtonActive = new Ten.Class({
     base: [Hatena.Star.CommentButton],
     ImgSrcSelector: '.hatena-star-comment-button-image-active',
-    ImgSrc: Hatena.Star.BaseURL + 'images/comment_active.gif'
+    ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/comment_active.gif'
 });
 
 /* Hatena.Star.Star */
@@ -2675,24 +3465,21 @@ Hatena.Star.Star = new Ten.Class({
             this.container = args.container;
             this.container._starColor = args.color;
             this.color = args.color;
-            var img = Hatena.Star.Star.getImage(this.container);
-            img.alt = this.screen_name;
-            img.title = '';
-            if (this.color && this.color != 'yellow' && this.color != 'temp') {
-                img.alt = img.alt + ' (' + this.color  + ')';
-            }
-            this.img = img;
+            this.generateImg();
         }
         this.quote = args.quote;
         this.entry = args.entry;
-	new Ten.Observer(this.img,'onmouseover',this,'showName');
-	new Ten.Observer(this.img,'onmouseout',this,'hideName');
-	new Ten.Observer(this.img,'onmouseover',this,'setTimer');
-	new Ten.Observer(this.img,'onmouseout',this,'clearTimer');
+        this.setImgObservers();
 
         this.user = new Hatena.Star.User(this.name);
+        if (!this.screen_name || this.screen_name == this.name) {
+            var self = this;
+            Hatena.Star.User.withNickname(this.name, function (name) {
+                self.screen_name = name;
+            });
+        }
         this.anchor = document.createElement('a');
-        this.anchor.href = this.user.userPage();
+        this.anchor.href = this.getAnchor();
         this.anchor.appendChild(this.img);
 
         this.count = args.count;
@@ -2710,43 +3497,59 @@ Hatena.Star.Star = new Ten.Class({
             img.src = Hatena.Star.Button.getImgSrc(color,container);
             img.setAttribute('tabIndex', 0);
             img.className = 'hatena-star-star';
-            with (img.style) {
-                padding = '0';
-                border = 'none';
-            }
+            var s = img.style;
+            s.padding = '0';
+            s.border = 'none';
             this.gotImage[color.ImgSrc] = img;
         }
         return this.gotImage[color.ImgSrc].cloneNode(false);
     },
 //    ImgSrcSelector: '.hatena-star-star-image',
-//    ImgSrc: Hatena.Star.BaseURL + 'images/star.gif',
+//    ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star.gif',
     ColorPallet : {
         'yellow' : {
             ImgSrcSelector: '.hatena-star-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star.gif'
         },
         'green' : {
             ImgSrcSelector: '.hatena-star-green-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star-green.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star-green.gif'
         },
         'red' : {
             ImgSrcSelector: '.hatena-star-red-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star-red.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star-red.gif'
         },
         'blue' : {
             ImgSrcSelector: '.hatena-star-blue-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star-blue.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star-blue.gif'
         },
         'purple' : {
             ImgSrcSelector: '.hatena-star-purple-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star-purple.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star-purple.gif'
         },
         'temp' : {
             ImgSrcSelector: '.hatena-star-temp-star-image',
-            ImgSrc: Hatena.Star.BaseURL + 'images/star-temp.gif'
+            ImgSrc: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/star-temp.gif'
         }
     }
 },{
+    generateImg: function () {
+        var img = Hatena.Star.Star.getImage(this.container);
+        img.alt = this.screen_name;
+        img.title = '';
+        if (this.color && this.color != 'yellow' && this.color != 'temp') {
+            img.alt = img.alt + ' (' + this.color  + ')';
+        }
+        this.img = img;
+    },
+    setImgObservers: function () {
+        new Ten.Observer(this.img,'onmouseover',this,'showName');
+        new Ten.Observer(this.img,'onmouseout',this,'hideName');
+        if ( Hatena.Star.Config.isStarDeletable ) {
+            new Ten.Observer(this.img,'onmouseover',this,'setTimerStarDeletion');
+            new Ten.Observer(this.img,'onmouseout',this,'clearTimerStarDeletion');
+        }
+    },
     asElement: function() {
         if (this.count && this.count > 1) {
             var c = document.createElement('span');
@@ -2762,7 +3565,7 @@ Hatena.Star.Star = new Ten.Class({
             return this.anchor;
         }
     },
-    setTimer: function(e) {
+    setTimerStarDeletion: function(e) {
         var self = this;
         if (this.deleteTimer) return;
         if (!this.name || !this.entry) return;
@@ -2770,25 +3573,32 @@ Hatena.Star.Star = new Ten.Class({
         if (!Hatena.Visitor.RKS) return;
         this.deleteTimer = setTimeout(function() {
             self.deleteTimer = null;
-            return; // Chrome popup window crash..
-            var uri = Hatena.Star.BaseURL + 'star.deletable.json?name='
-                + self.name;
+            var uri = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'star.deletable.json?name='
+                + self.name + '&uri=' + encodeURIComponent(self.entry.uri);
+            if (self.color) uri += '&color=' + self.color;
+            if (self.quote) {
+                uri += '&quote=' + encodeURIComponent(self.quote);
+            }
             new Ten.JSONP(uri, self, 'confirmDeletable');
         }, 4000);
     },
-    clearTimer: function() {
+    clearTimerStarDeletion: function() {
         if (this.deleteTimer) {
             clearTimeout(this.deleteTimer);
             this.deleteTimer = null;
         }
     },
     confirmDeletable: function(res) {
-        if (res.result && res.message && confirm(res.message)) {
+        if (res.result && res.confirm_html) {
+          var pos = Ten.Geometry.getElementPosition(this.anchor);
+          var scr = new Hatena.Star.DeleteConfirmScreen();
+          scr.showConfirm(res.confirm_html, this, pos);
+        } else if (res.result && res.message && confirm(res.message)) {
             this.deleteStar();
         }
     },
     deleteStar: function() {
-        var uri = Hatena.Star.BaseURL + 'star.delete.json?name='
+        var uri = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'star.delete.json?name='
             + this.name + '&uri=' + encodeURIComponent(this.entry.uri)
             + '&rks=' + Hatena.Visitor.RKS;
         if (this.color) uri += '&color=' + this.color;
@@ -2808,12 +3618,25 @@ Hatena.Star.Star = new Ten.Class({
         pos.x += 10;
         pos.y += 25;
         if (this.highlight) this.highlight.show();
-        this.screen.showName(this.screen_name, this.quote, pos, this.profile_icon);
+        this.screen.showName(this.screen_name, this.quote, pos, this.profile_icon, this.name);
     },
     hideName: function() {
         if (!this.screen) return;
         if (this.highlight) this.highlight.hide();
         this.screen.hide();
+    },
+    getAnchor: function () {
+        if (Hatena.Star.isTouchUA) {
+            if (Hatena.Star.getSmartPhoneDetailURL) {
+                var url = Hatena.Star.getSmartPhoneDetailURL(this);
+                if (url) {
+                    return url;
+                }
+            }
+            return Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + '/mobile/entry?uri=' + encodeURIComponent(this.entry.uri);
+        } else {
+            return this.user.userPage();
+        }
     }
 });
 
@@ -2959,7 +3782,7 @@ Hatena.Star.InnerCount = new Ten.Class({
         this.showInnerStars(e);
     },
     showInnerStars: function() {
-        var url = Hatena.Star.BaseURL + 'entry.json?uri=' +
+        var url = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'entry.json?uri=' +
         encodeURIComponent(this.entry.uri);
         new Ten.JSONP(url, this, 'receiveStarEntry');
     },
@@ -2993,11 +3816,12 @@ Hatena.Star.Comment = new Ten.Class({
         });
         var ico = Hatena.Star.User.getProfileIcon(this.name);
         ico.style.marginLeft = '-22px';
+        Hatena.Star.User.withNickname(this.name, function (name) {
+            ico.title = name;
+        });
         div.appendChild(ico);
         var span = document.createElement('span');
-        with(span.style) {
-            fontSize = '90%';
-        }
+        span.style.fontSize = '90%';
         span.innerHTML = this.body;
         div.appendChild(span);
         if (this.deletable()) {
@@ -3017,7 +3841,7 @@ Hatena.Star.Comment = new Ten.Class({
         if (!this.deletable()) return;
         if (!this.id) return;
         if (!Hatena.Visitor.RKS) return;
-        var uri = Hatena.Star.BaseURL + 'comment.delete.json?comment_id=' + this.id
+        var uri = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'comment.delete.json?comment_id=' + this.id
             + '&rks=' + Hatena.Visitor.RKS;
         new Ten.JSONP(uri, callback);
     }
@@ -3029,7 +3853,7 @@ Hatena.Star.CommentDeleteButton = new Ten.Class({
         this.parent = parent;
         this.comment = comment;
         this.button = new Ten.Element('img', {
-            src: Hatena.Star.BaseURL + 'images/delete2.gif',
+            src: Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/delete2.gif',
             alt: 'Delete',
             title: 'Delete',
             style: {
@@ -3085,10 +3909,10 @@ Hatena.Star.NameScreen = new Ten.Class({
     closeButton: null,
     draggable: false
 },{
-    showName: function(name, quote, pos, src) {
+    showName: function(name, quote, pos, src, urlName) {
         this.container.innerHTML = '';
-        this.container.appendChild(Hatena.Star.User.getProfileIcon(name, src));
-        this.container.appendChild(document.createTextNode(name));
+        this.container.appendChild(Hatena.Star.User.getProfileIcon(urlName || name, src));
+        this.container.appendChild(document.createTextNode(name || urlName));
         if (quote) {
             var blockquote = document.createElement('blockquote');
             Ten.Style.applyStyle(blockquote, this.constructor.quoteStyle);
@@ -3129,6 +3953,13 @@ Hatena.LoginWindow = new Ten.Class({
             value: document.location.href
         });
         form.appendChild(input);
+    },
+    hide: function () {
+        var script = document.createElement('script');
+        script.src = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'js/HatenaStar.js';
+        Hatena.Star = undefined;
+        document.body.appendChild(script);
+        Ten.SubWindow.prototype.hide.apply(this, arguments);
     }
 });
 
@@ -3163,6 +3994,41 @@ Hatena.Star.AlertScreen = new Ten.Class({
         if (pos.x + w > scr.x + win.w) pos.x = win.w + scr.x - w;
         this.show(pos);
     }
+});
+
+/* Hatena.Star.DeleteConfirmScreen */
+Hatena.Star.DeleteConfirmScreen = new Ten.Class({
+    base: [Ten.SubWindow],
+    style: {
+        padding: '2px',
+        textAlign: 'center',
+        borderRadius: '6px',
+        MozBorderRadius: '6px',
+        width: '320px',
+        height: '170px'
+    },
+    handleStyle: {
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        backgroundColor: '#f3f3f3',
+        borderBottom: '1px solid #bbb',
+        width: '100%',
+        height: '30px',
+        borderRadius: '6px 6px 0 0',
+        MozBorderRadius: '6px 6px 0 0'
+    }
+},{
+  showConfirm: function(msg, star, pos) {
+        this.container.innerHTML = msg;
+        var win = Ten.Geometry.getWindowSize();
+        var scr = Ten.Geometry.getScroll();
+        var w = parseInt(this.constructor.style.width) + 20;
+        if (pos.x + w > scr.x + win.w) pos.x = win.w + scr.x - w;
+        this.show(pos);
+    }
+
+    // XXX star.receiveDeleteResult({result: 1})
 });
 
 /* Hatena.Star.CommentScreen */
@@ -3206,12 +4072,11 @@ Hatena.Star.CommentScreen = new Ten.Class({
     },
     getLoadImage: function() {
         var img = document.createElement('img');
-        img.src = Hatena.Star.BaseURL + 'images/load.gif';
+        img.src = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'images/load.gif';
         img.setAttribute('alt', 'Loading');
-        with (img.style) {
-            verticalAlign = 'middle';
-            margin = '0 2px';
-        }
+        var s = img.style;
+        s.verticalAlign = 'middle';
+        s.margin = '0 2px';
         return img;
     }
 },{
@@ -3260,7 +4125,7 @@ Hatena.Star.CommentScreen = new Ten.Class({
         if (!body) return;
         ci.disabled = 'true';
         this.showLoadImage();
-        var url = Hatena.Star.BaseURL + 'comment.add.json?body=' + encodeURIComponent(body) +
+        var url = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'comment.add.json?body=' + encodeURIComponent(body) +
             '&uri=' + encodeURIComponent(this.entry.uri) +
             '&title=' + encodeURIComponent(this.entry.title);
         if (Hatena.Visitor && Hatena.Visitor.RKS) {
@@ -3313,7 +4178,7 @@ Hatena.Star.CommentScreen = new Ten.Class({
             style: {
                 width: '220px',
                 height: '3em',
-	        border: '1px solid #bbb',
+                border: '1px solid #bbb',
                 padding: '3px',
                 overflow: 'auto'
             }
@@ -3497,15 +4362,30 @@ Hatena.Star.EntryLoader = new Ten.Class({
         return e;
     },
     getElementByConfigSelector: function(selector,parent) {
+        var truncate = false;
+        selector = selector.replace(/::-ten-truncate$/, function () {
+            truncate = true; return '';
+        });
+
+        var result = null;
         if (selector.match(/^document\.(location|title)$/)) {
-            return document[RegExp.$1];
+            result = document[RegExp.$1];
         } else if (selector == 'window.location') {
-            return window.location;
+            result = window.location;
         } else if (selector == 'parent') {
-            return parent;
+            result = parent;
         } else {
-            return Ten.Selector.getElementsBySelector(selector,parent)[0];
+            result = Ten.Selector.getElementsBySelector(selector,parent)[0];
         }
+
+        if (truncate && result && result.nodeType == 1) {
+            result = Hatena.Star.EntryLoader.scrapeTitle(result) || result.title || result.alt || '';
+            if (result.length > 30) {
+                result = result.substring(0, 30) + '...';
+            }
+        }
+
+        return result;
     },
     finishLoad: function() {
         var c = Hatena.Star.EntryLoader;
@@ -3516,11 +4396,11 @@ Hatena.Star.EntryLoader = new Ten.Class({
         var c = Hatena.Star.EntryLoader;
         var entries = c.entries;
         if (!entries.length) return;
-        var url = Hatena.Star.BaseURL + 'entries.json?';
+        var url = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'entries.json?';
         for (var i = 0; i < entries.length; i++) {
             if (url.length > Ten.JSONP.MaxBytes) {
                 new Ten.JSONP(url, c, 'receiveStarEntries');
-                url = Hatena.Star.BaseURL + 'entries.json?';
+                url = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'entries.json?';
             }
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
@@ -3554,8 +4434,11 @@ Hatena.Star.EntryLoader = new Ten.Class({
             if (!Hatena.Visitor || typeof(Hatena.Visitor) == 'undefined') {
                 Hatena.Visitor = {};
             }
-            if (!Hatena.Visitor.RKS) Hatena.Visitor.RKS = res.rks;
+            if (!Hatena.Visitor.RKS) {
+                Hatena.Visitor.RKS = res.rks;
+            }
         }
+        Hatena.Star.User.RKS.ready(res.rks);
     },
     loaded: false,
     entries: null
@@ -3578,7 +4461,7 @@ Hatena.Star.ConfigLoader = new Ten.Class({
             }
     },
     loadConfig: function() {
-        var uri = Hatena.Star.BaseURL + 'siteconfig.json?host=' + location.hostname;
+        var uri = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'siteconfig.json?host=' + location.hostname;
         new Ten.JSONP(uri, Hatena.Star.ConfigLoader, 'setConfig');
     },
     setConfig: function(data) {
@@ -3645,6 +4528,12 @@ Hatena.Star.WindowObserver = new Ten.Class({
     observer: null
 });
 Ten.EventDispatcher.implementEventDispatcher(Hatena.Star.WindowObserver);
+
+/* Hatena.Star.Text */
+Hatena.Star.Text = {};
+
+Hatena.Star.useSmartPhoneStar = true;
+
 
 /* start */
 new Hatena.Star.WindowObserver();
@@ -3750,6 +4639,12 @@ it under the same terms as the Perl programming language.
 =cut
 */
 Hatena.Star.BaseURL = 'http://s.hatena.ne.jp/';
-
-
-
+Hatena.Star.PortalURL = 'http://www.hatena.ne.jp/';
+Hatena.Star.Text.loading = '\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026';
+Hatena.Star.Text.close   = '\u9589\u3058\u308B';
+Hatena.Star.Text.colorstar_for_smartphone = "\u4ED8\u3051\u305F\u3044\u8272\u306E\u30B9\u30BF\u30FC\u3092\u30BF\u30C3\u30C1";
+Hatena.Star.Text.for_colorstar_shop = "\u30AB\u30E9\u30FC\u30B9\u30BF\u30FC\u30B7\u30E7\u30C3\u30D7\u3078";
+Hatena.Star.Text.unlimited = "\u7121\u9650";
+Hatena.Star.Text.sending   = "\u9001\u4FE1\u4E2D...";
+Hatena.Star.UgoMemoURL = 'http://ugomemo.hatena.ne.jp/';
+Hatena.Star.HaikuURL   = 'http://h.hatena.ne.jp/';
