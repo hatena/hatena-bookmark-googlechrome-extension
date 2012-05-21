@@ -23,7 +23,7 @@ Hatena.Bookmark.Star = {
         }
         for (var i = 0;  i < elements.length; i++) {
             var element = elements[i];
-            var entry = new Hatena.Bookmark.Star.createCommentEntry(element)
+            var entry = Hatena.Bookmark.Star.createCommentEntry(element)
             if (entry && entry.uri)
                 entries.push(entry);
         }
