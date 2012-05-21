@@ -24,7 +24,7 @@ function confirmWithCallback( id, msg, callback ) {
     t.disabled = true;
     var htmlStr = '<p class="msg"></p>' +
         '<div><input type="button" value="OK" class="ok">' +
-        '<input type="button" value="Cancel" class="cancel">' +
+        '<input type="button" value="キャンセル" class="cancel">' +
         '</div>';
     var box = document.createElement( "div" );
     function closeConfirmBox() {
