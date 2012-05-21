@@ -33,6 +33,7 @@ function confirmWithCallback( id, msg, callback ) {
         document.removeEventListener( "click", closeConfirmBox, false );
         box.parentNode.removeChild( box );
     }
+    box.id = id + "-confirmation";
     box.className = "confirmation-balloon";
     box.innerHTML = htmlStr;
     box.getElementsByClassName( "msg" ).item( 0 ).textContent = msg;

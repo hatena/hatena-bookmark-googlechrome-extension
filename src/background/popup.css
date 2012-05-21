@@ -507,7 +507,8 @@ a.username {
     display: inline-block;
 }
 
-#buttons * input {
+#buttons * input,
+.confirmation-balloon * input {
     cursor: pointer;
     width: 90px;
     font-size: 95%;
@@ -685,6 +686,10 @@ a.username {
     padding: 7px 10px;
     border-radius: 3px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+#delete-button-confirmation {
+    right: 10px;
 }
 
 #recommend-tags-container, #all-tags-container {
