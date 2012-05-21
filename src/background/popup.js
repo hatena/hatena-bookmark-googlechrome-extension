@@ -11,57 +11,6 @@ importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model'
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;
 
-document.addEventListener( "click", function ( evt ) {
-    var id = evt.target.id;
-    if ( id === "delete-button" ) {
-        confirmWithCallback( id, "このブックマークを削除します。 よろしいですか?", deleteBookmark );
-    }
-}, false );
-
-// 指定した id のボタンの後ろに確認ポップアップの要素を追加する
-function confirmWithCallback( id, msg, callback ) {
-    function createConrimPopupBox() {
-        var box = document.createElement( "div" );
-        var htmlStr = '<p class="msg"></p>' +
-            '<div><input type="button" value="OK" class="ok">' +
-            '<input type="button" value="キャンセル" class="cancel">' +
-            '</div>';
-        box.className = "confirmation-balloon";
-        box.innerHTML = htmlStr;
-        return box;
-    }
-    function closeConfirmBox() { // 確認ポップアップを閉じる; イベントリスナの削除はここでする
-        t.value = prevVal;
-        t.disabled = false;
-        listenersInfo.forEach( function (v,i,arr) { v[0].removeEventListener.apply(v[0],v[1]) } );
-        box.parentNode.removeChild( box );
-    }
-    // ok or cancel なら, 確認ポップアップを閉じて必要な処理をする
-    function confirmOk() { closeConfirmBox(); callback(); }
-    function confirmCancel() { closeConfirmBox(); t.focus(); }
-
-    var t = document.getElementById( id );
-    var prevVal = t.value;
-    t.value = "確認";
-    t.disabled = true;
-    var box = createConrimPopupBox();
-    box.id = id + "-confirmation";
-    box.getElementsByClassName( "msg" ).item( 0 ).textContent = msg;
-    // イベントリスナ登録
-    var okButton = box.getElementsByClassName( "ok" ).item( 0 );
-    var cancelButton = box.getElementsByClassName( "cancel" ).item( 0 );
-    var listenersInfo = [
-        [ box, [ "click", function ( evt ) { evt.stopPropagation() }, false ] ],
-        [ document, [ "click", closeConfirmBox, false ] ],
-        [ okButton, [ "click", confirmOk, false ] ],
-        [ cancelButton, [ "click", confirmCancel, false ] ]
-    ];
-    listenersInfo.forEach( function (v,i,arr) { v[0].addEventListener.apply(v[0],v[1]) } );
-    // 要素の追加とフォーカス
-    t.parentNode.insertBefore( box, t.nextSibling );
-    cancelButton.focus();
-}
-
 if (popupMode) {
     // XXX
     p = function(msg) {
@@ -177,6 +126,50 @@ function deleteBookmark() {
         UserManager.user.deleteBookmark(url);
         closeWin();
     });
+}
+
+// 指定した id のボタンの後ろに確認ポップアップの要素を追加する
+function confirmWithCallback( id, msg, callback ) {
+    function createConrimPopupBox() {
+        var box = document.createElement( "div" );
+        var htmlStr = '<p class="msg"></p>' +
+            '<div><input type="button" value="OK" class="ok">' +
+            '<input type="button" value="キャンセル" class="cancel">' +
+            '</div>';
+        box.className = "confirmation-balloon";
+        box.innerHTML = htmlStr;
+        return box;
+    }
+    function closeConfirmBox() { // 確認ポップアップを閉じる; イベントリスナの削除はここでする
+        t.value = prevVal;
+        t.disabled = false;
+        listenersInfo.forEach( function (v,i,arr) { v[0].removeEventListener.apply(v[0],v[1]) } );
+        box.parentNode.removeChild( box );
+    }
+    // ok or cancel なら, 確認ポップアップを閉じて必要な処理をする
+    function confirmOk() { closeConfirmBox(); callback(); }
+    function confirmCancel() { closeConfirmBox(); t.focus(); }
+
+    var t = document.getElementById( id );
+    var prevVal = t.value;
+    t.value = "確認";
+    t.disabled = true;
+    var box = createConrimPopupBox();
+    box.id = id + "-confirmation";
+    box.getElementsByClassName( "msg" ).item( 0 ).textContent = msg;
+    // イベントリスナ登録
+    var okButton = box.getElementsByClassName( "ok" ).item( 0 );
+    var cancelButton = box.getElementsByClassName( "cancel" ).item( 0 );
+    var listenersInfo = [
+        [ box, [ "click", function ( evt ) { evt.stopPropagation() }, false ] ],
+        [ document, [ "click", closeConfirmBox, false ] ],
+        [ okButton, [ "click", confirmOk, false ] ],
+        [ cancelButton, [ "click", confirmCancel, false ] ]
+    ];
+    listenersInfo.forEach( function (v,i,arr) { v[0].addEventListener.apply(v[0],v[1]) } );
+    // 要素の追加とフォーカス
+    t.parentNode.insertBefore( box, t.nextSibling );
+    cancelButton.focus();
 }
 
 function formSubmitHandler(ev) {
@@ -1177,6 +1170,17 @@ var ready = function() {
             */
         }
     }
+
+    // 確認ポップアップを出力するようなイベントのためのリスナ
+    document.addEventListener( "click", function ( evt ) {
+        var id = evt.target.id;
+        var msg;
+        if ( id === "delete-button" ) {
+            msg = "このブックマークを削除します。 よろしいですか?";
+            confirmWithCallback( id, msg, deleteBookmark );
+        }
+    }, false );
+
     var user = UserManager.user;
     if (user) {
         var hicon = $('#header-usericon');
