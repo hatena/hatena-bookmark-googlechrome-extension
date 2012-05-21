@@ -1,9 +1,3 @@
-document.addEventListener( "DOMContentLoaded", function el_tmp( evt ) {
-    // confirm を出すと chrome 拡張がおかしくなることがあるので暫定措置
-    Hatena.Star.Config.isColorPalletAvailable   = false;
-    Hatena.Star.Config.isStarDeletable          = false;
-    Hatena.Star.Config.isCommentButtonAvailable = false;
-}, false );
 Deferred.debug = true;
 var BG = chrome.extension.getBackgroundPage();
 importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model']);

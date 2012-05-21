@@ -11,6 +11,12 @@
 <script type="text/javascript" src="config-setting.js"></script>
 <script type="text/javascript" src="popup.js"></script>
 <script type="text/javascript" src="../lib/50-HatenaStar.js"></script>
+<script type="text/javascript">
+    // confirm を出すと chrome 拡張がおかしくなることがあるので暫定措置
+    Hatena.Star.Config.isColorPalletAvailable   = false;
+    Hatena.Star.Config.isStarDeletable          = false;
+    Hatena.Star.Config.isCommentButtonAvailable = false;
+</script>
 <script type="text/javascript" src="../lib/51-HatenaStarLoader.js"></script>
 <script type="text/javascript" src="../lib/60-TagCompleter.js"></script>
 <link rel="stylesheet" href="popup.css" type="text/css" />
