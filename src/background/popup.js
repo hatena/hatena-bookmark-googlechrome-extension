@@ -124,46 +124,38 @@ function deleteBookmark() {
 
 // 指定した id のボタンの後ろに確認ポップアップの要素を追加する
 function confirmWithCallback( id, msg, callback ) {
-    function createConrimPopupBox() {
-        var box = document.createElement( "div" );
-        var htmlStr = '<p class="msg"></p>' +
+    function closeConfirmBox() { // 確認ポップアップを閉じる; イベントリスナの削除はここでする
+        t.val( prevVal );
+        t.attr( "disabled", false );
+        listenersInfo.forEach( function (v,i,arr) { v[0].unbind(v[1][0],v[1][1]) } );
+        listenersInfo = null;
+        box.remove();
+    }
+
+    var box = $('<div class="confirmation-balloon"><p class="msg"></p>' +
             '<div><input type="button" value="OK" class="ok">' +
             '<input type="button" value="キャンセル" class="cancel">' +
-            '</div>';
-        box.className = "confirmation-balloon";
-        box.innerHTML = htmlStr;
-        return box;
-    }
-    function closeConfirmBox() { // 確認ポップアップを閉じる; イベントリスナの削除はここでする
-        t.value = prevVal;
-        t.disabled = false;
-        listenersInfo.forEach( function (v,i,arr) { v[0].removeEventListener.apply(v[0],v[1]) } );
-        box.parentNode.removeChild( box );
-    }
-    // ok or cancel なら, 確認ポップアップを閉じて必要な処理をする
-    function confirmOk() { closeConfirmBox(); callback(); }
-    function confirmCancel() { closeConfirmBox(); t.focus(); }
-
-    var t = document.getElementById( id );
-    var prevVal = t.value;
-    t.value = "確認";
-    t.disabled = true;
-    var box = createConrimPopupBox();
-    box.id = id + "-confirmation";
-    box.getElementsByClassName( "msg" ).item( 0 ).textContent = msg;
+            '</div></div>');
+    var t = $('#'+id);
+    var prevVal = t.val();
+    t.val( "確認" );
+    t.attr( "disabled", true );
+    box.attr( "id", id + "-confirmation" );
+    box.find( ".msg" ).text( msg );
+    var okButton = box.find( ".ok" );
+    var cancelButton = box.find( ".cancel" );
     // イベントリスナ登録
-    var okButton = box.getElementsByClassName( "ok" ).item( 0 );
-    var cancelButton = box.getElementsByClassName( "cancel" ).item( 0 );
     var listenersInfo = [
-        [ box, [ "click", function ( evt ) { evt.stopPropagation() }, false ] ],
-        [ document, [ "click", closeConfirmBox, false ] ],
-        [ okButton, [ "click", confirmOk, false ] ],
-        [ cancelButton, [ "click", confirmCancel, false ] ]
+        [ box, [ "click", function (evt) { evt.stopPropagation() } ] ],
+        [ $(document), [ "click", function (evt) { closeConfirmBox() } ] ],
+        [ okButton, [ "click", function (evt) { closeConfirmBox(); callback(); } ] ],
+        [ cancelButton, [ "click", function (evt) { closeConfirmBox(); t.focus(); } ] ]
     ];
-    listenersInfo.forEach( function (v,i,arr) { v[0].addEventListener.apply(v[0],v[1]) } );
+    listenersInfo.forEach( function (v,i,arr) { v[0].bind(v[1][0],v[1][1]) } );
     // 要素の追加とフォーカス
-    t.parentNode.insertBefore( box, t.nextSibling );
+    box.insertAfter( t );
     cancelButton.focus();
+    return box;
 }
 
 function formSubmitHandler(ev) {
@@ -1166,14 +1158,14 @@ var ready = function() {
     }
 
     // 確認ポップアップを出力するようなイベントのためのリスナ
-    document.addEventListener( "click", function ( evt ) {
+    $(document).bind( "click", function ( evt ) {
         var id = evt.target.id;
         var msg;
         if ( id === "delete-button" ) {
             msg = "このブックマークを削除します。 よろしいですか?";
             confirmWithCallback( id, msg, deleteBookmark );
         }
-    }, false );
+    } );
 
     var user = UserManager.user;
     if (user) {
@@ -1214,4 +1206,3 @@ var ready = function() {
 };
 
 $(document).bind('ready', ready);
-
