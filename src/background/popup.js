@@ -147,7 +147,7 @@ function confirmWithCallback( id, msg, callback ) {
     // イベントリスナ登録
     var listenersInfo = [
         [ box, [ "click", function (evt) { evt.stopPropagation() } ] ],
-        [ $(document), [ "click", function (evt) { closeConfirmBox() } ] ],
+        [ $(document), [ "click", function (evt) { evt.target.id !== id && closeConfirmBox() } ] ],
         [ okButton, [ "click", function (evt) { closeConfirmBox(); callback(); } ] ],
         [ cancelButton, [ "click", function (evt) { closeConfirmBox(); t.focus(); } ] ]
     ];
@@ -1158,13 +1158,10 @@ var ready = function() {
     }
 
     // 確認ポップアップを出力するようなイベントのためのリスナ
-    $(document).bind( "click", function ( evt ) {
+    $("#delete-button").bind( "click", function ( evt ) {
         var id = evt.target.id;
-        var msg;
-        if ( id === "delete-button" ) {
-            msg = "このブックマークを削除します。 よろしいですか?";
-            confirmWithCallback( id, msg, deleteBookmark );
-        }
+        var msg = "このブックマークを削除します。 よろしいですか?";
+        confirmWithCallback( id, msg, deleteBookmark );
     } );
 
     var user = UserManager.user;
