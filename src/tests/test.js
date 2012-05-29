@@ -708,8 +708,7 @@ test('Model Bookmark/Tag', function(d) {
         bookmark.saveWithTransaction().next(function(b) {
             equals(b.id, 1);
             equals(b.date - 0, new Date(1255519120 * 1000)-0, 'date proxy');
-            ok(b.search.indexOf('これはすごい') != -1, 'search comment');
-            ok(b.search.indexOf('サイト') != -1, 'search title');
+            ok(typeof b.search === 'undefined', 'Bookmark#search not used');
             Tag.find({}).next(function(tags) {
                 equals(tags.length, 2);
                 equals(tags[0].name, 'hatena');
@@ -742,7 +741,7 @@ test('Model Bookmark/Tag', function(d) {
             });
         });
     });
-}, 14, 5000).
+}, 13, 5000).
 
 test('UserView', function(d) {
     var view = new User.View('nagayama');
