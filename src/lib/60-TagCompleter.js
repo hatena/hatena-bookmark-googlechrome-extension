@@ -3,7 +3,7 @@ var E = Utils.createElementSimply;
 
 var TagCompleter = $({});
 
-$.extend(TagCompleter, {
+$.extendWithAccessorProperties(TagCompleter, {
     register: function(input, options) {
         this.options = options || {};
         this.tagsObject = {};

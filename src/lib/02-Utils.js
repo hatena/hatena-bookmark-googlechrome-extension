@@ -214,10 +214,12 @@ if (typeof Deferred != 'undefined') {
     }
 }
 
-
 if (typeof jQuery != 'undefined') {
-    // setter/getter extend version
-    jQuery.extend = jQuery.fn.extend = function() {
+    /**
+     * jQuery 1.3.2 の jQuery.extend を基に,
+     * accessor property (setter / getter) も移動するように拡張したメソッド
+     */
+    jQuery.extendWithAccessorProperties = jQuery.fn.extendWithAccessorProperties = function() {
         // copy reference to target object
         var target = arguments[0] || {}, i = 1, length = arguments.length, deep = false, options;
 
@@ -291,4 +293,3 @@ if (typeof jQuery != 'undefined') {
     };
 
 }
-

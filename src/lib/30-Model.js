@@ -138,7 +138,7 @@ $.extend(Bookmark, {
     },
 });
 
-$.extend(Bookmark.prototype, {
+$.extendWithAccessorProperties(Bookmark.prototype, {
     updateTags: function() {
         if (this.id) {
             return Tag.destroyByBookmark(this).next(Tag.createByBookmark(this));

@@ -12,7 +12,7 @@ var Timer = {
         var sid;
 
         var timer = $({});
-        jQuery.extend(timer, {
+        jQuery.extendWithAccessorProperties(timer, {
             start: function() {
                 sid = Global.setInterval(function() {
                     timer.loop();
