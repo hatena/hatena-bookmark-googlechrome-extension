@@ -102,7 +102,7 @@ $.extend(SiteinfoManager, {
         details.isLoading = true;
         var self = SiteinfoManager;
         var url = urls.shift();
-        $.get(url).next(function (data) {
+        $.get(url,void 0,void 0,"text").next(function (data) {
             data = JSON.parse(data);
             console.log('load siteinfo from ' + url);
             details.isLoading = false;

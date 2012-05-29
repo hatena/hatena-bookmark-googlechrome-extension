@@ -12,7 +12,7 @@ $.extend(UserManager, {
         }, wait || 15 * 1000);
     },
     login: function() {
-        $.ajax({ url: UserManager.MY_NAME_URL, cache: false }).next(function(data) {
+        $.ajax({ url: UserManager.MY_NAME_URL, dataType: "text", cache: false }).next(function(data) {
             UserManager.loginHandler(JSON.parse(data));
         }).error(UserManager.loginErrorHandler);
     },
@@ -177,6 +177,7 @@ User.prototype = {
                 url: endpoint,
                 type: 'POST',
                 data: data,
+                dataType: "text",
                 timeout: 15000,
             });
         }, {wait: 3}).next(function(res) {

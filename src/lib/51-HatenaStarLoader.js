@@ -136,7 +136,7 @@ Hatena.Bookmark.Star = {
         for (var i = 0; i < len; i++) {
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
-        return jQuery.get(url).next(function(res) {
+        return jQuery.get(url,void 0,void 0,'text').next(function(res) {
             res = JSON.parse(res);
             var len = res.entries ? res.entries.length : 0;
             Hatena.Bookmark.Star.receiveStarEntries(res, starElements);
