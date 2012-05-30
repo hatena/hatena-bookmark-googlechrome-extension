@@ -5,7 +5,7 @@ var isEuraAgreed = function() {
 
 var Manager = $({});
 
-$.extend(Manager, {
+$.extendWithAccessorProperties(Manager, {
     editBookmark: function(url, options) {
         if (!UserManager.user) {
             // XXX:
