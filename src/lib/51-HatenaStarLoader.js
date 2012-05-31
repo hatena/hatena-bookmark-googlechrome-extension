@@ -123,6 +123,7 @@ Hatena.Bookmark.Star = {
             }
             if (!Hatena.Visitor.RKS) Hatena.Visitor.RKS = res.rks;
         }
+        Hatena.Star.User.RKS.ready(res.rks);
     },
     getStarEntries: function(entries, starElements) {
         // var c = Hatena.Star.EntryLoader;
