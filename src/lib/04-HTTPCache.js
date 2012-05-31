@@ -32,7 +32,8 @@ HTTPCache.prototype = {
             var self = this;
             var d = new Deferred();
             var dataType = ( this.options.json ? 'text' : void 0 );
-            $.get(this.createURL(url),void 0,void 0,dataType).next(function(res) {
+            var reqUrl = this.createURL( url );
+            $.ajax({ url: reqUrl, dataType: dataType, cache: false }).next(function(res) {
                 d.call(self.setResCache(url, res));
             }).error(function() {
                 cache.set(url, null);
