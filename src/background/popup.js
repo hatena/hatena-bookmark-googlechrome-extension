@@ -1076,7 +1076,7 @@ var ViewManager = {
                     Config.set('popup.lastView', name);
                     if (current.tab) current.tab.addClass('current');
                     current.init();
-                }, 0);
+                }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
             }
         });
     }
