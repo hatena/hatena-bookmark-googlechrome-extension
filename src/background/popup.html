@@ -94,9 +94,9 @@
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
         <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
         <li class="tab-link">
-        <a id="hatena-bookmark-link-top" title="はてなブックマークトップページ" alt="はてなブックマークトップページ" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" /></a>
+        <a id="hatena-bookmark-link-top" title="はてなブックマークトップページ" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" alt="はてなブックマークトップページ" /></a>
         <a id="header-usericon" href="http://b.hatena.ne.jp/my"></a>
-        <a id="header-helpicon" href="http://b.hatena.ne.jp/help/chrome_extentions"><img alt="help" title="help" width=16 height=16 src="/images/help.png" /></a>
+        <a id="header-helpicon" href="http://b.hatena.ne.jp/help/chrome_extentions" title="help"><img alt="help" width=16 height=16 src="/images/help.png" /></a>
         </li>
       </ul>
     </div>
@@ -105,7 +105,7 @@
         <li id="search-tab">
         <form id="search-form">
           <input type="image" src="/images/searchbutton.png" width=19 height=19 />
-          <input placeholder="検索ワードを入力" id="search-word" type="text" />
+          <input placeholder="マイブックマーク検索" id="search-word" type="text" />
         </form>
         </li>
       </ul>
@@ -348,7 +348,7 @@
   <div id="search-header">
     <div class="edit-cell"><span id="search-word-preview"></span><span id="search-preview-sep">-</span><span id="search-total-count"></span></div>
     <div class="edit-cell" id="search-header-right">
-      <a id="hatena-websearch" href="http://b.hatena.ne.jp/search?q=">はてなウェブ検索で検索</a>
+      <a id="hatena-websearch" href="http://b.hatena.ne.jp/search?q=" title="はてなブックマーク全体を対象に検索を行います">はてなブックマークで検索</a>
     </div>
   </div>
   <ul id="search-result"></ul>
