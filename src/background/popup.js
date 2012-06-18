@@ -593,7 +593,7 @@ var View = {
             var self = this;
             this.lastLoadedURL = info.url;
             if (!this.defaultHTML) {
-                this.defaultHTML = this.container.get(0).cloneNode(true);
+                this.defaultHTML = $(this.container.get(0)).clone(true);
                 this.images = null;
                 this.selectedImage = null;
                 this.currentEntry = null;
