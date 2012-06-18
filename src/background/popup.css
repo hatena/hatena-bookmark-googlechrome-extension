@@ -1129,3 +1129,48 @@ em a:visited {
 #search-tab {
   padding-left: 0;
 }
+
+/**
+ * 共有の UI を変更するための試験的な JS
+ */
+#buttons {
+    float: right;
+}
+#checkbox-options {
+    position: relative;
+    margin: 0.8em;
+    padding: 0;
+    display: inline-block;
+    float: left;
+}
+#checkbox-options h6 {
+    display: none;
+}
+#checkbox-options:not(.expanded) #checkbox-options-expanded {
+    display: none;
+}
+#checkbox-options.expanded #checkbox-options-minimized {
+    visibility: hidden;
+}
+#checkbox-options * {
+    vertical-align: middle;
+}
+/** 開いているときの表示 */
+#checkbox-options #checkbox-options-expanded {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background-color: #FFFFFF;
+    border: solid 1px #CCCCCC;
+}
+#checkbox-options #checkbox-options-expanded .bar button {
+    float: right;
+}
+#checkbox-options #checkbox-options-expanded .bar span {
+    float: left;
+}
+/** 閉じているときの表示 */
+#checkbox-options #checkbox-options-minimized ul,
+#checkbox-options #checkbox-options-minimized li {
+    display: inline-block;
+}
