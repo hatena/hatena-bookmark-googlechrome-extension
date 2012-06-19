@@ -54,13 +54,28 @@ var sharingOptions = {};
         for ( var modelId in model ) {
             var m = model[modelId];
             for ( var i = 0, len = m.viewIds.length; i < len; ++ i ) {
+                var $inputElem = $("#"+m.viewIds[i]);
+                $inputElem.prop( "disabled", m.disabled );
+                $inputElem.prop( "checked", m.disabled ? false : m.doPost );
+                var $labelElem = $inputElem.parent();
                 if ( m.disabled ) {
-                    $("#"+m.viewIds[i]).prop( "disabled", m.disabled );
+                    $labelElem.prop( "title",
+                            "非公開ブックマークは " + m.info.disp_name + " へ投稿されません." );
+                    $labelElem.addClass( "disabled" );
                 } else {
-                    $("#"+m.viewIds[i]).prop( "checked", m.doPost );
+                    $labelElem.prop( "title", m.info.title );
+                    $labelElem.removeClass( "disabled" );
                 }
             }
         }
+    }
+    /* 非公開ブクマの場合は, Twitter などの連携をできなくする */
+    sharingOptions.setPrivate = setPrivate;
+    function setPrivate( isPrivate ) {
+        model.postTwitter.disabled = isPrivate;
+        model.postFacebook.disabled = isPrivate;
+        model.postMixiCheck.disabled = isPrivate;
+        makeViewCorrespondToModel();
     }
     sharingOptions.initSharingOptions = initSharingOptions;
     function initSharingOptions( user, bookmarkView ) {
@@ -75,7 +90,7 @@ var sharingOptions = {};
 
         // Twitter
         model.postTwitter = { viewIds: [] };
-        info = {
+        model.postTwitter.info = info = {
              id: "post-twitter"
             ,modelId: "postTwitter"
             ,configId: "postTwitter" // チェック状態を config で保持する際に使用
@@ -101,7 +116,7 @@ var sharingOptions = {};
 
         // Facebook
         model.postFacebook = { viewIds: [] };
-        info = {
+        model.postFacebook.info = info = {
              id: "post-facebook"
             ,modelId: "postFacebook"
             ,configId: "postFacebook" // チェック状態を config で保持する際に使用
@@ -127,7 +142,7 @@ var sharingOptions = {};
 
         // Evernote
         model.postEvernote = { viewIds: [] };
-        info = {
+        model.postEvernote.info = info = {
              id: "post-evernote"
             ,modelId: "postEvernote"
             //,configId: "postEvernote" // 現在のところ config に保存しない
@@ -155,7 +170,7 @@ var sharingOptions = {};
 
         // mixi check
         model.postMixiCheck = { viewIds: [] };
-        info = {
+        model.postMixiCheck.info = info = {
              id: "post-mixi-check"
             ,modelId: "postMixiCheck"
             ,configId: "postMixiCheck" // チェック状態を config で保持する際に使用

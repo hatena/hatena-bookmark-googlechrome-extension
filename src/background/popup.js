@@ -983,33 +983,7 @@ var View = {
         },
 
         privateClickHandler: function() {
-            // 非公開にするかどうかを調べて, それに応じて投稿先オプションの model を書き換える
-            [this.postTwitter[0], this.postFacebook[0], this.postMixiCheck[0]].forEach(function (input) {
-                if (!input) return;
-                var label = input.parentNode;
-                if (!label.enabledTitle) {
-                    label.enabledTitle = label.title;
-                    label.disabledTitle = label.title +
-                        '(非公開ブックマークは' + (
-                            input.name === 'post_twitter'  ? ' Twitter '  :
-                            input.name === 'post_facebook' ? ' Facebook ' :
-                                                             'mixiチェック'
-                        ) + 'へ投稿されません。)';
-                    input.defaultChecked = input.checked;
-                }
-                if ( $('#private').val() ) {
-                    input.defaultChecked = input.checked;
-                    input.checked = false;
-                    input.disabled = true;
-                    label.title = label.disabledTitle;
-                    label.className = 'disabled';
-                } else {
-                    input.checked = input.defaultChecked;
-                    input.disabled = false;
-                    label.title = label.enabledTitle;
-                    label.className = '';
-                }
-            });
+            sharingOptions.setPrivate( $('#private').val() );
         },
     }
 };
