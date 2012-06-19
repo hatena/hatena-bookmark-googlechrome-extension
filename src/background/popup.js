@@ -603,50 +603,15 @@ var View = {
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
             this.usernameEL.text(user.name);
+            // TODO 対応する必要あり
             if (user.plususer) {
                 this.plusInputs.removeClass('none');
             } else {
                 this.setupOptionHelp('private');
                 this.plusInputs.remove();
             }
-            if (user.canUseTwitter) {
-                if (user.postTwitterChecked === 'on' ||
-                    (user.postTwitterChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postTwitter'))) {
-                    this.postTwitter.attr('checked', 'checked');
-                }
-                this.postTwitter.bind('change', function() {
-                    Config.set('popup.bookmark.postTwitter', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-twitter');
-            }
-            if (user.canUseFacebook) {
-                if (user.postFacebookChecked === 'on' ||
-                    (user.postFacebookChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postFacebook'))) {
-                    this.postFacebook.attr('checked', 'checked');
-                }
-                this.postFacebook.bind('change', function() {
-                    Config.set('popup.bookmark.postFacebook', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-facebook');
-            }
-            if (user.canUseMixiCheck) {
-                if (user.postMixiCheckChecked === 'on' ||
-                    (user.postMixiCheckChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postMixiCheck'))) {
-                    this.postMixiCheck.attr('checked', 'checked');
-                }
-                this.postMixiCheck.bind('change', function() {
-                    Config.set('popup.bookmark.postMixiCheck', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-mixi-check');
-            }
-            // とりあえず private 関係の方から呼び出す
-            //$('#private').click(Ten.Function.method(this, 'privateClickHandler'));
+            // SharingOptions (共有オプション) に関する部分の初期化
+            sharingOptions.initSharingOptions( user, this );
             this.privateClickHandler();
 
             if (info.title) {
