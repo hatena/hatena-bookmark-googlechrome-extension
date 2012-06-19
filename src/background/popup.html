@@ -368,22 +368,29 @@
         <div class="table-row">
             <div class="edit-cell">
                 <input id="edit-submit" type="submit" value="追加" />
+                <button id="private-button" type="button">非公開</button>
+                <input name="private" id="private" type="hidden" value="1" />
             </div>
+            <!--
             <div class="edit-cell">
                 <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
             </div>
+            -->
         </div>
 
     </div>
 
-      <!-- TODO これはどうする? -->
+    <!-- TODO これはどうする? -->
+    <div style="clear: both;">
       <span id="asin-container">
         <input value="" type="hidden" id="asin" name="asin" disabled />
         <label for="add-asin">
           <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" /> コレクション
         </label>
       </span>
+    </div>
 
+    <!--
       <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
         <input value="1" type="checkbox" id="private" name="private"
         /><span class="label-text">非公開</span>
@@ -393,6 +400,7 @@
       はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
       <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
       </p>
+    -->
 
     </form>
   </div>

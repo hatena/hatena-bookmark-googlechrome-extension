@@ -507,6 +507,7 @@ a.username {
     display: inline-block;
 }
 
+#private-button,
 #buttons * input,
 .confirmation-balloon * input {
     cursor: pointer;
@@ -514,6 +515,10 @@ a.username {
     font-size: 95%;
     margin: 5px;
     padding: 1px 0 1px 0;
+}
+#buttons * input {
+    position: relative;
+    z-index: 10;
 }
 
 .edit-left {
@@ -1173,4 +1178,19 @@ em a:visited {
 #checkbox-options #checkbox-options-minimized ul,
 #checkbox-options #checkbox-options-minimized li {
     display: inline-block;
+}
+
+/**
+ * 非公開ボタンのための CSS
+ */
+#private-button {
+    width: 5em;
+    margin-left: -1em;
+    z-index: 1;
+}
+#private-button.active { /* 非公開 ON の場合 */
+    background-color: #FFCCFF;
+}
+#private-button:not(.active) { /* 非公開 OFF の場合 */
+    background-color: #FFFFCC;
 }

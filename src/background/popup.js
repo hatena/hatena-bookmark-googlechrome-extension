@@ -1203,3 +1203,39 @@ var ready = function() {
 };
 
 $(document).bind('ready', ready);
+
+/**
+ * 非公開ボタンのための JS
+ */
+(function namespace() {
+    // Model としては hidden の input 要素を使い, View として button を使う
+    // 本来は $modelElem の状態を変更したら自動的に $viewElem が変更されるようにすべき
+    // 現在は画面変更時に要素の clone をするということをしていて整合させるのが
+    // 難しいので, 簡易的に処理する
+
+    /** Model に合うように View を変える */
+    function makeViewCorrespondToModel( $modelElem ) {
+        var $viewElem = $("#private-button");
+        if ( $modelElem.val() ) {  // 非公開状態の場合の View にする
+            $viewElem.removeClass( "active" );
+            $viewElem.text( "非公開" );
+        } else { // 公開状態の場合の View にする
+            $viewElem.addClass( "active" );
+            $viewElem.text( "公開" );
+        }
+    }
+    /** Model の状態を変更し, それに合わせて View も変える */
+    function toggleValue( evt ) {
+        var $modelElem = $("#private");
+        $modelElem.val( $modelElem.val() ? "" : "1" );
+        makeViewCorrespondToModel( $modelElem );
+    }
+    /** 初期化 */
+    function init() {
+        $(document).unbind( "ready", init );
+        var $viewElem = $("#private-button");
+        $viewElem.bind( "click", toggleValue );
+        makeViewCorrespondToModel( $("#private") );
+    }
+    $(document).bind( "ready", init );
+}).call( this );
