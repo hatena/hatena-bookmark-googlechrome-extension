@@ -645,7 +645,8 @@ var View = {
             } else {
                 this.setupOptionHelp('post-mixi-check');
             }
-            $('#private').click(Ten.Function.method(this, 'privateClickHandler'));
+            // とりあえず private 関係の方から呼び出す
+            //$('#private').click(Ten.Function.method(this, 'privateClickHandler'));
             this.privateClickHandler();
 
             if (info.title) {
@@ -1017,6 +1018,7 @@ var View = {
         },
 
         privateClickHandler: function() {
+            // 非公開にするかどうかを調べて, それに応じて投稿先オプションの model を書き換える
             [this.postTwitter[0], this.postFacebook[0], this.postMixiCheck[0]].forEach(function (input) {
                 if (!input) return;
                 var label = input.parentNode;
@@ -1030,7 +1032,7 @@ var View = {
                         ) + 'へ投稿されません。)';
                     input.defaultChecked = input.checked;
                 }
-                if ($('#private').get(0).checked) {
+                if ( $('#private').val() ) {
                     input.defaultChecked = input.checked;
                     input.checked = false;
                     input.disabled = true;
@@ -1217,11 +1219,11 @@ $(document).bind('ready', ready);
     function makeViewCorrespondToModel( $modelElem ) {
         var $viewElem = $("#private-button");
         if ( $modelElem.val() ) {  // 非公開状態の場合の View にする
-            $viewElem.removeClass( "active" );
-            $viewElem.text( "非公開" );
-        } else { // 公開状態の場合の View にする
             $viewElem.addClass( "active" );
-            $viewElem.text( "公開" );
+            $viewElem.text( "隠" );
+        } else { // 公開状態の場合の View にする
+            $viewElem.removeClass( "active" );
+            $viewElem.text( "公" );
         }
     }
     /** Model の状態を変更し, それに合わせて View も変える */
@@ -1229,6 +1231,7 @@ $(document).bind('ready', ready);
         var $modelElem = $("#private");
         $modelElem.val( $modelElem.val() ? "" : "1" );
         makeViewCorrespondToModel( $modelElem );
+        View.bookmark.privateClickHandler();
     }
     /** 初期化 */
     function init() {

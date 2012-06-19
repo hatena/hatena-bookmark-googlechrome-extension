@@ -94,19 +94,33 @@ a#users-count:visited {
 
 #header {
     display: table;
-    background: -webkit-gradient(
-    linear, 
-    left top, 
-    left bottom, 
-    from(#427DC4), 
-    to(#2C6EBD), 
-    color-stop(0.5, #427DC4), 
-    color-stop(0.5, #2C6EBD)
-    );
     border-bottom: 1px solid #bbb;
     -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
     -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px; /* Chrome 4 以降で使える */
     -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px; /* Chrome 4 以降で使える */
+}
+#edit-submit,
+#private-button,
+#header {
+    /* gradient を使った青背景 */
+    /* deprecated な書き方; Chrome 10 より古くても使える */
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(#427DC4),
+        to(#2C6EBD),
+        color-stop(0.5, #427DC4),
+        color-stop(0.5, #2C6EBD)
+    );
+    /* Chrome 10 以降で使える */
+    background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    /* current standard; but unimplimented yet (chrome 19) */
+    background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    color: #FFFFFF;
 }
 
 .table {
@@ -169,6 +183,7 @@ a#users-count:visited {
   background-color: #FFF;
   border: 1px solid #777;
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
   overflow: hidden;
   padding-bottom: 46px;
   z-index: 200;
@@ -240,16 +255,20 @@ a#users-count:visited {
   padding: 4px 4px 4px 0;
 }
 
-ul.tab-ui li {
+ul.tab-ui li,
+#edit-submit,
+#private-button {
   font-weight: bold;
   display: inline-block;
   padding: 4px 6px;
   margin: 0px;
   -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使える */
   cursor: pointer;
   color: rgba(255,255,255,0.8);
   border: 1px solid #427DC4;
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
 }
 
 ul.tab-ui li:hover {
@@ -262,6 +281,7 @@ ul.tab-ui li.tab-link {
   background: transparent;
   border: none;
   -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
   padding-right: 0;
 }
 
@@ -273,6 +293,7 @@ ul.tab-ui li.tab-link img {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使える */
   padding: 2px;
   display: inline-block;
 }
@@ -281,6 +302,7 @@ ul.tab-ui li.tab-link img {
   background: transparent;
   border: none;
   -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
 }
 
 #header-right ul.tab-ui li input[type='image'] {
@@ -357,6 +379,7 @@ ul.tab-ui li img {
   /*
   background: #fff;
   -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
   */
   display: table;
   width: 100%;
@@ -424,7 +447,9 @@ a.username {
   cursor: pointer;
   background: #fff;
   -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
   -webkit-border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 4px; /* Chrome 4 以降で使える */
   padding: 2px;
   border: 1px solid #eee;
 }
@@ -471,6 +496,11 @@ a.username {
 }
 
 #edit > .table-row {
+    /* 将来的には display: flex に移行する必要がありそう
+     *   https://developer.mozilla.org/en/CSS/Flexbox
+     *   https://developer.mozilla.org/en/CSS/Using_CSS_flexible_boxes
+     *   http://myakura.hatenablog.com/entry/2012/06/11/230915
+     */
     display: -webkit-box;
     -webkit-box-orient: horizontal;
 }
@@ -514,7 +544,6 @@ a.username {
     width: 90px;
     font-size: 95%;
     margin: 5px;
-    padding: 1px 0 1px 0;
 }
 #buttons * input {
     position: relative;
@@ -554,7 +583,7 @@ a.username {
 #comment {
     width: 100%;
     -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Chrome 10 以降で使用可能 */
     padding: 3px 3px 3px 5px;
     vertical-align: top;
     resize: vertical;
@@ -1058,6 +1087,7 @@ em a:visited {
   margin: 0 0px 10px 0;
   padding: 5px;
   -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
   color: #71590c;
   text-align: center;
 }
@@ -1078,6 +1108,7 @@ em a:visited {
   padding: 10px;
   border: 1px solid #eee;
   -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
   line-height: 1.5;
 }
 
@@ -1184,13 +1215,12 @@ em a:visited {
  * 非公開ボタンのための CSS
  */
 #private-button {
-    width: 5em;
+    width: 3em;
     margin-left: -1em;
     z-index: 1;
 }
 #private-button.active { /* 非公開 ON の場合 */
-    background-color: #FFCCFF;
+    color: #FF0;
 }
 #private-button:not(.active) { /* 非公開 OFF の場合 */
-    background-color: #FFFFCC;
 }
