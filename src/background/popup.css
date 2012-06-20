@@ -2,6 +2,9 @@
 * {
     margin: 0;
     padding: 0;
+}
+
+body {
     font: 100%/1.4 "Arial", "Helvetica", sans-serif;
     font-size: small;
 }
@@ -1219,8 +1222,12 @@ em a:visited {
     margin-left: -1em;
     z-index: 1;
 }
-#private-button.active { /* 非公開 ON の場合 */
+#private-button.active .off, /* 非公開 ON の場合の off 用表示 */
+#private-button:not(.active) .on { /* 非公開 OFF の場合の on 用表示 */
+    display: none;
+}
+#private-button .on { /* 非公開 ON の表示 */
     color: #FF0;
 }
-#private-button:not(.active) { /* 非公開 OFF の場合 */
+#private-button .off { /* 非公開 OFF の表示 */
 }

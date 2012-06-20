@@ -368,8 +368,18 @@
         <div class="table-row">
             <div class="edit-cell">
                 <input id="edit-submit" type="submit" value="追加" />
-                <button id="private-button" type="button">公</button>
+                <button id="private-button" type="button" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) "
+                  ><span class="on">隠</span
+                  ><span class="off">公</span>
+                </button>
                 <input name="private" id="private" type="hidden" value="" />
+                <!-- TODO
+                <p id="option-help-private" class="option-help-tooltip" style="display: none;">
+                <img src="/images/add-private.png" alt="" width="16" height="16" />
+                はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
+                <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
+                </p>
+                -->
             </div>
             <!--
             <div class="edit-cell">
@@ -389,18 +399,6 @@
         </label>
       </span>
     </div>
-
-    <!--
-      <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
-        <input value="1" type="checkbox" id="private" name="private"
-        /><span class="label-text">非公開</span>
-      </label>
-      <p id="option-help-private" class="option-help-tooltip" style="display: none;">
-      <img src="/images/add-private.png" alt="" width="16" height="16" />
-      はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
-      <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
-      </p>
-    -->
 
     </form>
   </div>

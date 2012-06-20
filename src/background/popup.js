@@ -1167,10 +1167,8 @@ $(document).bind('ready', ready);
         var $viewElem = $("#private-button");
         if ( $modelElem.val() ) {  // 非公開状態の場合の View にする
             $viewElem.addClass( "active" );
-            $viewElem.text( "隠" );
         } else { // 公開状態の場合の View にする
             $viewElem.removeClass( "active" );
-            $viewElem.text( "公" );
         }
     }
     /** Model の状態を (外部から) 指定して変更する */
