@@ -11,8 +11,16 @@ var sharingOptions = {};
     function minimizeSharingOptions( evt ) {
         $("#checkbox-options").removeClass( "expanded" );
     }
+    /** チェックボックスの状態が変化した場合に呼び出される controller */
     function onViewStateChange( evt ) {
-        model[$(this).data( "modelId" )].doPost = this.checked;
+        var modelInfo = model[$(this).data( "modelId" )];
+        // tooltip を出す必要があるなら出す
+        if ( modelInfo.tooltipId ) { // tooltip を出す可能性があって
+            if( ! modelInfo.doPost && this.checked ) { // 偽から真に変化したとき
+                View.bookmark.optionHelpTooltipManager.showTooltip( modelInfo.tooltipId );
+            }
+        }
+        modelInfo.doPost = this.checked;
         var confId = $(this).data( "configId" );
         if ( confId ) {
             Config.set( 'popup.bookmark.' + $(this).data( "configId" ), this.checked );
@@ -107,7 +115,7 @@ var sharingOptions = {};
                 model.postTwitter.doPost = true;
             }
         } else {
-            bookmarkView.setupOptionHelp('post-twitter');
+            model.postTwitter.tooltipId = "option-help-post-twitter";
         }
         model.postTwitter.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
@@ -133,7 +141,7 @@ var sharingOptions = {};
                 model.postFacebook.doPost = true;
             }
         } else {
-            bookmarkView.setupOptionHelp('post-facebook');
+            model.postFacebook.tooltipId = "option-help-post-facebook";
         }
         model.postFacebook.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
@@ -160,7 +168,7 @@ var sharingOptions = {};
                 model.postEvernote.doPost = true;
             }
         } else {
-            bookmarkView.setupOptionHelp('post-evernote');
+            model.postEvernote.tooltipId = "option-help-post-evernote";
         }
         */
         model.postEvernote.viewIds.push(
@@ -187,7 +195,7 @@ var sharingOptions = {};
                 model.postMixiCheck.doPost = true;
             }
         } else {
-            bookmarkView.setupOptionHelp('post-mixi-check');
+            model.postMixiCheck.tooltipId = "option-help-post-mixi-check";
         }
         model.postMixiCheck.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
