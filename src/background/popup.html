@@ -94,9 +94,6 @@
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
         <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
         <li class="tab-link">
-        <a id="hatena-bookmark-link-top" title="はてなブックマークトップページ" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" alt="はてなブックマークトップページ" /></a>
-        <a id="header-usericon" href="http://b.hatena.ne.jp/my"></a>
-        <a id="header-helpicon" href="http://b.hatena.ne.jp/help/chrome_extentions" title="help"><img alt="help" width=16 height=16 src="/images/help.png" /></a>
         </li>
       </ul>
     </div>
@@ -226,12 +223,14 @@
           <div class="table-row">
             <div class="edit-cell" id="bookmark-options">
               <div id="comment-area">
-                <textarea rows="2" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
+                <div class="input-wrapper">
+                  <textarea rows="2" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
+                  <p id="type-counter"><span id="type-count">0</span> / 100</p>
+                </div>
                 <ul id="tag-complete-list">
                 </ul>
                 <input type="hidden" id="input-url" name="url" />
               </div>
-              <p id="type-counter"><span id="type-count">0</span> / 100</p>
             </div>
           </div>
         </div>
