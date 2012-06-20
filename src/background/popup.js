@@ -938,7 +938,7 @@ var View = {
                 f.show();
             }
             if (entry.is_private) {
-                $('#private').attr('checked', 'true');
+                this.privateOption.setValue( true );
             }
             if (entry.has_asin) {
                 var addAsin = $('#add-asin').attr('disabled', null);
@@ -982,6 +982,7 @@ var View = {
             });
         },
 
+        // TODO ここにある意味はないので, privateOption か sharingOptions に移す
         privateClickHandler: function() {
             sharingOptions.setPrivate( $('#private').val() );
         },
@@ -1146,13 +1147,20 @@ var ready = function() {
 $(document).bind('ready', ready);
 
 /**
- * 非公開ボタンのための JS
+ * View.bookmark.privateOption
+ * 非公開オプションの管理用オブジェクト
+ * public :
+ *  - View.bookmark.privateOption.setValue( boolean )
  */
 (function namespace() {
     // Model としては hidden の input 要素を使い, View として button を使う
     // 本来は $modelElem の状態を変更したら自動的に $viewElem が変更されるようにすべき
     // 現在は画面変更時に要素の clone をするということをしていて整合させるのが
     // 難しいので, 簡易的に処理する
+    // また, 同様の理由により, オブジェクト内部に DOM Element を保持するのではなく
+    // 処理の度に document から取ってくるようにしている.
+
+    var privateOption = View.bookmark.privateOption = {};
 
     /** Model に合うように View を変える */
     function makeViewCorrespondToModel( $modelElem ) {
@@ -1165,12 +1173,18 @@ $(document).bind('ready', ready);
             $viewElem.text( "公" );
         }
     }
-    /** Model の状態を変更し, それに合わせて View も変える */
+    /** Model の状態を (外部から) 指定して変更する */
+    privateOption.setValue = setValue;
+    function setValue( isPrivate ) {
+        var $modelElem = $("#private");
+        $modelElem.val( isPrivate ? "1" : "" );
+        makeViewCorrespondToModel( $modelElem );
+        View.bookmark.privateClickHandler(); // sharingOptions に private 状態を伝える
+    }
+    /** Model の状態をトグルし, それに合わせて View も変える */
     function toggleValue( evt ) {
         var $modelElem = $("#private");
-        $modelElem.val( $modelElem.val() ? "" : "1" );
-        makeViewCorrespondToModel( $modelElem );
-        View.bookmark.privateClickHandler();
+        setValue( ! $modelElem.val() );
     }
     /** 初期化 */
     function init() {
