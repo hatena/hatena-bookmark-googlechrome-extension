@@ -101,7 +101,6 @@
       <ul class="tab-ui">
         <li id="search-tab">
         <form id="search-form">
-          <input type="image" src="/images/searchbutton.png" width=19 height=19 />
           <input placeholder="マイブックマーク検索" id="search-word" type="text" />
         </form>
         </li>
@@ -223,11 +222,11 @@
           <div class="table-row">
             <div class="edit-cell" id="bookmark-options">
               <div id="comment-area">
-                <textarea rows="2" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
+                <textarea rows="1" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
                 <p id="type-counter"><span id="type-count">0</span> / 100</p>
-              </div>
               <ul id="tag-complete-list">
               </ul>
+              </div>
               <input type="hidden" id="input-url" name="url" />
             </div>
           </div>
@@ -252,7 +251,7 @@
     <div id="checkbox-options">
       <!-- TODO 見出しレベル -->
       <h6>共有:</h6>
-      <div id="checkbox-options-expanded">
+      <div id="checkbox-options-expanded" class="shadow">
         <ul>
           <!-- template -->
           <li id="checkbox-options-expanded-item-template">
@@ -292,9 +291,9 @@
             </label>
           </li>
         </ul>
-        <div class="bar">
+        <div class="bar cf">
           <span>共有する</span>
-          <button id="checkbox-options-button-to-minimize" type="button">▲</button>
+          <button id="checkbox-options-button-to-minimize" type="button"></button>
         </div>
       </div>
       <div id="checkbox-options-minimized">
@@ -328,7 +327,7 @@
           </li>
           -->
         </ul>
-        <button id="checkbox-options-button-to-expand" type="button">▼</button>
+        <button id="checkbox-options-button-to-expand" type="button"></button>
       </div>
 
       <!-- TODO なにこれ? -->

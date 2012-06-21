@@ -17,6 +17,15 @@
     padding: 0;
 }
 
+.shadow {
+  box-shadow: 0px 2px 5px #CCCCCC;
+  -webkit-box-shadow: 0px 2px 5px #CCCCCC;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
 body {
     font: 100%/1.4 "Arial", "Helvetica", sans-serif;
     font-size: small;
@@ -296,7 +305,7 @@ ul.tab-ui li {
   font-weight: bold;
   display: inline-block;
   padding: 4px 6px;
-  margin: 0px 10px 0 0;
+  margin: 0;
   -webkit-border-radius: 5px;
   border-radius: 5px; /* Chrome 4 以降で使える */
   cursor: pointer;
@@ -488,12 +497,16 @@ a.username {
   border: 1px solid #eee;
 }
 
+span#favorites {
+  margin-left: 10px;
+}
+
 /* }}} */
 
 /* edit {{{ */
 
 #form {
-  margin: 10px 20px 0 20px;
+  margin: 10px 15px 0 15px;
 }
 
 #bookmark-edit-header {
@@ -502,7 +515,7 @@ a.username {
   background: #eee;
   border-bottom: 1px solid #ddd;
   border-top: 1px solid #ddd;
-  padding: 5px 20px 5px 20px;
+  padding: 5px 15px 5px 15px;
 }
 
 #bookmark-edit-header a {
@@ -564,7 +577,7 @@ a.username {
 
 #buttons {
     float: right;
-    margin: 15px 0 15px;
+    margin: 10px 0 10px;
 }
 
 #buttons > .table-row,
@@ -580,6 +593,10 @@ a.username {
 #buttons * input {
     position: relative;
     z-index: 10;
+}
+
+label {
+  font-size: 12px;
 }
 
 .edit-left {
@@ -614,7 +631,7 @@ a.username {
 #comment {
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 0 18px 0;
   font-size: 12px;
   line-height: 1.6;
   vertical-align: top;
@@ -623,7 +640,7 @@ a.username {
   -webkit-box-shadow: none;
   -webkit-box-sizing: border-box;
   box-sizing: border-box; /* Chrome 10 以降で使用可能 */
-  resize: vertical;
+  resize: none;
 }
 
 #comment-area {
@@ -667,9 +684,10 @@ a.username {
     text-align: right;	
     font-size: 12px;
     line-height: 12px;
-    margin: 4px 0 0 0;
+    margin: -12px 0 0 0;
     color: #999;
     white-space: nowrap;
+    z-index: 100;
 }
 
 #type-counter span {
@@ -725,7 +743,7 @@ a.username {
 #send-mail-label .label-text {
     background: 0px 50% no-repeat;
     margin-left: 2px;
-    padding-left: 17px;
+    padding-left: 21px;
 }
 
 #post-twitter-label .label-text {
@@ -800,8 +818,8 @@ div#tag-container {
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
-  margin-right: 4px;
-  padding: 1px 5px 1px 5px;
+  margin-right: 1px;
+  padding: 0px 5px 0px 5px;
   cursor: pointer;
   white-space: nowrap;
   display: inline-block;
@@ -867,7 +885,7 @@ dd#all-tags {
 }
 
 #url {
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     display: block;
 }
 
@@ -877,7 +895,25 @@ dd#all-tags {
 
 #search-form {
   display: inline-block;
+  background-color: #FFF;
   -webkit-box-flex: 1;
+  height: 24px;
+  padding: 0;
+  vertical-align: middle;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+}
+
+#search-form input {
+  border: none;
+  background: url(../images/user-search.png) 5px center no-repeat;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 10px 0 20px;
 }
 
 #search-word-preview em {
@@ -915,7 +951,6 @@ dd#all-tags {
   text-decoration: underline;
   cursor:pointer;
 }
-
 
 #login-container,
 #bookmark-container,
@@ -1232,7 +1267,8 @@ em a:visited {
 #checkbox-options {
     position: relative;
     padding: 0;
-    margin-top: 15px;
+    width: 145px;
+    margin-top: 10px;
     display: inline-block;
     float: left;
 }
@@ -1248,6 +1284,26 @@ em a:visited {
 #checkbox-options * {
     vertical-align: middle;
 }
+
+#checkbox-options-button-to-minimize {
+  height: 16px;
+  width: 16px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-open.png) center center no-repeat;
+}
+
+#checkbox-options-button-to-expand {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+  padding: 2px 0 2px 0;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-close.png) center center no-repeat;
+}
+
+
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
     position: absolute;
@@ -1256,13 +1312,41 @@ em a:visited {
     background-color: #FFFFFF;
     border: solid 1px #CCCCCC;
 }
+
+#checkbox-options-expanded ul {
+  padding: 7px 0 12px 0;
+}
+
+#checkbox-options-expanded ul li {
+  list-style-type: none;
+  padding: 0 12px 0 12px;
+}
+
+#checkbox-options-expanded ul li span.displayed-name {
+  margin-left: 5px;
+}
+
+#checkbox-options #checkbox-options-expanded .bar {
+  margin-bottom: 5px;
+}
+
 #checkbox-options #checkbox-options-expanded .bar button {
     float: right;
 }
 #checkbox-options #checkbox-options-expanded .bar span {
     float: left;
+    margin-left: 12px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #999;
+    font-weight: bold;
 }
 /** 閉じているときの表示 */
+
+#checkbox-options #checkbox-options-minimized {
+  margin-left: 5px;
+}
+
 #checkbox-options #checkbox-options-minimized ul,
 #checkbox-options #checkbox-options-minimized li {
     display: inline-block;
