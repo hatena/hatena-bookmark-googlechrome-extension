@@ -753,21 +753,6 @@ var View = {
                 }
             }
 
-            $('dd span.tag').live('click', function() {
-                var tag = this.textContent;
-                var input = self.commentEL.get(0);
-                var index = 0;
-                if (this.className.indexOf('selected') == -1) {
-                    index = input.selectionEnd + tag.length + 2;
-                    self.tagCompleter.inputLine.addTag(tag);
-                } else {
-                    index = input.value.length - tag.length - 2;
-                    self.tagCompleter.inputLine.deleteTag(tag);
-                }
-                input.setSelectionRange(index, index);
-                return false;
-            });
-
             var form = this.form;
             if (!form.data('keypressBound')) {
                 form.data('keypressBound', true);
@@ -1162,6 +1147,23 @@ var ready = function() {
         var id = evt.target.id;
         var msg = "このブックマークを削除します。 よろしいですか?";
         confirmWithCallback( id, msg, deleteBookmark );
+    } );
+
+    // ブックマーク追加時のタグ一覧のタグクリックのリスナ
+    $('dd span.tag').live( 'click', function() {
+        var bView = View.bookmark;
+        var tag = this.textContent;
+        var input = bView.commentEL.get(0);
+        var index = 0;
+        if ( this.className.indexOf('selected') == -1 ) {
+            index = input.selectionEnd + tag.length + 2;
+            bView.tagCompleter.inputLine.addTag(tag);
+        } else {
+            index = input.value.length - tag.length - 2;
+            bView.tagCompleter.inputLine.deleteTag(tag);
+        }
+        input.setSelectionRange(index, index);
+        return false;
     } );
 
     var user = UserManager.user;
