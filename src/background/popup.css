@@ -106,7 +106,6 @@ a#users-count:visited {
     border-top-right-radius: 4px; /* Chrome 4 以降で使える */
 }
 #edit-submit,
-#private-button,
 #header {
     /* gradient を使った青背景 */
     /* deprecated な書き方; Chrome 10 より古くても使える */
@@ -258,8 +257,7 @@ a#users-count:visited {
   padding: 4px 4px 4px 0;
 }
 
-#edit-submit,
-#private-button {
+#edit-submit {
   font-weight: bold;
   display: inline-block;
   padding: 4px 6px;
@@ -276,13 +274,6 @@ a#users-count:visited {
 #edit-submit {
   -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px; /* Chrome 4 以降で使える */
-  -webkit-box-shadow: none;
-  box-shadow: none; /* Chrome 10 以降で使える */
-}
-
-#private-button {
-  -webkit-border-radius: 0 3px 3px 0;
-  border-radius: 0 3px 3px 0; /* Chrome 4 以降で使える */
   -webkit-box-shadow: none;
   box-shadow: none; /* Chrome 10 以降で使える */
 }
@@ -566,7 +557,6 @@ a.username {
     display: inline-block;
 }
 
-#private-button,
 #buttons * input,
 .confirmation-balloon * input {
     cursor: pointer;

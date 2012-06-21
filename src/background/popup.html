@@ -366,12 +366,16 @@
     <div id="buttons">
         <div class="table-row">
             <div class="edit-cell">
+              <!-- 開始: 非公開オプション用 -->
+              <label title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) ">
+                <input id="private-option-view" type="checkbox" />
+                <span>非公開</span>
+              </label>
+              <input name="private" id="private" type="hidden" value="" />
+              <!-- 終了: 非公開オプション用 -->
+           </div>
+            <div class="edit-cell">
                 <input id="edit-submit" type="submit" value="追加" />
-                <button id="private-button" type="button" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) "
-                  ><span class="on">隠</span
-                  ><span class="off">公</span>
-                </button>
-                <input name="private" id="private" type="hidden" value="" />
             </div>
             <!--
             <div class="edit-cell">

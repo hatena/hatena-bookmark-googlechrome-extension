@@ -1138,12 +1138,8 @@ $(document).bind('ready', ready);
 
     /** Model に合うように View を変える */
     function makeViewCorrespondToModel( $modelElem ) {
-        var $viewElem = $("#private-button");
-        if ( $modelElem.val() ) {  // 非公開状態の場合の View にする
-            $viewElem.addClass( "active" );
-        } else { // 公開状態の場合の View にする
-            $viewElem.removeClass( "active" );
-        }
+        var $viewElem = $("#private-option-view");
+        $viewElem.prop( "checked", $modelElem.val() ? true : false );
     }
     /** tooltip の ID を設定する (これを設定するとツールチップの表示がなされる) */
     privateOption.setTooltipId = setTooltipId;
@@ -1162,16 +1158,16 @@ $(document).bind('ready', ready);
         makeViewCorrespondToModel( $modelElem );
         View.bookmark.privateClickHandler(); // sharingOptions に private 状態を伝える
     }
-    /** Model の状態をトグルし, それに合わせて View も変える */
-    function toggleValue( evt ) {
+    /** View の変更を Model に反映させるための controller */
+    function onChangeView( evt ) {
         var $modelElem = $("#private");
-        setValue( ! $modelElem.val() );
+        setValue( this.checked );
     }
     /** 初期化 */
     function init() {
         $(document).unbind( "ready", init );
-        var $viewElem = $("#private-button");
-        $viewElem.bind( "click", toggleValue );
+        var $viewElem = $("#private-option-view");
+        $viewElem.bind( "change", onChangeView );
         makeViewCorrespondToModel( $("#private") );
     }
     $(document).bind( "ready", init );
