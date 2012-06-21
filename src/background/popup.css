@@ -797,6 +797,10 @@ div#tag-container {
     color: #666;
 }
 
+div#tag-container dl:first-child {
+    margin-bottom: 12px;
+}
+
 #recommend-tags-container {
     display: none;
     padding:0;
@@ -805,7 +809,6 @@ div#tag-container {
 #all-tags-container {
     display: none;
     padding:0;
-    margin-top: 12px;
 }
 
 #recommend-tags-container dt, #all-tags-container dt {
