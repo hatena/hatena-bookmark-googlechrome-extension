@@ -1,4 +1,17 @@
 /* BASIC {{{ */
+.cf:before,
+.cf:after {
+  content: "";
+  display: block;
+  overflow: hidden;
+}
+.cf:after {
+  clear: both;
+}
+.cf {
+  zoom: 1;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -258,10 +271,11 @@ a#users-count:visited {
 }
 
 #edit-submit {
+  width: 90px;
   font-weight: bold;
   display: inline-block;
   padding: 4px 6px;
-  margin: 0px;
+  margin: 0 0 0 15px;
   -webkit-border-radius: 3px;
   border-radius: 3px; /* Chrome 4 以降で使える */
   cursor: pointer;
@@ -272,8 +286,8 @@ a#users-count:visited {
 }
 
 #edit-submit {
-  -webkit-border-radius: 3px 0 0 3px;
-  border-radius: 3px 0 0 3px; /* Chrome 4 以降で使える */
+  -webkit-border-radius: 3px;
+  border-radius: 3px; /* Chrome 4 以降で使える */
   -webkit-box-shadow: none;
   box-shadow: none; /* Chrome 10 以降で使える */
 }
@@ -479,7 +493,7 @@ a.username {
 /* edit {{{ */
 
 #form {
-  margin-top: 5px;
+  margin: 10px 20px 0 20px;
 }
 
 #bookmark-edit-header {
@@ -488,7 +502,7 @@ a.username {
   background: #eee;
   border-bottom: 1px solid #ddd;
   border-top: 1px solid #ddd;
-  padding-bottom: 3px;
+  padding: 5px 20px 5px 20px;
 }
 
 #bookmark-edit-header a {
@@ -512,7 +526,6 @@ a.username {
 #edit {
     width:100%;
     display: table;
-    padding: 0 3px;
 }
 
 #edit > .table-row {
@@ -529,6 +542,7 @@ a.username {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-flex: 1;
+    margin-bottom: 10px;
 }
 
 #edit > .table-row > .table-left > .table-row {
@@ -545,11 +559,12 @@ a.username {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-align: end;
-    padding: 5px 5px 1px 5px;
+    margin-bottom: 10px;
 }
 
 #buttons {
-    text-align: right;
+    float: right;
+    margin: 15px 0 15px;
 }
 
 #buttons > .table-row,
@@ -560,9 +575,7 @@ a.username {
 #buttons * input,
 .confirmation-balloon * input {
     cursor: pointer;
-    width: 90px;
     font-size: 95%;
-    margin: 5px;
 }
 #buttons * input {
     position: relative;
@@ -577,12 +590,11 @@ a.username {
 }
 
 .edit-cell {
-  padding: 5px;
   display: table-cell;
 }
 
 #edit .edit-cell {
-  padding: 3px 5px;
+
 }
 
 #title .edit-cell {
@@ -598,14 +610,6 @@ a.username {
 
 
 /* }}} */
-
-div.input-wrapper {
-  margin: 0px 5px 5px 0;
-  padding: 5px 5px 5px 5px;
-  border: 1px solid #cccccc;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-}
 
 #comment {
   width: 100%;
@@ -623,8 +627,12 @@ div.input-wrapper {
 }
 
 #comment-area {
-    width: 100%;
-    position: relative;
+  position: relative;
+  padding: 5px 5px 5px 5px;
+  margin-top: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 
 #bookmark-error,
@@ -759,28 +767,41 @@ div.input-wrapper {
     right: 10px;
 }
 
-#recommend-tags-container, #all-tags-container {
+div#tag-container {
+    background-color: #E7F0FC;
+    border: 1px solid #E6E6FC;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 6px;
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #666;
+}
+
+#recommend-tags-container {
     display: none;
-    padding:0px 8px 0px 8px;
+    padding:0;
+}
+
+#all-tags-container {
+    display: none;
+    padding:0;
+    margin-top: 12px;
 }
 
 #recommend-tags-container dt, #all-tags-container dt {
-    padding:5px 0px 0px 5px;
+    margin: 0 3px 5px 5px;
     font-weight: bold;
-    font-size: 90%;
+    font-size: 12px;
 }
 
 #recommend-tags-container dd, #all-tags-container dd {
-    background-color: #E7F0FC;
-    border-radius: 3px;
-    padding: 6px;
-    font-size: 90%;
-    line-height: 1.8;
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
   margin-right: 4px;
-  padding: 1px 3px 1px 3px;
+  padding: 1px 5px 1px 5px;
   cursor: pointer;
   white-space: nowrap;
   display: inline-block;
@@ -788,11 +809,10 @@ div.input-wrapper {
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
-  background-color: #559be6;
+  background-color: #7DB4E8;
   color: #FFF;
-  border: 1px solid #35618f;
-  border-right-color: #bcd8f5;
-  border-bottom-color: #bcd8f5;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 #tag-notice {
@@ -843,6 +863,12 @@ dd#all-tags {
 
 #title {
     font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#url {
+    margin-bottom: 5px;
+    display: block;
 }
 
 .none {
@@ -1202,13 +1228,11 @@ em a:visited {
 /**
  * 共有の UI を変更するための試験的な JS
  */
-#buttons {
-    float: right;
-}
+
 #checkbox-options {
     position: relative;
-    margin: 0.8em;
     padding: 0;
+    margin-top: 15px;
     display: inline-block;
     float: left;
 }
