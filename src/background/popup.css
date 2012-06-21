@@ -304,10 +304,9 @@ a#users-count:visited {
 ul.tab-ui li {
   font-weight: bold;
   display: inline-block;
-  padding: 4px 6px;
+  font-size: 12px;
+  line-height: 24px;
   margin: 0;
-  -webkit-border-radius: 5px;
-  border-radius: 5px; /* Chrome 4 以降で使える */
   cursor: pointer;
   color: rgba(255,255,255,0.8);
   border: 1px solid #427DC4;
@@ -357,13 +356,18 @@ ul.tab-ui li.tab-link img {
 #bookmark-tab,
 #comment-tab {
   background-image: url(/images/chrome-b-append_off.png);
-  background-position: 3px 5px;
+  background-position: 5px center;
   background-repeat: no-repeat;
-  padding-left: 25px;
+  padding: 0 5px 0 25px;
+  -webkit-border-radius: 5px 0 0 5px;
+  border-radius: 5px 0 0 5px; /* Chrome 4 以降で使える */
 }
 
 #comment-tab {
   background-image: url(/images/serif_list_off.png);
+  padding: 0 8px 0 25px;
+  -webkit-border-radius: 0 5px 5px 0;
+  border-radius: 0 5px 5px 0; /* Chrome 4 以降で使える */
 }
 
 #bookmark-tab.current {
@@ -901,6 +905,7 @@ dd#all-tags {
   background-color: #FFF;
   -webkit-box-flex: 1;
   height: 24px;
+  width: 180px;
   padding: 0;
   vertical-align: middle;
   border: 1px solid #cccccc;
@@ -913,6 +918,8 @@ dd#all-tags {
 
 #search-form input {
   border: none;
+  width: 100%;
+  box-sizing: border-box;
   background: url(../images/user-search.png) 5px center no-repeat;
   font-size: 12px;
   line-height: 24px;
@@ -1314,6 +1321,7 @@ em a:visited {
     bottom: 0;
     background-color: #FFFFFF;
     border: solid 1px #CCCCCC;
+    color: #666;
 }
 
 #checkbox-options-expanded ul {
