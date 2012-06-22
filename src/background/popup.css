@@ -509,7 +509,7 @@ span#favorites {
 /* edit {{{ */
 
 #form {
-  margin: 10px 15px 0 15px;
+  margin: 10px 10px 0 10px;
 }
 
 #bookmark-edit-header {
@@ -517,7 +517,7 @@ span#favorites {
   width: 100%;
   background: #eee;
   border-bottom: 1px solid #ddd;
-  padding: 5px 15px 5px 15px;
+  padding: 5px 12px 5px 12px;
 }
 
 #bookmark-edit-header a {
@@ -946,7 +946,7 @@ dd#all-tags {
   background: url(../images/user-search.png) 5px center no-repeat;
   font-size: 12px;
   line-height: 24px;
-  padding: 0 10px 0 20px;
+  padding: 0 10px 0 22px;
 }
 
 #search-word-preview em {
