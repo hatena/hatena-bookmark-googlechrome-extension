@@ -176,7 +176,7 @@
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
-                  <img id="favicon" width="16" height="16"><span id="title-text"></span>
+                  <img id="favicon" width="16" height="16"><span id="title-text"></span><span id="users-count-container" class="none"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
                 </span>
 
                 <span class="none" id="title-text-edit-container">
@@ -202,9 +202,6 @@
             <div class="edit-cell" id="url-container">
               <div>
                 <a href="" id="url"></a>
-              </div>
-              <div>
-                <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
               </div>
             </div>
           </div>
@@ -410,14 +407,14 @@
 
     <div id="comment-title-container">
       <span id="comment-title"></span>
+      <a id="comment-users"></a>
+      <span id="comment-count-detail"></span>
       <span id="comment-title-star-container"></span>
       <img src="/images/star_my.gif" alt="はてなスターをロードしています…" title="はてなスターをロードしています…" id="star-loading-icon" />
     </div>
 
     <div id="comment-title-right">
       <div id="comment-infos">
-        <a id="comment-users"></a>
-        <span id="comment-count-detail"></span>
         <img onclick="View.comment.toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
       </div>
     </div>

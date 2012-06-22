@@ -156,7 +156,7 @@ var sharingOptions = {};
             //,configId: "postEvernote" // 現在のところ config に保存しない
             ,name: "post_evernote"
             ,disp_name: "Evernote"
-            ,icon_img_src: "/images/icon-facebook.png"
+            ,icon_img_src: "/images/icon-evernote.png"
             ,title: "ブックマークしたページを Evernote へ投稿する場合はチェックを入れてください。"
         };
         /* ここら辺は未実装
