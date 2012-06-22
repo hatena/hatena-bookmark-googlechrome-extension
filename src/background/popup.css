@@ -1316,7 +1316,7 @@ em a:visited {
 #checkbox-options {
     position: relative;
     padding: 0;
-    width: 145px;
+    width: 160px;
     margin-top: 10px;
     display: inline-block;
     float: left;
@@ -1356,7 +1356,6 @@ em a:visited {
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
     position: absolute;
-    width: 100%;
     bottom: 0;
     background-color: #FFFFFF;
     border: solid 1px #CCCCCC;
@@ -1372,6 +1371,10 @@ em a:visited {
   padding: 0 12px 0 12px;
 }
 
+#checkbox-options-expanded-item-template label {
+  margin-right: 0px;
+}
+
 #checkbox-options-expanded ul li span.displayed-name {
   margin-left: 5px;
 }
@@ -1382,6 +1385,7 @@ em a:visited {
 
 #checkbox-options #checkbox-options-expanded .bar button {
     float: right;
+    margin-right: 5px;
 }
 #checkbox-options #checkbox-options-expanded .bar span {
     float: left;
@@ -1400,6 +1404,10 @@ em a:visited {
 #checkbox-options #checkbox-options-minimized ul,
 #checkbox-options #checkbox-options-minimized li {
     display: inline-block;
+}
+
+#checkbox-options #checkbox-options-minimized li {
+  margin-right: 2px;
 }
 
 /**
