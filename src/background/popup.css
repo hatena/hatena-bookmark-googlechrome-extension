@@ -997,14 +997,20 @@ dd#all-tags {
 }
 
 #comment-list li {
-  padding: 3px 3px 6px 3px;
+  padding: 3px 10px 6px 10px;
   border-bottom: 1px solid #F0F0F0;
   margin: 3px;
   font-size: 95%;
 }
 
 #comment-list li a.username {
-  padding: 0px 3px 0px 3px;
+  padding: 0px 8px 0px 5px;
+  color: #2D6BC4;
+  text-decoration: none;
+}
+
+#comment-list li a.username:hover {
+  text-decoration: underline;
 }
 
 #comment-list li .comment {
