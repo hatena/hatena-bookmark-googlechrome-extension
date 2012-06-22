@@ -72,7 +72,7 @@ body {
 
 body {
   overflow-x: hidden;
-  color: #222;
+  color: #333;
   min-height: 70px;
 }
 
@@ -104,6 +104,7 @@ a#users-count:visited {
     color: #E9637A;
     padding: 0px 3px 0px 3px;
     font-weight: bold;
+    text-decoration: underline;
 }
 
 #favicon,
@@ -268,7 +269,7 @@ a#users-count:visited {
   display: table-cell;
   width: 100%;
   white-space: nowrap;
-  padding: 4px;
+  padding: 4px 4px 4px 10px;
 }
 
 #header-right {
@@ -276,7 +277,7 @@ a#users-count:visited {
   width: 100%;
   text-align: right;
   white-space: nowrap;
-  padding: 4px 4px 4px 0;
+  padding: 4px 10px 4px 0;
 }
 
 #edit-submit {
@@ -629,6 +630,14 @@ label {
   float: right;
 }
 
+#url-container a {
+  color: #2D6BC4;
+  text-decoration: none;
+}
+
+#url-container a:hover {
+  text-decoration: underline;
+}
 
 /* }}} */
 
@@ -660,7 +669,7 @@ label {
 #bookmarked-notice {
     text-align: center;
     padding: 5px;
-    margin: 3px;
+    margin: 5px 10px 5px 10px;
     font-size: 90%;
     font-weight: bold;
     color: #555;
@@ -849,9 +858,14 @@ div#tag-container dl:first-child {
   position: absolute;
   list-style: none;
   background-color: #fff;
-  border: 1px solid #555;
+  border: 1px solid #CCC;
+  color: #666;
   min-width: 125px;
   max-width: 200px;
+}
+
+#tag-complete-list li {
+  padding: 1px 5px 1px 5px;
 }
 
 #tag-complete-list li:hover {
@@ -860,7 +874,7 @@ div#tag-container dl:first-child {
 }
 
 #tag-complete-list li.selected {
-  background-color: #2C6EBD;
+  background-color: #7DB4E8;
   color: #FFF;
 }
 
