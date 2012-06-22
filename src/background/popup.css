@@ -559,7 +559,7 @@ span#favorites {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-flex: 1;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 #edit > .table-row > .table-left > .table-row {
@@ -910,7 +910,7 @@ dd#all-tags {
 
 #title {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
     line-height: 1.6;
 }
 
