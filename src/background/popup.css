@@ -607,6 +607,7 @@ span#favorites {
 
 label {
   font-size: 12px;
+  vertical-align: middle;
 }
 
 .edit-left {
