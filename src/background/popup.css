@@ -148,6 +148,12 @@ a#users-count:visited {
     color: #FFFFFF;
 }
 
+#edit-submit:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1, #5287c7), color-stop(0.54, #5287c7), color-stop(0.46, #84a9d7));
+  background: -webkit-linear-gradient(top, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
+  background: linear-gradient(to bottom, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
+}
+
 .table {
   display: table;
 }
