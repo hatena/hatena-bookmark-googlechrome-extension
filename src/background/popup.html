@@ -131,9 +131,9 @@
 <div id="bookmark-container">
   <div id="bookmark-edit-container">
     <div id="bookmark-edit-header">
-      <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
+      <div class="edit-cell"><a href="http://b.hatena.ne.jp" tabindex="-1"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
       <div class="edit-cell">
-        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
+        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my" tabindex="-1"></a>さん
       </div>
     </div>
     <div id="bookmark-message" class="none"></div>
@@ -176,7 +176,7 @@
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
-                  <img id="favicon" width="16" height="16"><span id="title-text"></span><span id="users-count-container" class="none"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
+                  <img id="favicon" width="16" height="16"><span id="title-text"></span><span id="users-count-container" class="none"><a id='users-count' tabindex="-1"></a></span><img id="comment-show"><span id="favorites"></span>
                 </span>
 
                 <span class="none" id="title-text-edit-container">
@@ -186,7 +186,7 @@
 
                 <div class="none" id="title-notice">
                   <p>
-                  <img src="/images/caution.png"> タイトルは全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_title">タイトル変更のガイドライン</a>
+                  <img src="/images/caution.png"> タイトルは全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_title">ガイドライン</a>
                   </p>
                   <p class="none" id="title-notice-user-container">
                   </p>
@@ -201,7 +201,7 @@
           <div class="table-row">
             <div class="edit-cell" id="url-container">
               <div>
-                <a href="" id="url"></a>
+                <a href="" id="url" tabindex="-1"></a>
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@
           <div class="table-row">
             <div class="edit-cell" id="bookmark-options">
               <div id="comment-area">
-                <textarea rows="1" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
+                <textarea rows="1" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)" tabindex="1"></textarea>
                 <p id="type-counter"><span id="type-count">0</span> / 100</p>
               <ul id="tag-complete-list" class="shadow">
               </ul>
@@ -233,7 +233,7 @@
 
     <div id="tag-container">
     <dl id="recommend-tags-container">
-      <dt>おすすめタグ <a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note">※タグについての詳しい説明</a></dt>
+      <dt>おすすめタグ <a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note" tabindex="-1">※タグについて</a></dt>
       <dd id="recommend-tags">
       </dd>
     </dl>
@@ -242,7 +242,7 @@
       <dd id="all-tags">
       </dd>
     </dl>
-    <p id="tag-notice"><a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note">※タグについての詳しい説明</a></p>
+    <p id="tag-notice"><a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note" tabindex="-1">※タグについて</a></p>
     </div>
 
     <div id="checkbox-options">
@@ -289,11 +289,12 @@
           </li>
         </ul>
         <div class="bar cf">
-          <span>共有する</span>
           <button id="checkbox-options-button-to-minimize" type="button"></button>
+          <span>共有する</span>
         </div>
       </div>
       <div id="checkbox-options-minimized">
+        <button id="checkbox-options-button-to-expand" type="button"></button>
         <ul>
           <!-- template -->
           <li id="checkbox-options-minimized-item-template">
@@ -324,7 +325,6 @@
           </li>
           -->
         </ul>
-        <button id="checkbox-options-button-to-expand" type="button"></button>
       </div>
 
       <!-- TODO なにこれ? -->
@@ -364,7 +364,7 @@
             <div class="edit-cell">
               <!-- 開始: 非公開オプション用 -->
               <label title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) ">
-                <input id="private-option-view" type="checkbox" />
+                <input id="private-option-view" type="checkbox" tabindex="2" />
                 <img src="/images/add-private.png" alt="" width="16" height="16" />
                 <span>非公開</span>
               </label>
@@ -372,7 +372,7 @@
               <!-- 終了: 非公開オプション用 -->
            </div>
             <div class="edit-cell">
-                <input id="edit-submit" type="submit" value="追加" />
+                <input id="edit-submit" type="submit" value="追加" tabindex="3" />
             </div>
             <!--
             <div class="edit-cell">

@@ -234,8 +234,10 @@ a#users-count:visited {
 
 #title-notice {
   color: #333;
+  font-size: 12px;
+  line-height: 16px;
   background-color: #EEE;
-  padding: 3px;
+  padding: 5px 10px 5px 10px;
   border-radius: 6px;
   margin-top: 5px;
   margin-right: 50px;
@@ -666,6 +668,12 @@ label {
   resize: none;
 }
 
+#comment:focus {
+   background-color: #fff;
+   border: none;
+   outline: none;
+}
+
 #comment-area {
   position: relative;
   padding: 5px 5px 5px 5px;
@@ -674,6 +682,11 @@ label {
   border-radius: 3px;
   -webkit-border-radius: 3px;
 }
+
+#comment-area:hover {
+  border: 1px solid #999;
+}
+
 
 #bookmark-error,
 #bookmarked-notice {
@@ -793,7 +806,6 @@ label {
     display: none;
 }
 
-.confirmation-balloon,
 .option-help-tooltip {
     background: #eee;
     border: 1px solid #ccc;
@@ -802,6 +814,26 @@ label {
     padding: 7px 10px;
     border-radius: 3px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.confirmation-balloon {
+    background-color: #FFFFFF;
+    border: solid 1px #CCCCCC;
+    color: #666;
+    margin-top: 5px;
+    padding: 12px;
+}
+
+.confirmation-balloon p.msg {
+  margin-bottom: 8px;
+}
+
+.confirmation-balloon input {
+  width: 100px;
+}
+
+.confirmation-balloon input.cancel {
+  margin-left: 20px;
 }
 
 #delete-button-confirmation {
@@ -813,7 +845,7 @@ div#tag-container {
     border: 1px solid #E6E6FC;
     border-radius: 3px;
     -webkit-border-radius: 3px;
-    padding: 6px;
+    padding: 8px 6px 8px 6px;
     margin: 5px 0 0 0;
     font-size: 12px;
     line-height: 1.5;
@@ -821,7 +853,11 @@ div#tag-container {
 }
 
 div#tag-container dl:first-child {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+div#tag-container dt {
+  color: #333;
 }
 
 #recommend-tags-container {
@@ -855,6 +891,12 @@ div#tag-container dl:first-child {
   white-space: nowrap;
   display: inline-block;
   border: 1px solid #E7F0FC;
+}
+
+#recommend-tags-container dd .tag:hover, #all-tags-container dd .tag:hover {
+  background-color: #becde0;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
@@ -1323,8 +1365,6 @@ em a:visited {
 #checkbox-options {
     position: relative;
     padding: 0;
-    width: 160px;
-    margin-top: 10px;
     display: inline-block;
     float: left;
 }
@@ -1350,10 +1390,11 @@ em a:visited {
 }
 
 #checkbox-options-button-to-expand {
-  height: 16px;
+  height: 45px;
   width: 16px;
   line-height: 16px;
-  padding: 2px 0 2px 0;
+  padding: 9;
+  margin: 0 5px 0 5px;
   background-color: #FFF;
   border: none;
   background: url(../images/box-close.png) center center no-repeat;
@@ -1363,19 +1404,22 @@ em a:visited {
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
     position: absolute;
-    bottom: 0;
+    left: 0px;
+    bottom: 7px;
     background-color: #FFFFFF;
     border: solid 1px #CCCCCC;
     color: #666;
 }
 
 #checkbox-options-expanded ul {
-  padding: 7px 0 12px 0;
+  padding: 7px 0 7px 0;
 }
 
 #checkbox-options-expanded ul li {
   list-style-type: none;
   padding: 0 12px 0 12px;
+  margin: 3px 0 3px 0;
+  line-height: 16px;
 }
 
 #checkbox-options-expanded-item-template label {
@@ -1391,12 +1435,11 @@ em a:visited {
 }
 
 #checkbox-options #checkbox-options-expanded .bar button {
-    float: right;
-    margin-right: 5px;
+    float: left;
+    margin: 2px 5px 0 10px;
 }
 #checkbox-options #checkbox-options-expanded .bar span {
-    float: left;
-    margin-left: 12px;
+    margin-left: 5px;
     font-size: 12px;
     line-height: 16px;
     color: #999;
@@ -1413,8 +1456,12 @@ em a:visited {
     display: inline-block;
 }
 
+#checkbox-options #checkbox-options-minimized ul {
+}
+
 #checkbox-options #checkbox-options-minimized li {
-  margin-right: 2px;
+  margin-right: 4px;
+  line-height: 16px;
 }
 
 /**
