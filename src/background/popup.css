@@ -855,8 +855,8 @@ div#tag-container {
     color: #666;
 }
 
-div#tag-container dl:first-child {
-    margin-bottom: 15px;
+div#tag-container dl:last-child {
+    margin-top: 15px;
 }
 
 div#tag-container dt {
