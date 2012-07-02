@@ -245,87 +245,7 @@
     <p id="tag-notice"><a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note" tabindex="-1">※タグについて</a></p>
     </div>
 
-    <div id="checkbox-options">
-      <!-- TODO 見出しレベル -->
-      <h6>共有:</h6>
-      <div id="checkbox-options-expanded" class="shadow">
-        <ul>
-          <!-- template -->
-          <li id="checkbox-options-expanded-item-template">
-            <label>
-              <input type="checkbox" /><span class="icon-img">icon_img</span
-              ><span class="displayed-name"></span>
-            </label>
-          </li>
-
-          <!--
-          <li>
-            <label id="post-twitter-label" for="post-twitter" title=
-              "ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
-              <input value="1" type="checkbox" id="post-twitter" name="post_twitter"
-              /><span class="label-text">Twitter</span>
-            </label>
-          </li>
-          <li>
-            <label id="post-facebook-label" for="post-facebook" title=
-              "ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
-              <input value="1" type="checkbox" id="post-facebook" name="post_facebook"
-              /><span class="label-text">Facebook</span>
-            </label>
-          </li>
-          <li>
-            <label id="post-mixi-check-label" for="post-mixi-check" title=
-              "ブックマークしたページをmixiチェックへ投稿する場合はチェックを入れてください。">
-              <input value="1" type="checkbox" id="post-mixi-check" name="post_mixi_check"
-              /><span class="label-text">mixiチェック</span>
-            </label>
-          </li>
-          -->
-          <li id="plus-inputs" class="none">
-            <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
-              <input value="1" type="checkbox" id="send_mail" name="send_mail"
-              /><span class="label-text">メール</span>
-            </label>
-          </li>
-        </ul>
-        <div class="bar cf">
-          <button id="checkbox-options-button-to-minimize" type="button"></button>
-          <span>共有する</span>
-        </div>
-      </div>
-      <div id="checkbox-options-minimized">
-        <button id="checkbox-options-button-to-expand" type="button"></button>
-        <ul>
-          <!-- template -->
-          <li id="checkbox-options-minimized-item-template">
-            <label>
-              <input type="checkbox" /><span class="icon-img">icon_img</span>
-            </label>
-          </li>
-          <!--
-          <li>
-            <label id="post-twitter-label" for="post-twitter" title=
-              "ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
-              <input value="1" type="checkbox" id="post-twitter" name="post_twitter"
-              /><img src="" alt="twitter">
-            </label>
-          </li>
-          <li>
-            <label id="post-facebook-label" for="post-facebook" title=
-              "ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
-              <input value="1" type="checkbox" id="post-facebook" name="post_facebook"
-              /><img src="" alt="Facebook">
-            </label>
-          </li>
-          <li id="plus-inputs" class="none">
-            <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
-              <input value="1" type="checkbox" id="send_mail" name="send_mail"
-              /><span class="label-text">メール</span>
-            </label>
-          </li>
-          -->
-        </ul>
-      </div>
+    <div id="submit-container">
 
       <!-- TODO なにこれ? -->
       <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
@@ -347,55 +267,139 @@
           target="_blank">もっと詳しく</a>
       </p>
 
-      <!-- 確認オプションは削除する -->
-      <!--
-      <dt>オプション:</dt>
-      <dd>
-      <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
-        <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" /> ブックマークを確認
-      </label>
-      </dd>
-      -->
-      <script src="/popup/sharing_checkbox_options.js"></script>
-    </div>
-
-    <div id="buttons">
-        <div class="table-row">
-            <div class="edit-cell">
-              <!-- 開始: 非公開オプション用 -->
-              <label title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) ">
-                <input id="private-option-view" type="checkbox" tabindex="2" />
-                <img src="/images/add-private.png" alt="" width="16" height="16" />
-                <span>非公開</span>
+      <div id="checkbox-options">
+        <!-- TODO 見出しレベル -->
+        <h6>共有:</h6>
+        <div id="checkbox-options-expanded" class="shadow">
+          <ul>
+            <!-- template -->
+            <li id="checkbox-options-expanded-item-template">
+              <label>
+                <input type="checkbox" /><span class="icon-img">icon_img</span
+                ><span class="displayed-name"></span>
               </label>
-              <input name="private" id="private" type="hidden" value="" />
-              <!-- 終了: 非公開オプション用 -->
-           </div>
-            <div class="edit-cell">
-                <input id="edit-submit" type="submit" value="追加" tabindex="3" />
-            </div>
+            </li>
+
             <!--
-            <div class="edit-cell">
-                <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
-            </div>
+            <li>
+              <label id="post-twitter-label" for="post-twitter" title=
+                "ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="post-twitter" name="post_twitter"
+                /><span class="label-text">Twitter</span>
+              </label>
+            </li>
+            <li>
+              <label id="post-facebook-label" for="post-facebook" title=
+                "ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="post-facebook" name="post_facebook"
+                /><span class="label-text">Facebook</span>
+              </label>
+            </li>
+            <li>
+              <label id="post-mixi-check-label" for="post-mixi-check" title=
+                "ブックマークしたページをmixiチェックへ投稿する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="post-mixi-check" name="post_mixi_check"
+                /><span class="label-text">mixiチェック</span>
+              </label>
+            </li>
             -->
+            <li id="plus-inputs" class="none">
+              <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
+                <input value="1" type="checkbox" id="send_mail" name="send_mail"
+                /><span class="label-text">メール</span>
+              </label>
+            </li>
+          </ul>
+          <div class="bar cf">
+            <button id="checkbox-options-button-to-minimize" type="button"></button>
+            <span>共有する</span>
+          </div>
         </div>
-    </div>
+        <div id="checkbox-options-minimized">
+          <button id="checkbox-options-button-to-expand" type="button"></button>
+          <ul>
+            <!-- template -->
+            <li id="checkbox-options-minimized-item-template">
+              <label>
+                <input type="checkbox" /><span class="icon-img">icon_img</span>
+              </label>
+            </li>
+            <!--
+            <li>
+              <label id="post-twitter-label" for="post-twitter" title=
+                "ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="post-twitter" name="post_twitter"
+                /><img src="" alt="twitter">
+              </label>
+            </li>
+            <li>
+              <label id="post-facebook-label" for="post-facebook" title=
+                "ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="post-facebook" name="post_facebook"
+                /><img src="" alt="Facebook">
+              </label>
+            </li>
+            <li id="plus-inputs" class="none">
+              <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
+                <input value="1" type="checkbox" id="send_mail" name="send_mail"
+                /><span class="label-text">メール</span>
+              </label>
+            </li>
+            -->
+          </ul>
+        </div>
 
-        <p id="option-help-private" class="option-help-tooltip" style="display: none;">
-          <img src="/images/add-private.png" alt="" width="16" height="16" />
-            はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
-          <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
-        </p>
-
-    <!-- TODO これはどうする? -->
-    <div style="clear: both;">
-      <span id="asin-container">
-        <input value="" type="hidden" id="asin" name="asin" disabled />
-        <label for="add-asin">
-          <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" /> コレクション
+        <!-- 確認オプションは削除する -->
+        <!--
+        <dt>オプション:</dt>
+        <dd>
+        <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
+          <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" /> ブックマークを確認
         </label>
-      </span>
+        </dd>
+        -->
+        <script src="/popup/sharing_checkbox_options.js"></script>
+      </div>
+
+      <div id="buttons">
+          <div class="table-row">
+              <div class="edit-cell">
+                <!-- 開始: 非公開オプション用 -->
+                <label title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) ">
+                  <input id="private-option-view" type="checkbox" tabindex="5" />
+                  <img src="/images/add-private.png" alt="" width="16" height="16" />
+                  <span>非公開</span>
+                </label>
+                <input name="private" id="private" type="hidden" value="" />
+                <!-- 終了: 非公開オプション用 -->
+             </div>
+              <div class="edit-cell">
+                  <input id="edit-submit" type="submit" value="追加" tabindex="6" />
+              </div>
+              <!--
+              <div class="edit-cell">
+                  <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
+              </div>
+              -->
+          </div>
+      </div>
+
+      <p id="option-help-private" class="option-help-tooltip" style="display: none;">
+        <img src="/images/add-private.png" alt="" width="16" height="16" />
+          はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
+        <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
+      </p>
+
+      <!-- TODO これはどうする? -->
+      <div style="clear: both;">
+        <span id="asin-container">
+          <input value="" type="hidden" id="asin" name="asin" disabled />
+          <label for="add-asin">
+            <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" /> コレクション
+          </label>
+        </span>
+      </div>
+
     </div>
 
     </form>
