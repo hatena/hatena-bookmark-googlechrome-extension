@@ -1403,6 +1403,10 @@ em a:visited {
   background: url(../images/box-close.png) center center no-repeat;
 }
 
+/* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
+body.sharing-options-panel-opend .option-help-tooltip {
+    margin-left: 160px;
+}
 
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {

@@ -7,9 +7,11 @@ var sharingOptions = {};
     var model;
     function expandSharingOptions( evt ) {
         $("#checkbox-options").addClass( "expanded" );
+        $(document.body).addClass( "sharing-options-panel-opend" );
     }
     function minimizeSharingOptions( evt ) {
         $("#checkbox-options").removeClass( "expanded" );
+        $(document.body).removeClass( "sharing-options-panel-opend" );
     }
     /** チェックボックスの状態が変化した場合に呼び出される controller */
     function onViewStateChange( evt ) {
