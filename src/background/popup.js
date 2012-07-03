@@ -604,11 +604,8 @@ var View = {
             this.usericon.attr('src', user.view.icon);
             this.usernameEL.text(user.name);
             // TODO 対応する必要あり
-            if (user.plususer) {
-                this.plusInputs.removeClass('none');
-            } else {
+            if ( ! user.plususer ) {
                 this.privateOption.setTooltipId( "option-help-private" );
-                this.plusInputs.remove();
             }
             // SharingOptions (共有オプション) に関する部分の初期化
             sharingOptions.initSharingOptions( user, this );

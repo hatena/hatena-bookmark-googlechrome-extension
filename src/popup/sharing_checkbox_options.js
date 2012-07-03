@@ -8,10 +8,17 @@ var sharingOptions = {};
     function expandSharingOptions( evt ) {
         $("#checkbox-options").addClass( "expanded" );
         $(document.body).addClass( "sharing-options-panel-opend" );
+        $(document).bind( "click", onClickDocument );
     }
     function minimizeSharingOptions( evt ) {
         $("#checkbox-options").removeClass( "expanded" );
         $(document.body).removeClass( "sharing-options-panel-opend" );
+        $(document).unbind( "click", onClickDocument );
+    }
+    function onClickDocument( evt ) {
+        if ( ! $(evt.target).closest('#checkbox-options').length ) {
+            minimizeSharingOptions();
+        }
     }
     /** チェックボックスの状態が変化した場合に呼び出される controller */
     function onViewStateChange( evt ) {
@@ -31,6 +38,7 @@ var sharingOptions = {};
     }
     function initTemplatedListItemExpanded( $templateElem, itemInfo ) {
         var $cloned = $templateElem.clone();
+        $cloned.attr( "id", "" );
         var img = new Image();
         img.src = itemInfo["icon_img_src"];
         $cloned.find( ".icon-img" ).replaceWith( img );
@@ -47,6 +55,7 @@ var sharingOptions = {};
     }
     function initTemplatedListItemMinimized( $templateElem, itemInfo ) {
         var $cloned = $templateElem.clone();
+        $cloned.attr( "id", "" );
         var img = new Image();
         img.src = itemInfo["icon_img_src"];
         $cloned.find( ".icon-img" ).replaceWith( img );
@@ -201,6 +210,28 @@ var sharingOptions = {};
         }
         model.postMixiCheck.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
+        if ( model.postMixiCheck.doPost ) {
+            // 元々チェックが入っている場合のみ縮小版にも表示する
+            model.postMixiCheck.viewIds.push(
+                    initTemplatedListItemMinimized( $templateElemMin, info ) );
+        }
+
+        // mail
+        model.sendMail = { viewIds: [] };
+        model.sendMail.info = info = {
+             id: "send_mail"
+            ,modelId: "sendMail"
+            //,configId: "postMail" // Mail のチェック状態は保持しない?
+            ,name: "post_mail"
+            ,disp_name: "メール"
+            ,icon_img_src: "/images/icon-mail.png"
+            ,title: "ブックマークしたページを設定で指定したメールアドレスに送信する場合はチェックを入れてください。"
+        }
+        if ( user.plususer ) {
+            model.sendMail.available = true;
+            model.sendMail.viewIds.push(
+                    initTemplatedListItemExpanded( $templateElemEx, info ) );
+        }
 
         $templateElemEx.remove();
         $templateElemMin.remove();
