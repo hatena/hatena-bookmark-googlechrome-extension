@@ -774,6 +774,7 @@ label {
 
 #post-twitter-label .label-text,
 #post-facebook-label .label-text,
+#post-evernote-label .label-text,
 #post-mixi-check-label .label-text,
 #private-label .label-text,
 #send-mail-label .label-text {
@@ -788,6 +789,10 @@ label {
 
 #post-facebook-label .label-text {
     background-image: url(/images/icon-facebook.png);
+}
+
+#post-evernote-label .label-text {
+    background-image: url(/images/icon-evernote.png);
 }
 
 #post-mixi-check-label .label-text {

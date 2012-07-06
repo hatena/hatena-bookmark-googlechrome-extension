@@ -88,6 +88,8 @@ User.prototype = {
     get postTwitterChecked() { return this.options.twitter_checked || 'inherit' },
     get canUseFacebook() { return this.options.is_oauth_facebook == 1 },
     get postFacebookChecked() { return this.options.facebook_checked || 'inherit' },
+    get canUseEvernote() { return this.options.is_oauth_evernote == 1 },
+    get postEvernotehecked() { return this.options.evernote_checked || 'inherit' },
     get canUseMixiCheck() { return this.options.is_oauth_mixi_check == 1 },
     get postMixiCheckChecked() { return this.options.mixi_check_checked || 'inherit' },
     get maxCommentLength() { return this.options.max_comment_length || 100 },

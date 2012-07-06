@@ -107,6 +107,8 @@ var sharingOptions = {};
         var $templateElemEx = $("#checkbox-options-expanded-item-template");
         var $templateElemMin = $("#checkbox-options-minimized-item-template");
 
+        // ここらへんもっとすっきりさせたい
+
         // Twitter
         model.postTwitter = { viewIds: [] };
         model.postTwitter.info = info = {
@@ -164,24 +166,22 @@ var sharingOptions = {};
         model.postEvernote.info = info = {
              id: "post-evernote"
             ,modelId: "postEvernote"
-            //,configId: "postEvernote" // 現在のところ config に保存しない
+            ,configId: "postEvernote"
             ,name: "post_evernote"
             ,disp_name: "Evernote"
             ,icon_img_src: "/images/icon-evernote.png"
             ,title: "ブックマークしたページを Evernote へ投稿する場合はチェックを入れてください。"
         };
-        /* ここら辺は未実装
         if ( user.canUseEvernote ) {
             model.postEvernote.available = true;
             if ( user.postEvernoteChecked === 'on' ||
                     ( user.postEvernoteChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postEvernoteChecked') ) ) {
+                     Config.get('popup.bookmark.postEvernote') ) ) {
                 model.postEvernote.doPost = true;
             }
         } else {
             model.postEvernote.tooltipId = "option-help-post-evernote";
         }
-        */
         model.postEvernote.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
         model.postEvernote.viewIds.push(
