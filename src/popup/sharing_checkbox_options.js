@@ -24,9 +24,9 @@ var sharingOptions = {};
     function onViewStateChange( evt ) {
         var m = model[$(this).data( "modelId" )];
         // tooltip を出す必要があるなら出す
-        if ( m.info.tooltipId ) { // tooltip を出す可能性があって
+        if ( m.tooltipId ) { // tooltip を出す可能性があって
             if( ! m.doPost && this.checked ) { // 偽から真に変化したとき
-                View.bookmark.optionHelpTooltipManager.showTooltip( m.info.tooltipId );
+                View.bookmark.optionHelpTooltipManager.showTooltip( m.tooltipId );
             }
         }
         m.doPost = this.checked;
