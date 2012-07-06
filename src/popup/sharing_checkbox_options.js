@@ -22,17 +22,17 @@ var sharingOptions = {};
     }
     /** チェックボックスの状態が変化した場合に呼び出される controller */
     function onViewStateChange( evt ) {
-        var modelInfo = model[$(this).data( "modelId" )];
+        var m = model[$(this).data( "modelId" )];
         // tooltip を出す必要があるなら出す
-        if ( modelInfo.tooltipId ) { // tooltip を出す可能性があって
-            if( ! modelInfo.doPost && this.checked ) { // 偽から真に変化したとき
-                View.bookmark.optionHelpTooltipManager.showTooltip( modelInfo.tooltipId );
+        if ( m.info.tooltipId ) { // tooltip を出す可能性があって
+            if( ! m.doPost && this.checked ) { // 偽から真に変化したとき
+                View.bookmark.optionHelpTooltipManager.showTooltip( m.info.tooltipId );
             }
         }
-        modelInfo.doPost = this.checked;
-        var confId = $(this).data( "configId" );
+        m.doPost = this.checked;
+        var confId = m.info.configId;
         if ( confId ) {
-            Config.set( 'popup.bookmark.' + $(this).data( "configId" ), this.checked );
+            Config.set( 'popup.bookmark.' + confId, this.checked );
         }
         makeViewCorrespondToModel();
     }
