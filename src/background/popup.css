@@ -699,6 +699,9 @@ label {
     background-color: #FDD;
     border-radius: 3px;
 }
+#bookmarked-notice {
+    position: relative;
+}
 
 #bookmarked-notice-text {
     margin-right: 8px;
@@ -811,9 +814,14 @@ label {
     display: none;
 }
 
+#submit-container {
+    position: relative;
+}
 .option-help-tooltip {
+    position: absolute;
+    bottom: 100%;
     padding: 10px;
-    margin: 10px 0px 0px 0px;
+    margin: -0.3em 0.4em;
     font-size: 90%;
     color: #555;
     background-color: #FDD;
@@ -845,7 +853,10 @@ label {
 }
 
 #delete-button-confirmation {
-    right: 10px;
+    position: absolute;
+    top: -0.1em;
+    right: 25px;
+    z-index: 20;
 }
 
 div#tag-container {
@@ -1385,7 +1396,8 @@ em a:visited {
 #checkbox-options.expanded #checkbox-options-minimized {
     visibility: hidden;
 }
-#checkbox-options * {
+#checkbox-options *,
+#buttons * {
     vertical-align: middle;
 }
 

@@ -38,7 +38,7 @@ var sharingOptions = {};
     }
     function initTemplatedListItemExpanded( $templateElem, itemInfo ) {
         var $cloned = $templateElem.clone();
-        $cloned.attr( "id", "" );
+        $cloned.attr( "id", null );
         var img = new Image();
         img.src = itemInfo["icon_img_src"];
         $cloned.find( ".icon-img" ).replaceWith( img );
@@ -55,7 +55,7 @@ var sharingOptions = {};
     }
     function initTemplatedListItemMinimized( $templateElem, itemInfo ) {
         var $cloned = $templateElem.clone();
-        $cloned.attr( "id", "" );
+        $cloned.attr( "id", null );
         var img = new Image();
         img.src = itemInfo["icon_img_src"];
         $cloned.find( ".icon-img" ).replaceWith( img );

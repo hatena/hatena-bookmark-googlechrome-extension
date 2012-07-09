@@ -132,7 +132,7 @@ function confirmWithCallback( id, msg, callback ) {
         box.remove();
     }
 
-    var box = $('<div class="confirmation-balloon"><p class="msg"></p>' +
+    var box = $('<div class="confirmation-balloon shadow"><p class="msg"></p>' +
             '<div><input type="button" value="OK" class="ok">' +
             '<input type="button" value="キャンセル" class="cancel">' +
             '</div></div>');
