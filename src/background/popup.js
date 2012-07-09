@@ -1149,7 +1149,7 @@ var ready = function() {
         confirmWithCallback( id, msg, deleteBookmark );
     } );
 
-    // ブックマーク追加時のタグ一覧のタグクリックのリスナ
+    // bookmark view におけるタグ一覧のタグクリックのリスナ
     $('dd span.tag').live( 'click', function() {
         var bView = View.bookmark;
         var tag = this.textContent;
