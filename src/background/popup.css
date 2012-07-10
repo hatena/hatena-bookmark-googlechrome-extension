@@ -246,6 +246,10 @@ a#users-count:visited {
   width: auto;
 }
 
+#title-notice-user-container {
+    margin-left: 20px;
+}
+
 #image-detect-notice {
   position: absolute;
   display: table-cell;
@@ -986,7 +990,6 @@ dd#all-tags {
 
 #url {
     margin: 0 0 1px 3px;
-    display: block;
 }
 
 .none {

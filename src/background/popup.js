@@ -551,7 +551,7 @@ var View = {
                 this.images = [url];
             }
             if (lastEditor) {
-                $('#image-detect-notice-user-container').text('最終変更: ').append(createUserLink(lastEditor)).
+                $('#image-detect-notice-user-container').text('最終変更 : ').append(createUserLink(lastEditor)).
                 show();
             }
         },
