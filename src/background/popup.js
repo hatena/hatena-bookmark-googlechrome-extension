@@ -846,15 +846,19 @@ var View = {
         },
 
         titleEditToggle: function() {
-            var img = $('#title-editable-toggle');
-            if (img.attr('src').indexOf('/images/edit-lock.png') == -1) {
-                img.attr('src', '/images/edit-lock.png');
+            var $img = $('#title-editable-toggle');
+            var to_edit_image_path = '/images/edit.png';
+            var to_close_image_path = '/images/close.gif';
+            if ($img.attr('src').indexOf(to_edit_image_path) == -1) {
+                $img.attr('src', to_edit_image_path);
+                $img.attr('title', 'タイトルを変更する');
                 $('#title-text-container').show();
                 $('#title-text-edit-container').addClass('none');
                 $('#title-input').attr('disabled', 'disabled');
                 $('#title-notice').hide();
             } else {
-                img.attr('src', '/images/edit-cancel.png');
+                $img.attr('src', to_close_image_path);
+                $img.attr('title', '変更をキャンセルする');
                 $('#title-text-container').hide();
                 $('#title-text-edit-container').removeClass('none');
                 $('#title-input').attr('disabled', null);
@@ -938,16 +942,8 @@ var View = {
                 this.privateOption.setValue( true );
             }
             if (entry.has_asin) {
-                var addAsin = $('#add-asin').attr('disabled', null);
-                $('#asin').attr('disabled', null).attr('value', entry.asin);
-
-                if (Config.get('popup.bookmark.addAsin')) {
-                    addAsin.attr('checked', 'checked');
-                }
-                addAsin.bind('change', function() {
-                    Config.set('popup.bookmark.addAsin', this.checked);
-                });
-
+                var addAsin = $('#add-asin').prop('disabled', null);
+                $('#asin').prop('disabled', null).attr('value', entry.asin);
                 $('#asin-container').show();
             }
         },

@@ -603,7 +603,11 @@ span#favorites {
     display: inline-block;
 }
 
-#buttons * input,
+label {
+    cursor: pointer;
+}
+
+#buttons * input[type="submit"],
 .confirmation-balloon * input {
     cursor: pointer;
     font-size: 95%;
@@ -1406,14 +1410,6 @@ em a:visited {
     vertical-align: middle;
 }
 
-#checkbox-options-button-to-minimize {
-  height: 16px;
-  width: 16px;
-  background-color: #FFF;
-  border: none;
-  background: url(../images/box-open.png) center center no-repeat;
-}
-
 #checkbox-options-button-to-expand {
   height: 45px;
   width: 16px;
@@ -1423,6 +1419,7 @@ em a:visited {
   background-color: #FFF;
   border: none;
   background: url(../images/box-close.png) center center no-repeat;
+  cursor: pointer;
 }
 
 /* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
@@ -1433,8 +1430,8 @@ body.sharing-options-panel-opend .option-help-tooltip {
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
     position: absolute;
-    left: 0px;
-    bottom: 7px;
+    left: -1px;
+    bottom: 12px;
     background-color: #FFFFFF;
     border: solid 1px #CCCCCC;
     color: #666;
@@ -1459,21 +1456,24 @@ body.sharing-options-panel-opend .option-help-tooltip {
   margin-left: 5px;
 }
 
-#checkbox-options #checkbox-options-expanded .bar {
-  margin-bottom: 5px;
+#checkbox-options-expanded .bar {
+    margin-bottom: 0;
+    background-color: #EEE;
+    border-top: 1px solid #DDD;
 }
 
-#checkbox-options #checkbox-options-expanded .bar button {
-    float: left;
-    margin: 2px 5px 0 10px;
+#checkbox-options-button-to-minimize {
+  float: left;
+  height: 21px;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 2px 5px 0 10px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-open.png) 10px 50% no-repeat;
 }
-#checkbox-options #checkbox-options-expanded .bar span {
-    margin-left: 5px;
-    font-size: 12px;
-    line-height: 16px;
-    color: #999;
-    font-weight: bold;
-}
+
 /** 閉じているときの表示 */
 
 #checkbox-options #checkbox-options-minimized {
