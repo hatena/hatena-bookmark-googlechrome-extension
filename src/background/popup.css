@@ -300,7 +300,6 @@ a#users-count:visited {
   display: inline-block;
   padding: 4px 6px;
   margin: 0 0 0 15px;
-  -webkit-border-radius: 3px;
   border-radius: 3px; /* Chrome 4 以降で使える */
   cursor: pointer;
   color: rgba(255,255,255,0.8);
@@ -310,7 +309,6 @@ a#users-count:visited {
 }
 
 #edit-submit {
-  -webkit-border-radius: 3px;
   border-radius: 3px; /* Chrome 4 以降で使える */
   -webkit-box-shadow: none;
   box-shadow: none; /* Chrome 10 以降で使える */
@@ -349,7 +347,6 @@ ul.tab-ui li.tab-link a {
 ul.tab-ui li.tab-link img {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
-  -webkit-border-radius: 4px;
   border-radius: 4px; /* Chrome 4 以降で使える */
   padding: 2px;
   display: inline-block;
@@ -374,14 +371,12 @@ ul.tab-ui li.tab-link img {
   background-position: 5px 3px;
   background-repeat: no-repeat;
   padding: 0 5px 0 25px;
-  -webkit-border-radius: 5px 0 0 5px;
   border-radius: 5px 0 0 5px; /* Chrome 4 以降で使える */
 }
 
 #comment-tab {
   background-image: url(/images/serif_list_off.png);
   padding: 0 8px 0 25px;
-  -webkit-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0; /* Chrome 4 以降で使える */
 }
 
@@ -690,7 +685,6 @@ label {
   margin-top: 10px;
   border: 1px solid #cccccc;
   border-radius: 3px;
-  -webkit-border-radius: 3px;
 }
 
 #comment-area:hover {
@@ -873,7 +867,6 @@ div#tag-container {
     background-color: #E7F0FC;
     border: 1px solid #E6E6FC;
     border-radius: 3px;
-    -webkit-border-radius: 3px;
     padding: 8px 6px 8px 6px;
     margin: 5px 0 0 0;
     font-size: 12px;
@@ -925,14 +918,12 @@ div#tag-container dt {
 #recommend-tags-container dd .tag:hover, #all-tags-container dd .tag:hover {
   background-color: #becde0;
   border-radius: 5px;
-  -webkit-border-radius: 5px;
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
   background-color: #7DB4E8;
   color: #FFF;
   border-radius: 5px;
-  -webkit-border-radius: 5px;
 }
 
 #tag-notice {
@@ -1010,10 +1001,6 @@ dd#all-tags {
   vertical-align: middle;
   border: 1px solid #cccccc;
   border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -o-border-radius: 3px;
-  -ms-border-radius: 3px;
 }
 
 #search-form input {
@@ -1306,7 +1293,6 @@ em a:visited {
   border: 1px solid #ede2c2;
   margin: 0 0px 10px 0;
   padding: 5px;
-  -webkit-border-radius: 4px;
   border-radius: 4px; /* Chrome 4 以降で使用可能 */
   color: #71590c;
   text-align: center;
@@ -1327,7 +1313,6 @@ em a:visited {
   background: #fafafa;
   padding: 10px;
   border: 1px solid #eee;
-  -webkit-border-radius: 4px;
   border-radius: 4px; /* Chrome 4 以降で使用可能 */
   line-height: 1.5;
 }
