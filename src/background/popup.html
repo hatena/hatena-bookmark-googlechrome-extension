@@ -94,9 +94,6 @@
         <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
         <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
         <li class="tab-link">
-        <a id="hatena-bookmark-link-top" title="はてなブックマークトップページ" href="http://b.hatena.ne.jp/"><img src="/images/link-bookmark.png" alt="はてなブックマークトップページ" /></a>
-        <a id="header-usericon" href="http://b.hatena.ne.jp/my"></a>
-        <a id="header-helpicon" href="http://b.hatena.ne.jp/help/chrome_extentions" title="help"><img alt="help" width=16 height=16 src="/images/help.png" /></a>
         </li>
       </ul>
     </div>
@@ -104,7 +101,6 @@
       <ul class="tab-ui">
         <li id="search-tab">
         <form id="search-form">
-          <input type="image" src="/images/searchbutton.png" width=19 height=19 />
           <input placeholder="マイブックマーク検索" id="search-word" type="text" />
         </form>
         </li>
@@ -135,9 +131,9 @@
 <div id="bookmark-container">
   <div id="bookmark-edit-container">
     <div id="bookmark-edit-header">
-      <div class="edit-cell"><a href="http://b.hatena.ne.jp"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
+      <div class="edit-cell"><a href="http://b.hatena.ne.jp" tabindex="-1"><img src="/images/logo-text.png" alt="Hatena::Bookmark" /></a></div>
       <div class="edit-cell">
-        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my"></a>さん
+        ようこそ<img width="16" height="16" id="usericon"><a id="username" href="http://b.hatena.ne.jp/my" tabindex="-1"></a>さん
       </div>
     </div>
     <div id="bookmark-message" class="none"></div>
@@ -176,21 +172,20 @@
 
               <div style="width: 100%; display: table-cell;">
                 <span id="title-toggle-button" class="edit-cell">
-                  <img onclick="View.bookmark.titleEditToggle();" src="/images/edit-lock.png" class="loaded" id="title-editable-toggle">
+                  <img onclick="View.bookmark.titleEditToggle();" src="/images/edit.png" class="loaded" id="title-editable-toggle" title='タイトルを変更する'>
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
-                  <img id="favicon" width="16" height="16"><span id="title-text"></span>
+                  <img id="favicon" width="16" height="16"><span id="title-text"></span><span id="users-count-container" class="none"><a id='users-count' tabindex="-1"></a></span><img id="comment-show"><span id="favorites"></span>
                 </span>
 
                 <span class="none" id="title-text-edit-container">
                   <input type="text" id="title-input" name="title" disabled="disabled" />
                 </span>
 
-
                 <div class="none" id="title-notice">
                   <p>
-                  <img src="/images/caution.png"> タイトルは全ユーザー共通です <a href="http://b.hatena.ne.jp/help/guideline_title">タイトル変更のガイドライン</a>
+                  <img src="/images/caution.png" /> タイトルは全ユーザー共通です : <a href="http://b.hatena.ne.jp/help/guideline_title">ガイドライン</a>
                   </p>
                   <p class="none" id="title-notice-user-container">
                   </p>
@@ -205,10 +200,7 @@
           <div class="table-row">
             <div class="edit-cell" id="url-container">
               <div>
-                <a href="" id="url"></a>
-              </div>
-              <div>
-                <span id="users-count-container" class="none"><img src="/images/page.gif"><a id='users-count'></a></span><img id="comment-show"><span id="favorites"></span>
+                <a href="" id="url" tabindex="-1"></a>
               </div>
             </div>
           </div>
@@ -226,77 +218,21 @@
           <div class="table-row">
             <div class="edit-cell" id="bookmark-options">
               <div id="comment-area">
-                <textarea rows="2" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)"></textarea>
-                <ul id="tag-complete-list">
-                </ul>
-                <input type="hidden" id="input-url" name="url" />
+                <textarea rows="1" id="comment" name="comment" placeholder="コメントを入力してください (省略可能)" tabindex="1"></textarea>
+                <p id="type-counter"><span id="type-count">0</span> / 100</p>
+              <ul id="tag-complete-list" class="shadow">
+              </ul>
               </div>
-              <p id="type-counter"><span id="type-count">0</span> / 100</p>
-              <dl id="checkbox-options">
-                <dt>共有:</dt>
-                <dd>
-                  <label id="post-twitter-label" for="post-twitter" title="ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
-                    <input value="1" type="checkbox" id="post-twitter" name="post_twitter" /><span class="label-text">Twitter</span>
-                  </label>
-                  <label id="post-facebook-label" for="post-facebook" title="ブックマークしたページを Facebook へ投稿する場合はチェックを入れてください。">
-                    <input value="1" type="checkbox" id="post-facebook" name="post_facebook" /><span class="label-text">Facebook</span>
-                  </label>
-                  <label id="post-mixi-check-label" for="post-mixi-check" title="ブックマークしたページをmixiチェックへ投稿する場合はチェックを入れてください。">
-                    <input value="1" type="checkbox" id="post-mixi-check" name="post_mixi_check" /><span class="label-text">mixiチェック</span>
-                  </label>
-
-                  <p id="option-help-post-twitter" class="option-help-tooltip" style="display: none;">
-                    <img src="/images/icon-twitter.png" alt="" width="16" height="16" />
-                    Twitter連携機能を設定すると、ブックマーク時にTwitterへも投稿することができます。
-                    <a href="http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=chrome" target="_blank">もっと詳しく</a>
-                  </p>
-                  <p id="option-help-post-facebook" class="option-help-tooltip" style="display: none;">
-                    <img src="/images/icon-facebook.png" alt="" width="16" height="16" />
-                    Facebook連携機能を設定すると、ブックマーク時にFacebookへも投稿することができます。
-                    <a href="http://b.hatena.ne.jp/help/config_coop#facebook" target="_blank">もっと詳しく</a>
-                  </p>
-                  <p id="option-help-post-mixi-check" class="option-help-tooltip" style="display: none;">
-                    <img src="/images/icon-mixi.png" alt="" width="16" height="16" />
-                    mixiチェック連携機能を設定すると、ブックマーク時にmixiチェックへも投稿することができます。
-                    <a href="http://b.hatena.ne.jp/help/config_coop#mixi-check" target="_blank">もっと詳しく</a>
-                  </p>
-                </dd>
-                <dt>オプション:</dt>
-                <dd>
-                  <label for="confirm-bookmark" title="ブックマーク保存完了後、別ウィンドウではてなブックマークのエントリーページを表示します。">
-                    <input value="1" type="checkbox" id="confirm-bookmark" name="confirm_bookmark" /> ブックマークを確認
-                  </label>
-                  <label id="private-label" for="private" title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。(閲覧許可ユーザーにも公開されません。) ">
-                    <input value="1" type="checkbox" id="private" name="private" /><span class="label-text">非公開</span>
-                  </label>
-                  <span id="plus-inputs" class="none">
-                    <input value="1" type="hidden" id="with_status_op" name="with_status_op" />
-                    <label id="send-mail-label" for="send_mail" title="ブックマークしたページを設定で指定したメールアドレスに送信する場合チェックを入れてください。">
-                      <input value="1" type="checkbox" id="send_mail" name="send_mail" /><span class="label-text">メール</span>
-                    </label>
-                  </span>
-                  <span id="asin-container">
-                    <input value="" type="hidden" id="asin" name="asin" disabled />
-                    <label for="add-asin">
-                      <input value="1" type="checkbox" id="add-asin" name="add_asin" disabled="disabled" /> コレクション
-                    </label>
-                  </span>
-
-                  <p id="option-help-private" class="option-help-tooltip" style="display: none;">
-                    <img src="/images/add-private.png" alt="" width="16" height="16" />
-                    はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
-                    <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
-                  </p>
-                </dd>
-              </dl>
+              <input type="hidden" id="input-url" name="url" />
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <div id="tag-container">
     <dl id="recommend-tags-container">
-      <dt>おすすめタグ <a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note">※タグについての詳しい説明</a></dt>
+      <dt>おすすめタグ <a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note" tabindex="-1">※タグについて</a></dt>
       <dd id="recommend-tags">
       </dd>
     </dl>
@@ -305,18 +241,104 @@
       <dd id="all-tags">
       </dd>
     </dl>
-    <p id="tag-notice"><a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note">※タグについての詳しい説明</a></p>
-
-    <div id="buttons">
-        <div class="table-row">
-            <div class="edit-cell">
-                <input id="edit-submit" type="submit" value="追加" />
-            </div>
-            <div class="edit-cell">
-                <input onclick="closeWin();" id="cancel" type="button" value="キャンセル" />
-            </div>
-        </div>
+    <p id="tag-notice"><a href="http://b.hatena.ne.jp/help/tag" target="_blank" class="note" tabindex="-1">※タグについて</a></p>
     </div>
+
+    <div id="submit-container">
+
+      <p id="option-help-post-twitter" class="option-help-tooltip shadow" style="display: none;">
+        <img src="/images/icon-twitter.png" alt="" width="16" height="16" />
+        Twitter 連携機能を設定すると、ブックマーク時に Twitter へも投稿することができます。
+        <a href="http://b.hatena.ne.jp/my/config#tabmenu-config_table_twitter"
+          target="_blank">Twitter 連携機能の設定画面へ</a>
+      </p>
+      <p id="option-help-post-facebook" class="option-help-tooltip shadow" style="display: none;">
+        <img src="/images/icon-facebook.png" alt="" width="16" height="16" />
+        Facebook 連携機能を設定すると、ブックマーク時に Facebook へも投稿することができます。
+        <a href="http://b.hatena.ne.jp/my/config#tabmenu-config_table_coop"
+          target="_blank">Facebook 連携機能の設定画面へ</a>
+      </p>
+      <p id="option-help-post-evernote" class="option-help-tooltip shadow" style="display: none;">
+        <img src="/images/icon-evernote.png" alt="" width="16" height="16" />
+        Evernote 連携機能を設定すると、ブックマーク時に Evernote へも投稿することができます。
+        <a href="http://b.hatena.ne.jp/my/config#tabmenu-config_table_coop"
+          target="_blank">Evernote 連携機能の設定画面へ</a>
+      </p>
+      <p id="option-help-post-mixi-check" class="option-help-tooltip shadow" style="display: none;">
+        <img src="/images/icon-mixi.png" alt="" width="16" height="16" />
+        mixi チェック連携機能を設定すると、ブックマーク時に mixi チェックへも投稿することができます。
+        <a href="http://b.hatena.ne.jp/my/config#tabmenu-config_table_coop"
+          target="_blank">mixi チェック連携機能の設定画面へ</a>
+      </p>
+
+      <p id="option-help-private" class="option-help-tooltip shadow" style="display: none;">
+        <img src="/images/add-private.png" alt="" width="16" height="16" />
+          有料オプション “はてなブックマークプラス” にお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます。
+        <a href="http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=chrome" target="_blank">もっと詳しく</a>
+      </p>
+
+      <div id="checkbox-options">
+        <h6>共有:</h6>
+        <div id="checkbox-options-expanded" class="shadow">
+          <ul>
+            <!-- template -->
+            <li id="checkbox-options-expanded-item-template">
+              <label>
+                <input type="checkbox" /><span class="icon-img">icon_img</span
+                ><span class="displayed-name"></span>
+              </label>
+            </li>
+            <!-- template を使わない -->
+            <li id="asin-container">
+              <label for="add-asin" title="Amazon.co.jp の商品をコレクションに追加する場合はチェックを入れてください。">
+                <input value="1" type="checkbox" id="add-asin" name="add_asin"
+                  disabled="disabled" /> コレクション
+              </label>
+              <input value="" type="hidden" id="asin" name="asin" disabled="disabled" />
+            </li>
+          </ul>
+          <div class="bar cf">
+            <button id="checkbox-options-button-to-minimize" type="button" tabindex="13"
+              title="オプションパネルを閉じる"></button>
+          </div>
+        </div>
+        <div id="checkbox-options-minimized">
+          <button id="checkbox-options-button-to-expand" type="button" tabindex="10"
+            title="全てのオプションを表示する"></button>
+          <ul>
+            <!-- template -->
+            <li id="checkbox-options-minimized-item-template">
+              <label>
+                <input type="checkbox" /><span class="icon-img">icon_img</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+
+        <script src="/popup/sharing_checkbox_options.js"></script>
+      </div>
+
+      <div id="buttons">
+          <div class="table-row">
+              <div class="edit-cell">
+                <!-- 開始: 非公開オプション用 -->
+                <label title="ブックマークを他のユーザーに公開しない場合はチェックを入れてください。 (閲覧許可ユーザーにも公開されません。) ">
+                  <input id="private-option-view" type="checkbox" tabindex="20" />
+                  <img src="/images/add-private.png" alt="" width="16" height="16" />
+                  <span>非公開</span>
+                </label>
+                <input name="private" id="private" type="hidden" value="" />
+                <input type="hidden" name="with_status_op" value="1" />
+                <!-- 終了: 非公開オプション用 -->
+             </div>
+              <div class="edit-cell">
+                  <input id="edit-submit" type="submit" value="追加" tabindex="21" />
+              </div>
+          </div>
+      </div>
+
+    </div>
+
     </form>
   </div>
 </div>
@@ -327,14 +349,14 @@
 
     <div id="comment-title-container">
       <span id="comment-title"></span>
+      <a id="comment-users"></a>
+      <span id="comment-count-detail"></span>
       <span id="comment-title-star-container"></span>
       <img src="/images/star_my.gif" alt="はてなスターをロードしています…" title="はてなスターをロードしています…" id="star-loading-icon" />
     </div>
 
     <div id="comment-title-right">
       <div id="comment-infos">
-        <a id="comment-users"></a>
-        <span id="comment-count-detail"></span>
         <img onclick="View.comment.toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
       </div>
     </div>

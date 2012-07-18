@@ -1,7 +1,32 @@
 /* BASIC {{{ */
+.cf:before,
+.cf:after {
+  content: "";
+  display: block;
+  overflow: hidden;
+}
+.cf:after {
+  clear: both;
+}
+.cf {
+  zoom: 1;
+}
+
 * {
     margin: 0;
     padding: 0;
+}
+
+.shadow {
+  box-shadow: 0px 2px 5px #CCCCCC;
+  -webkit-box-shadow: 0px 2px 5px #CCCCCC;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+body {
     font: 100%/1.4 "Arial", "Helvetica", sans-serif;
     font-size: small;
 }
@@ -47,7 +72,7 @@
 
 body {
   overflow-x: hidden;
-  color: #222;
+  color: #333;
   min-height: 70px;
 }
 
@@ -79,6 +104,7 @@ a#users-count:visited {
     color: #E9637A;
     padding: 0px 3px 0px 3px;
     font-weight: bold;
+    text-decoration: underline;
 }
 
 #favicon,
@@ -94,19 +120,40 @@ a#users-count:visited {
 
 #header {
     display: table;
-    background: -webkit-gradient(
-    linear, 
-    left top, 
-    left bottom, 
-    from(#427DC4), 
-    to(#2C6EBD), 
-    color-stop(0.5, #427DC4), 
-    color-stop(0.5, #2C6EBD)
-    );
     border-bottom: 1px solid #bbb;
     -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
     -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px; /* Chrome 4 以降で使える */
     -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px; /* Chrome 4 以降で使える */
+}
+#edit-submit,
+#header {
+    /* gradient を使った青背景 */
+    /* deprecated な書き方; Chrome 10 より古くても使える */
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(#427DC4),
+        to(#2C6EBD),
+        color-stop(0.5, #427DC4),
+        color-stop(0.5, #2C6EBD)
+    );
+    /* Chrome 10 以降で使える */
+    background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    /* current standard; but unimplimented yet (chrome 19) */
+    background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    color: #FFFFFF;
+}
+
+#edit-submit:hover,
+#edit-submit:focus,
+#edit-submit:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1, #5287c7), color-stop(0.54, #5287c7), color-stop(0.46, #84a9d7));
+  background: -webkit-linear-gradient(top, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
+  background: linear-gradient(to bottom, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
 }
 
 .table {
@@ -169,6 +216,7 @@ a#users-count:visited {
   background-color: #FFF;
   border: 1px solid #777;
   -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
   overflow: hidden;
   padding-bottom: 46px;
   z-index: 200;
@@ -188,12 +236,18 @@ a#users-count:visited {
 
 #title-notice {
   color: #333;
+  font-size: 12px;
+  line-height: 16px;
   background-color: #EEE;
-  padding: 3px;
+  padding: 5px 10px 5px 10px;
   border-radius: 6px;
   margin-top: 5px;
   margin-right: 50px;
   width: auto;
+}
+
+#title-notice-user-container {
+    margin-left: 20px;
 }
 
 #image-detect-notice {
@@ -229,7 +283,7 @@ a#users-count:visited {
   display: table-cell;
   width: 100%;
   white-space: nowrap;
-  padding: 4px;
+  padding: 4px 4px 4px 10px;
 }
 
 #header-right {
@@ -237,19 +291,40 @@ a#users-count:visited {
   width: 100%;
   text-align: right;
   white-space: nowrap;
-  padding: 4px 4px 4px 0;
+  padding: 4px 10px 4px 0;
+}
+
+#edit-submit {
+  width: 90px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 4px 6px;
+  margin: 0 0 0 15px;
+  border-radius: 3px; /* Chrome 4 以降で使える */
+  cursor: pointer;
+  color: rgba(255,255,255,0.8);
+  border: 1px solid #427DC4;
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
+}
+
+#edit-submit {
+  border-radius: 3px; /* Chrome 4 以降で使える */
+  -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
 }
 
 ul.tab-ui li {
   font-weight: bold;
   display: inline-block;
-  padding: 4px 6px;
-  margin: 0px;
-  -webkit-border-radius: 4px;
+  font-size: 12px;
+  line-height: 24px;
+  margin: 0;
   cursor: pointer;
   color: rgba(255,255,255,0.8);
   border: 1px solid #427DC4;
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
 }
 
 ul.tab-ui li:hover {
@@ -257,11 +332,11 @@ ul.tab-ui li:hover {
   border: 1px solid #427DC4;
 }
 
-
 ul.tab-ui li.tab-link {
   background: transparent;
   border: none;
   -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
   padding-right: 0;
 }
 
@@ -272,7 +347,7 @@ ul.tab-ui li.tab-link a {
 ul.tab-ui li.tab-link img {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
-  -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使える */
   padding: 2px;
   display: inline-block;
 }
@@ -281,6 +356,7 @@ ul.tab-ui li.tab-link img {
   background: transparent;
   border: none;
   -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
 }
 
 #header-right ul.tab-ui li input[type='image'] {
@@ -292,13 +368,16 @@ ul.tab-ui li.tab-link img {
 #bookmark-tab,
 #comment-tab {
   background-image: url(/images/chrome-b-append_off.png);
-  background-position: 3px 5px;
+  background-position: 5px 3px;
   background-repeat: no-repeat;
-  padding-left: 25px;
+  padding: 0 5px 0 25px;
+  border-radius: 5px 0 0 5px; /* Chrome 4 以降で使える */
 }
 
 #comment-tab {
   background-image: url(/images/serif_list_off.png);
+  padding: 0 8px 0 25px;
+  border-radius: 0 5px 5px 0; /* Chrome 4 以降で使える */
 }
 
 #bookmark-tab.current {
@@ -311,7 +390,6 @@ ul.tab-ui li.tab-link img {
 
 ul.tab-ui li.current {
   color: #2C6EBD;
-  text-shadow: 0px 1px 0px #fff;
   background: #fff;
   border-top-color: rgba(0,0,0,0.3);
   border-left-color:  rgba(0,0,0,0.3);
@@ -331,7 +409,7 @@ ul.tab-ui li img {
 
 #comment-title-container {
   background: no-repeat 0px 2px;
-  padding-left: 22px;
+  padding: 0 15px 0 22px;
   display: table-cell;
   /*
   display: inline-block;
@@ -357,6 +435,7 @@ ul.tab-ui li img {
   /*
   background: #fff;
   -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
   */
   display: table;
   width: 100%;
@@ -366,12 +445,13 @@ ul.tab-ui li img {
   padding: 3px 10px 3px 10px;
 }
 
-#comment-title {
-  font-size: 100%;
+h3#comment-header {
+  font-size: 13px;
+  padding: 5px 10px 5px 10px;
 }
 
 #comment-list {
-  padding: 5px 0;
+  padding: 0;
 }
 
 #comment-list li {
@@ -401,12 +481,10 @@ a.username {
 
 #comment-title-right {
   display: table-cell;
-  width: 190px;
   text-align: right;
   /*
   display: inline-block;
   */
-  margin-top: 2px;
 }
 
 #image-detect-notice-user-container {
@@ -424,9 +502,15 @@ a.username {
   cursor: pointer;
   background: #fff;
   -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
   -webkit-border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 4px; /* Chrome 4 以降で使える */
   padding: 2px;
   border: 1px solid #eee;
+}
+
+span#favorites {
+  margin-left: 10px;
 }
 
 /* }}} */
@@ -434,7 +518,7 @@ a.username {
 /* edit {{{ */
 
 #form {
-  margin-top: 5px;
+  margin: 10px 10px 0 10px;
 }
 
 #bookmark-edit-header {
@@ -442,14 +526,15 @@ a.username {
   width: 100%;
   background: #eee;
   border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  padding-bottom: 3px;
+  padding: 5px 12px 5px 12px;
 }
 
 #bookmark-edit-header a {
 }
 
 #bookmark-edit-header div.edit-cell {
+  font-size: 12px;
+  line-height: 16px;
   padding-bottom: 0;
   padding-top: 2px;
   vertical-align: middle;
@@ -467,10 +552,14 @@ a.username {
 #edit {
     width:100%;
     display: table;
-    padding: 0 3px;
 }
 
 #edit > .table-row {
+    /* 将来的には display: flex に移行する必要がありそう
+     *   https://developer.mozilla.org/en/CSS/Flexbox
+     *   https://developer.mozilla.org/en/CSS/Using_CSS_flexible_boxes
+     *   http://myakura.hatenablog.com/entry/2012/06/11/230915
+     */
     display: -webkit-box;
     -webkit-box-orient: horizontal;
 }
@@ -479,6 +568,7 @@ a.username {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-flex: 1;
+    margin-bottom: 5px;
 }
 
 #edit > .table-row > .table-left > .table-row {
@@ -495,11 +585,12 @@ a.username {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-align: end;
-    padding: 5px 5px 1px 5px;
+    margin-bottom: 10px;
 }
 
 #buttons {
-    text-align: right;
+    float: right;
+    margin: 10px 0 10px;
 }
 
 #buttons > .table-row,
@@ -507,13 +598,23 @@ a.username {
     display: inline-block;
 }
 
-#buttons * input,
+label {
+    cursor: pointer;
+}
+
+#buttons * input[type="submit"],
 .confirmation-balloon * input {
     cursor: pointer;
-    width: 90px;
     font-size: 95%;
-    margin: 5px;
-    padding: 1px 0 1px 0;
+}
+#buttons * input {
+    position: relative;
+    z-index: 10;
+}
+
+label {
+  font-size: 12px;
+  vertical-align: middle;
 }
 
 .edit-left {
@@ -524,12 +625,11 @@ a.username {
 }
 
 .edit-cell {
-  padding: 5px;
   display: table-cell;
 }
 
 #edit .edit-cell {
-  padding: 3px 5px;
+
 }
 
 #title .edit-cell {
@@ -543,33 +643,68 @@ a.username {
   float: right;
 }
 
+#url-container a {
+  color: #2D6BC4;
+  text-decoration: none;
+}
+
+#url-container a:hover {
+  text-decoration: underline;
+}
+
+#users-count-container {
+  margin-left: 8px;
+}
 
 /* }}} */
 
 #comment {
-    width: 100%;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 3px 3px 3px 5px;
-    vertical-align: top;
-    resize: vertical;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 18px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  vertical-align: top;
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; /* Chrome 10 以降で使用可能 */
+  resize: none;
+}
+
+#comment:focus {
+   background-color: #fff;
+   border: none;
+   outline: none;
 }
 
 #comment-area {
-    width: 100%;
-    position: relative;
+  position: relative;
+  padding: 5px 5px 5px 5px;
+  margin-top: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
 }
+
+#comment-area:hover {
+  border: 1px solid #999;
+}
+
 
 #bookmark-error,
 #bookmarked-notice {
     text-align: center;
     padding: 5px;
-    margin: 3px;
+    margin: 5px 10px 5px 10px;
     font-size: 90%;
     font-weight: bold;
     color: #555;
     background-color: #FDD;
     border-radius: 3px;
+}
+#bookmarked-notice {
+    position: relative;
 }
 
 #bookmarked-notice-text {
@@ -589,12 +724,13 @@ a.username {
 }
 
 #type-counter {
-    float: right;
-    margin-top: 5px;
-    padding-left: 13px;
-    font-size: 90%;
-    color: #555;
+    text-align: right;	
+    font-size: 12px;
+    line-height: 12px;
+    margin: -12px 0 0 0;
+    color: #999;
     white-space: nowrap;
+    z-index: 100;
 }
 
 #type-counter span {
@@ -645,12 +781,13 @@ a.username {
 
 #post-twitter-label .label-text,
 #post-facebook-label .label-text,
+#post-evernote-label .label-text,
 #post-mixi-check-label .label-text,
 #private-label .label-text,
 #send-mail-label .label-text {
     background: 0px 50% no-repeat;
     margin-left: 2px;
-    padding-left: 17px;
+    padding-left: 21px;
 }
 
 #post-twitter-label .label-text {
@@ -659,6 +796,10 @@ a.username {
 
 #post-facebook-label .label-text {
     background-image: url(/images/icon-facebook.png);
+}
+
+#post-evernote-label .label-text {
+    background-image: url(/images/icon-evernote.png);
 }
 
 #post-mixi-check-label .label-text {
@@ -677,55 +818,112 @@ a.username {
     display: none;
 }
 
-.confirmation-balloon,
+#submit-container {
+    position: relative;
+}
 .option-help-tooltip {
-    background: #eee;
-    border: 1px solid #ccc;
     position: absolute;
-    margin: 0 10px;
-    padding: 7px 10px;
+    bottom: 100%;
+    padding: 10px;
+    margin: -0.3em 0.4em;
+    font-size: 90%;
+    color: #555;
+    background-color: #FDD;
     border-radius: 3px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.option-help-tooltip a {
+    font-size: 11px;
+}
+
+.confirmation-balloon {
+    background-color: #FFFFFF;
+    border: solid 1px #CCCCCC;
+    color: #666;
+    margin-top: 5px;
+    padding: 12px;
+}
+
+.confirmation-balloon p.msg {
+  margin-bottom: 8px;
+}
+
+.confirmation-balloon input {
+  width: 100px;
+}
+
+.confirmation-balloon input.cancel {
+  margin-left: 20px;
 }
 
 #delete-button-confirmation {
-    right: 10px;
+    position: absolute;
+    top: -0.1em;
+    right: 25px;
+    z-index: 20;
 }
 
-#recommend-tags-container, #all-tags-container {
+div#tag-container {
+    background-color: #E7F0FC;
+    border: 1px solid #E6E6FC;
+    border-radius: 3px;
+    padding: 8px 6px 8px 6px;
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #666;
+}
+
+div#tag-container dl:last-child {
+    margin-top: 15px;
+}
+
+div#tag-container dt {
+  color: #333;
+}
+
+#recommend-tags-container {
     display: none;
-    padding:0px 8px 0px 8px;
+    padding:0;
+}
+
+#all-tags-container {
+    display: none;
+    padding:0;
 }
 
 #recommend-tags-container dt, #all-tags-container dt {
-    padding:5px 0px 0px 5px;
+    margin: 0 3px 5px 5px;
     font-weight: bold;
-    font-size: 90%;
+    font-size: 12px;
+}
+
+#recommend-tags-container dt a, #all-tags-container dt #show-all-tags-toggle {
+    font-weight: normal;
+    font-size: 11px;
 }
 
 #recommend-tags-container dd, #all-tags-container dd {
-    background-color: #E7F0FC;
-    border-radius: 3px;
-    padding: 6px;
-    font-size: 90%;
-    line-height: 1.8;
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
-  margin-right: 4px;
-  padding: 1px 3px 1px 3px;
+  margin-right: 1px;
+  padding: 0px 5px 0px 5px;
   cursor: pointer;
   white-space: nowrap;
   display: inline-block;
   border: 1px solid #E7F0FC;
 }
 
+#recommend-tags-container dd .tag:hover, #all-tags-container dd .tag:hover {
+  background-color: #becde0;
+  border-radius: 5px;
+}
+
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
-  background-color: #559be6;
+  background-color: #7DB4E8;
   color: #FFF;
-  border: 1px solid #35618f;
-  border-right-color: #bcd8f5;
-  border-bottom-color: #bcd8f5;
+  border-radius: 5px;
 }
 
 #tag-notice {
@@ -737,9 +935,14 @@ a.username {
   position: absolute;
   list-style: none;
   background-color: #fff;
-  border: 1px solid #555;
+  border: 1px solid #CCC;
+  color: #666;
   min-width: 125px;
   max-width: 200px;
+}
+
+#tag-complete-list li {
+  padding: 1px 5px 1px 5px;
 }
 
 #tag-complete-list li:hover {
@@ -748,7 +951,7 @@ a.username {
 }
 
 #tag-complete-list li.selected {
-  background-color: #2C6EBD;
+  background-color: #7DB4E8;
   color: #FFF;
 }
 
@@ -776,6 +979,12 @@ dd#all-tags {
 
 #title {
     font-weight: bold;
+    margin-bottom: 3px;
+    line-height: 1.6;
+}
+
+#url {
+    margin: 0 0 1px 3px;
 }
 
 .none {
@@ -784,7 +993,24 @@ dd#all-tags {
 
 #search-form {
   display: inline-block;
+  background-color: #FFF;
   -webkit-box-flex: 1;
+  height: 24px;
+  width: 180px;
+  padding: 0;
+  vertical-align: middle;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+}
+
+#search-form input {
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  background: url(../images/user-search.png) 5px center no-repeat;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 10px 0 22px;
 }
 
 #search-word-preview em {
@@ -823,7 +1049,6 @@ dd#all-tags {
   cursor:pointer;
 }
 
-
 #login-container,
 #bookmark-container,
 #comment-container,
@@ -845,18 +1070,25 @@ dd#all-tags {
 }
 
 #comment-list li {
-  padding: 3px 3px 6px 3px;
+  padding: 6px 10px 6px 10px;
   border-bottom: 1px solid #F0F0F0;
   margin: 3px;
   font-size: 95%;
+  line-height: 16px;
 }
 
 #comment-list li a.username {
-  padding: 0px 3px 0px 3px;
+  padding: 0px 8px 0px 5px;
+  color: #2D6BC4;
+  text-decoration: none;
+}
+
+#comment-list li a.username:hover {
+  text-decoration: underline;
 }
 
 #comment-list li .comment {
-  color: #000;
+  color: #333;
 }
 
 #comment-list li .timestamp {
@@ -880,6 +1112,15 @@ dd#all-tags {
 em #comment-users {
   /* 3 users over */
   font-weight: bold;
+}
+
+#comment-title {
+  line-height: 1.6;
+  margin-right: 8px;
+}
+
+#comment-title-star-container {
+  margin-left: 8px;
 }
 
 #comment-toggle {
@@ -1006,7 +1247,7 @@ body.data-loading * .loading {
 
 #comment-count-detail {
   color: #555;
-  font-size: 90%;
+  font-size: 11px;
 }
 
 /* USERS {{{ */
@@ -1052,7 +1293,7 @@ em a:visited {
   border: 1px solid #ede2c2;
   margin: 0 0px 10px 0;
   padding: 5px;
-  -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
   color: #71590c;
   text-align: center;
 }
@@ -1072,7 +1313,7 @@ em a:visited {
   background: #fafafa;
   padding: 10px;
   border: 1px solid #eee;
-  -webkit-border-radius: 4px;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
   line-height: 1.5;
 }
 
@@ -1123,9 +1364,134 @@ em a:visited {
 
 
 #favorites a img {
-  margin:0 1px;
+  margin:0 2px;
 }
 
 #search-tab {
   padding-left: 0;
+}
+
+/**
+ * 共有オプション
+ */
+
+#checkbox-options {
+    position: relative;
+    padding: 0;
+    display: inline-block;
+    float: left;
+}
+#checkbox-options h6 {
+    display: none;
+}
+#checkbox-options:not(.expanded) #checkbox-options-expanded {
+    display: none;
+}
+#checkbox-options.expanded #checkbox-options-minimized {
+    visibility: hidden;
+}
+#checkbox-options *,
+#buttons * {
+    vertical-align: middle;
+}
+
+#checkbox-options-button-to-expand {
+  height: 45px;
+  width: 16px;
+  line-height: 16px;
+  padding: 9;
+  margin: 0 5px 0 5px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-close.png) center center no-repeat;
+  cursor: pointer;
+}
+
+/* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
+body.sharing-options-panel-opend .option-help-tooltip {
+    margin-left: 160px;
+}
+
+/** 開いているときの表示 */
+#checkbox-options #checkbox-options-expanded {
+    position: absolute;
+    left: -1px;
+    bottom: 12px;
+    background-color: #FFFFFF;
+    border: solid 1px #CCCCCC;
+    color: #666;
+}
+
+#checkbox-options-expanded ul {
+  padding: 7px 0 7px 0;
+}
+
+#checkbox-options-expanded ul li {
+  list-style-type: none;
+  padding: 0 12px 0 12px;
+  margin: 3px 0 3px 0;
+  line-height: 16px;
+}
+
+#checkbox-options-expanded-item-template label {
+  margin-right: 0px;
+}
+
+#checkbox-options-expanded ul li span.displayed-name {
+  margin-left: 5px;
+}
+
+#checkbox-options-expanded .bar {
+    margin-bottom: 0;
+    background-color: #EEE;
+    border-top: 1px solid #DDD;
+}
+
+#checkbox-options-button-to-minimize {
+  float: left;
+  height: 21px;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 2px 5px 0 10px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-open.png) 10px 50% no-repeat;
+}
+
+/** 閉じているときの表示 */
+
+#checkbox-options #checkbox-options-minimized {
+  margin-left: 5px;
+}
+
+#checkbox-options #checkbox-options-minimized ul,
+#checkbox-options #checkbox-options-minimized li {
+    display: inline-block;
+}
+
+#checkbox-options #checkbox-options-minimized ul {
+}
+
+#checkbox-options #checkbox-options-minimized li {
+  margin-right: 4px;
+  line-height: 16px;
+}
+
+/**
+ * 非公開ボタンのための CSS
+ */
+#private-button {
+    width: 3em;
+    margin-left: -1em;
+    z-index: 1;
+}
+#private-button.active .off, /* 非公開 ON の場合の off 用表示 */
+#private-button:not(.active) .on { /* 非公開 OFF の場合の on 用表示 */
+    display: none;
+}
+#private-button .on { /* 非公開 ON の表示 */
+    color: #FF0;
+}
+#private-button .off { /* 非公開 OFF の表示 */
 }

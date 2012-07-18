@@ -132,7 +132,7 @@ function confirmWithCallback( id, msg, callback ) {
         box.remove();
     }
 
-    var box = $('<div class="confirmation-balloon"><p class="msg"></p>' +
+    var box = $('<div class="confirmation-balloon shadow"><p class="msg"></p>' +
             '<div><input type="button" value="OK" class="ok">' +
             '<input type="button" value="キャンセル" class="cancel">' +
             '</div></div>');
@@ -551,7 +551,7 @@ var View = {
                 this.images = [url];
             }
             if (lastEditor) {
-                $('#image-detect-notice-user-container').text('最終変更: ').append(createUserLink(lastEditor)).
+                $('#image-detect-notice-user-container').text('最終変更 : ').append(createUserLink(lastEditor)).
                 show();
             }
         },
@@ -603,49 +603,12 @@ var View = {
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
             this.usernameEL.text(user.name);
-            if (user.plususer) {
-                this.plusInputs.removeClass('none');
-            } else {
-                this.setupOptionHelp('private');
-                this.plusInputs.remove();
+            // TODO 対応する必要あり
+            if ( ! user.plususer ) {
+                this.privateOption.setTooltipId( "option-help-private" );
             }
-            if (user.canUseTwitter) {
-                if (user.postTwitterChecked === 'on' ||
-                    (user.postTwitterChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postTwitter'))) {
-                    this.postTwitter.attr('checked', 'checked');
-                }
-                this.postTwitter.bind('change', function() {
-                    Config.set('popup.bookmark.postTwitter', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-twitter');
-            }
-            if (user.canUseFacebook) {
-                if (user.postFacebookChecked === 'on' ||
-                    (user.postFacebookChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postFacebook'))) {
-                    this.postFacebook.attr('checked', 'checked');
-                }
-                this.postFacebook.bind('change', function() {
-                    Config.set('popup.bookmark.postFacebook', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-facebook');
-            }
-            if (user.canUseMixiCheck) {
-                if (user.postMixiCheckChecked === 'on' ||
-                    (user.postMixiCheckChecked === 'inherit' &&
-                     Config.get('popup.bookmark.postMixiCheck'))) {
-                    this.postMixiCheck.attr('checked', 'checked');
-                }
-                this.postMixiCheck.bind('change', function() {
-                    Config.set('popup.bookmark.postMixiCheck', this.checked);
-                });
-            } else {
-                this.setupOptionHelp('post-mixi-check');
-            }
-            $('#private').click(Ten.Function.method(this, 'privateClickHandler'));
+            // SharingOptions (共有オプション) に関する部分の初期化
+            sharingOptions.initSharingOptions( user, this );
             this.privateClickHandler();
 
             if (info.title) {
@@ -868,15 +831,19 @@ var View = {
         },
 
         titleEditToggle: function() {
-            var img = $('#title-editable-toggle');
-            if (img.attr('src').indexOf('/images/edit-lock.png') == -1) {
-                img.attr('src', '/images/edit-lock.png');
+            var $img = $('#title-editable-toggle');
+            var to_edit_image_path = '/images/edit.png';
+            var to_close_image_path = '/images/close.gif';
+            if ($img.attr('src').indexOf(to_edit_image_path) == -1) {
+                $img.attr('src', to_edit_image_path);
+                $img.attr('title', 'タイトルを変更する');
                 $('#title-text-container').show();
                 $('#title-text-edit-container').addClass('none');
                 $('#title-input').attr('disabled', 'disabled');
                 $('#title-notice').hide();
             } else {
-                img.attr('src', '/images/edit-cancel.png');
+                $img.attr('src', to_close_image_path);
+                $img.attr('title', '変更をキャンセルする');
                 $('#title-text-container').hide();
                 $('#title-text-edit-container').removeClass('none');
                 $('#title-input').attr('disabled', null);
@@ -957,77 +924,18 @@ var View = {
                 f.show();
             }
             if (entry.is_private) {
-                $('#private').attr('checked', 'true');
+                this.privateOption.setValue( true );
             }
             if (entry.has_asin) {
-                var addAsin = $('#add-asin').attr('disabled', null);
-                $('#asin').attr('disabled', null).attr('value', entry.asin);
-
-                if (Config.get('popup.bookmark.addAsin')) {
-                    addAsin.attr('checked', 'checked');
-                }
-                addAsin.bind('change', function() {
-                    Config.set('popup.bookmark.addAsin', this.checked);
-                });
-
+                var addAsin = $('#add-asin').prop('disabled', null);
+                $('#asin').prop('disabled', null).attr('value', entry.asin);
                 $('#asin-container').show();
             }
         },
 
-        setupOptionHelp: function (checkId) {
-            var doc = $(document);
-            var checkIds = doc.data('option-help-check-ids');
-            if (checkIds) {
-                checkIds.push(checkId);
-                return;
-            }
-            checkIds = [checkId];
-            doc.data('option-help-check-ids', checkIds);
-            var isShowing = false;
-            doc.click(function (event) {
-                var target = event.target;
-                var idToShow = '';
-                if (target.id && checkIds.indexOf(target.id) >= 0) {
-                    if (target.checked)
-                        idToShow = 'option-help-' + target.id;
-                } else if ($(target).closest('.option-help-tooltip').length) {
-                    return;
-                }
-                if (!idToShow && !isShowing) return;
-                $('.option-help-tooltip').each(function () {
-                    $(this).css('display', (this.id === idToShow) ? '' : 'none');
-                });
-                isShowing = !!idToShow;
-            });
-        },
-
+        // TODO ここにある意味はないので, privateOption か sharingOptions に移す
         privateClickHandler: function() {
-            [this.postTwitter[0], this.postFacebook[0], this.postMixiCheck[0]].forEach(function (input) {
-                if (!input) return;
-                var label = input.parentNode;
-                if (!label.enabledTitle) {
-                    label.enabledTitle = label.title;
-                    label.disabledTitle = label.title +
-                        '(非公開ブックマークは' + (
-                            input.name === 'post_twitter'  ? ' Twitter '  :
-                            input.name === 'post_facebook' ? ' Facebook ' :
-                                                             'mixiチェック'
-                        ) + 'へ投稿されません。)';
-                    input.defaultChecked = input.checked;
-                }
-                if ($('#private').get(0).checked) {
-                    input.defaultChecked = input.checked;
-                    input.checked = false;
-                    input.disabled = true;
-                    label.title = label.disabledTitle;
-                    label.className = 'disabled';
-                } else {
-                    input.checked = input.defaultChecked;
-                    input.disabled = false;
-                    label.title = label.enabledTitle;
-                    label.className = '';
-                }
-            });
+            sharingOptions.setPrivate( $('#private').val() );
         },
     }
 };
@@ -1205,3 +1113,106 @@ var ready = function() {
 };
 
 $(document).bind('ready', ready);
+
+/**
+ * View.bookmark.privateOption
+ * 非公開オプションの管理用オブジェクト
+ * public :
+ *  - View.bookmark.privateOption.setValue( boolean )
+ */
+(function namespace() {
+    // Model としては hidden の input 要素を使い, View として button を使う
+    // 本来は $modelElem の状態を変更したら自動的に $viewElem が変更されるようにすべき
+    // 現在は画面変更時に要素の clone をするということをしていて整合させるのが
+    // 難しいので, 簡易的に処理する
+    // また, 同様の理由により, オブジェクト内部に DOM Element を保持するのではなく
+    // 処理の度に document から取ってくるようにしている.
+
+    var privateOption = View.bookmark.privateOption = {};
+    var tooltipId = void 0;
+
+    /** Model に合うように View を変える */
+    function makeViewCorrespondToModel( $modelElem ) {
+        var $viewElem = $("#private-option-view");
+        $viewElem.prop( "checked", $modelElem.val() ? true : false );
+    }
+    /** tooltip の ID を設定する (これを設定するとツールチップの表示がなされる) */
+    privateOption.setTooltipId = setTooltipId;
+    function setTooltipId( aTooltipId ) {
+        tooltipId = aTooltipId;
+    }
+    /** Model の状態を (外部から) 指定して変更する */
+    privateOption.setValue = setValue;
+    function setValue( isPrivate ) {
+        var $modelElem = $("#private");
+        // ツールチップを表示
+        if ( tooltipId && ! $modelElem.val() && isPrivate ) {
+            View.bookmark.optionHelpTooltipManager.showTooltip( tooltipId );
+        }
+        $modelElem.val( isPrivate ? "1" : "" );
+        makeViewCorrespondToModel( $modelElem );
+        View.bookmark.privateClickHandler(); // sharingOptions に private 状態を伝える
+    }
+    /** View の変更を Model に反映させるための controller */
+    function onChangeView( evt ) {
+        var $modelElem = $("#private");
+        setValue( this.checked );
+    }
+    /** 初期化 */
+    function init() {
+        $(document).unbind( "ready", init );
+        var $viewElem = $("#private-option-view");
+        $viewElem.bind( "change", onChangeView );
+        makeViewCorrespondToModel( $("#private") );
+    }
+    $(document).bind( "ready", init );
+}).call( this );
+
+/** View.bookmark.optionHelpTooltipManager
+ * 本来は使えないオプションを有効にしたときに表示されるツールチップを管理するオブジェクト
+ */
+(function namespace() {
+    var man = View.bookmark.optionHelpTooltipManager = {};
+    // 表示中のツールチップの id
+    var idBeingDisplayed = void 0;
+
+    /** ツールチップが表示されているときにドキュメントクリックで呼び出されるリスナ */
+    function onClickDocument( evt ) {
+        // ツールチップがクリックされた場合は閉じない
+        if ( ! $(evt.target).closest('.option-help-tooltip').length )
+            dropTooltip();
+    }
+    /** 表示しているツールチップを閉じる */
+    function dropTooltip() {
+        $(document).unbind( "click", onClickDocument );
+        var $tooltipBox = $("#"+idBeingDisplayed);
+        if ( ! $tooltipBox.length ) {
+            console.error( "指定された id のツールチップは存在しません" );
+        }
+        $tooltipBox.css( "display", "none" );
+        idBeingDisplayed = void 0;
+    }
+    /** public: View.bookmark.optionHelpTooltipManager.showTooltip( tooltipId )
+     * ツールチップを表示する
+     */
+    man.showTooltip = showTooltip;
+    function showTooltip( tooltipId ) {
+        var $tooltipBox = $("#"+tooltipId);
+        if ( idBeingDisplayed ) { // 古いツールチップが残っている場合
+            dropTooltip();
+        }
+        if ( ! $tooltipBox.length ) {
+            console.error( "指定された id のツールチップは存在しません" );
+            return;
+        }
+        $tooltipBox.css( "display", "block" );
+        idBeingDisplayed = tooltipId;
+        // Tooltip を消すためのリスナの登録
+        // change イベントでこのリスナ登録をしてそのあとの click イベントで実行される,
+        // というようなことがあるのでとりあえず setTimeout で逃げる
+        // cf : http://dev.opera.com/articles/view/timing-and-synchronization-in-javascript/
+        setTimeout( function () {
+            $(document).bind( "click", onClickDocument );
+        }, 4 );
+    }
+}).call( this );
