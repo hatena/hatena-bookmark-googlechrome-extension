@@ -666,11 +666,11 @@ label {
   line-height: 1.6;
   vertical-align: top;
   border: none;
-  box-shadow: none;
   -webkit-box-shadow: none;
+  box-shadow: none; /* Chrome 10 以降で使用可能 */
   -webkit-box-sizing: border-box;
   box-sizing: border-box; /* Chrome 10 以降で使用可能 */
-  resize: none;
+  resize: vertical;
 }
 
 #comment:focus {
@@ -724,17 +724,21 @@ label {
 }
 
 #type-counter {
-    text-align: right;	
+    position: absolute;
+    bottom: 2px;
+    right: 20px;
+    display: inline-block;
+    border-radius: 6px 0 0 6px;
+    padding-left: 8px;
+    padding-right: 2px;
+    opacity: 0.6;
     font-size: 12px;
     line-height: 12px;
-    margin: -12px 0 0 0;
-    color: #999;
+    color: #000;
+    background-color: #FFF;
     white-space: nowrap;
-    z-index: 100;
-}
-
-#type-counter span {
-    font-size: 100%;
+    text-align: right;
+    pointer-events: none;
 }
 
 #type-counter .red {
