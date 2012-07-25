@@ -725,7 +725,7 @@ label {
 
 #type-counter {
     position: absolute;
-    bottom: 2px;
+    bottom: 5px;
     right: 20px;
     display: inline-block;
     border-radius: 6px 0 0 6px;
