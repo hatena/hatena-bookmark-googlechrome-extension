@@ -937,6 +937,7 @@ div#tag-container dt {
 #tag-complete-list {
   display: none;
   position: absolute;
+  z-index: 100;
   list-style: none;
   background-color: #fff;
   border: 1px solid #CCC;
