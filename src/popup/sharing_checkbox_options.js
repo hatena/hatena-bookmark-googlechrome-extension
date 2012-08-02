@@ -224,7 +224,7 @@ var sharingOptions = {};
              id: "send_mail"
             ,modelId: "sendMail"
             //,configId: "postMail" // Mail のチェック状態は保持しない?
-            ,name: "post_mail"
+            ,name: "send_mail"
             ,disp_name: "メール"
             ,icon_img_src: "/images/icon-mail.png"
             ,title: "ブックマークしたページを設定で指定したメールアドレスに送信する場合はチェックを入れてください。"
