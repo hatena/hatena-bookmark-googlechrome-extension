@@ -458,7 +458,6 @@ var View = {
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
         get usernameEL()             { return $('#username') },
-        get plusInputs()             { return $('#plus-inputs') },
         get titleText()              { return $('#title-text') },
         get faviconEL()              { return $('#favicon') },
         get form()                   { return $('#form') },
