@@ -458,7 +458,6 @@ var View = {
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
         get usernameEL()             { return $('#username') },
-        get plusInputs()             { return $('#plus-inputs') },
         get titleText()              { return $('#title-text') },
         get faviconEL()              { return $('#favicon') },
         get form()                   { return $('#form') },
@@ -603,10 +602,6 @@ var View = {
             var user = UserManager.user;
             this.usericon.attr('src', user.view.icon);
             this.usernameEL.text(user.name);
-            // TODO 対応する必要あり
-            if ( ! user.plususer ) {
-                this.privateOption.setTooltipId( "option-help-private" );
-            }
             // SharingOptions (共有オプション) に関する部分の初期化
             sharingOptions.initSharingOptions( user, this );
             this.privateClickHandler();
@@ -1129,26 +1124,16 @@ $(document).bind('ready', ready);
     // 処理の度に document から取ってくるようにしている.
 
     var privateOption = View.bookmark.privateOption = {};
-    var tooltipId = void 0;
 
     /** Model に合うように View を変える */
     function makeViewCorrespondToModel( $modelElem ) {
         var $viewElem = $("#private-option-view");
         $viewElem.prop( "checked", $modelElem.val() ? true : false );
     }
-    /** tooltip の ID を設定する (これを設定するとツールチップの表示がなされる) */
-    privateOption.setTooltipId = setTooltipId;
-    function setTooltipId( aTooltipId ) {
-        tooltipId = aTooltipId;
-    }
     /** Model の状態を (外部から) 指定して変更する */
     privateOption.setValue = setValue;
     function setValue( isPrivate ) {
         var $modelElem = $("#private");
-        // ツールチップを表示
-        if ( tooltipId && ! $modelElem.val() && isPrivate ) {
-            View.bookmark.optionHelpTooltipManager.showTooltip( tooltipId );
-        }
         $modelElem.val( isPrivate ? "1" : "" );
         makeViewCorrespondToModel( $modelElem );
         View.bookmark.privateClickHandler(); // sharingOptions に private 状態を伝える
