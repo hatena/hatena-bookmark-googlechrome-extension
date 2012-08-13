@@ -451,9 +451,6 @@ var View = {
     },
     bookmark: {
         get confirmBookmark()        { return $('#confirm-bookmark'); },
-        get postTwitter()            { return $('#post-twitter'); },
-        get postFacebook()           { return $('#post-facebook'); },
-        get postMixiCheck()          { return $('#post-mixi-check'); },
         get container()              { return $('#bookmark-container'); },
         get tab()                    { return $('#bookmark-tab'); },
         get usericon()               { return $('#usericon') },
