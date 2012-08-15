@@ -202,6 +202,13 @@ var createBookmarkList = function(bookmark) {
 
 
 var View = {
+    loginmessage: {
+        get container() { return $('#login-container'); },
+        onshow: function() {
+        },
+        onhide: function() {
+        }
+    },
     search: {
         get container() { return $('#search-container'); },
         get list() { return $('#search-result'); },
@@ -209,19 +216,25 @@ var View = {
         get searchWord() { return $('#search-word'); },
         get wordPreview() { return $('#search-word-preview'); },
         get totalCount() { return $('#search-total-count'); },
+        onshow: function() {
+        },
+        onhide: function() {
+        },
         init: function() {
         },
-        search: function(word) {
+        searchAndDisplay: function( word ) {
+            /*
             if (!UserManager.user) {
                 this.container.hide();
                 $('#login-container').show();
                 return;
             }
-            Config.set('popup.search.lastWord', word);
+            */
+            Config.set( 'popup.search.lastWord', word );
             this.searchWord.focus();
 
             document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
-            ViewManager.show('search');
+            //ViewManager.show('search');
             var list = this.list;
             list.empty();
             if (this.current) {
@@ -276,6 +289,11 @@ var View = {
         get commentToggle()   { return $('#comment-toggle') },
         get commentMessage()   { return $('#comment-message') },
 
+        onshow: function() {
+            this.init();
+        },
+        onhide: function() {
+        },
         init: function() {
             if (this.inited) return;
             var self = this;
@@ -548,11 +566,17 @@ var View = {
                 url: $('#link-canonical').attr('href')
             });
         },
+        onshow: function() {
+            this.init();
+        },
+        onhide: function() {
+        },
         init: function() {
             var user = UserManager.user;
             if (!UserManager.user) {
-               $('#bookmark-edit-container').hide();
-               $('#login-container').show();
+                // TODO error
+                //$('#bookmark-edit-container').hide();
+                //$('#login-container').show();
                 return;
             }
 
@@ -932,23 +956,63 @@ function createUserLink(username) {
 }
 
 var ViewManager = {
+    initialize: function __ViewManager_initialize() {
+    },
+    finalize: function __ViewManager_finalize() {
+    },
+    _currentTab: void 0,
+    _currentViewName: void 0,
+    __changeTab: function ( viewName ) {
+        if ( this._currentTab ) {
+            this._currentTab.removeClass('current');
+            this._currentTab = void 0;
+        }
+        if ( viewName && View[viewName].tab ) {
+            ( this._currentTab = View[viewName].tab ).addClass('current');
+        }
+    },
     show: function (name) {
-        $('#login-container').hide();
-        Object.keys(View).forEach(function(key) {
-            if (key != name) {
-                var current = View[key];
-                current.container.hide();
-                if (current.tab) current.tab.removeClass('current');
-            } else {
-                setTimeout(function() {
-                    var current = View[name];
-                    current.container.show();
-                    Config.set('popup.lastView', name);
-                    if (current.tab) current.tab.addClass('current');
-                    current.init();
-                }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
-            }
-        });
+        if ( this._currentViewName === name ) {
+            return;
+        } else if ( this._currentViewName ) {
+            var currentView = View[this._currentViewName];
+            currentView.onhide();
+            currentView.container.hide();
+            this._currentViewName = void 0;
+        }
+
+        // setTimeout は必要か???
+        // setTimeout(function() {
+        var currentView = View[name];
+        if ( currentView ) {
+            currentView.container.show();
+            Config.set( 'popup.lastView', name );
+            currentView.onshow();
+            this._currentViewName = name;
+        }
+        // }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
+    },
+
+    showBookmarkAddForm: function () {
+        this.__changeTab("bookmark");
+        if ( !UserManager.user ) {
+            this.show('loginmessage');
+        } else {
+            this.show('bookmark');
+        }
+    },
+    showComment: function () {
+        this.__changeTab("comment");
+        this.show("comment");
+    },
+    search: function ( searchWord ) {
+        this.__changeTab("search");
+        if ( !UserManager.user ) {
+            this.show('loginmessage');
+        } else {
+            this.show('search');
+            View.search.searchAndDisplay( searchWord );
+        }
     }
 }
 
@@ -1040,7 +1104,7 @@ var ready = function() {
     });
     // $('a').each(function() { this.target = '_blank' });
     if (request_uri.param('error')) {
-        ViewManager.show('bookmark');
+        ViewManager.showBookmarkAddForm();
         return;
     }
 };
@@ -1269,14 +1333,15 @@ var eulaPage = new Page( "eula" );
 var mainPage = new Page( "main" );
 (function extendMainPage() {
     function onClickBookmarkButton( evt ) {
-        ViewManager.show( "bookmark" );
+        ViewManager.showBookmarkAddForm();
     }
     function onClickCommentButton( evt ) {
-        ViewManager.show( "comment" );
+        ViewManager.showComment();
     }
     function searchFormSubmitHandler( evt ) {
         evt.preventDefault();
-        View.search.search($('#search-word').attr('value'));
+        //View.search.search( $('#search-word').attr('value') );
+        ViewManager.search( $('#search-word').attr('value') );
     }
     var _searchIncD = null;
     function searchIncSearchHandler( evt ) {
@@ -1284,7 +1349,8 @@ var mainPage = new Page( "main" );
         if ( _searchIncD ) _searchIncD.cancel();
         _searchIncD = Deferred.wait(0.2).next(function() {
             _searchIncD = null;
-            View.search.search($('#search-word').attr('value'));
+            //View.search.search($('#search-word').attr('value'));
+            ViewManager.search( $('#search-word').attr('value') );
         });
     }
 
@@ -1313,14 +1379,15 @@ var mainPage = new Page( "main" );
         */
         var lastView = Config.get('popup.lastView');
         if ( lastView === 'bookmark' ) {
-            ViewManager.show('bookmark');
+            ViewManager.showBookmarkAddForm();
         } else {
             var lastWord = Config.get('popup.search.lastWord');
             if ( lastView === 'search' && lastWord ) {
                 document.getElementById('search-word').value = lastWord;
-                View.search.search( $('#search-word').attr('value') );
+                //View.search.search( $('#search-word').attr('value') );
+                ViewManager.search( $('#search-word').attr('value') );
             } else {
-                ViewManager.show('comment');
+                ViewManager.showComment();
             }
         }
     };
