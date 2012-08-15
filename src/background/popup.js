@@ -174,21 +174,6 @@ function formSubmitHandler(ev) {
     return false;
 }
 
-function searchFormSubmitHandler(ev) {
-    View.search.search($('#search-word').attr('value'));
-    return false;
-}
-
-var _searchIncD = null;
-function searchIncSearchHandler(ev) {
-    if (_searchIncD) _searchIncD.cancel();
-    _searchIncD = Deferred.wait(0.2).next(function() {
-        _searchIncD = null;
-        View.search.search($('#search-word').attr('value'));
-    });
-    return false;
-}
-
 var E = Utils.createElementSimply;
 
 var createBookmarkList = function(bookmark) {
@@ -978,18 +963,6 @@ if (popupMode) {
 }
 */
 
-var eulaAccept = function() {
-    localStorage.eula = true;
-    UserManager.loginWithRetry(15 * 1000);
-    $('#eula').hide();
-    setTimeout(function() {
-        ready();
-        setTimeout(function() {
-            $('#main').show();
-        }, 20);
-    }, 1000);
-}
-
 /*
 var setWindowSize = function(w, h) {
     document.getElementById('search-container').style.maxHeight = '' + h + 'px';
@@ -1000,17 +973,8 @@ var setWindowSize = function(w, h) {
 }
 */
 
-var ready = function() {
-    if (!localStorage.eula) {
-        $('#main').hide();
-        // 何故かレンダリングされないタイミングがあるのでずらす
-        setTimeout(function() {
-            $('#eula').show();
-        }, 20);
-        return;
-    }
-
-    if (window.popupMode) {
+function changePopupWindowWidthAppropriately() {
+    if ( window.popupMode ) {
         if (request_uri.param('error')) {
             //
         } else {
@@ -1041,7 +1005,9 @@ var ready = function() {
             */
         }
     }
+}
 
+var ready = function() {
     // 確認ポップアップを出力するようなイベントのためのリスナ
     $("#delete-button").bind( "click", function ( evt ) {
         var id = evt.target.id;
@@ -1066,22 +1032,6 @@ var ready = function() {
         return false;
     } );
 
-    var user = UserManager.user;
-    if (user) {
-        var hicon = $('#header-usericon');
-        hicon.append(E('img', {
-            title: user.name,
-            alt: user.name,
-            src: user.view.icon,
-            width: 16,
-            height: 16,
-        }));
-        hicon.show();
-    }
-    $('#search-form').bind('submit', searchFormSubmitHandler);
-    if (Config.get('popup.search.incsearch')) {
-        $('#search-word').bind('keyup', searchIncSearchHandler);
-    }
     $('#image-detect-container-list img').live('click', function() {
         View.bookmark.imageSelect(this);
     });
@@ -1092,15 +1042,6 @@ var ready = function() {
     if (request_uri.param('error')) {
         ViewManager.show('bookmark');
         return;
-    }
-
-    if (Config.get('popup.lastView') == 'bookmark') {
-        ViewManager.show('bookmark');
-    } else if (Config.get('popup.lastView') == 'search' && Config.get('popup.search.lastWord')) {
-        document.getElementById('search-word').value = Config.get('popup.search.lastWord');
-        View.search.search($('#search-word').attr('value'));
-    } else {
-        ViewManager.show('comment');
     }
 };
 
@@ -1197,4 +1138,197 @@ $(document).bind('ready', ready);
             $(document).bind( "click", onClickDocument );
         }, 4 );
     }
+}).call( this );
+
+
+
+$(document).bind( "ready", function onready() {
+    $(document).unbind( "ready", onready );
+    changePopupWindowWidthAppropriately();
+    pageManager.initialize();
+} );
+$(window).bind( "unload", function onunload() {
+    $(window).unbind( "unload", onunload );
+    pageManager.finalize();
+} );
+
+var pageManager;
+(function definePageManagerObject() {
+    pageManager = {};
+    pageManager.initialize = pageManager_initialize;
+    pageManager.finalize   = pageManager_finalize;
+    pageManager.showEulaPage = pageManager_showEulaPage;
+    pageManager.showMainPage = pageManager_showMainPage;
+
+    var currentPage = null;
+    var pages = null;
+    function pageManager_initialize() {
+        pages = [ eulaPage, mainPage ];
+        pages.forEach( function ( elem ) { elem.initialize() } );
+        console.debug( "initialize pageManager...");
+
+        !localStorage.eula ? pageManager_showEulaPage()
+                           : pageManager_showMainPage();
+    }
+    function pageManager_finalize() {
+        _hideCurrentPage();
+        pages.forEach( function ( elem ) { elem.finalize() } );
+        pages = null;
+        console.debug( "finalize pageManager...");
+
+        // 同意をリセットする; テスト用
+        //localStorage.removeItem( "eula" );
+    }
+    function pageManager_showEulaPage() {
+        _showPage( eulaPage );
+    }
+    function pageManager_showMainPage() {
+        _showPage( mainPage );
+    }
+    function _showPage( page ) {
+        if ( currentPage === page ) return;
+        if ( currentPage ) {
+            currentPage.hide();
+            currentPage = null;
+        }
+        page.show();
+        currentPage = page;
+    }
+    function _hideCurrentPage() {
+        if ( currentPage ) currentPage.hide();
+        currentPage = null;
+    }
+}).call( this );
+
+var Page;
+(function definePageClass() {
+    Page = _Page;
+    Page.prototype.initialize = _Page_initialize;
+    Page.prototype.finalize   = _Page_finalize;
+    Page.prototype.show = _Page_show;
+    Page.prototype.hide = _Page_hide;
+
+    function _Page( pageElemId ) {
+        this._pageElemId = pageElemId;
+        this._$elem = null;
+    }
+    function _Page_initialize() {
+        this._$elem = $('#'+this._pageElemId);
+        this._$elem.hide();
+    }
+    function _Page_finalize() {
+        this._$elem.hide();
+        this._$elem = null;
+        delete this.onshow;
+        delete this.onhide;
+    }
+    function _Page_show() {
+        if ( this.onshow ) this.onshow();
+        this._$elem.show();
+    }
+    function _Page_hide() {
+        if ( this.onhide ) this.onhide();
+        this._$elem.hide();
+    }
+}).call( this );
+
+var eulaPage = new Page( "eula" );
+(function extendEulaPageObject() {
+    function eulaAccept() {
+        localStorage.eula = "accepted";
+        UserManager.loginWithRetry(15 * 1000);
+        // TODO コメント削除
+        /*
+        $('#eula').hide();
+        setTimeout(function() {
+            ready();
+            setTimeout(function() {
+                $('#main').show();
+            }, 20);
+        }, 1000);
+        */
+        pageManager.showMainPage();
+    }
+    function onClickAcceptButton( evt ) {
+        eulaAccept();
+    }
+    function onClickNotAcceptButton( evt ) {
+        // TODO closeWin するときの後処理
+        closeWin();
+    }
+    eulaPage.onshow = function eulaPage_onshow() {
+        $("#eula-accept-button-ok").bind( "click", onClickAcceptButton );
+        $("#eula-accept-button-ng").bind( "click", onClickNotAcceptButton );
+    };
+    eulaPage.onhide = function eulaPage_onshow() {
+        $("#eula-accept-button-ok").unbind( "click", onClickAcceptButton );
+        $("#eula-accept-button-ng").unbind( "click", onClickNotAcceptButton );
+    };
+}).call( this );
+
+var mainPage = new Page( "main" );
+(function extendMainPage() {
+    function onClickBookmarkButton( evt ) {
+        ViewManager.show( "bookmark" );
+    }
+    function onClickCommentButton( evt ) {
+        ViewManager.show( "comment" );
+    }
+    function searchFormSubmitHandler( evt ) {
+        evt.preventDefault();
+        View.search.search($('#search-word').attr('value'));
+    }
+    var _searchIncD = null;
+    function searchIncSearchHandler( evt ) {
+        evt.preventDefault();
+        if ( _searchIncD ) _searchIncD.cancel();
+        _searchIncD = Deferred.wait(0.2).next(function() {
+            _searchIncD = null;
+            View.search.search($('#search-word').attr('value'));
+        });
+    }
+
+    mainPage.onshow = function mainPage_onshow() {
+        $("#bookmark-tab").bind( "click", onClickBookmarkButton );
+        $("#comment-tab").bind( "click", onClickCommentButton );
+        $('#search-form').bind( "submit", searchFormSubmitHandler );
+        if ( Config.get('popup.search.incsearch') ) {
+            $('#search-word').bind( "keyup", searchIncSearchHandler );
+        }
+
+        // これはもう要らなさそう
+        /*
+        var user = UserManager.user;
+        if ( user ) {
+            var hicon = $('#header-usericon');
+            hicon.append(E('img', {
+                title: user.name,
+                alt: user.name,
+                src: user.view.icon,
+                width: 16,
+                height: 16,
+            }));
+            hicon.show();
+        }
+        */
+        var lastView = Config.get('popup.lastView');
+        if ( lastView === 'bookmark' ) {
+            ViewManager.show('bookmark');
+        } else {
+            var lastWord = Config.get('popup.search.lastWord');
+            if ( lastView === 'search' && lastWord ) {
+                document.getElementById('search-word').value = lastWord;
+                View.search.search( $('#search-word').attr('value') );
+            } else {
+                ViewManager.show('comment');
+            }
+        }
+    };
+    mainPage.onhide = function mainPage_onhide() {
+        $("#bookmark-tab").unbind( "click", onClickBookmarkButton );
+        $("#comment-tab").unbind( "click", onClickCommentButton );
+        $('#search-form').unbind( "submit", searchFormSubmitHandler );
+        // bind してなくても削除処理をする
+        $('#search-word').unbind( "keyup", searchIncSearchHandler );
+    };
 }).call( this );

@@ -85,14 +85,17 @@
 
     * （2009年11月30日作成）
   </pre></blockquote>
-  <p class="eula-accept"><input type="button" onclick="eulaAccept();return false;" value="同意する" /> <input type="button" onclick="closeWin();return false;" value="同意しない" /></p>
+  <p class="eula-accept">
+    <input type="button" value="同意する" id="eula-accept-button-ok" />
+    <input type="button" value="同意しない" id="eula-accept-button-ng" />
+  </p>
 </div>
 <div id="main">
   <div id="header">
     <div id="header-left">
       <ul class="tab-ui">
-        <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
-        <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
+        <li id="bookmark-tab">ブックマークする</li>
+        <li id="comment-tab">コメント</li>
         <li class="tab-link">
         </li>
       </ul>
