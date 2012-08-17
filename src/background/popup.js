@@ -294,10 +294,15 @@ var View = {
         // --- public methods ---
         onshow: function() {
             this.__init();
+            $("#comment-toggle").bind( "click", this.__listeners.onClickNoCommentToggleButton );
         },
         onhide: function() {
+            $("#comment-toggle").unbind( "click", this.__listeners.onClickNoCommentToggleButton );
         },
         // --- private methods ---
+        __listeners: {
+            onClickNoCommentToggleButton: function ( evt ) { View.comment.__toggleNoComment() }
+        },
         __init: function() {
             if (this.inited) return;
             var self = this;
@@ -490,11 +495,48 @@ var View = {
         },
         // --- public methods ---
         onshow: function() {
+            this.__addListeners();
             this.__init();
         },
         onhide: function() {
+            this.__removeListeners();
         },
         // --- private methods ---
+        __listeners: {
+            onClickImgDetectClose: function ( evt ) { View.bookmark.__imageDetectClose() },
+            onClickImgCurrentContainer: function ( evt ) { View.bookmark.__imageDetect() },
+            onClickCanonical: function ( evt ) { View.bookmark.__canonicalClick() },
+            onClickTitleEditToggleButton: function ( evt ) { View.bookmark.__titleEditToggle() },
+            onSubmitForm: function ( evt ) {
+                formSubmitHandler( evt.currentTarget );
+                evt.preventDefault();
+            },
+            onClickDeleteButton: function ( evt ) {
+                var id = evt.target.id;
+                var msg = "このブックマークを削除します。 よろしいですか?";
+                confirmWithCallback( id, msg, deleteBookmark );
+            }
+        },
+        __addListeners: function () {
+            var ll = this.__listeners;
+            $("#image-detect-container-close-button").bind( "click", ll.onClickImgDetectClose );
+            $("#image-current-container").bind( "click", ll.onClickImgCurrentContainer );
+            $("#canonical-tips-button").bind( "click", ll.onClickCanonical );
+            $("#title-editable-toggle").bind( "click", ll.onClickTitleEditToggleButton );
+            $("#delete-button").bind( "click", ll.onClickDeleteButton );
+            $("#form").bind( "submit", ll.onSubmitForm );
+            this.privateOption.setEventListener();
+        },
+        __removeListeners: function () {
+            var ll = this.__listeners;
+            $("#image-detect-container-close-button").unbind( "click", ll.onClickImgDetectClose );
+            $("#image-current-container").unbind( "click", ll.onClickImgCurrentContainer );
+            $("#canonical-tips-button").unbind( "click", ll.onClickCanonical );
+            $("#title-editable-toggle").unbind( "click", ll.onClickTitleEditToggleButton );
+            $("#delete-button").unbind( "click", ll.onClickDeleteButton );
+            $("#form").unbind( "submit", ll.onSubmitForm );
+            this.privateOption.unsetEventListener();
+        },
         __init: function() {
             var user = UserManager.user;
             if (!UserManager.user) {
@@ -594,8 +636,11 @@ var View = {
             });
         },
         __clearView: function() {
+            this.__removeListeners();
             this.container.empty();
-            this.container.append(this.defaultHTML);
+            this.container.append( this.defaultHTML );
+            this.defaultHTML = void 0;
+            this.__addListeners();
         },
         __loadByInformation: function(info) {
             if (this.lastLoadedURL && this.lastLoadedURL != info.url) {
@@ -606,7 +651,7 @@ var View = {
             var self = this;
             this.lastLoadedURL = info.url;
             if (!this.defaultHTML) {
-                this.defaultHTML = $(this.container.get(0)).clone(true);
+                this.defaultHTML = $(this.container.get(0)).clone(false);
                 this.images = null;
                 this.selectedImage = null;
                 this.currentEntry = null;
@@ -1081,13 +1126,6 @@ function changePopupWindowWidthAppropriately() {
 }
 
 var ready = function() {
-    // 確認ポップアップを出力するようなイベントのためのリスナ
-    $("#delete-button").bind( "click", function ( evt ) {
-        var id = evt.target.id;
-        var msg = "このブックマークを削除します。 よろしいですか?";
-        confirmWithCallback( id, msg, deleteBookmark );
-    } );
-
     // bookmark view におけるタグ一覧のタグクリックのリスナ
     $('dd span.tag').live( 'click', function() {
         // TODO この関数は View.bookmark の中で管理すべき
@@ -1137,6 +1175,8 @@ $(document).bind('ready', ready);
     // 処理の度に document から取ってくるようにしている.
 
     var privateOption = View.bookmark.privateOption = {};
+    privateOption.setEventListener = _privateOption_setEventListener;
+    privateOption.unsetEventListener = _privateOption_unsetEventListener;
 
     /** Model に合うように View を変える */
     function makeViewCorrespondToModel( $modelElem ) {
@@ -1156,14 +1196,13 @@ $(document).bind('ready', ready);
         var $modelElem = $("#private");
         setValue( this.checked );
     }
-    /** 初期化 */
-    function init() {
-        $(document).unbind( "ready", init );
-        var $viewElem = $("#private-option-view");
-        $viewElem.bind( "change", onChangeView );
+    function _privateOption_setEventListener() {
+        $("#private-option-view").bind( "change", onChangeView );
         makeViewCorrespondToModel( $("#private") );
     }
-    $(document).bind( "ready", init );
+    function _privateOption_unsetEventListener() {
+        $("#private-option-view").unbind( "change", onChangeView );
+    }
 }).call( this );
 
 /** View.bookmark.optionHelpTooltipManager

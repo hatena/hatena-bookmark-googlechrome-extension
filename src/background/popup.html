@@ -142,8 +142,7 @@
     <div id="bookmark-message" class="none"></div>
     <div id="bookmark-canonical" class="none">
       <div class="table-row">
-         <!-- TODO View.bookmark 内でイベントリスナの登録を行う -->
-         <div class="table-left" id="canonical-tips">このページには別のURLが提示されています。</div><div class="table-right"><input type="button" onclick="View.bookmark.__canonicalClick();" value=" 以下の URL に変更 " /></div>
+         <div class="table-left" id="canonical-tips">このページには別のURLが提示されています。</div><div class="table-right"><input type="button" id="canonical-tips-button" value=" 以下の URL に変更 " /></div>
       </div>
       <div class="table-row">
         <div class="table-left"><a id="link-canonical"></a></div><div class="table-right"><img src="/images/page.gif"> <a id="canonical-users"></a></div>
@@ -157,8 +156,7 @@
 
     <div id="image-detect-container" class="none">
       <div id="image-detect-image-container">
-      <!-- TODO イベントリスナの追加は View.bookmark の中で行う -->
-      <img onclick="View.bookmark.__imageDetectClose();" src="/images/close.gif">
+      <img id="image-detect-container-close-button" src="/images/close.gif">
       </div>
       <div id="image-detect-container-list">
       </div>
@@ -168,7 +166,7 @@
       </div>
     </div>
 
-    <form id="form" onsubmit="formSubmitHandler(this);return false;">
+    <form id="form">
     <div id="edit">
       <div class="table-row">
         <div class="table-left">
@@ -177,8 +175,7 @@
 
               <div style="width: 100%; display: table-cell;">
                 <span id="title-toggle-button" class="edit-cell">
-                  <!-- TODO View.bookmark の中でイベントリスナの追加 -->
-                  <img onclick="View.bookmark.__titleEditToggle();" src="/images/edit.png" class="loaded" id="title-editable-toggle" title='タイトルを変更する'>
+                  <img src="/images/edit.png" class="loaded" id="title-editable-toggle" title='タイトルを変更する'>
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
@@ -214,8 +211,7 @@
 
         <div id="image-table-container" class="table-right none">
           <div id="image-container">
-            <!-- TODO このイベントリスナは View.bookmark 内で追加する -->
-            <div id="image-current-container" onclick="View.bookmark.__imageDetect();" ><img id="current-image" src="/images/noimages.png" /></div>
+            <div id="image-current-container"><img id="current-image" src="/images/noimages.png" /></div>
           </div>
         </div>
       </div>
@@ -358,8 +354,7 @@
 
     <div id="comment-title-right">
       <div id="comment-infos">
-        <!-- TODO イベントリスナの追加は View.comment の中で行う -->
-        <img onclick="View.comment.__toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
+        <img id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
       </div>
     </div>
 
