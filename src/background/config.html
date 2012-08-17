@@ -14,7 +14,6 @@
 <link rel="stylesheet" href="config.css" type="text/css" />
 </head>
 <body style="display:none">
-<form onsubmit="return false;">
   <h1>はてなブックマーク設定</h1>
   <h2>全般</h2>
   <div class="notice">※設定は自動で保存されます</div>
@@ -114,18 +113,16 @@
       <th>初期設定に戻す</th>
       <td>
         <p class="notice">※設定項目全般をデフォルト値に戻します</p>
-        <input type="button" onclick="resetAll();" value="初期設定に戻す" />
+        <input type="button" id="config-reset-button" value="初期設定に戻す" />
       </td>
     </tr>
     <tr id="init-db">
       <th>データの同期</th>
       <td>
         <p class="notice">※ユーザー 『<span id="db-username"></span>』 のはてなブックマークのデータを再同期します。Web 上のはてなブックマークとのデータに差違が出た場合にご利用ください。</p>
-        <input type="button" onclick="resetDB();" value="再同期する" />
+        <input type="button" id="db-reset-button" value="再同期する" />
       </td>
     </tr>
   </table>
-
-</form>
 </body>
 </html>
