@@ -115,11 +115,12 @@ function getInformation() {
 }
 
 function deleteBookmark() {
-    getInformation().next(function(info) {
-        var url = info.url;
-        UserManager.user.deleteBookmark(url);
-        closeWin();
-    });
+    var url = View.bookmark.lastLoadedURL;
+    if ( !url ) {
+        throw new Error("Bookmark View に表示されているエントリの URL が不明です");
+    }
+    UserManager.user.deleteBookmark( url );
+    closeWin();
 }
 
 // 指定した id のボタンの後ろに確認ポップアップの要素を追加する
