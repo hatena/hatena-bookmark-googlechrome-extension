@@ -1,4 +1,5 @@
 {
+  "manifest_version": 2,
   "default_locale": "ja",
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
@@ -18,8 +19,8 @@
   },
   "browser_action": {
     "default_icon": "images/chrome-b-plus.png",
-    "default_title": "Hatena Bookmark"
-    ,"popup": "background/popup.html"
+    "default_title": "Hatena Bookmark",
+    "default_popup": "background/popup.html"
   },
   "content_scripts": [
     {
@@ -77,5 +78,7 @@
     }
   ],
   "options_page": "background/config.html",
-  "background_page": "background/background.html"
+  "background": {
+    "page": "background/background.html"
+  }
 }
