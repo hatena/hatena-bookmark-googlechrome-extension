@@ -27,7 +27,7 @@ if (popupMode) {
             delete BG.popupWinInfo;
         delete window.currentWin;
     });
-    chrome.self.onConnect.addListener(function(port, name) {
+    chrome.extension.onConnect.addListener(function(port, name) {
         port.onMessage.addListener(function(info, con) {
             if (info.message == 'popup-reload') {
                 if (info.data.url) {
