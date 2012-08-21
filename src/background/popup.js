@@ -224,18 +224,10 @@ var View = {
         get __totalCount() { return $('#search-total-count'); },
         /** public */
         searchAndDisplay: function( word ) {
-            /*
-            if (!UserManager.user) {
-                this.container.hide();
-                $('#login-container').show();
-                return;
-            }
-            */
             Config.set( 'popup.search.lastWord', word );
             this.__searchWord.focus();
 
             document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
-            //ViewManager.show('search');
             var list = this.__list;
             list.empty();
             if (this.current) {
@@ -541,8 +533,6 @@ var View = {
             var user = UserManager.user;
             if (!UserManager.user) {
                 // TODO error
-                //$('#bookmark-edit-container').hide();
-                //$('#login-container').show();
                 return;
             }
 
@@ -1279,7 +1269,6 @@ var pageManager;
     function pageManager_initialize() {
         pages = [ eulaPage, mainPage ];
         pages.forEach( function ( elem ) { elem.initialize() } );
-        console.debug( "initialize pageManager...");
 
         !localStorage.eula ? pageManager_showEulaPage()
                            : pageManager_showMainPage();
@@ -1288,10 +1277,6 @@ var pageManager;
         _hideCurrentPage();
         pages.forEach( function ( elem ) { elem.finalize() } );
         pages = null;
-        console.debug( "finalize pageManager...");
-
-        // 同意をリセットする; テスト用
-        //localStorage.removeItem( "eula" );
     }
     function pageManager_showEulaPage() {
         _showPage( eulaPage );
@@ -1351,16 +1336,6 @@ var eulaPage = new Page( "eula" );
     function eulaAccept() {
         localStorage.eula = "accepted";
         UserManager.loginWithRetry(15 * 1000);
-        // TODO コメント削除
-        /*
-        $('#eula').hide();
-        setTimeout(function() {
-            ready();
-            setTimeout(function() {
-                $('#main').show();
-            }, 20);
-        }, 1000);
-        */
         pageManager.showMainPage();
     }
     function onClickAcceptButton( evt ) {
@@ -1390,7 +1365,6 @@ var mainPage = new Page( "main" );
     }
     function searchFormSubmitHandler( evt ) {
         evt.preventDefault();
-        //View.search.search( $('#search-word').attr('value') );
         ViewManager.search( $('#search-word').attr('value') );
     }
     var _searchIncD = null;
@@ -1399,7 +1373,6 @@ var mainPage = new Page( "main" );
         if ( _searchIncD ) _searchIncD.cancel();
         _searchIncD = Deferred.wait(0.2).next(function() {
             _searchIncD = null;
-            //View.search.search($('#search-word').attr('value'));
             ViewManager.search( $('#search-word').attr('value') );
         });
     }
@@ -1412,21 +1385,6 @@ var mainPage = new Page( "main" );
             $('#search-word').bind( "keyup", searchIncSearchHandler );
         }
 
-        // これはもう要らなさそう
-        /*
-        var user = UserManager.user;
-        if ( user ) {
-            var hicon = $('#header-usericon');
-            hicon.append(E('img', {
-                title: user.name,
-                alt: user.name,
-                src: user.view.icon,
-                width: 16,
-                height: 16,
-            }));
-            hicon.show();
-        }
-        */
         var lastView = Config.get('popup.lastView');
         if ( lastView === 'bookmark' ) {
             ViewManager.showBookmarkAddForm();
@@ -1434,7 +1392,6 @@ var mainPage = new Page( "main" );
             var lastWord = Config.get('popup.search.lastWord');
             if ( lastView === 'search' && lastWord ) {
                 document.getElementById('search-word').value = lastWord;
-                //View.search.search( $('#search-word').attr('value') );
                 ViewManager.search( $('#search-word').attr('value') );
             } else {
                 ViewManager.showComment();
