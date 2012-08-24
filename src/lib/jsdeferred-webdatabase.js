@@ -3,7 +3,6 @@
     Deferred.define(this);
 
     var $D = Deferred;
-    var $F = function() {};
     var $K = function(x) { return function() { return x } };
     var Database, Transaction, SQL, Model;
 
