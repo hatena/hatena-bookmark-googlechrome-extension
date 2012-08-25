@@ -1,14 +1,32 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript" src="../lib/jsloader.js"></script>
-    <script type="text/javascript" src="test_starter.js"></script>
-    <link rel="stylesheet" href="lib/testsuite.css" type="text/css" media="screen" />
-  </head>
-  <body>
-  <h1 style="position:fixed:top:0;">Q</h1>
-  <h2 id="userAgent"></h2>
-    <ol id="tests">
-    </ol>
-    <div id="main"></div>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>はてなブックマーク Google Chrome 拡張 - Tests</title>
+  <link rel="stylesheet" href="submodule-qunit/qunit/qunit.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <script src="../lib/jquery-1.7.2.js"></script>
+  <script src="../lib/jsdeferred.js"></script>
+  <script src="../lib/jsdeferred.jquery.js"></script>
+  <script src="../lib/jsdeferred.googlechrome.js"></script>
+  <script src="../lib/jsdeferred-webdatabase.js"></script>
+  <script src="../lib/02-Utils.js"></script>
+  <script src="../lib/03-Timer.js"></script>
+  <script src="../lib/03-URI.js"></script>
+  <script src="../lib/03-ExpireCache.js"></script>
+  <script src="../lib/04-HTTPCache.js"></script>
+  <script src="../lib/05-Config.js"></script>
+  <script src="../lib/10-SiteinfoManager.js"></script>
+  <script src="../lib/15-UserManager.js"></script>
+  <script src="../lib/30-Model.js"></script>
+  <script src="../lib/40-Sync.js"></script>
+  <script src="../lib/60-TagCompleter.js"></script>
+
+  <script src="submodule-qunit/qunit/qunit.js"></script>
+  <script src="test.js"></script>
+  <script src="test-http-cache.js"></script>
+  <script src="test-tagcompleter.js"></script>
+</body>
 </html>
