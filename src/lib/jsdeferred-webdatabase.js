@@ -677,7 +677,6 @@
                             .next( klass.__afterCreateTable );
             },
             __afterCreateTable: function(r) {
-                console.log( "debugger" );
                 if (!this._infoCache) {
                     return klass.__updateInfo().next($K(r));
                 } else {
