@@ -3,7 +3,6 @@
     Deferred.define(this);
 
     var $D = Deferred;
-    var $F = function() {};
     var $K = function(x) { return function() { return x } };
     var Database, Transaction, SQL, Model;
 
@@ -593,20 +592,17 @@
                     }
                 });
             },
-            getInfo: function(name) {
-                if (klass._infoCache) {
-                    return klass._infoCache[name];
-                }
-                return;
+            __getInfo: function ( key ) {
+                return ( klass._infoCache ? klass._infoCache[key] : void 0 );
             },
             isTableCreated: function() {
-                if (klass.getInfo(name)) {
+                if ( klass.__getInfo("name") ) {
                     return $D.next(function() {
                         return true;
                     });
                 } else {
-                    return klass.updateInfo().next(function() {
-                        return klass.getInfo(name) ? true : false;
+                    return klass.__updateInfo().next(function() {
+                        return klass.__getInfo("name") ? true : false;
                     });
                 }
             },
@@ -677,17 +673,17 @@
                 return klass.execute(sql.deleteSql(klass.table));
             },
             createTable: function() {
-                var d = klass.execute(sql.create(klass.table, klass.fields));
-                return d.next(klass.afterCreateTable);
+                return klass.execute( sql.create(klass.table,klass.fields) )
+                            .next( klass.__afterCreateTable );
             },
-            afterCreateTable: function(r) {
+            __afterCreateTable: function(r) {
                 if (!this._infoCache) {
-                    return klass.updateInfo().next($K(r));
+                    return klass.__updateInfo().next($K(r));
                 } else {
                     return $D.next($K(r));
                 }
             },
-            updateInfo: function() {
+            __updateInfo: function() {
                 return klass.execute(sql.select('sqlite_master', '*', {
                     type: 'table',
                     name: klass.table
