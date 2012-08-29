@@ -272,7 +272,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 });
 */
 
-chrome.self.onConnect.addListener(function(port, name) {
+chrome.extension.onConnect.addListener(function(port, name) {
   port.onMessage.addListener(function(info, con) {
       if (!localStorage.eula) return;
 

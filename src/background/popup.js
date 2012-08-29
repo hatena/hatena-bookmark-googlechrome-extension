@@ -27,7 +27,7 @@ if (popupMode) {
             delete BG.popupWinInfo;
         delete window.currentWin;
     });
-    chrome.self.onConnect.addListener(function(port, name) {
+    chrome.extension.onConnect.addListener(function(port, name) {
         port.onMessage.addListener(function(info, con) {
             if (info.message == 'popup-reload') {
                 if (info.data.url) {
@@ -115,11 +115,12 @@ function getInformation() {
 }
 
 function deleteBookmark() {
-    getInformation().next(function(info) {
-        var url = info.url;
-        UserManager.user.deleteBookmark(url);
-        closeWin();
-    });
+    var url = View.bookmark.lastLoadedURL;
+    if ( !url ) {
+        throw new Error("Bookmark View に表示されているエントリの URL が不明です");
+    }
+    UserManager.user.deleteBookmark( url );
+    closeWin();
 }
 
 // 指定した id のボタンの後ろに確認ポップアップの要素を追加する
@@ -159,11 +160,12 @@ function confirmWithCallback( id, msg, callback ) {
 }
 
 function formSubmitHandler(ev) {
+    // TODO この関数は View.bookmark の中で管理すべき
     var form = $('#form');
 
     var user = UserManager.user;
     var url = form.serialize();
-    url = View.bookmark.setSubmitData(url);
+    url = View.bookmark.__setSubmitData(url);
 
     url = url.replace(new RegExp('\\+', 'g'), '%20'); // for title
     console.log(url);
@@ -171,21 +173,6 @@ function formSubmitHandler(ev) {
     setTimeout(function() {
         closeWin();
     }, 0);
-    return false;
-}
-
-function searchFormSubmitHandler(ev) {
-    View.search.search($('#search-word').attr('value'));
-    return false;
-}
-
-var _searchIncD = null;
-function searchIncSearchHandler(ev) {
-    if (_searchIncD) _searchIncD.cancel();
-    _searchIncD = Deferred.wait(0.2).next(function() {
-        _searchIncD = null;
-        View.search.search($('#search-word').attr('value'));
-    });
     return false;
 }
 
@@ -217,27 +204,32 @@ var createBookmarkList = function(bookmark) {
 
 
 var View = {
+    loginmessage: {
+        get container() { return $('#login-container'); },
+        onshow: function() {
+        },
+        onhide: function() {
+        }
+    },
     search: {
         get container() { return $('#search-container'); },
-        get list() { return $('#search-result'); },
         get tab() { return $('#search-tab'); },
-        get searchWord() { return $('#search-word'); },
-        get wordPreview() { return $('#search-word-preview'); },
-        get totalCount() { return $('#search-total-count'); },
-        init: function() {
+        onshow: function() {
         },
-        search: function(word) {
-            if (!UserManager.user) {
-                this.container.hide();
-                $('#login-container').show();
-                return;
-            }
-            Config.set('popup.search.lastWord', word);
-            this.searchWord.focus();
+        onhide: function() {
+        },
+        /** private */
+        get __list() { return $('#search-result'); },
+        get __searchWord() { return $('#search-word'); },
+        get __wordPreview() { return $('#search-word-preview'); },
+        get __totalCount() { return $('#search-total-count'); },
+        /** public */
+        searchAndDisplay: function( word ) {
+            Config.set( 'popup.search.lastWord', word );
+            this.__searchWord.focus();
 
             document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
-            ViewManager.show('search');
-            var list = this.list;
+            var list = this.__list;
             list.empty();
             if (this.current) {
                 this.current.cancel();
@@ -246,8 +238,8 @@ var View = {
             var self = this;
             var start = 0;
 
-            self.wordPreview.empty();
-            self.wordPreview.append(E('span',{},  E('em', {}, word), 'での検索結果'));
+            self.__wordPreview.empty();
+            self.__wordPreview.append(E('span',{},  E('em', {}, word), 'での検索結果'));
 
             var max = Config.get('popup.search.result.threshold');
             var el = list.get(0);
@@ -266,7 +258,7 @@ var View = {
                         // m.appendTo(list);
                     });
                     var rLen = el.children.length;
-                    self.totalCount.text(rLen >= (max-1) ? sprintf('%d件以上', max) : sprintf('%d件', rLen));
+                    self.__totalCount.text(rLen >= (max-1) ? sprintf('%d件以上', max) : sprintf('%d件', rLen));
                     start += 100;
                     if (start < max && !(rLen >= (max-1))) {
                         loop();
@@ -279,67 +271,80 @@ var View = {
         }
     },
     comment: {
+        // --- public accessors ---
         get container()       { return $('#comment-container') },
-        get list()            { return $('#comment-list') },
         get tab()             { return $('#comment-tab') },
-        get title()           { return $('#comment-title') },
-        get titleContainer()  { return $('#comment-title-container') },
-        get starLoadingIcon() { return $('#star-loading-icon') },
-        get commentUsers()    { return $('#comment-users') },
-        get commentCount()    { return $('#comment-count-detail') },
-        get commentInfos()    { return $('#comment-infos') },
-        get commentToggle()   { return $('#comment-toggle') },
-        get commentMessage()   { return $('#comment-message') },
-
-        init: function() {
+        // --- private accessors ---
+        get __list()            { return $('#comment-list') },
+        get __title()           { return $('#comment-title') },
+        get __titleContainer()  { return $('#comment-title-container') },
+        get __starLoadingIcon() { return $('#star-loading-icon') },
+        get __commentUsers()    { return $('#comment-users') },
+        get __commentCount()    { return $('#comment-count-detail') },
+        get __commentInfos()    { return $('#comment-infos') },
+        get __commentToggle()   { return $('#comment-toggle') },
+        get __commentMessage()   { return $('#comment-message') },
+        // --- public methods ---
+        onshow: function() {
+            this.__init();
+            $("#comment-toggle").bind( "click", this.__listeners.onClickNoCommentToggleButton );
+        },
+        onhide: function() {
+            $("#comment-toggle").unbind( "click", this.__listeners.onClickNoCommentToggleButton );
+        },
+        // --- private methods ---
+        __listeners: {
+            onClickNoCommentToggleButton: function ( evt ) { View.comment.__toggleNoComment() }
+        },
+        __init: function() {
             if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
-                self.setTitle(info.title || info.url);
-                self.titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
+                self.__setTitle(info.title || info.url);
+                self.__titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
                 if (info.url.indexOf('http') != 0) {
-                    self.commentMessage.text('表示できるブックマークコメントはありません');
+                    self.__commentMessage.text('表示できるブックマークコメントはありません');
                     return;
                 }
                 HTTPCache.comment.get(info.url).next(function(r) {
                     if (r) {
-                        self.commentMessage.hide();
-                        self.setTitle(r.title);
-                        self.list.empty();
-                        self.list.html('');
-                        self.showComment(r);
+                        self.__commentMessage.hide();
+                        self.__setTitle(r.title);
+                        self.__list.empty();
+                        self.__list.html('');
+                        self.__showComment(r);
                     } else {
-                        self.commentMessage.text('表示できるブックマークコメントはありません');
+                        self.__commentMessage.text('表示できるブックマークコメントはありません');
                     }
                 });
             });
         },
-        setTitle: function(title) {
-            this.title.text(Utils.truncate(title, 60));
-            this.title.attr('title', title);
+        __setTitle: function(title) {
+            this.__title.text(Utils.truncate(title, 60));
+            this.__title.attr('title', title);
         },
-        showNoComment: function() {
-            this.list.removeClass('hide-nocomment');
+        __showNoComment: function() {
+            this.__list.removeClass('hide-nocomment');
             Config.set('popup.commentviewer.togglehide', true);
-            this.commentToggle.attr('src', '/images/comment-viewer-toggle-on.png');
-            this.commentToggle.attr('title', 'コメントがないユーザを非表示');
-            this.commentToggle.attr('alt', 'コメントがないユーザを非表示');
+            this.__commentToggle.attr('src', '/images/comment-viewer-toggle-on.png');
+            this.__commentToggle.attr('title', 'コメントがないユーザを非表示');
+            this.__commentToggle.attr('alt', 'コメントがないユーザを非表示');
         },
-        hideNoComment: function() {
-            this.list.addClass('hide-nocomment');
+        __hideNoComment: function() {
+            this.__list.addClass('hide-nocomment');
             Config.set('popup.commentviewer.togglehide', false);
-            this.commentToggle.attr('src', '/images/comment-viewer-toggle-off.png');
-            this.commentToggle.attr('title', 'すべてのユーザを表示');
-            this.commentToggle.attr('alt', 'すべてのユーザを表示');
+            this.__commentToggle.attr('src', '/images/comment-viewer-toggle-off.png');
+            this.__commentToggle.attr('title', 'すべてのユーザを表示');
+            this.__commentToggle.attr('alt', 'すべてのユーザを表示');
         },
-        toggleNoComment: function() {
-            if (this.list.hasClass('hide-nocomment')) {
-                this.showNoComment();
+        __toggleNoComment: function() {
+            if (this.__list.hasClass('hide-nocomment')) {
+                this.__showNoComment();
             } else {
-                this.hideNoComment();
+                this.__hideNoComment();
             }
         },
-        showComment: function(data) {
+        __showComment: function(data) {
             var eid = data.eid;
             var self = this;
             var bookmarks = data.bookmarks;
@@ -352,23 +357,23 @@ var View = {
 
             if (Config.get('popup.commentviewer.autodetect.enabled')) {
                 if (Config.get('popup.commentviewer.autodetect.threshold') < publicLen) {
-                    self.hideNoComment();
+                    self.__hideNoComment();
                 }
             } else if (!Config.get('popup.commentviewer.togglehide')) {
-                self.hideNoComment();
+                self.__hideNoComment();
             }
 
-            self.commentUsers.text(sprintf('%d %s', data.count, data.count > 1 ? 'users' : 'user'));
-            self.commentUsers.attr('href', data.entry_url);
+            self.__commentUsers.text(sprintf('%d %s', data.count, data.count > 1 ? 'users' : 'user'));
+            self.__commentUsers.attr('href', data.entry_url);
             if (data.count > 3) {
-                self.commentUsers.wrap($('<em/>'));
+                self.__commentUsers.wrap($('<em/>'));
             }
-            self.commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
-            self.commentInfos.show();
+            self.__commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
+            self.__commentInfos.show();
 
             if (publicLen == 0) {
-                self.commentMessage.text('表示できるブックマークコメントはありません');
-                self.commentMessage.show();
+                self.__commentMessage.text('表示できるブックマークコメントはありません');
+                self.__commentMessage.show();
                 this.inited = true;
                 return;
             }
@@ -376,11 +381,11 @@ var View = {
             var i = 0;
             var step = 100;
             var starLoaded = 0;
-            self.starLoadingIcon.show();
+            self.__starLoadingIcon.show();
             var starLoadedCheck = function(entriesLen) {
                 starLoaded++;
                 if (publicLen/step <= starLoaded) {
-                    self.starLoadingIcon.hide();
+                    self.__starLoadingIcon.hide();
                 }
             }
 
@@ -443,57 +448,112 @@ var View = {
                     elements.push(li);
                 }
                 Hatena.Bookmark.Star.loadElements(elements, (n == 0 ? options : null)).next(starLoadedCheck);
-                self.list.append(frag);
+                self.__list.append(frag);
                 return Deferred.wait(0.25);
             });
             this.inited = true;
         }
     },
     bookmark: {
-        get confirmBookmark()        { return $('#confirm-bookmark'); },
-        get postTwitter()            { return $('#post-twitter'); },
-        get postFacebook()           { return $('#post-facebook'); },
-        get postMixiCheck()          { return $('#post-mixi-check'); },
-        get container()              { return $('#bookmark-container'); },
-        get tab()                    { return $('#bookmark-tab'); },
-        get usericon()               { return $('#usericon') },
-        get usernameEL()             { return $('#username') },
-        get titleText()              { return $('#title-text') },
-        get faviconEL()              { return $('#favicon') },
-        get form()                   { return $('#form') },
-        get message()                { return $('#bookmark-message') },
-        get commentEL()              { return $('#comment') },
-        get allTagsContainer()       { return $('#all-tags-container') },
-        get allTags()                { return $('#all-tags') },
-        get recommendTagsContainer() { return $('#recommend-tags-container') },
-        get recommendTags()          { return $('#recommend-tags') },
-        get tagNotice()              { return $('#tag-notice') },
-        get typeCount()              { return $('#type-count') },
-        get port() {
+        // --- public accessors ---
+        get container()                { return $('#bookmark-container'); },
+        get tab()                      { return $('#bookmark-tab'); },
+        // --- private accessors ---
+        get __confirmBookmark()        { return $('#confirm-bookmark'); },
+        get __usericon()               { return $('#usericon') },
+        get __usernameEL()             { return $('#username') },
+        get __titleText()              { return $('#title-text') },
+        get __faviconEL()              { return $('#favicon') },
+        get __form()                   { return $('#form') },
+        get __message()                { return $('#bookmark-message') },
+        get __commentEL()                { return $('#comment') },
+        get __allTagsContainer()       { return $('#all-tags-container') },
+        get __allTags()                { return $('#all-tags') },
+        get __recommendTagsContainer() { return $('#recommend-tags-container') },
+        get __recommendTags()          { return $('#recommend-tags') },
+        get __tagNotice()              { return $('#tag-notice') },
+        get __typeCount()              { return $('#type-count') },
+        get __port() {
             if (!this._port) {
                 var self = this;
                 var _port = chrome.extension.connect();
                 // ToDO もう一段階簡略化できそう
                 _port.onMessage.addListener(function(info, con) {
                     if (info.message == 'bookmarkedit_bridge_recieve')
-                        self.updatePageData(info.data);
+                        self.__updatePageData(info.data);
                 });
                 this._port = _port;
             }
             return this._port;
         },
-        updatePageData: function(data) {
-            if (data.images) {
-                this.setImages(data.images);
-            }
-            if (data.canonical) {
-                this.setCanonical(data.canonical);
-            }
-            if (data.title) {
-                this.setTitle(data.title);
+        // --- public methods ---
+        onshow: function() {
+            this.__addListeners();
+            this.__init();
+        },
+        onhide: function() {
+            this.__removeListeners();
+        },
+        // --- private methods ---
+        __listeners: {
+            onClickImgDetectClose: function ( evt ) { View.bookmark.__imageDetectClose() },
+            onClickImgCurrentContainer: function ( evt ) { View.bookmark.__imageDetect() },
+            onClickCanonical: function ( evt ) { View.bookmark.__canonicalClick() },
+            onClickTitleEditToggleButton: function ( evt ) { View.bookmark.__titleEditToggle() },
+            onSubmitForm: function ( evt ) {
+                formSubmitHandler( evt.currentTarget );
+                evt.preventDefault();
+            },
+            onClickDeleteButton: function ( evt ) {
+                var id = evt.target.id;
+                var msg = "このブックマークを削除します。 よろしいですか?";
+                confirmWithCallback( id, msg, deleteBookmark );
             }
         },
-        setImages: function(images) {
+        __addListeners: function () {
+            var ll = this.__listeners;
+            $("#image-detect-container-close-button").bind( "click", ll.onClickImgDetectClose );
+            $("#image-current-container").bind( "click", ll.onClickImgCurrentContainer );
+            $("#canonical-tips-button").bind( "click", ll.onClickCanonical );
+            $("#title-editable-toggle").bind( "click", ll.onClickTitleEditToggleButton );
+            $("#delete-button").bind( "click", ll.onClickDeleteButton );
+            $("#form").bind( "submit", ll.onSubmitForm );
+            this.privateOption.setEventListener();
+        },
+        __removeListeners: function () {
+            var ll = this.__listeners;
+            $("#image-detect-container-close-button").unbind( "click", ll.onClickImgDetectClose );
+            $("#image-current-container").unbind( "click", ll.onClickImgCurrentContainer );
+            $("#canonical-tips-button").unbind( "click", ll.onClickCanonical );
+            $("#title-editable-toggle").unbind( "click", ll.onClickTitleEditToggleButton );
+            $("#delete-button").unbind( "click", ll.onClickDeleteButton );
+            $("#form").unbind( "submit", ll.onSubmitForm );
+            this.privateOption.unsetEventListener();
+        },
+        __init: function() {
+            var user = UserManager.user;
+            if (!UserManager.user) {
+                // TODO error
+                return;
+            }
+
+            var self = this;
+            getInformation().next(function(info) {
+                self.__loadByInformation(info);
+            });
+        },
+        __updatePageData: function(data) {
+            if (data.images) {
+                this.__setImages(data.images);
+            }
+            if (data.canonical) {
+                this.__setCanonical(data.canonical);
+            }
+            if (data.title) {
+                this.__setTitle(data.title);
+            }
+        },
+        __setImages: function(images) {
             if (this.images) {
                 this.images = this.images.concat(images);
             } else {
@@ -501,7 +561,7 @@ var View = {
             }
             $('#image-table-container').show();
         },
-        setSubmitData: function(data) {
+        __setSubmitData: function(data) {
             var selectedImage = $('#current-image').attr('updated');
             if (selectedImage) {
                 var noImage = selectedImage.indexOf('/images/noimages') != -1;
@@ -520,18 +580,18 @@ var View = {
             }
             return data;
         },
-        imageDetectClose: function() {
+        __imageDetectClose: function() {
             $('#image-detect-container').hide();
         },
-        imageSelect: function(img) {
-            this.updateCurrentImage(img.src);
-            this.imageDetectClose();
+        __imageSelect: function(img) {
+            this.__updateCurrentImage(img.src);
+            this.__imageDetectClose();
         },
-        updateCurrentImage: function(src) {
+        __updateCurrentImage: function(src) {
             $('#current-image').attr('src', src);
             $('#current-image').attr('updated', src);
         },
-        imageDetect: function() {
+        __imageDetect: function() {
             var images = this.images;
             if (images && images.length) {
                 images = $.unique(images.concat(['/images/noimages.png']));
@@ -542,7 +602,7 @@ var View = {
                 $('#image-detect-container').show();
             }
         },
-        setCurrentImage: function(url, lastEditor) {
+        __setCurrentImage: function(url, lastEditor) {
             $('#current-image').attr('src', url);
             if (this.images) {
                 this.images.push(url);
@@ -554,45 +614,35 @@ var View = {
                 show();
             }
         },
-        setCanonical: function(url) {
+        __setCanonical: function(url) {
             $('#link-canonical').attr('href', url).text(Utils.truncate(url, 40)).attr('title', url);
             $('#canonical-users').empty().attr('href', Utils.entryURL(url)).append(
                 $('<img/>').attr('src', Utils.entryImage(url))
             );
             $('#bookmark-canonical').show();
         },
-        canonicalClick: function() {
-            this.loadByInformation({
+        __canonicalClick: function() {
+            this.__loadByInformation({
                 url: $('#link-canonical').attr('href')
             });
         },
-        init: function() {
-            var user = UserManager.user;
-            if (!UserManager.user) {
-               $('#bookmark-edit-container').hide();
-               $('#login-container').show();
-                return;
-            }
-
-            var self = this;
-            getInformation().next(function(info) {
-                self.loadByInformation(info);
-            });
-        },
-        clearView: function() {
+        __clearView: function() {
+            this.__removeListeners();
             this.container.empty();
-            this.container.append(this.defaultHTML);
+            this.container.append( this.defaultHTML );
+            this.defaultHTML = void 0;
+            this.__addListeners();
         },
-        loadByInformation: function(info) {
+        __loadByInformation: function(info) {
             if (this.lastLoadedURL && this.lastLoadedURL != info.url) {
-                this.clearView();
+                this.__clearView();
             } else if (this.lastLoadedURL == info.url) {
                 return;
             }
             var self = this;
             this.lastLoadedURL = info.url;
             if (!this.defaultHTML) {
-                this.defaultHTML = $(this.container.get(0)).clone(true);
+                this.defaultHTML = $(this.container.get(0)).clone(false);
                 this.images = null;
                 this.selectedImage = null;
                 this.currentEntry = null;
@@ -600,22 +650,22 @@ var View = {
             }
 
             var user = UserManager.user;
-            this.usericon.attr('src', user.view.icon);
-            this.usernameEL.text(user.name);
+            this.__usericon.attr('src', user.view.icon);
+            this.__usernameEL.text(user.name);
             // SharingOptions (共有オプション) に関する部分の初期化
             sharingOptions.initSharingOptions( user, this );
             this.privateClickHandler();
 
             if (info.title) {
-                this.setTitle(info.title);
+                this.__setTitle(info.title);
             } else {
-                this.setTitleByURL(info.url);
+                this.__setTitleByURL(info.url);
             }
-            this.faviconEL.attr('src', info.faviconUrl);
+            this.__faviconEL.attr('src', info.faviconUrl);
 
             var url = info.url;
 
-            this.port.postMessage({
+            this.__port.postMessage({
                 message: 'bookmarkedit_bridge_get',
                 data: {
                     url: url,
@@ -625,21 +675,21 @@ var View = {
             var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
             if (lastCommentValueConf && lastCommentValueConf.url == url) {
                 // Config.set('popup.bookmark.lastCommentValue', {});
-                this.commentEL.attr('value', lastCommentValueConf.comment);
+                this.__commentEL.attr('value', lastCommentValueConf.comment);
                 var cLength = lastCommentValueConf.comment.length;
-                this.commentEL.get(0).setSelectionRange(cLength, cLength);
+                this.__commentEL.get(0).setSelectionRange(cLength, cLength);
             }
 
             if (request_uri.param('error')) {
                 $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
                 .removeClass('none');
-                this.commentEL.attr('value', request_uri.param('comment'));
+                this.__commentEL.attr('value', request_uri.param('comment'));
             }
 
             // debug /
             /*
             setTimeout(function() {
-                self.updatePageData({
+                self.__updatePageData({
                     'canonical': 'http://www.hatena.ne.jp/',
                     'images': ['http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-u-hover.gif', 'http://www.hatena.ne.jp/images/badge-d-used-hover.gif'],
                 });
@@ -647,9 +697,9 @@ var View = {
             */
 
             if (!url || info.url.indexOf('http') != 0) {
-                this.form.hide();
-                this.message.text('この URL ははてなブックマークに追加できません');
-                this.message.show();
+                this.__form.hide();
+                this.__message.text('この URL ははてなブックマークに追加できません');
+                this.__message.show();
                 return;
             }
 
@@ -660,29 +710,29 @@ var View = {
                 }
                 canURL = canURL.replace('b.hatena.ne.jp/entry/', '');
                 $('#canonical-tips').text('エントリーページをブックマークしようとしています。');
-                this.setCanonical(canURL);
+                this.__setCanonical(canURL);
             }
 
             if (Config.get('popup.bookmark.confirmBookmark')) {
-                this.confirmBookmark.attr('checked', 'checked');
+                this.__confirmBookmark.attr('checked', 'checked');
             }
-            this.confirmBookmark.bind('change', function() {
+            this.__confirmBookmark.bind('change', function() {
                 Config.set('popup.bookmark.confirmBookmark', this.checked);
             });
 
-            this.setURL(url);
+            this.__setURL(url);
             this.tagCompleter = TagCompleter;
-            this.tagCompleter.register(this.commentEL, {
+            this.tagCompleter.register(this.__commentEL, {
                 updatedHandler: function(inputLine) {
                     // darty...
                     var m = inputLine.value;
                     var byte = Utils.countCommentToBytes(m);
                     byte = Math.floor(byte / 3);
-                    self.typeCount.text(byte);
+                    self.__typeCount.text(byte);
                     if (byte > 100) {
-                        self.typeCount.addClass('red');
+                        self.__typeCount.addClass('red');
                     } else {
-                        self.typeCount.removeClass('red');
+                        self.__typeCount.removeClass('red');
                     }
                     $('dd span.tag').each(function(i, el) {
                         if (m.indexOf('[' + el.textContent + ']') == -1) {
@@ -695,7 +745,7 @@ var View = {
                     });
                     rememberLastComment(m);
                     setTimeout(function() {
-                        self.commentEL.focus();
+                        self.__commentEL.focus();
                     }, 10);
                 }
             });
@@ -711,19 +761,19 @@ var View = {
                 }
             }
 
-            var form = this.form;
+            var form = this.__form;
             if (!form.data('keypressBound')) {
                 form.data('keypressBound', true);
                 form.keypress(function(e) {
-                    if (e.keyCode !== 13 || e.target !== self.commentEL.get(0))
+                    if (e.keyCode !== 13 || e.target !== self.__commentEL.get(0))
                         return;
                     $('#edit-submit').click();
                     return false;
                 });
             }
 
-            this.form.show();
-            this.commentEL.focus();
+            this.__form.show();
+            this.__commentEL.focus();
             if (Config.get('popup.tags.allTags.enabled') || Config.get('popup.tags.complete.enabled')) {
                 HTTPCache.usertags.get(user.name).next(function(res) {
                     if (Config.get('popup.tags.complete.enabled')) {
@@ -731,16 +781,16 @@ var View = {
                         self.tagCompleter.tagsObject = res.tags;
                     }
                     if (Config.get('popup.tags.allTags.enabled')) {
-                        self.setUserTags(res)
+                        self.__setUserTags(res)
                     }
                 });
             }
 
-            HTTPCache.entry.get(url).next(function(res) { self.setEntry(res) });
-            Model.Bookmark.findByUrl(url).next(function(res) { self.setByBookmark(res) });
+            HTTPCache.entry.get(url).next(function(res) { self.__setEntry(res) });
+            Model.Bookmark.findByUrl(url).next(function(res) { self.__setByBookmark(res) });
         },
 
-        setUserTags: function(tags) {
+        __setUserTags: function(tags) {
             if (!tags || (tags.tagsCountSortedKeys && tags.tagsCountSortedKeys.length == 0)) return;
 
             var toggle = $('#show-all-tags-toggle');
@@ -756,7 +806,7 @@ var View = {
                 } else {
                     var target = tags.tagsCountSortedKeys.slice(0, 20);
                 }
-                self.showTags(target, self.allTagsContainer, self.allTags);
+                self.__showTags(target, self.__allTagsContainer, self.__allTags);
             }
 
             toggle.bind('click', function() {
@@ -770,15 +820,15 @@ var View = {
             update();
         },
 
-        setRecomendTags: function(tags) {
-           this.showTags(tags, this.recommendTagsContainer, this.recommendTags);
+        __setRecommendTags: function(tags) {
+           this.__showTags(tags, this.__recommendTagsContainer, this.__recommendTags);
            this.tagCompleter.update();
            if (tags && tags.length) {
-               this.tagNotice.remove();
+               this.__tagNotice.remove();
            }
         },
 
-        showTags: function(tags, container, tagsList) {
+        __showTags: function(tags, container, tagsList) {
             if (!tags) return;
             var len = tags.length;
             if (len) {
@@ -794,38 +844,39 @@ var View = {
             }
         },
 
-        getMatchedTextNode: function(text, target) {
+        // 使われてない
+        __getMatchedTextNode: function(text, target) {
             return document.evaluate(
                'descendant::text()[contains(., "' + text.replace(/\"/g, '\\"') + '")]',
                target || document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
             ).singleNodeValue;
         },
 
-        setByBookmark: function(b) {
+        __setByBookmark: function(b) {
             if (b) {
                 $('#bookmarked-notice-text').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました');
                 $('#bookmarked-notice').removeClass('none');
                 $('#edit-submit').attr('value', '保存');
-                this.updateComment(b.comment);
+                this.__updateComment(b.comment);
             }
         },
 
-        updateComment: function(text) {
+        __updateComment: function(text) {
             this.tagCompleter.updateComment(text);
         },
 
-        setURL: function(url) {
+        __setURL: function(url) {
             $('#input-url').attr('value', url);
             $('#url').text(Utils.truncate(url, 50)).attr('title', url).attr('href', url);
 
             if (!$('#favicon').attr('src')) {
                 var favicon= new URI('http://cdn-ak.favicon.st-hatena.com/');
                 favicon.param({url: url});
-                this.faviconEL.attr('src', favicon);
+                this.__faviconEL.attr('src', favicon);
             }
         },
 
-        titleEditToggle: function() {
+        __titleEditToggle: function() {
             var $img = $('#title-editable-toggle');
             var to_edit_image_path = '/images/edit.png';
             var to_close_image_path = '/images/close.gif';
@@ -850,22 +901,22 @@ var View = {
             }
         },
 
-        setTitle: function(title, force) {
+        __setTitle: function(title, force) {
             if (force || !this.titleLoaded) {
-                this.titleText.text(Utils.truncate(title, 60));
-                this.titleText.attr('title', title);
+                this.__titleText.text(Utils.truncate(title, 60));
+                this.__titleText.attr('title', title);
                $('#title-input').attr('value', title);
             }
             this.titleLoaded = true;
         },
 
-        setTitleByURL: function(title) {
-            this.titleText.text(Utils.truncate(title, 70));
-            this.titleText.attr('title', title);
+        __setTitleByURL: function(title) {
+            this.__titleText.text(Utils.truncate(title, 70));
+            this.__titleText.attr('title', title);
            $('#title-input').attr('value', title);
         },
 
-        setEntry: function(entry) {
+        __setEntry: function(entry) {
             this.currentEntry = entry;
             $('body').removeClass('data-loading');
             if (entry.bookmarked_data && !$('#bookmarked-notice-text').text()) {
@@ -874,13 +925,13 @@ var View = {
                     dateYMDHM: data.timestamp,
                     comment: data.comment_raw,
                 }
-                this.setByBookmark(data);
+                this.__setByBookmark(data);
             }
 
-            if (entry.title) this.setTitle(entry.title, true);
-            this.setURL(entry.url);
+            if (entry.title) this.__setTitle(entry.title, true);
+            this.__setURL(entry.url);
             if (Config.get('popup.tags.recommendTags.enabled'))
-                this.setRecomendTags(entry.recommend_tags);
+                this.__setRecommendTags(entry.recommend_tags);
             var count = parseInt(entry.count, 10);
             if (count) {
                 var uc = $('#users-count');
@@ -889,7 +940,7 @@ var View = {
                 $('#users-count-container').removeClass('none');
             }
             if (entry.image_url) {
-                this.setCurrentImage(entry.image_url, entry.image_last_editor);
+                this.__setCurrentImage(entry.image_url, entry.image_last_editor);
             }
             if (entry.favorites && entry.favorites.length) {
                 var f = $('#favorites');
@@ -950,23 +1001,63 @@ function createUserLink(username) {
 }
 
 var ViewManager = {
+    initialize: function __ViewManager_initialize() {
+    },
+    finalize: function __ViewManager_finalize() {
+    },
+    _currentTab: void 0,
+    _currentViewName: void 0,
+    __changeTab: function ( viewName ) {
+        if ( this._currentTab ) {
+            this._currentTab.removeClass('current');
+            this._currentTab = void 0;
+        }
+        if ( viewName && View[viewName].tab ) {
+            ( this._currentTab = View[viewName].tab ).addClass('current');
+        }
+    },
     show: function (name) {
-        $('#login-container').hide();
-        Object.keys(View).forEach(function(key) {
-            if (key != name) {
-                var current = View[key];
-                current.container.hide();
-                if (current.tab) current.tab.removeClass('current');
-            } else {
-                setTimeout(function() {
-                    var current = View[name];
-                    current.container.show();
-                    Config.set('popup.lastView', name);
-                    if (current.tab) current.tab.addClass('current');
-                    current.init();
-                }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
-            }
-        });
+        if ( this._currentViewName === name ) {
+            return;
+        } else if ( this._currentViewName ) {
+            var currentView = View[this._currentViewName];
+            currentView.onhide();
+            currentView.container.hide();
+            this._currentViewName = void 0;
+        }
+
+        // setTimeout は必要か???
+        // setTimeout(function() {
+        var currentView = View[name];
+        if ( currentView ) {
+            currentView.container.show();
+            Config.set( 'popup.lastView', name );
+            currentView.onshow();
+            this._currentViewName = name;
+        }
+        // }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
+    },
+
+    showBookmarkAddForm: function () {
+        this.__changeTab("bookmark");
+        if ( !UserManager.user ) {
+            this.show('loginmessage');
+        } else {
+            this.show('bookmark');
+        }
+    },
+    showComment: function () {
+        this.__changeTab("comment");
+        this.show("comment");
+    },
+    search: function ( searchWord ) {
+        this.__changeTab("search");
+        if ( !UserManager.user ) {
+            this.show('loginmessage');
+        } else {
+            this.show('search');
+            View.search.searchAndDisplay( searchWord );
+        }
     }
 }
 
@@ -981,18 +1072,6 @@ if (popupMode) {
 }
 */
 
-var eulaAccept = function() {
-    localStorage.eula = true;
-    UserManager.loginWithRetry(15 * 1000);
-    $('#eula').hide();
-    setTimeout(function() {
-        ready();
-        setTimeout(function() {
-            $('#main').show();
-        }, 20);
-    }, 1000);
-}
-
 /*
 var setWindowSize = function(w, h) {
     document.getElementById('search-container').style.maxHeight = '' + h + 'px';
@@ -1003,17 +1082,8 @@ var setWindowSize = function(w, h) {
 }
 */
 
-var ready = function() {
-    if (!localStorage.eula) {
-        $('#main').hide();
-        // 何故かレンダリングされないタイミングがあるのでずらす
-        setTimeout(function() {
-            $('#eula').show();
-        }, 20);
-        return;
-    }
-
-    if (window.popupMode) {
+function changePopupWindowWidthAppropriately() {
+    if ( window.popupMode ) {
         if (request_uri.param('error')) {
             //
         } else {
@@ -1044,19 +1114,15 @@ var ready = function() {
             */
         }
     }
+}
 
-    // 確認ポップアップを出力するようなイベントのためのリスナ
-    $("#delete-button").bind( "click", function ( evt ) {
-        var id = evt.target.id;
-        var msg = "このブックマークを削除します。 よろしいですか?";
-        confirmWithCallback( id, msg, deleteBookmark );
-    } );
-
+var ready = function() {
     // bookmark view におけるタグ一覧のタグクリックのリスナ
     $('dd span.tag').live( 'click', function() {
+        // TODO この関数は View.bookmark の中で管理すべき
         var bView = View.bookmark;
         var tag = this.textContent;
-        var input = bView.commentEL.get(0);
+        var input = bView.__commentEL.get(0);
         var index = 0;
         if ( this.className.indexOf('selected') == -1 ) {
             index = input.selectionEnd + tag.length + 2;
@@ -1069,41 +1135,17 @@ var ready = function() {
         return false;
     } );
 
-    var user = UserManager.user;
-    if (user) {
-        var hicon = $('#header-usericon');
-        hicon.append(E('img', {
-            title: user.name,
-            alt: user.name,
-            src: user.view.icon,
-            width: 16,
-            height: 16,
-        }));
-        hicon.show();
-    }
-    $('#search-form').bind('submit', searchFormSubmitHandler);
-    if (Config.get('popup.search.incsearch')) {
-        $('#search-word').bind('keyup', searchIncSearchHandler);
-    }
     $('#image-detect-container-list img').live('click', function() {
-        View.bookmark.imageSelect(this);
+        // TODO この関数は View.bookmark の中で管理すべき
+        View.bookmark.__imageSelect(this);
     });
     $('a').live('click', function() {
         this.target = '_blank';
     });
     // $('a').each(function() { this.target = '_blank' });
     if (request_uri.param('error')) {
-        ViewManager.show('bookmark');
+        ViewManager.showBookmarkAddForm();
         return;
-    }
-
-    if (Config.get('popup.lastView') == 'bookmark') {
-        ViewManager.show('bookmark');
-    } else if (Config.get('popup.lastView') == 'search' && Config.get('popup.search.lastWord')) {
-        document.getElementById('search-word').value = Config.get('popup.search.lastWord');
-        View.search.search($('#search-word').attr('value'));
-    } else {
-        ViewManager.show('comment');
     }
 };
 
@@ -1124,6 +1166,8 @@ $(document).bind('ready', ready);
     // 処理の度に document から取ってくるようにしている.
 
     var privateOption = View.bookmark.privateOption = {};
+    privateOption.setEventListener = _privateOption_setEventListener;
+    privateOption.unsetEventListener = _privateOption_unsetEventListener;
 
     /** Model に合うように View を変える */
     function makeViewCorrespondToModel( $modelElem ) {
@@ -1143,14 +1187,13 @@ $(document).bind('ready', ready);
         var $modelElem = $("#private");
         setValue( this.checked );
     }
-    /** 初期化 */
-    function init() {
-        $(document).unbind( "ready", init );
-        var $viewElem = $("#private-option-view");
-        $viewElem.bind( "change", onChangeView );
+    function _privateOption_setEventListener() {
+        $("#private-option-view").bind( "change", onChangeView );
         makeViewCorrespondToModel( $("#private") );
     }
-    $(document).bind( "ready", init );
+    function _privateOption_unsetEventListener() {
+        $("#private-option-view").unbind( "change", onChangeView );
+    }
 }).call( this );
 
 /** View.bookmark.optionHelpTooltipManager
@@ -1200,4 +1243,167 @@ $(document).bind('ready', ready);
             $(document).bind( "click", onClickDocument );
         }, 4 );
     }
+}).call( this );
+
+
+
+$(document).bind( "ready", function onready() {
+    $(document).unbind( "ready", onready );
+    changePopupWindowWidthAppropriately();
+    pageManager.initialize();
+} );
+$(window).bind( "unload", function onunload() {
+    $(window).unbind( "unload", onunload );
+    pageManager.finalize();
+} );
+
+var pageManager;
+(function definePageManagerObject() {
+    pageManager = {};
+    pageManager.initialize = pageManager_initialize;
+    pageManager.finalize   = pageManager_finalize;
+    pageManager.showEulaPage = pageManager_showEulaPage;
+    pageManager.showMainPage = pageManager_showMainPage;
+
+    var currentPage = null;
+    var pages = null;
+    function pageManager_initialize() {
+        pages = [ eulaPage, mainPage ];
+        pages.forEach( function ( elem ) { elem.initialize() } );
+
+        !localStorage.eula ? pageManager_showEulaPage()
+                           : pageManager_showMainPage();
+    }
+    function pageManager_finalize() {
+        _hideCurrentPage();
+        pages.forEach( function ( elem ) { elem.finalize() } );
+        pages = null;
+    }
+    function pageManager_showEulaPage() {
+        _showPage( eulaPage );
+    }
+    function pageManager_showMainPage() {
+        _showPage( mainPage );
+    }
+    function _showPage( page ) {
+        if ( currentPage === page ) return;
+        if ( currentPage ) {
+            currentPage.hide();
+            currentPage = null;
+        }
+        page.show();
+        currentPage = page;
+    }
+    function _hideCurrentPage() {
+        if ( currentPage ) currentPage.hide();
+        currentPage = null;
+    }
+}).call( this );
+
+var Page;
+(function definePageClass() {
+    Page = _Page;
+    Page.prototype.initialize = _Page_initialize;
+    Page.prototype.finalize   = _Page_finalize;
+    Page.prototype.show = _Page_show;
+    Page.prototype.hide = _Page_hide;
+
+    function _Page( pageElemId ) {
+        this._pageElemId = pageElemId;
+        this._$elem = null;
+    }
+    function _Page_initialize() {
+        this._$elem = $('#'+this._pageElemId);
+        this._$elem.hide();
+    }
+    function _Page_finalize() {
+        this._$elem.hide();
+        this._$elem = null;
+        delete this.onshow;
+        delete this.onhide;
+    }
+    function _Page_show() {
+        if ( this.onshow ) this.onshow();
+        this._$elem.show();
+    }
+    function _Page_hide() {
+        if ( this.onhide ) this.onhide();
+        this._$elem.hide();
+    }
+}).call( this );
+
+var eulaPage = new Page( "eula" );
+(function extendEulaPageObject() {
+    function eulaAccept() {
+        localStorage.eula = "accepted";
+        UserManager.loginWithRetry(15 * 1000);
+        pageManager.showMainPage();
+    }
+    function onClickAcceptButton( evt ) {
+        eulaAccept();
+    }
+    function onClickNotAcceptButton( evt ) {
+        // TODO closeWin するときの後処理
+        closeWin();
+    }
+    eulaPage.onshow = function eulaPage_onshow() {
+        $("#eula-accept-button-ok").bind( "click", onClickAcceptButton );
+        $("#eula-accept-button-ng").bind( "click", onClickNotAcceptButton );
+    };
+    eulaPage.onhide = function eulaPage_onshow() {
+        $("#eula-accept-button-ok").unbind( "click", onClickAcceptButton );
+        $("#eula-accept-button-ng").unbind( "click", onClickNotAcceptButton );
+    };
+}).call( this );
+
+var mainPage = new Page( "main" );
+(function extendMainPage() {
+    function onClickBookmarkButton( evt ) {
+        ViewManager.showBookmarkAddForm();
+    }
+    function onClickCommentButton( evt ) {
+        ViewManager.showComment();
+    }
+    function searchFormSubmitHandler( evt ) {
+        evt.preventDefault();
+        ViewManager.search( $('#search-word').attr('value') );
+    }
+    var _searchIncD = null;
+    function searchIncSearchHandler( evt ) {
+        evt.preventDefault();
+        if ( _searchIncD ) _searchIncD.cancel();
+        _searchIncD = Deferred.wait(0.2).next(function() {
+            _searchIncD = null;
+            ViewManager.search( $('#search-word').attr('value') );
+        });
+    }
+
+    mainPage.onshow = function mainPage_onshow() {
+        $("#bookmark-tab").bind( "click", onClickBookmarkButton );
+        $("#comment-tab").bind( "click", onClickCommentButton );
+        $('#search-form').bind( "submit", searchFormSubmitHandler );
+        if ( Config.get('popup.search.incsearch') ) {
+            $('#search-word').bind( "keyup", searchIncSearchHandler );
+        }
+
+        var lastView = Config.get('popup.lastView');
+        if ( lastView === 'bookmark' ) {
+            ViewManager.showBookmarkAddForm();
+        } else {
+            var lastWord = Config.get('popup.search.lastWord');
+            if ( lastView === 'search' && lastWord ) {
+                document.getElementById('search-word').value = lastWord;
+                ViewManager.search( $('#search-word').attr('value') );
+            } else {
+                ViewManager.showComment();
+            }
+        }
+    };
+    mainPage.onhide = function mainPage_onhide() {
+        $("#bookmark-tab").unbind( "click", onClickBookmarkButton );
+        $("#comment-tab").unbind( "click", onClickCommentButton );
+        $('#search-form').unbind( "submit", searchFormSubmitHandler );
+        // bind してなくても削除処理をする
+        $('#search-word').unbind( "keyup", searchIncSearchHandler );
+    };
 }).call( this );

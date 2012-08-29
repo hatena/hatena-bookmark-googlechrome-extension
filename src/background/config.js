@@ -103,13 +103,13 @@ function showInitDB() {
     $('#init-db').show();
 }
 
-function resetDB() {
+function onClickDBResetButton( evt ) {
     if (window.confirm(sprintf('ユーザー『%s』のローカルデータベースを再同期します。よろしいですか？', user.name))) {
         user.resetDatabase();
     }
 }
 
-function resetAll() {
+function onClickConfigResetButton() {
     if (window.confirm('初期設定に戻します。よろしいですか？')) {
         Config.clearALL();
         location.reload();
@@ -120,7 +120,7 @@ $(document).ready(function() {
     Config.View.autoObserve();
     $('body').show();
     if (user) showInitDB();
+    $("#config-reset-button").bind( "click", onClickConfigResetButton );
+    $("#db-reset-button").bind( "click", onClickDBResetButton );
 });
-
-
 
