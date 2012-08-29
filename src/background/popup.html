@@ -11,12 +11,7 @@
 <script type="text/javascript" src="config-setting.js"></script>
 <script type="text/javascript" src="popup.js"></script>
 <script type="text/javascript" src="../lib/50-HatenaStar.js"></script>
-<script type="text/javascript">
-    // confirm を出すと chrome 拡張がおかしくなることがあるので暫定措置
-    Hatena.Star.Config.isColorPalletAvailable   = false;
-    Hatena.Star.Config.isStarDeletable          = false;
-    Hatena.Star.Config.isCommentButtonAvailable = false;
-</script>
+<script type="text/javascript" src="popup-hatena-star.js"></script>
 <script type="text/javascript" src="../lib/51-HatenaStarLoader.js"></script>
 <script type="text/javascript" src="../lib/60-TagCompleter.js"></script>
 <link rel="stylesheet" href="popup.css" type="text/css" />
@@ -85,14 +80,17 @@
 
     * （2009年11月30日作成）
   </pre></blockquote>
-  <p class="eula-accept"><input type="button" onclick="eulaAccept();return false;" value="同意する" /> <input type="button" onclick="closeWin();return false;" value="同意しない" /></p>
+  <p class="eula-accept">
+    <input type="button" value="同意する" id="eula-accept-button-ok" />
+    <input type="button" value="同意しない" id="eula-accept-button-ng" />
+  </p>
 </div>
 <div id="main">
   <div id="header">
     <div id="header-left">
       <ul class="tab-ui">
-        <li onclick="ViewManager.show('bookmark');" id="bookmark-tab">ブックマークする</li>
-        <li onclick="ViewManager.show('comment');" id="comment-tab">コメント</li>
+        <li id="bookmark-tab">ブックマークする</li>
+        <li id="comment-tab">コメント</li>
         <li class="tab-link">
         </li>
       </ul>
@@ -139,7 +137,7 @@
     <div id="bookmark-message" class="none"></div>
     <div id="bookmark-canonical" class="none">
       <div class="table-row">
-         <div class="table-left" id="canonical-tips">このページには別のURLが提示されています。</div><div class="table-right"><input type="button" onclick="View.bookmark.canonicalClick();" value=" 以下の URL に変更 " /></div>
+         <div class="table-left" id="canonical-tips">このページには別のURLが提示されています。</div><div class="table-right"><input type="button" id="canonical-tips-button" value=" 以下の URL に変更 " /></div>
       </div>
       <div class="table-row">
         <div class="table-left"><a id="link-canonical"></a></div><div class="table-right"><img src="/images/page.gif"> <a id="canonical-users"></a></div>
@@ -153,7 +151,7 @@
 
     <div id="image-detect-container" class="none">
       <div id="image-detect-image-container">
-      <img onclick="View.bookmark.imageDetectClose();" src="/images/close.gif">
+      <img id="image-detect-container-close-button" src="/images/close.gif">
       </div>
       <div id="image-detect-container-list">
       </div>
@@ -163,7 +161,7 @@
       </div>
     </div>
 
-    <form id="form" onsubmit="formSubmitHandler(this);return false;">
+    <form id="form">
     <div id="edit">
       <div class="table-row">
         <div class="table-left">
@@ -172,7 +170,7 @@
 
               <div style="width: 100%; display: table-cell;">
                 <span id="title-toggle-button" class="edit-cell">
-                  <img onclick="View.bookmark.titleEditToggle();" src="/images/edit.png" class="loaded" id="title-editable-toggle" title='タイトルを変更する'>
+                  <img src="/images/edit.png" class="loaded" id="title-editable-toggle" title='タイトルを変更する'>
                 </span>
 
                 <span class="edit-cell" id="title-text-container">
@@ -208,7 +206,7 @@
 
         <div id="image-table-container" class="table-right none">
           <div id="image-container">
-            <div id="image-current-container" onclick="View.bookmark.imageDetect();" ><img id="current-image" src="/images/noimages.png" /></div>
+            <div id="image-current-container"><img id="current-image" src="/images/noimages.png" /></div>
           </div>
         </div>
       </div>
@@ -351,7 +349,7 @@
 
     <div id="comment-title-right">
       <div id="comment-infos">
-        <img onclick="View.comment.toggleNoComment();" id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
+        <img id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
       </div>
     </div>
 
