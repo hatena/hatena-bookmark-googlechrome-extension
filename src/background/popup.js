@@ -352,8 +352,6 @@ var View = {
             // http://b.hatena.ne.jp/entry/jsonlite/ が返す JSON に "bookmarks"
             // プロパティが存在しないのは, 著者が非公開設定にしている場合
             if ( !bookmarks ) {
-                self.__commentCount.text("");
-                self.__commentInfos.show();
                 self.__commentMessage.text( "ページ作者の希望により" +
                         "ブックマークの一覧は非表示に設定されています" );
                 self.__commentMessage.show();
