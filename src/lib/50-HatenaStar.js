@@ -316,6 +316,15 @@ Ten.Event = new Ten.Class({
             e.cancelBubble = true;
             e.returnValue = false;
         }
+    },
+    preventDefault: function () {
+        var e = this.event;
+        if (e.preventDefault) e.preventDefault();
+        e.returnValue = false;
+        this._isDefaultPrevented = true;
+    },
+    isDefaultPrevented: function () {
+        return this._isDefaultPrevented || this.event.defaultPrevented || (this.event.returnValue === false);
     }
 });
 
@@ -1421,7 +1430,7 @@ Ten.Browser = {
     isDSi : navigator.userAgent.indexOf('Nintendo DSi') != -1,
     is3DS : navigator.userAgent.indexOf('Nintendo 3DS') != -1,
     isWii : navigator.userAgent.indexOf('Nintendo Wii') != -1,
-    isAndroid : navigator.userAgent.indexOf('Android ') != -1,
+    isAndroid : navigator.userAgent.indexOf('Android') != -1,
     isIPhone : (navigator.userAgent.indexOf('iPod;') != -1 || navigator.userAgent.indexOf('iPhone;') != -1 || navigator.userAgent.indexOf('iPhone Simulator;') != -1),
     isIPad : navigator.userAgent.indexOf('iPad') != -1,
     isSupportsXPath : !!document.evaluate,
@@ -1431,8 +1440,10 @@ Ten.Browser = {
         toString: function() { return this.string }
     }
 };
-Ten.Browser.isTouch = Ten.Browser.isIPhone || Ten.Browser.isAndroid || Ten.Browser.isDSi || Ten.Browser.is3DS || Ten.Browser.isIPad;
+Ten.Browser.isTouch = Ten.Browser.isIPhone || Ten.Browser.isAndroid || Ten.Browser.isDSi || Ten.Browser.is3DS;
 Ten.Browser.isSmartPhone = Ten.Browser.isIPhone || Ten.Browser.isAndroid;
+
+Ten.Event.onKeyDown = ((Ten.Browser.isFirefox && Ten.Browser.isOSX) || Ten.Browser.isOpera) ? 'onkeypress' : 'onkeydown';
 
 Ten.Deferred = (function () {
     function Deferred () { return (this instanceof Deferred) ? this.init() : new Deferred() }
@@ -1790,7 +1801,6 @@ Ten.Deferred = (function () {
         return Deferred;
     };
     
-    this.Deferred = Deferred;
     return Deferred;
 })();
 
@@ -2214,11 +2224,7 @@ Hatena.Star.HatenaHostRegexp = /(\.hatena\.ne\.jp|\.hatelabo.jp|\.hatena\.com)$/
 Hatena.Star.Token = null;
 Hatena.Star.UseAnimation = false;
 
-// XXX
-Ten.Browser.is3DS = navigator.userAgent.indexOf('Nintendo 3DS') != -1;
-Ten.Browser.isTouch = Ten.Browser.isTouch || Ten.Browser.is3DS;
-
-Hatena.Star.isTouchUA = Ten.Browser.isTouch;
+Hatena.Star.isTouchUA = Ten.Browser.isTouch || Ten.Browser.isIPad;
 
 // ---- user setting ----
 Hatena.Star.Config = {
@@ -2276,9 +2282,7 @@ Hatena.Star.User = new Ten.Class({
                 if ( location.protocol == 'https:' ) {
                     img.src = 'https://www.hatena.com/users/' + pp;
                 } else {
-                    var n = 0;
-                    for ( var i = 0; i < name.length; i++ ) { n += name.charCodeAt(i) }
-                    img.src = 'http://cdn' + (n % 5) + '.www.st-hatena.com/users/' + pp;
+                    img.src = 'http://cdn1.www.st-hatena.com/users/' + pp;
                 }
             } else {
                 img.src = 'http://n.hatena.com/' + name + '/profile/image?size=16&type=' + encodeURIComponent(this.profileIconType);
@@ -4348,6 +4352,7 @@ Hatena.Star.EntryLoader = new Ten.Class({
         e.uri = a.href;
         if (!e.uri) return null;
         var title = c.getElementByConfigSelector(selectors.title, enode);
+        if (!title) return null;
         if (typeof(title) == 'string') {
             e.title = title;
         } else {
