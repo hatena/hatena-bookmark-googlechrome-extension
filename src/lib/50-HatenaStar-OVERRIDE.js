@@ -6,7 +6,7 @@
  * - 参考 : https://developer.chrome.com/extensions/contentSecurityPolicy.html
  * そのため, JSONP の代わりに XHR でデータをとってくるように Ten.JSONP を上書きする.
  */
-Ten.JSONP = Ten.Class({
+Ten.JSONP = new Ten.Class({
     initialize: function(uri,obj,method) {
         var del = uri.match(/\?/) ? '&' : '?';
         if (!uri.match(/timestamp=/)) {
