@@ -5,8 +5,7 @@
   display: block;
   overflow: hidden;
 }
-.cf:after {Did you intend to checkout 'origin/dev' which can not be resolved as commit?
-
+.cf:after {
   clear: both;
 }
 .cf {
@@ -301,7 +300,7 @@ a#users-count:visited {
   margin: 0 0 0 15px;
   border-radius: 3px; /* Chrome 4 以降で使える */
   cursor: pointer;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,1.0);
   border: 1px solid #427DC4;
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
   box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
