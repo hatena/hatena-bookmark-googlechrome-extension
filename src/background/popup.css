@@ -5,7 +5,8 @@
   display: block;
   overflow: hidden;
 }
-.cf:after {
+.cf:after {Did you intend to checkout 'origin/dev' which can not be resolved as commit?
+
   clear: both;
 }
 .cf {
@@ -94,7 +95,7 @@ input[type='text'] {
 a:link,
 a:hover,
 a:visited {
-    color: #000080;
+    color: #2D6BC4;
 }
 
 a#users-count:link,
@@ -111,7 +112,7 @@ a#users-count:visited {
 .usericon,
 #usericon {
   vertical-align:text-bottom;
-  margin:0 2px 0 0;
+  margin:0 5px 0 0;
 }
 
 /* }}} */
@@ -189,8 +190,6 @@ a#users-count:visited {
 }
 
 #current-image {
-  background-color: #EEE;
-  padding: 3px;
   max-width: 50px;
   max-height: 50px;
 }
@@ -200,9 +199,8 @@ a#users-count:visited {
 }
 
 #image-current-container {
-  background-color: #EEE;
-  border: 1px solid #BBB;
-  padding: 3px;
+  border: 1px solid #E6E6E6;
+  padding: 2px;
   cursor: pointer;
 }
 
@@ -297,8 +295,9 @@ a#users-count:visited {
 #edit-submit {
   width: 90px;
   font-weight: bold;
+  letter-spacing: 5px;
   display: inline-block;
-  padding: 4px 6px;
+  padding: 4px 6px 4px 11px;
   margin: 0 0 0 15px;
   border-radius: 3px; /* Chrome 4 以降で使える */
   cursor: pointer;
@@ -525,7 +524,7 @@ span#favorites {
   display: table;
   width: 100%;
   background: #eee;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #E6E6E6;
   padding: 5px 12px 5px 12px;
 }
 
@@ -1020,6 +1019,7 @@ dd#all-tags {
 
 #search-word-preview em {
   font-weight: bold;
+  font-style: normal;
   padding-left: 5px;
   padding-right: 5px;
   color: #000;
@@ -1075,15 +1075,15 @@ dd#all-tags {
 }
 
 #comment-list li {
-  padding: 6px 10px 6px 10px;
+  padding: 7px 10px 7px 10px;
   border-bottom: 1px solid #F0F0F0;
-  margin: 3px;
-  font-size: 95%;
-  line-height: 16px;
+  margin: 0 8px 0 8px;
+  font-size: 98%;
+  line-height: 1.5;
 }
 
 #comment-list li a.username {
-  padding: 0px 8px 0px 5px;
+  padding: 0px 10px 0px 3px;
   color: #2D6BC4;
   text-decoration: none;
 }
@@ -1156,6 +1156,11 @@ body.data-loading * .loading {
   background-repeat: no-repeat;
   background-position: left 3px;
   text-indent: 0px;
+  font-weight: normal;
+}
+
+#search-container h3.entry-search a {
+  text-decoration: none;
 }
 
 #search-container li {
@@ -1163,6 +1168,11 @@ body.data-loading * .loading {
 
 #search-container div.comment {
   font-size: 95%;
+  margin-left: 5px;
+}
+
+#search-container div.infos {
+  margin: 2px 0 0 5px;
 }
 
 #search-container div.infos a.url {
@@ -1170,13 +1180,13 @@ body.data-loading * .loading {
 }
 
 #search-container ul {
- padding-top: 5px;
+ padding-top: 2px;
 }
 
 #search-container ul li {
   list-style: none;
   line-height: 1.4;
-  margin: 5px 0 0px 10px !important;
+  margin: 8px 10px 0px 10px !important;
 }
 
 #search-container span.highlight {
@@ -1191,7 +1201,8 @@ body.data-loading * .loading {
 #search-container .tags,
 #search-container a.user-tag {
   text-decoration: none;
-  color: #66c;
+  color: #999;
+  margin-right: 5px;
 }
 
 #search-container a.url,
@@ -1337,32 +1348,33 @@ em a:visited {
 
 #search-result li.bookmark {
   border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-  padding-left: 20px;
+  padding-bottom: 10px;
+  padding-left: 25px;
 }
 
 #search-result li.bookmark h3 {
-  text-indent: -18px;
+  text-indent: -20px;
 }
 
 #search-result li.bookmark img {
-  margin-right: 2px;
+  margin: 0 8px 2px 0;
 }
 
 #search-header {
   display: table;
   width: 100%;
   background: #eee;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #E6E6E6;
+  border-top: 1px solid #E6E6E6;
 }
 
 #search-header .edit-cell {
-  padding: 3px;
+  padding: 3px 3px 3px 12px;
 }
 
 #search-header .edit-cell:last-child {
   text-align: right;
+  padding: 3px 12px 3px 3px;
 }
 
 /* }}} */
@@ -1428,13 +1440,13 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 
 #checkbox-options-expanded ul {
-  padding: 7px 0 7px 0;
+  padding: 5px 0 5px 0;
 }
 
 #checkbox-options-expanded ul li {
   list-style-type: none;
   padding: 0 12px 0 12px;
-  margin: 3px 0 3px 0;
+  margin: 5px 0 5px 0;
   line-height: 16px;
 }
 
