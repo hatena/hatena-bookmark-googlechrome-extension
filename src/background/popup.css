@@ -1167,11 +1167,10 @@ body.data-loading * .loading {
 
 #search-container div.comment {
   font-size: 95%;
-  margin-left: 5px;
 }
 
 #search-container div.infos {
-  margin: 2px 0 0 5px;
+  margin: 2px 0 0 0;
 }
 
 #search-container div.infos a.url {
@@ -1201,7 +1200,6 @@ body.data-loading * .loading {
 #search-container a.user-tag {
   text-decoration: none;
   color: #999;
-  margin-right: 5px;
 }
 
 #search-container a.url,
@@ -1347,16 +1345,16 @@ em a:visited {
 
 #search-result li.bookmark {
   border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  padding-left: 25px;
+  padding-bottom: 8px;
+  padding-left: 28px;
 }
 
 #search-result li.bookmark h3 {
-  text-indent: -20px;
+  text-indent: -25px;
 }
 
 #search-result li.bookmark img {
-  margin: 0 8px 2px 0;
+  margin: 0 7px 2px 0;
 }
 
 #search-header {
@@ -1368,7 +1366,7 @@ em a:visited {
 }
 
 #search-header .edit-cell {
-  padding: 3px 3px 3px 12px;
+  padding: 3px 3px 3px 8px;
 }
 
 #search-header .edit-cell:last-child {
