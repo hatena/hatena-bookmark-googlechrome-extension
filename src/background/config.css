@@ -29,7 +29,7 @@ h1 {
     color-stop(0.5, #2C6EBD)
     );
     border-bottom: 1px solid #bbb;
-    -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
     -webkit-border-bottom-left-radius: 4px;
     -webkit-border-bottom-right-radius: 4px;
     padding: 5px;
