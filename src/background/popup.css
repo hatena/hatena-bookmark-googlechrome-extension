@@ -133,16 +133,6 @@ a#users-count:visited {
 #edit-submit,
 #header {
     /* gradient を使った青背景 */
-    /* deprecated な書き方; Chrome 10 より古くても使える */
-    background: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        from(#427DC4),
-        to(#2C6EBD),
-        color-stop(0.5, #427DC4),
-        color-stop(0.5, #2C6EBD)
-    );
     /* Chrome 10 以降で使える */
     background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
     /* current standard; but unimplimented yet (chrome 19) */
@@ -153,7 +143,6 @@ a#users-count:visited {
 #edit-submit:hover,
 #edit-submit:focus,
 #edit-submit:active {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(1, #5287c7), color-stop(0.54, #5287c7), color-stop(0.46, #84a9d7));
   background: -webkit-linear-gradient(top, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
   background: linear-gradient(to bottom, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
 }
