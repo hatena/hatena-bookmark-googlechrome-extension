@@ -107,11 +107,15 @@ a#users-count:visited {
     text-decoration: underline;
 }
 
-#favicon,
 .usericon,
 #usericon {
   vertical-align:text-bottom;
-  margin:0 5px 0 5px;
+  margin:0 4px 0 5px;
+}
+
+#favicon {
+  vertical-align:text-bottom;
+  margin:0 4px 0 0;
 }
 
 /* }}} */
@@ -177,7 +181,6 @@ a#users-count:visited {
 
 #title-text-container {
   display: inline;
-  te
 }
 
 #title-text-edit-container {
@@ -994,7 +997,7 @@ dd#all-tags {
 }
 
 #url {
-    margin: 0 0 1px 3px;
+    margin: 0 0 1px 2px;
 }
 
 .none {
