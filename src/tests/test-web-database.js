@@ -1,8 +1,10 @@
-/*==================================================*
+/*============================================================*
  * jsdeferred-webdatabase.js 周りのテスト
- *==================================================*/
+ *============================================================*/
 
-asyncTest( "test of isTableCreated method", 2, function () {
+module( "jsdeferred-webdatabase" );
+
+asyncTest( "isTableCreated method", 2, function () {
 
     // テスト用の Database オブジェクトを返すようにメソッドを上書き
     Model.getDatabase = function() {
@@ -32,10 +34,10 @@ asyncTest( "test of isTableCreated method", 2, function () {
         ok( !isCreated,
             "テーブルが存在しないならば Model.Bookmark.isTableCreated は偽を返す" );
     } ).
-    // テスト終了
-    error(). // エラーが発生しても start() メソッドが呼ばれるように
+    // エラーが発生しても QUnit.start メソッドが呼ばれるように
+    error().
     next( function () {
-        start(); // 停止しているテストの再開
+        QUnit.start(); // 停止している testrunner の再開
     } );
 
 } );
