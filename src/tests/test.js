@@ -509,6 +509,10 @@ asyncTest( 'sync sync sync', 12, function(d) {
     Sync.getDataURL = function() {
         return user.dataURL;
     }
+    // Sync.deferred は, jQuery.fn.deferred で定義されていて, JSDeferred.connect を
+    // 行う. 要は, Sync.bind("progress", ...) でイベントリスナを登録し, イベント発火
+    // 時に next に進むものと思えばよい. (bind は Object.prototype.bind ではなく
+    // jQuery のメソッド)
     Sync.deferred('bind', 'progress').next(function(ev, obj) {
         if (obj.value !== null && obj.value == 0) {
             ok(true, 'progress start');
@@ -517,33 +521,56 @@ asyncTest( 'sync sync sync', 12, function(d) {
     Sync.deferred('bind', 'complete').next(function() {
         ok(true, 'Sync!');
         Sync.unbind('complete');
-        Bookmark.count().next(function(r) {
+    }).
+    // Sync.deferred().next メソッドのコールバックの中から Deferred オブジェクトを
+    // 返しても, そこに値がセットされる前に次の next コールバックが呼び出されてしまう
+    // ようなので, 一旦別の next コールバック呼び出しをはさむ
+    // Sync 前の状態確認
+    next(function () {
+        return Bookmark.count().next(function(r) {
             equal(r, 518, 'total count');
-            Tag.find({where: {name: 'db'}}).next(function(r) {
-                equal(r.length, 13, 'tag');
-
-                Sync.deferred('bind', 'complete').next(function() {
-                    ok(true, 'sync sync');
-                    Bookmark.count().next(function(r) {
-                        equal(r, 519, 'total count2');
-                        Tag.find({where: {name: 'db'}}).next(function(r) {
-                            equal(r.length, 14, 'tag2');
-                            Bookmark.search('高速').next(function(r) {
-                                equal(r.length, 3, 'search');
-                                Tag.getNameCountHash().next(function(tags) {
-                                    equal(Object.keys(tags).length, 88);
-                                    equal(tags['並行'], 40);
-                                    equal(tags['javascript'], 11);
-                                    QUnit.start();
-                                });
-                            });
-                        });
-                    });
-                });
-                Sync.sync();
-            });
         });
+    }).
+    next(function () {
+        return Tag.find({where: {name: 'db'}}).next(function (r) {
+            equal(r.length, 13, 'tag');
+        });
+    }).
+    // Sync する
+    next(function () {
+        var d = Sync.deferred('bind', 'complete').next(function() {
+            ok(true, 'sync sync');
+        });
+        Sync.sync();
+        return d;
+    }).
+    // 以降は Sync 後の状態確認
+    next(function () {
+        return Bookmark.count().next(function(r) {
+            equal(r, 519, 'total count2');
+        });
+    }).
+    next(function () {
+        return Tag.find({where: {name: 'db'}}).next(function(r) {
+            equal(r.length, 14, 'tag2');
+        });
+    }).
+    next(function () {
+        return Bookmark.search('高速').next(function(r) {
+            equal(r.length, 3, 'search');
+        });
+    }).
+    next(function () {
+        return Tag.getNameCountHash().next(function(tags) {
+            equal(Object.keys(tags).length, 88);
+            equal(tags['並行'], 40);
+            equal(tags['javascript'], 11);
+        });
+    }).
+    next(function () {
+        QUnit.start();
     });
+
     Model.initialize(true).next(function() {
         Sync.init();
     });
