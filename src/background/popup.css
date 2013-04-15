@@ -527,11 +527,6 @@ span#favorites {
   text-align: right;
 }
 
-#edit {
-    width:100%;
-    display: table;
-}
-
 #edit > .table-row {
     /* 将来的には display: flex に移行する必要がありそう
      *   https://developer.mozilla.org/en/CSS/Flexbox
