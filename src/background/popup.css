@@ -544,16 +544,6 @@ span#favorites {
     margin-bottom: 5px;
 }
 
-#edit > .entry-info-box > .entry-basic-info-box > .table-row {
-    display: -webkit-box;
-    -webkit-box-orient: horizontal;
-}
-
-#edit > .entry-info-box > .entry-basic-info-box > .table-row > .edit-cell {
-    display: block;
-    -webkit-box-flex: 1;
-}
-
 #edit > .entry-info-box > .entry-image-box {
     -webkit-box-flex: 0; /* Chrome 21 未満 */
     -webkit-flex: none; /* Chrome 21 以降 */
@@ -605,14 +595,8 @@ label {
 
 }
 
-#title .edit-cell {
-  padding: 0px;
-}
-
-#title-toggle-button.edit-cell {
+#title-toggle-button {
   padding-right: 30px;
-  padding-left: 20px;
-  display: inline;
   float: right;
 }
 
@@ -962,8 +946,6 @@ dd#all-tags {
     font-weight: bold;
     margin-bottom: 3px;
     line-height: 1.6;
-    padding-left: 20px;
-    text-indent: -20px;
 }
 
 #url {
