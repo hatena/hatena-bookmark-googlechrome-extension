@@ -1,18 +1,16 @@
 
-require 'rubygems'
-require 'json/pure'
+require 'json'
 require 'rake'
 require 'rake/clean'
 require 'pathname'
 begin
   require 'crxmake'
 rescue LoadError
-  warn "require jsonschema"
-  warn "gem sources -a http://gems.github.com"
-  warn "gem install Constellation-crxmake"
+  warn "require crxmake"
+  warn "  gem install crxmake"
+  warn "( see: http://constellation.hatenablog.com/entry/20090911/1252672391 )"
   exit 1
 end
-require 'crxmake'
 require 'open-uri'
 
 project_name = 'hatena-bookmark'
@@ -40,12 +38,12 @@ namespace :manifest do
       require 'jsonschema'
     rescue LoadError
       warn "require jsonschema"
-      warn "gem sources -a http://gems.github.com"
-      warn "gem install Constellation-jsonschema"
+      warn "  gem install jsonschema"
+      warn '( see: http://constellation.hatenablog.com/entry/20090912/1252774066 )'
       exit 1
     end
     data = JSON.parse manifest_path.read
-    schema = JSON.parse open('http://gist.github.com/179669.txt').read # manifest.json schema by os0x
+    schema = JSON.parse open('https://gist.github.com/os0x/179669/raw/').read # manifest.json schema by os0x
     puts "JSON schema check."
     begin
       JSON::Schema.validate(data, schema)
