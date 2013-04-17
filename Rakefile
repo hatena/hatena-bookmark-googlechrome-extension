@@ -3,14 +3,7 @@ require 'json'
 require 'rake'
 require 'rake/clean'
 require 'pathname'
-begin
-  require 'crxmake'
-rescue LoadError
-  warn "require crxmake"
-  warn "  gem install crxmake"
-  warn "( see: http://constellation.hatenablog.com/entry/20090911/1252672391 )"
-  exit 1
-end
+require 'crxmake'
 require 'open-uri'
 
 project_name = 'hatena-bookmark'
@@ -32,14 +25,7 @@ CLEAN.include ['**/.*.sw?', '.*.sw?']
 namespace :manifest do
   desc "json schema check"
   task :validate do
-    begin
-      require 'jsonschema'
-    rescue LoadError
-      warn "require jsonschema"
-      warn "  gem install jsonschema"
-      warn '( see: http://constellation.hatenablog.com/entry/20090912/1252774066 )'
-      exit 1
-    end
+    require 'jsonschema'
     data = JSON.parse manifest_path.read
     schema = JSON.parse open('https://gist.github.com/os0x/179669/raw/').read # manifest.json schema by os0x
     puts "JSON schema check."

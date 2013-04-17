@@ -17,3 +17,10 @@ chrome-extension://{extension-id}/tests/test.html にアクセスすると実行
 ````
 $ find src | grep -v '^src/tests\(/\|$\)' | xargs zip src.zip
 ````
+
+## Rakefile
+
+Rakefile に必要な Ruby gems は bundler で管理しています.
+
+* [Bundler: The best way to manage a Ruby application's gems](http://gembundler.com/)
+* [bundle install 周りのドキュメント](http://gembundler.com/v1.3/man/bundle-install.1.html)
