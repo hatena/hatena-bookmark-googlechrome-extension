@@ -1,8 +1,9 @@
+# encoding: utf-8
+
 require 'rake/clean'
 
 require 'json'
 require 'pathname'
-require 'crxmake'
 require 'open-uri'
 
 project_name = 'hatena-bookmark'
@@ -11,7 +12,6 @@ root_path = Pathname.new(__FILE__).parent
 src_path = root_path.join('src')
 manifest_path = src_path.join('manifest.json')
 output_path = root_path.join('bin')
-pem_file = ENV['PEM'] || root_path.join(project_name + '.pem')
 
 task :release => [:clean, :package]
 task :default => ['manifest:validate']
@@ -35,22 +35,10 @@ namespace :manifest do
   end
 end
 
+desc "リリース用の zip ファイルを生成する"
 task :package do
-  output_path.mkpath unless output_path.directory?
-  crx = output_path.join("#{project_name}.crx").to_s
-  options = {
-    :ex_dir => src_path.to_s,
-    :crx_output => crx,
-#    :verbose => true,
-    :ignorefile => /\.sw[op]/,
-    :ignoredir => /\.(?:svn|git|cvs)/
-  }
-  if pem_file && Pathname.new(pem_file.to_s).exist?
-    options[:pkey] = pem_file.to_s
-  else
-    options[:pkey_output] = pem_file.to_s
-  end
-  CrxMake.make(options)
-  puts "generated package: #{crx}"
-  puts "generated pkem(.pem): #{options[:pkey_output]}" if options[:pkey_output]
+  # TODO src_path を使うように
+  # TODO output_path を使うように
+  # TODO project_name を使うように
+  sh 'find src | grep -v \'^src/tests\\(/\\|$\\)\' | xargs zip bookmark-googlechrome-extension.zip'
 end

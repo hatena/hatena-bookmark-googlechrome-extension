@@ -1,16 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    crxmake (2.0.7)
-      zip (~> 2.0.2)
     jsonschema (2.0.2)
     rake (10.0.4)
-    zip (2.0.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  crxmake
   jsonschema
   rake
