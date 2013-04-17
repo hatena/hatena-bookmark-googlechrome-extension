@@ -569,6 +569,7 @@ var View = {
             } else {
                 this.images = images;
             }
+            // TODO 元々非表示であることが期待されている? (非表示になることは現状ではない)
             $('#image-table-container').show();
         },
         __setSubmitData: function(data) {
