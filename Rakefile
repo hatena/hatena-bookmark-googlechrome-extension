@@ -17,12 +17,10 @@ project_name = 'hatena-bookmark'
 
 github_account = 'youracountname' # `git config github.user`.chomp
 github_project = 'hatena-bookmark'
-extension_url = "http://cloud.github.com/downloads/#{github_account}/#{github_project}/#{project_name}.crx"
 
 root_path = Pathname.new(__FILE__).parent
 src_path = root_path.join('src')
 manifest_path = src_path.join('manifest.json')
-update_path = src_path.join('update.xml')
 output_path = root_path.join('bin')
 pem_file = ENV['PEM'] || root_path.join(project_name + '.pem')
 
@@ -52,22 +50,6 @@ namespace :manifest do
       puts "JSON schema invalid!"
       puts e.to_s
     end
-  end
-end
-
-task :update_xml do
-  puts "update xml: #{update_path}"
-  manifest = JSON.parse manifest_path.read
-  raise 'require id & version' unless manifest['id'] && manifest['version']
-  template = <<-EOF
-<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">
-    <app appid="#{manifest['id']}">
-        <updatecheck codebase="#{extension_url}" version="#{manifest['version']}" />
-    </app>
-</gupdate>
-  EOF
-  update_path.open('w') do |f|
-    f.puts template
   end
 end
 
