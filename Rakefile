@@ -1,15 +1,11 @@
+require 'rake/clean'
 
 require 'json'
-require 'rake'
-require 'rake/clean'
 require 'pathname'
 require 'crxmake'
 require 'open-uri'
 
 project_name = 'hatena-bookmark'
-
-github_account = 'youracountname' # `git config github.user`.chomp
-github_project = 'hatena-bookmark'
 
 root_path = Pathname.new(__FILE__).parent
 src_path = root_path.join('src')
@@ -17,7 +13,7 @@ manifest_path = src_path.join('manifest.json')
 output_path = root_path.join('bin')
 pem_file = ENV['PEM'] || root_path.join(project_name + '.pem')
 
-task :release => [:clean, :update_xml, :package]
+task :release => [:clean, :package]
 task :default => ['manifest:validate']
 
 CLEAN.include ['**/.*.sw?', '.*.sw?']
@@ -58,5 +54,3 @@ task :package do
   puts "generated package: #{crx}"
   puts "generated pkem(.pem): #{options[:pkey_output]}" if options[:pkey_output]
 end
-
-
