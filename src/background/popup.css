@@ -413,19 +413,6 @@ ul.tab-ui li img {
 }
 
 #comment-header {
-  /*
-  background: #fff;
-  box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
-  */
-  display: table;
-  width: 100%;
-  background: #eee;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  padding: 3px 10px 3px 10px;
-}
-
-h3#comment-header {
   font-size: 13px;
   padding: 5px 10px 5px 10px;
 }
@@ -499,11 +486,16 @@ span#favorites {
   margin: 10px 10px 0 10px;
 }
 
-#bookmark-edit-header {
+
+.content-header {
   display: table;
   width: 100%;
-  background: #eee;
+  box-sizing: border-box;
   border-bottom: 1px solid #E6E6E6;
+  background: #EEE;
+}
+
+#bookmark-edit-header {
   padding: 5px 12px 5px 12px;
 }
 
@@ -1343,11 +1335,6 @@ em a:visited {
 }
 
 #search-header {
-  display: table;
-  width: 100%;
-  background: #eee;
-  border-bottom: 1px solid #E6E6E6;
-  border-top: 1px solid #E6E6E6;
 }
 
 #search-header .edit-cell {
