@@ -564,7 +564,7 @@ var View = {
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
             if (data.selection) {
-                var quote = '"' + data.selection.replace(/\s+/g, ' ') + '"';
+                var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
                 this.__updateComment(quote);
             }
         },
