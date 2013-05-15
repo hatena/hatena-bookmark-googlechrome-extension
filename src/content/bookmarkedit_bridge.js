@@ -71,7 +71,9 @@ function getImages() {
 }
 
 function getSelectedString() {
-    var range = selection = window.getSelection().getRangeAt(0);
+    var selection = window.getSelection();
+    if (!selection.rangeCount) return null;
+    var range = selection.getRangeAt(0);
     if (range.collapsed) return null;
     return range.toString();
 }
