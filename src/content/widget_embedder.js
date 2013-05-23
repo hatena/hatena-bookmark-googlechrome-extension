@@ -62,7 +62,13 @@ var SiteinfoRequestor = {
 
 function WidgetEmbedder(siteinfo) {
     this.siteinfo = siteinfo;
-    this.embedLater(WidgetEmbedder.INITIAL_DELAY);
+    if (document.readyState === 'complete') {
+        this.embedLater(WidgetEmbedder.INITIAL_DELAY);
+    }
+    else {
+        var self = this;
+        window.addEventListener('load', function() { self.embedLater(WidgetEmbedder.INITIAL_DELAY); } , false);
+    }
 }
 
 extend(WidgetEmbedder, {
