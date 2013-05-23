@@ -90,7 +90,12 @@ extend(WidgetEmbedder.prototype, {
     embedLater: function WE_embedLater(delay) {
         if (this.timerId) return;
         this.timerId = setTimeout(function (self) {
-            self.embed();
+            if (document.readyState === 'complete') {
+                self.embed();
+             }
+            else {
+                window.addEventListener('load', function() { self.embed(); } , false);
+            }
             self.timerId = 0;
             document.addEventListener('DOMNodeInserted', self, false);
         }, delay, this);
