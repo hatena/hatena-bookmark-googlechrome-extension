@@ -62,7 +62,13 @@ var SiteinfoRequestor = {
 
 function WidgetEmbedder(siteinfo) {
     this.siteinfo = siteinfo;
-    this.embedLater(WidgetEmbedder.INITIAL_DELAY);
+    if (document.readyState === 'complete') {
+        this.embedLater(WidgetEmbedder.INITIAL_DELAY);
+    }
+    else {
+        var self = this;
+        window.addEventListener('load', function() { self.embedLater(WidgetEmbedder.INITIAL_DELAY); } , false);
+    }
 }
 
 extend(WidgetEmbedder, {
@@ -90,12 +96,7 @@ extend(WidgetEmbedder.prototype, {
     embedLater: function WE_embedLater(delay) {
         if (this.timerId) return;
         this.timerId = setTimeout(function (self) {
-            if (document.readyState === 'complete') {
-                self.embed();
-             }
-            else {
-                window.addEventListener('load', function() { self.embed(); } , false);
-            }
+            self.embed();
             self.timerId = 0;
             document.addEventListener('DOMNodeInserted', self, false);
         }, delay, this);
