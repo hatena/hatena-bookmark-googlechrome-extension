@@ -54,6 +54,11 @@ var sharingOptions = {};
         $cloned.insertBefore( $templateElem );
         return id;
     }
+    function setPropsForMinimizedShearedInputElem($inputElem, modelId) {
+        $inputElem.attr( "tabindex", 11 );
+        $inputElem.bind( "change", onViewStateChange );
+        $inputElem.data( "modelId", modelId);
+    }
     function initTemplatedListItemMinimized( $templateElem, itemInfo ) {
         var $cloned = $templateElem.clone();
         $cloned.attr( "id", null );
@@ -65,9 +70,7 @@ var sharingOptions = {};
         var id = itemInfo["id"] + "-minimized";
         //$inputElem.prop( "name", itemInfo["name"] + "-minimized" );
         $inputElem.prop( "id", id );
-        $inputElem.attr( "tabindex", 11 );
-        $inputElem.bind( "change", onViewStateChange );
-        $inputElem.data( "modelId", itemInfo["modelId"] );
+        setPropsForMinimizedShearedInputElem($inputElem, itemInfo["modelId"]);
         $cloned.insertBefore( $templateElem );
         return id;
     }
@@ -89,6 +92,8 @@ var sharingOptions = {};
                 }
             }
         }
+        // Twitter に流すリンクのリンク先
+        updateSharedLinkSelectButton();
     }
     /* 非公開ブクマの場合は, Twitter などの連携をできなくする */
     sharingOptions.setPrivate = setPrivate;
@@ -134,8 +139,14 @@ var sharingOptions = {};
         }
         model.postTwitter.viewIds.push(
                 initTemplatedListItemExpanded( $templateElemEx, info ) );
-        model.postTwitter.viewIds.push(
-                initTemplatedListItemMinimized( $templateElemMin, info ) );
+        setPropsForMinimizedShearedInputElem($("#post-twitter-minimized"), info["modelId"]);
+        model.postTwitter.viewIds.push("post-twitter-minimized");
+        // 共有するリンクのリンク先
+        if (user.defaultSharedLinkTo === "origin") {
+            $("#linked-to-origin").prop("checked", true);
+        } else {
+            $("#linked-to-entry").prop("checked", true);
+        }
 
         // Facebook
         model.postFacebook = { viewIds: [] };
@@ -239,8 +250,39 @@ var sharingOptions = {};
         $templateElemMin.remove();
 
         makeViewCorrespondToModel();
+
+        $("#twitter-shared-link-button-to-expand").bind("click", onClickSharedLinkSelectButton);
+        $("#post-twitter-minimized").bind("click", onTwitterCheckboxClicked);
     }
     //$(document).bind( "ready", initSharingOption );
     //    <button id="checkbox-options-button-to-expand">開く</button>
     //    <button id="checkbox-options-button-to-minimize">開く</button>
+    function updateSharedLinkSelectButton() {
+        var button = document.getElementById("twitter-shared-link-button-to-expand");
+        var inputElem = document.getElementById("post-twitter-minimized");
+        if (inputElem.disabled || !inputElem.checked) {
+            button.disabled = true;
+        } else {
+            button.disabled = false;
+        }
+    }
+    function onTwitterCheckboxClicked(evt) {
+        updateSharedLinkSelectButton();
+    }
+    function onClickSharedLinkSelectButton(evt) {
+        var popupElemId = "twitter-shared-link-select-popup";
+        var popupElem = document.getElementById(popupElemId);
+        popupElem.style.display = "block";
+        var button = evt.currentTarget;
+        button.classList.add("js-opened");
+        // ポップアップ以外の場所がクリックされたら閉じる
+        document.addEventListener("click", function onClick(evt) {
+            var e = evt.target;
+            if (!$(evt.target).closest("#"+popupElemId).length) {
+                popupElem.style.display = "none";
+                button.classList.remove("js-opened");
+                document.removeEventListener("click", onClick, true);
+            }
+        }, true);
+    }
 }).call( this );
