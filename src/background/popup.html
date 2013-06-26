@@ -290,6 +290,18 @@
           <button id="checkbox-options-button-to-expand" type="button" tabindex="10"
             title="全てのオプションを表示する"></button>
           <ul>
+            <!-- not template -->
+            <li style="position: relative;">
+              <label style="margin-right: 0;" title="ブックマークしたページを Twitter へ投稿する場合はチェックを入れてください。">
+                <input type="checkbox" id="post-twitter-minimized" /><img src="/images/icon-twitter.png" />
+              </label
+              ><button id="twitter-shared-link-button-to-expand" type="button" tabindex="11" title="Twitter で共有するリンクのリンク先"></button>
+              <div id="twitter-shared-link-select-popup" class="shadow">
+                <div style="font-weight: bold">リンク先</div>
+                <div><input type="radio" name="shared-link-to" value="entry" id="linked-to-entry" /><label for="linked-to-entry">コメント一覧ページ</label></div>
+                <div><input type="radio" name="shared-link-to" value="origin" id="linked-to-origin" /><label for="linked-to-origin">ブックマークしたページ</label></div>
+              </div>
+            </li>
             <!-- template -->
             <li id="checkbox-options-minimized-item-template">
               <label>
