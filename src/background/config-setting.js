@@ -48,6 +48,7 @@
         'popup.lastView': 'comment',
         'content.webinfo.enabled': true,
         'background.bookmarkcounter.enabled': true,
+        'background.twitterlink.enabled': false
     };
     Object.keys(defaults).forEach(function(key) {
         Config.append(key, defaults[key]);

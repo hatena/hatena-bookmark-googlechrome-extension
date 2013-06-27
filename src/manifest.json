@@ -9,7 +9,9 @@
     "https://*/*",
     "tabs",
     "bookmarks",
-    "unlimited_storage"
+    "unlimited_storage",
+    "webRequest",
+    "webRequestBlocking"
   ],
   "icons": {
       "16": "images/favicon16.png",
