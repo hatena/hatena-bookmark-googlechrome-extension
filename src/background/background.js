@@ -281,6 +281,21 @@ chrome.extension.onConnect.addListener(function(port, name) {
   });
 });
 
+const ENTRY_RE = /^http:\/\/b\.hatena\.ne\.jp\/entry\/(s\/)?/;
+chrome.webRequest.onHeadersReceived.addListener(function(details) {
+    if (!Config.get('background.twitterlink.enabled')) return;
+
+    var headers = details.responseHeaders;
+    headers.forEach(function(header) {
+        if (header.name !== 'Location') return;
+
+        header.value = header.value.replace(ENTRY_RE, function(m, ssl) {
+            return ssl ? 'https://' : 'http://';
+        });
+    });
+    return { responseHeaders: headers };
+}, { urls: ['http://htn.to/*'] }, ['blocking', 'responseHeaders']);
+
 // login check
 setInterval(function() {
     if (isEuraAgreed()) {
