@@ -562,6 +562,11 @@ var View = {
             if (data.title) {
                 this.__setTitle(data.title);
             }
+            // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
+            if (data.selection) {
+                var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
+                this.__updateComment(quote);
+            }
         },
         __setImages: function(images) {
             if (this.images) {

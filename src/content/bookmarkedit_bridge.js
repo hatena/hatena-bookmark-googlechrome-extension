@@ -24,6 +24,9 @@ function onMessage(info) {
     var title = getTitle();
     if (title) data.title = title;
 
+    var selection = getSelectedString();
+    if (selection) data.selection = selection;
+
     port.postMessage({
         message: 'bookmarkedit_bridge_recieve',
         data: data,
@@ -65,6 +68,14 @@ function getImages() {
           .map(function (item) { return item.image });
     }
     return images.filter(function(image) { return image && image.src }).map(function(image) { return image.src });
+}
+
+function getSelectedString() {
+    var selection = window.getSelection();
+    if (!selection.rangeCount) return null;
+    var range = selection.getRangeAt(0);
+    if (range.collapsed) return null;
+    return range.toString();
 }
 
 
