@@ -62,8 +62,9 @@ def setup_filecopy_task(taskname, obj_dir_path_str, src_dir_path_strs)
 end
 
 setup_filecopy_task(:filecopy_chrome, 'obj/chrome', [ 'src/main', 'src/chrome' ])
+setup_filecopy_task(:filecopy_opera,  'obj/opera',  [ 'src/main', 'src/opera' ])
 
-task :filecopy => [ :filecopy_chrome ]
+task :filecopy => [ :filecopy_chrome, :filecopy_opera ]
 
 desc "Chrome 拡張リリース用の zip ファイルを生成する"
 task :package_chrome => [ :filecopy_chrome ] do
