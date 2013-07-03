@@ -35,10 +35,42 @@ namespace :manifest do
   end
 end
 
-desc "リリース用の zip ファイルを生成する"
-task :package do
+# 指定のディレクトリ (複数) の中にあるファイル全てを
+# 別のディレクトリの中にコピーするためのタスクを定義する。
+def setup_filecopy_task(taskname, obj_dir_path_str, src_dir_path_strs)
+  obj_dir = Pathname.new(obj_dir_path_str)
+  obj_file_path_strs = []
+  src_dir_path_strs.each do |src_dir_path_str|
+    src_dir_pathname = Pathname.new(src_dir_path_str)
+    Pathname.glob(src_dir_pathname.to_s + '/**/*') do |pathname|
+      src_str  = pathname.to_s
+      dist     = obj_dir + pathname.relative_path_from(src_dir_pathname)
+      dist_str = dist.to_s
+      if pathname.directory?
+        directory dist_str
+      else
+        file dist_str => [ dist.dirname.to_s, src_str ] do |t|
+          cp src_str, t.name
+        end
+      end
+      obj_file_path_strs << dist
+    end
+  end
+
+  directory obj_dir_path_str
+  task taskname => [ obj_dir.to_s ] + obj_file_path_strs
+end
+
+setup_filecopy_task(:filecopy_chrome, 'obj/chrome', [ 'src/main', 'src/chrome' ])
+
+task :filecopy => [ :filecopy_chrome ]
+
+desc "Chrome 拡張リリース用の zip ファイルを生成する"
+task :package_chrome => [ :filecopy_chrome ] do
   # TODO src_path を使うように
   # TODO output_path を使うように
   # TODO project_name を使うように
-  sh 'find src | grep -v \'^src/tests\\(/\\|$\\)\' | xargs zip bookmark-googlechrome-extension.zip'
+  sh 'find obj/chrome | grep -v \'^obj/chrome/tests\\(/\\|$\\)\' | xargs zip bookmark-googlechrome-extension.zip'
 end
+
+task :package => [ :package_chrome ]
