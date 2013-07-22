@@ -3,6 +3,7 @@ GEM
   specs:
     jsonschema (2.0.2)
     rake (10.0.4)
+    watchr (0.7)
 
 PLATFORMS
   ruby
@@ -10,3 +11,4 @@ PLATFORMS
 DEPENDENCIES
   jsonschema
   rake
+  watchr
