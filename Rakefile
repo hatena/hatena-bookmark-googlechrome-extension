@@ -10,19 +10,19 @@ project_name = 'hatena-bookmark'
 
 root_path = Pathname.new(__FILE__).parent
 src_path = root_path.join('src')
-manifest_path = src_path.join('manifest.json')
+chrome_manifest_path = src_path.join('chrome/manifest.json')
 output_path = root_path.join('bin')
 
 task :release => [:clean, :package]
-task :default => ['manifest:validate']
+task :default => [:filecopy]
 
 CLEAN.include ['**/.*.sw?', '.*.sw?']
 
 namespace :manifest do
   desc "json schema check"
-  task :validate do
+  task :validate_chrome do
     require 'jsonschema'
-    data = JSON.parse manifest_path.read
+    data = JSON.parse chrome_manifest_path.read
     schema = JSON.parse open('https://gist.github.com/os0x/179669/raw/').read # manifest.json schema by os0x
     puts "JSON schema check."
     begin
