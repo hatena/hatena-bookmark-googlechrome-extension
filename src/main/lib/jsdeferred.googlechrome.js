@@ -48,18 +48,6 @@ if (typeof Deferred.chrome == 'undefined')
         update            : [2],
     });
 
-    Deferred.chrome.registers('bookmarks', {
-        create      : [1],
-        get         : [1],
-        getChildren : [1],
-        getTree     : [0],
-        move        : [2],
-        remove      : [1],
-        removeTree  : [0],
-        search      : [1],
-        update      : [2],
-    });
-
     Deferred.chrome.registers('windows', {
         create         : [1],
         get            : [1],
@@ -74,11 +62,4 @@ if (typeof Deferred.chrome == 'undefined')
         getAcceptLanguages : [0],
     });
 
-    Deferred.chrome.registers('toolstrip', {
-        collapse : [1],
-        expand   : [1],
-    });
-
 })(Deferred);
-
-
