@@ -134,8 +134,6 @@ $.extendWithAccessorProperties(Manager, {
 
 var ConnectMessenger = $({});
 
-ConnectMessenger = $({});
-
 ConnectMessenger.bind('login_check', function(data) {
     // console.log('login by url: ' + data.url);
     UserManager.loginWithRetry(15 * 1000);
@@ -159,40 +157,6 @@ ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
     if (Config.get('content.webinfo.enabled')) {
         // console.log('got request of siteinfos whose domain is XPath');
         SiteinfoManager.sendSiteinfosWithXPath(port);
-    }
-});
-
-var bookmarkeditBridgePorts = {};
-ConnectMessenger.bind('bookmarkedit_bridge_set', function(event, data, port) {
-    var url = data.url;
-    var disconnectHandler = function() {
-        port.onDisconnect.removeListener(disconnectHandler);
-        delete bookmarkeditBridgePorts[url];
-    }
-    bookmarkeditBridgePorts[url] = port;
-    port.onDisconnect.addListener(disconnectHandler);
-});
-
-ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
-    // console.log('!get' + data.url);
-    var url = data.url;
-    // console.log(bookmarkeditBridgePorts);
-    var bridgePort = bookmarkeditBridgePorts[url];
-    if (bridgePort) {
-        bridgePort.onMessage.addListener(function(info, con) {
-            if (info.message == 'bookmarkedit_bridge_recieve' && data.url == url) {
-                console.log('recieve!!');
-                port.postMessage({
-                    message: info.message,
-                    data: info.data
-                });
-            }
-        });
-
-        bridgePort.postMessage({
-            message: 'get',
-            data: {}
-        });
     }
 });
 

@@ -483,19 +483,6 @@ var View = {
         get __recommendTags()          { return $('#recommend-tags') },
         get __tagNotice()              { return $('#tag-notice') },
         get __typeCount()              { return $('#type-count') },
-        get __port() {
-            if (!this._port) {
-                var self = this;
-                var _port = chrome.extension.connect();
-                // ToDO もう一段階簡略化できそう
-                _port.onMessage.addListener(function(info, con) {
-                    if (info.message == 'bookmarkedit_bridge_recieve')
-                        self.__updatePageData(info.data);
-                });
-                this._port = _port;
-            }
-            return this._port;
-        },
         // --- public methods ---
         onshow: function() {
             this.__addListeners();
@@ -681,12 +668,22 @@ var View = {
 
             var url = info.url;
 
-            this.__port.postMessage({
-                message: 'bookmarkedit_bridge_get',
-                data: {
-                    url: url,
+            if (info.tabId) {
+                if (/^https?:\/\//.test(info.url)) {
+                    chrome.tabs.executeScript(info.tabId, {
+                        file: "/content/bookmarkedit_bridge.js",
+                        allFrames: false,
+                        runAt: "document_end",
+                    }, function (results) {
+                        var res = results[0];
+                        if (res.url !== info.url) {
+                            console.info("ブックマーク対象ページの情報を取得しようとしましたが、タブに表示されているページの URL が期待する URL ではありませんでした。");
+                            return;
+                        }
+                        self.__updatePageData(res);
+                    });
                 }
-            });
+            }
 
             var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
             if (lastCommentValueConf && lastCommentValueConf.url == url) {
