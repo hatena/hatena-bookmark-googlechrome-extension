@@ -245,6 +245,18 @@ chrome.extension.onConnect.addListener(function(port, name) {
   });
 });
 
+// 右クリックメニュー
+
+chrome.contextMenus.create({'title':'はてなブックマークに追加','onclick':function(info, tab) {
+    var url = tab.url;
+    chrome.windows.create({
+        url : ('/background/popup.html?url='+encodeURIComponent(url)),
+        focused : true,
+        type : 'popup',
+    });
+}});
+chrome.contextMenus.create({'title':'このページをはてなブックマークで表示'});
+
 // login check
 setInterval(function() {
     if (isEuraAgreed()) {
