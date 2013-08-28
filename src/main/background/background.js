@@ -253,6 +253,7 @@ chrome.contextMenus.create({'title':'はてなブックマークに追加','oncl
         url : ('/background/popup.html?url='+encodeURIComponent(url)),
         focused : true,
         type : 'popup',
+        //type: 'panel'
     });
 }});
 chrome.contextMenus.create({'title':'このページをはてなブックマークで表示'});
