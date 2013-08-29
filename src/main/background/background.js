@@ -253,10 +253,15 @@ chrome.contextMenus.create({'title':'はてなブックマークに追加','oncl
         url : ('/background/popup.html?url='+encodeURIComponent(url)),
         focused : true,
         type : 'popup',
-        //type: 'panel'
+        height : 500,
+        width : 450
     });
 }});
-chrome.contextMenus.create({'title':'このページをはてなブックマークで表示'});
+chrome.contextMenus.create({'title':'このページをはてなブックマークで表示','onclick':function(info, tab) {
+        var url = tab.url;
+        window.open('http://b.hatena.ne.jp/entry/'+url);
+    }
+});
 
 // login check
 setInterval(function() {
