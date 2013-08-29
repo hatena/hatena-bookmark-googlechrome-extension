@@ -259,7 +259,7 @@ chrome.contextMenus.create({'title':'はてなブックマークに追加','oncl
 }});
 chrome.contextMenus.create({'title':'このページをはてなブックマークで表示','onclick':function(info, tab) {
         var url = tab.url;
-        window.open('http://b.hatena.ne.jp/entry/'+url);
+        window.open('http://b.hatena.ne.jp/entry/'+encodeURIComponent(url));
     }
 });
 
