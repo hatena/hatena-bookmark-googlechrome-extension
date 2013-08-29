@@ -636,11 +636,37 @@ var View = {
             this.defaultHTML = void 0;
             this.__addListeners();
         },
+        updateLastCommentValue: function(url, comment) {
+            var lastCommentValue = Config.get('popup.bookmark.lastCommentValue');
+            var urls = lastCommentValue.urls || [];
+            if(!this.__matchUrlOfComment(url)){
+                urls.push(url);
+            }
+            Config.set('popup.bookmark.lastCommentValue',{
+                urls: urls,
+                comment: comment
+            });
+        },
+        __matchUrlOfComment: function(url) {
+            var correctUrls = Config.get('popup.bookmark.lastCommentValue').urls;
+            return (correctUrls && correctUrls.indexOf(url) >= 0 ? true : false);
+        },
         __loadByInformation: function(info) {
             if (this.lastLoadedURL && this.lastLoadedURL != info.url) {
+                var comment = this.__commentEL.attr('value');
+                this.updateLastCommentValue(this.lastLoadedURL, comment);
                 this.__clearView();
+                this.__commentEL.attr('value',comment);
             } else if (this.lastLoadedURL == info.url) {
                 return;
+            } else {
+                // this.lastLoadedURL == undefined の場合
+                if ( this.__matchUrlOfComment(info.url) ){
+                    var lastComment = Config.get('popup.bookmark.lastCommentValue').comment;
+                    this.__commentEL.attr('value', lastComment);
+                } else {
+                    Config.set('popup.bookmark.lastCommentValue',{});
+                }
             }
             var self = this;
             this.lastLoadedURL = info.url;
@@ -651,7 +677,6 @@ var View = {
                 this.currentEntry = null;
                 this.titleLoaded = false;
             }
-
             var user = UserManager.user;
             this.__usericon.attr('src', user.view.icon);
             this.__usernameEL.text(user.name);
@@ -667,7 +692,6 @@ var View = {
             this.__faviconEL.attr('src', info.faviconUrl);
 
             var url = info.url;
-
             if (info.tabId) {
                 if (/^https?:\/\//.test(info.url)) {
                     chrome.tabs.executeScript(info.tabId, {
@@ -681,12 +705,13 @@ var View = {
                             return;
                         }
                         self.__updatePageData(res);
+
                     });
                 }
             }
 
             var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
-            if (lastCommentValueConf && lastCommentValueConf.url == url) {
+            if (lastCommentValueConf && this.__matchUrlOfComment(url)) {
                 // Config.set('popup.bookmark.lastCommentValue', {});
                 this.__commentEL.attr('value', lastCommentValueConf.comment);
                 var cLength = lastCommentValueConf.comment.length;
@@ -756,23 +781,11 @@ var View = {
                             console.log(el.className);
                         }
                     });
-                    rememberLastComment(m);
                     setTimeout(function() {
                         self.__commentEL.focus();
                     }, 10);
                 }
             });
-
-            var lastCommentValue;
-            function rememberLastComment(value) {
-                if (lastCommentValue != value) {
-                    lastCommentValue = value;
-                    Config.set('popup.bookmark.lastCommentValue', {
-                        url: url,
-                        comment: lastCommentValue,
-                    });
-                }
-            }
 
             var form = this.__form;
             if (!form.data('keypressBound')) {
@@ -1267,6 +1280,7 @@ $(document).bind( "ready", function onready() {
 } );
 $(window).bind( "unload", function onunload() {
     $(window).unbind( "unload", onunload );
+    View.bookmark.updateLastCommentValue(View.bookmark.lastLoadedURL, $('#comment').attr('value'));
     pageManager.finalize();
 } );
 
