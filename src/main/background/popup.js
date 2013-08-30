@@ -551,7 +551,8 @@ var View = {
                 this.__setTitle(data.title);
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
-            if (data.selection) {
+            // コンテキストメニューからの呼び出しの際はこれに相当する処理を__loadByInformationの中で実行
+            if (data.selection && !request_uri.param('popup')) {
                 var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
                 this.__updateComment(quote);
             }
