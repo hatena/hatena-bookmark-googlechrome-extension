@@ -246,25 +246,9 @@ chrome.extension.onConnect.addListener(function(port, name) {
 });
 
 // 右クリックメニュー
-
-chrome.contextMenus.create({
-    'title':'このページをはてなブックマークに追加',
-    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
-    'onclick':function(info, tab) {
-        var url = tab.url;
-        var selectionText = info.selectionText || '';
-        chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)+'&comment='+encodeURIComponent(selectionText)),
-            focused : true,
-            type : 'popup',
-            height : 550,
-            width : 500
-        });
-    }
-});
 chrome.contextMenus.create({
     'title':'このページをはてなブックマークで表示',
-    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
+    'contexts':["page", "frame",  "editable", "image", "video", "audio"],
     'onclick':function(info, tab) {
         var url = tab.url.replace(/^https?:\/\//,'');
         window.open('http://b.hatena.ne.jp/entry/'+url);
@@ -278,22 +262,6 @@ chrome.contextMenus.create({
         window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
     }
 })
-
-chrome.contextMenus.create({
-    'title':'このリンクをはてなブックマークに追加',
-    'contexts':['link'],
-    'onclick':function(info, tab) {
-        var url = info.linkUrl;
-        chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)),
-            focused : true,
-            type : 'popup',
-            height : 550,
-            width : 500
-        });
-
-    }
-});
 
 chrome.contextMenus.create({
     'title':'このリンクをはてなブックマークで表示',
