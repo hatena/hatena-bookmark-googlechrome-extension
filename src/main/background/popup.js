@@ -74,7 +74,10 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
-    if (request_uri.param('debug') || request_uri.param('error') || request_uri.param('popup')) {
+    if (request_uri.param('debug') || request_uri.param('error')) {
+        return;
+    } else if (request_uri.param('popup')) {
+        ViewManager.showBookmarkAddForm();
         return;
     }
     var pos;
