@@ -74,10 +74,7 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
-    if (request_uri.param('debug') || request_uri.param('error')) {
-        return;
-    } else if (request_uri.param('popup')) {
-        ViewManager.showBookmarkAddForm();
+    if (request_uri.param('debug') || request_uri.param('error') || request_uri.param('popup')) {
         return;
     }
     var pos;
@@ -1168,6 +1165,8 @@ var ready = function() {
     if (request_uri.param('error')) {
         ViewManager.showBookmarkAddForm();
         return;
+    } else if (request_uri.param('popup')) {
+        ViewManager.showBookmarkAddForm();
     }
 };
 
