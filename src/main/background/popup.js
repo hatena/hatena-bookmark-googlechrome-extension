@@ -699,8 +699,9 @@ var View = {
                 .removeClass('none');
                 this.__commentEL.attr('value', request_uri.param('comment'));
             }
+            // 文字選択中にコンテキストメニューから開いた時にコメントを引用風にフィルインする処理
             if (request_uri.param('popup') && request_uri.param('comment')) {
-                this.__commentEL.attr('value',request_uri.param('comment'));
+                this.__commentEL.attr('value','“'+ request_uri.param('comment')+'“');
             }
 
             // debug /
