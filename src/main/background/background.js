@@ -247,19 +247,24 @@ chrome.extension.onConnect.addListener(function(port, name) {
 
 // 右クリックメニュー
 
-chrome.contextMenus.create({'title':'はてなブックマークに追加','onclick':function(info, tab) {
-    var url = tab.url;
-    chrome.windows.create({
-        url : ('/background/popup.html?url='+encodeURIComponent(url)),
-        focused : true,
-        type : 'popup',
-        height : 500,
-        width : 450
-    });
-}});
-chrome.contextMenus.create({'title':'このページをはてなブックマークで表示','onclick':function(info, tab) {
+chrome.contextMenus.create({
+    'title':'はてなブックマークに追加',
+    'contexts':['all'],
+    'onclick':function(info, tab) {
         var url = tab.url;
-        window.open('http://b.hatena.ne.jp/entry/'+encodeURIComponent(url));
+        var selectionText = info.selectionText || '';
+        chrome.windows.create({
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)+'&comment='+encodeURIComponent(selectionText)),
+            focused : true,
+            type : 'popup',
+            height : 550,
+            width : 500
+        });
+    }
+});
+chrome.contextMenus.create({'title':'このページをはてなブックマークで表示','onclick':function(info, tab) {
+        var url = tab.url.replace(/^https?:\/\//,'');
+        window.open('http://b.hatena.ne.jp/entry/'+url);
     }
 });
 

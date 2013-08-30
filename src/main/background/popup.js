@@ -4,7 +4,6 @@ importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model'
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;
-
 if (popupMode) {
     // XXX
     p = function(msg) {
@@ -75,7 +74,9 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
-    if (request_uri.param('debug') || request_uri.param('error')) return;
+    if (request_uri.param('debug') || request_uri.param('error') || request_uri.param('popup')) {
+        return;
+    }
     var pos;
     try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
     if (!pos) {
@@ -697,6 +698,9 @@ var View = {
                 $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
                 .removeClass('none');
                 this.__commentEL.attr('value', request_uri.param('comment'));
+            }
+            if (request_uri.param('popup') && request_uri.param('comment')) {
+                this.__commentEL.attr('value',request_uri.param('comment'));
             }
 
             // debug /
