@@ -262,11 +262,20 @@ chrome.contextMenus.create({
         });
     }
 });
-chrome.contextMenus.create({'title':'このページをはてなブックマークで表示','onclick':function(info, tab) {
+chrome.contextMenus.create({'title':'このページをはてなブックマークで表示',
+    'onclick':function(info, tab) {
         var url = tab.url.replace(/^https?:\/\//,'');
         window.open('http://b.hatena.ne.jp/entry/'+url);
     }
 });
+
+var searchMenuId = chrome.contextMenus.create({
+    'title':'はてなブックマークで「%s」を検索',
+    'contexts':['selection'],
+    'onclick': function(info, tab) {
+        window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
+    }
+})
 
 // login check
 setInterval(function() {
