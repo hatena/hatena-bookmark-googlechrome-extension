@@ -252,9 +252,8 @@ chrome.contextMenus.create({
     'contexts':["page", "frame", "editable", "image", "video", "audio"],
     'onclick':function(info, tab) {
         var url = tab.url;
-        var selectionText = info.selectionText || '';
         chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)+'&comment='+encodeURIComponent(selectionText)),
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)),
             focused : true,
             type : 'popup',
             height : 550,
