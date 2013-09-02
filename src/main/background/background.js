@@ -249,11 +249,12 @@ chrome.extension.onConnect.addListener(function(port, name) {
 
 chrome.contextMenus.create({
     'title':'このページをはてなブックマークに追加',
-    'contexts':["page", "frame", "editable", "image", "video", "audio"],
+    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
     'onclick':function(info, tab) {
         var url = tab.url;
+        var selectionText = info.selectionText || '';
         chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)),
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)+'&comment='+encodeURIComponent(selectionText)),
             focused : true,
             type : 'popup',
             height : 550,

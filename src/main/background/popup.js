@@ -551,7 +551,8 @@ var View = {
                 this.__setTitle(data.title);
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
-            if (data.selection) {
+            // コンテキストメニューからの呼び出しの際はこれに相当する処理を__loadByInformationの中で実行
+            if (data.selection && !request_uri.param('popup')) {
                 var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
                 this.__updateComment(quote);
             }
@@ -698,6 +699,10 @@ var View = {
                 $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
                 .removeClass('none');
                 this.__commentEL.attr('value', request_uri.param('comment'));
+            }
+            // 文字選択中にコンテキストメニューから開いた時にコメントを引用風にフィルインする処理
+            if (request_uri.param('popup') && request_uri.param('comment')) {
+                this.__commentEL.attr('value','“'+ request_uri.param('comment')+'“');
             }
 
             // debug /
