@@ -271,15 +271,6 @@ chrome.contextMenus.create({
         window.open('http://b.hatena.ne.jp/entry/'+url);
     }
 });
-*/
-chrome.contextMenus.create({
-    'title':'はてなブックマークで「%s」を検索',
-    'contexts':['selection'],
-    'onclick': function(info, tab) {
-        window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
-    }
-})
-/*
 chrome.contextMenus.create({
     'title':'このリンクをはてなブックマークに追加',
     'contexts':['link'],
@@ -304,6 +295,13 @@ chrome.contextMenus.create({
         window.open('http://b.hatena.ne.jp/entry/'+url);
     }
 });
+chrome.contextMenus.create({
+    'title':'はてなブックマークで「%s」を検索',
+    'contexts':['selection'],
+    'onclick': function(info, tab) {
+        window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
+    }
+})
 
 // login check
 setInterval(function() {
