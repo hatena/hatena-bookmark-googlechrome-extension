@@ -1410,7 +1410,7 @@ var mainPage = new Page( "main" );
         $("#comment-tab").bind( "click", onClickCommentButton );
         $('#search-form').bind( "submit", searchFormSubmitHandler );
         if ( Config.get('popup.search.incsearch') ) {
-            $('#search-word').bind( "keyup", searchIncSearchHandler );
+            $('#search-word').bind( "input", searchIncSearchHandler );
         }
 
         var lastView = Config.get('popup.lastView');
