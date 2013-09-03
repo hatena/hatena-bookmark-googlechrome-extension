@@ -669,9 +669,18 @@ var View = {
             this.__faviconEL.attr('src', info.faviconUrl);
 
             var url = info.url;
-
             if (info.tabId) {
                 if (/^https?:\/\//.test(info.url)) {
+                    if(request_uri.param('popup')){
+                    //コンテキストメニューから呼び出した時はexcuteScriptの実行をbackground.jsに委託する
+                    chrome.runtime.sendMessage({
+                        message : 'get_bookmarkedit_info',
+                        tabId : info.tabId,
+                        url : info.url
+                    },function(res){
+                        self.__updatePageData(res);
+                    });
+                    } else {
                     chrome.tabs.executeScript(info.tabId, {
                         file: "/content/bookmarkedit_bridge.js",
                         allFrames: false,
@@ -684,6 +693,7 @@ var View = {
                         }
                         self.__updatePageData(res);
                     });
+                }
                 }
             }
 

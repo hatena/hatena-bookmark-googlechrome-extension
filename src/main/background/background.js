@@ -159,6 +159,22 @@ ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
         SiteinfoManager.sendSiteinfosWithXPath(port);
     }
 });
+chrome.runtime.onMessage.addListener(function(data, sender, sendResponse){
+    var res;
+    chrome.tabs.executeScript(data.tabId-0, {
+        file: "/content/bookmarkedit_bridge.js",
+        allFrames: false,
+        runAt: "document_end",
+    }, function (results) {
+        res = results[0];
+        if (res.url !== data.url) {
+            console.info("ブックマーク対象ページの情報を取得しようとしましたが、タブに表示されているページの URL が期待する URL ではありませんでした。");
+            return;
+        }
+        sendResponse(res);
+    });
+        return true;
+})
 
 UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
@@ -254,7 +270,11 @@ chrome.contextMenus.create({
         var url = tab.url;
         var selectionText = info.selectionText || '';
         chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)+'&comment='+encodeURIComponent(selectionText)),
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)
+                   +'&comment='+encodeURIComponent(selectionText)
+                   +'&windowId='+tab.windowId
+                   +'&tabId='+tab.id
+                   +'&title='+encodeURIComponent(tab.title)),
             focused : true,
             type : 'popup',
             height : 550,
