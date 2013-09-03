@@ -285,20 +285,23 @@ var View = {
         get __commentInfos()    { return $('#comment-infos') },
         get __commentToggle()   { return $('#comment-toggle') },
         get __commentMessage()   { return $('#comment-message') },
+        __commentModeButtonSelector: {
+            popular: "#comment-mode-popular",
+            comment: "#comment-mode-comment",
+            nocomment: "#comment-mode-nocomment",
+        },
         __entryURL:"",
         // --- public methods ---
         onshow: function() {
             var self = this;
             this.__init();
             $("#comment-toggle").bind( "click", this.__listeners.onClickNoCommentToggleButton );
-
-            var commentModes = ["popular", "comment", "nocomment"];
-            commentModes.forEach(function(mode){
-                $("#comment-mode-" + mode).bind( "click", function(){
+            Object.keys(self.__commentModeButtonSelector).forEach(function(mode){
+                $(self.__commentModeButtonSelector[mode]).bind( "click", function(){
                     var prevMode = Config.get('popup.commentviewer.mode');
                     if (mode != prevMode){
                         Config.set('popup.commentviewer.mode', mode);
-                        self.__changeCommentMode(prevMode);
+                        self.__changeCommentMode(prevMode, mode);
                     }
                 });
             });
@@ -312,7 +315,7 @@ var View = {
         },
         __init: function() {
             var self = this;
-            Config.set('popup.commentviewer.mode', 'popular');
+            Config.set('popup.commentviewer.hasPopular', true);
             getInformation().next(function(info) {
                 self.__setTitle(info.title || info.url);
                 self.__titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
@@ -327,13 +330,18 @@ var View = {
                         self.__showCommentHeader(r);
                     }
                 });
-                self.__showPopularComment();
+
+                self.__changeCommentMode('popular', Config.get('popup.commentviewer.mode'));
             });
         },
-        __changeCommentMode: function(prevMode){
+        __changeCommentMode: function(prevMode, currentMode){
+            BG.console.log(currentMode);
             var self = this;
-            var mode = Config.get('popup.commentviewer.mode');
-            switch (mode){
+            Object.keys(self.__commentModeButtonSelector).forEach(function(m){
+                $(self.__commentModeButtonSelector[m]).removeClass("active");
+            });
+            $("#comment-mode-" + currentMode).addClass("active");
+            switch (currentMode){
                 case 'popular':
                     self.__showPopularComment();
                     break;
@@ -394,6 +402,16 @@ var View = {
             self.__commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
             self.__commentInfos.show();
 
+            HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
+                if (data) {
+                    if (data.bookmarks.length == 0){
+                        Config.set('popup.commentviewer.hasPopular', false);
+                        $("#comment-mode-popular").hide();
+                        return;
+                    }
+                }
+            });
+
             var options = {
                 title: data.title,
                 uri: data.url,
@@ -403,7 +421,7 @@ var View = {
         },
         __showComment: function() {
             var self = this;
-            if(self.__list[0].hasChildNodes()){
+            if (self.__list[0].hasChildNodes()){
                 self.__list.show();
                 self.__popularList.hide();
                 return;
@@ -455,23 +473,22 @@ var View = {
         },
         __showPopularComment: function() {
             var self = this;
-            if(self.__popularList[0].hasChildNodes()){
+            if (self.__popularList[0].hasChildNodes()){
                 self.__popularList.show();
                 self.__list.hide();
                 return;
             }
 
             HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
+                self.__commentMessage.hide();
                 if (data) {
-                    self.__commentMessage.hide();
                     if (data.bookmarks.length == 0){
-                        //人気コメントなかったらふつうのcomment表示する
-                        self.__showComment();
+                        // デフォルトがpopularだったときは、Modeを変更せずcommentを表示する
+                        self.__changeCommentMode('popular', 'comment');
                         Config.set('popup.commentviewer.hasPopular', false);
                         $("#comment-mode-popular").hide();
                         return;
                     }
-
                     self.__popularList.show();
                     self.__list.hide();
 
