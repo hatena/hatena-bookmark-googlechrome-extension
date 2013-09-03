@@ -1516,3 +1516,12 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 #private-button .off { /* 非公開 OFF の表示 */
 }
+
+/*cocodrips 仮タブ*/
+.comment-mode-tab{
+    display: inline-block;
+    text-align: center;
+    background-color: #ffffff;
+    width: 18px;
+    border: 1px solid #E6E6E6;
+}

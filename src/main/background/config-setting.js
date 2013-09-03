@@ -34,6 +34,8 @@
         'popup.commentviewer.autodetect.enabled': true,
         'popup.commentviewer.autodetect.threshold': 15,
         'popup.commentviewer.togglehide': false,
+        'popup.commentviewer.mode': 'popular',
+        'popup.commentviewer.hasPopular': true,
         'popup.bookmark.confirmBookmark': false,
         'popup.bookmark.postTwitter': false,
         'popup.bookmark.postFacebook': false,

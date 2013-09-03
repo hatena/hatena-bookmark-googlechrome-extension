@@ -119,6 +119,14 @@ HTTPCache.comment = new HTTPCache('commentCache', {
     encoder: encodeURIComponent,
 });
 
+HTTPCache.popularComment = new HTTPCache('popularCommentCache', {
+    expire: 60 * 30,
+    baseURL: B_HTTP + 'api/viewer.popular_bookmarks?url=',
+    seriarizer: 'JSON',
+    json: true,
+    encoder: encodeURIComponent,
+});
+
 HTTPCache.entry = new HTTPCache('entryCache', {
     expire: 60 * 15,
     baseURL: B_HTTP + 'my.entry?url=',
