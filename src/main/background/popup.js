@@ -551,7 +551,7 @@ var View = {
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
             // ただし、すでにコメント欄に入力済みの文字列がある場合はフィルインしない
-            if( !this.__matchUrlOfComment(data.url) || !Config.get('popup.bookmark.lastCommentValue').comment){
+            if(!this.tagCompleter.inputLine.value){
                 if (data.selection) {
                     var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
                     this.__updateComment(quote);
