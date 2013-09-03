@@ -335,7 +335,6 @@ var View = {
             });
         },
         __changeCommentMode: function(prevMode, currentMode){
-            BG.console.log(currentMode);
             var self = this;
             Object.keys(self.__commentModeButtonSelector).forEach(function(m){
                 $(self.__commentModeButtonSelector[m]).removeClass("active");
@@ -487,6 +486,10 @@ var View = {
                         self.__changeCommentMode('popular', 'comment');
                         Config.set('popup.commentviewer.hasPopular', false);
                         $("#comment-mode-popular").hide();
+
+                        self.__popularList.hide();
+                        self.__list.show();
+
                         return;
                     }
                     self.__popularList.show();
