@@ -417,11 +417,11 @@ ul.tab-ui li img {
   padding: 5px 10px 5px 10px;
 }
 
-#comment-list {
+.comment-list {
   padding: 0;
 }
 
-#comment-list li {
+.comment-list li {
   padding: 3px 20px 3px 10px;
 }
 
@@ -1015,7 +1015,7 @@ dd#all-tags {
 }
 
 #search-container,
-#comment-list {
+.comment-list {
   max-height: 470px;
   overflow-y: auto;
   word-break:break-all;
@@ -1027,7 +1027,7 @@ dd#all-tags {
   padding: 20px 10px 20px 10px;
 }
 
-#comment-list li {
+.comment-list li {
   padding: 7px 10px 7px 10px;
   border-bottom: 1px solid #F0F0F0;
   margin: 0 8px 0 8px;
@@ -1035,21 +1035,21 @@ dd#all-tags {
   line-height: 1.5;
 }
 
-#comment-list li a.username {
+.comment-list li a.username {
   padding: 0px 10px 0px 3px;
   color: #2D6BC4;
   text-decoration: none;
 }
 
-#comment-list li a.username:hover {
+.comment-list li a.username:hover {
   text-decoration: underline;
 }
 
-#comment-list li .comment {
+.comment-list li .comment {
   color: #333;
 }
 
-#comment-list li .timestamp {
+.comment-list li .timestamp {
   font-size: 90%;
   color: #999;
   padding-left: 5px;
