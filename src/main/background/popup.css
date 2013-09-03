@@ -452,7 +452,7 @@ a.username {
     text-align: right;
     padding-right: 2px;
     vertical-align: bottom;
-    min-width: 90px;
+    min-width: 93px;
     /*
     display: inline-block;
     */
@@ -1525,10 +1525,12 @@ body.sharing-options-panel-opend .option-help-tooltip {
     display: inline-block;
     text-align: center;
     vertical-align: bottom;
-    background-color: #F9F9F9;
-    height: 20px;
-    width: 30px;
     margin-left: -5px;
+    padding: 2px;
+    height: 16px;
+    width: 27px;
+    font-size: 90%;
+    background-color: #F9F9F9;
     border: 1px solid #E6E6E6;
     border-radius: 5px 5px 0 0;
 }
