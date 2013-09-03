@@ -330,7 +330,6 @@ var View = {
                         self.__showCommentHeader(r);
                     }
                 });
-
                 self.__changeCommentMode('popular', Config.get('popup.commentviewer.mode'));
             });
         },
@@ -416,7 +415,10 @@ var View = {
                 uri: data.url,
             };
             // 全体のstarの数を計算
-            Hatena.Bookmark.Star.loadElements([], options);
+            if (!self.isInit){
+                Hatena.Bookmark.Star.loadElements([], options);
+                self.isInit = true;
+            }
         },
         __showComment: function() {
             var self = this;
