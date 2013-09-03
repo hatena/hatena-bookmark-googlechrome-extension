@@ -550,9 +550,12 @@ var View = {
                 this.__setTitle(data.title);
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
-            if (data.selection) {
-                var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
-                this.__updateComment(quote);
+            // ただし、すでにコメント欄に入力済みの文字列がある場合はフィルインしない
+            if(!this.tagCompleter.inputLine.value){
+                if (data.selection) {
+                    var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
+                    this.__updateComment(quote);
+                }
             }
         },
         __setImages: function(images) {
