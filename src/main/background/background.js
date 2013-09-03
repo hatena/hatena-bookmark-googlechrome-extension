@@ -312,7 +312,7 @@ chrome.contextMenus.create({
     'contexts':['link'],
     'onclick':function(info, tab) {
         var url = info.linkUrl.replace(/^https?:\/\//,'');
-        window.open('http://b.hatena.ne.jp/entry/'+url);
+        window.open("http://b.hatena.ne.jp/entry?url=" + encodeURIComponent(url));
     }
 });
 chrome.contextMenus.create({
@@ -321,7 +321,7 @@ chrome.contextMenus.create({
     'onclick': function(info, tab) {
         window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
     }
-})
+});
 
 // login check
 setInterval(function() {
