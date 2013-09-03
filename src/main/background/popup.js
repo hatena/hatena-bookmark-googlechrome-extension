@@ -671,29 +671,13 @@ var View = {
             var url = info.url;
             if (info.tabId) {
                 if (/^https?:\/\//.test(info.url)) {
-                    if(request_uri.param('popup')){
-                    //コンテキストメニューから呼び出した時はexcuteScriptの実行をbackground.jsに委託する
                     chrome.runtime.sendMessage({
                         message : 'get_bookmarkedit_info',
                         tabId : info.tabId,
-                        url : info.url
+                        url : url
                     },function(res){
                         self.__updatePageData(res);
                     });
-                    } else {
-                    chrome.tabs.executeScript(info.tabId, {
-                        file: "/content/bookmarkedit_bridge.js",
-                        allFrames: false,
-                        runAt: "document_end",
-                    }, function (results) {
-                        var res = results[0];
-                        if (res.url !== info.url) {
-                            console.info("ブックマーク対象ページの情報を取得しようとしましたが、タブに表示されているページの URL が期待する URL ではありませんでした。");
-                            return;
-                        }
-                        self.__updatePageData(res);
-                    });
-                }
                 }
             }
 

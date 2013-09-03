@@ -173,7 +173,7 @@ chrome.runtime.onMessage.addListener(function(data, sender, sendResponse){
         }
         sendResponse(res);
     });
-        return true;
+    return true;
 })
 
 UserManager.bind('UserChange', function() {
