@@ -1,120 +1,120 @@
 /* BASIC {{{ */
 .cf:before,
 .cf:after {
-    content: "";
-    display: block;
-    overflow: hidden;
+  content: "";
+  display: block;
+  overflow: hidden;
 }
 .cf:after {
-    clear: both;
+  clear: both;
 }
 .cf {
-    zoom: 1;
+  zoom: 1;
 }
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .shadow {
-    box-shadow: 0px 2px 5px #CCCCCC;
+  box-shadow: 0px 2px 5px #CCCCCC;
 }
 
 input[type="checkbox"] {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 body {
-    font: 100%/1.4 "Arial", "Helvetica", sans-serif;
-    font-size: small;
+  font: 100%/1.4 "Arial", "Helvetica", sans-serif;
+  font-size: small;
 }
 
 #main {
 }
 
 #eula {
-    max-width: 450px;
-    min-width: 400px;
-    display: none;
-    margin: 10px;
+  max-width: 450px;
+  min-width: 400px;
+  display: none;
+  margin: 10px;
 }
 
 #eula p {
-    padding: 5px 5px 0 5px;
+  padding: 5px 5px 0 5px;
 }
 
 .eula-accept {
-    padding: 4px 4px 4px 10px;
-    text-align: center;
+  padding: 4px 4px 4px 10px;
+  text-align: center;
 }
 
 .eula-accept input {
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
 }
 
 #eula blockquote {
-    margin: 20px 20px 5px 20px;
-    overflow: auto;
-    height: 15em;
-    border: 1px solid #999;
+  margin: 20px 20px 5px 20px;
+  overflow: auto;
+  height: 15em;
+  border: 1px solid #999;
 }
 
 #eula pre {
-    white-space: pre-wrap;
-    font-size: 90%;
-    line-height: 1.7;
-    padding: 1em;
+  white-space: pre-wrap;
+  font-size: 90%;
+  line-height: 1.7;
+  padding: 1em;
 }
 
 body {
-    overflow-x: hidden;
-    color: #333;
-    min-height: 70px;
+  overflow-x: hidden;
+  color: #333;
+  min-height: 70px;
 }
 
 img {
-    vertical-align: middle;
-    border: none;
+  vertical-align: middle;
+  border: none;
 }
 
 input[type='text'] {
-    border: 1px solid #b7c5e3;
-    padding: 2px 3px;
-    color: #222;
+  border: 1px solid #b7c5e3;
+  padding: 2px 3px;
+  color: #222;
 }
 
 .table-row {
-    display: table-row;
+  display: table-row;
 }
 
 a:link,
 a:hover,
 a:visited {
-    color: #2D6BC4;
+  color: #2D6BC4;
 }
 
 a#users-count:link,
 a#users-count:hover,
 a#users-count:visited {
-    font-size: 90%;
-    color: #E9637A;
-    padding: 0px 3px 0px 3px;
-    font-weight: bold;
-    text-decoration: underline;
+  font-size: 90%;
+  color: #E9637A;
+  padding: 0px 3px 0px 3px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .usericon,
 #usericon {
-    vertical-align:text-bottom;
-    margin:0 4px 0 5px;
+  vertical-align:text-bottom;
+  margin:0 4px 0 5px;
 }
 
 #favicon {
-    vertical-align:text-bottom;
-    margin:0 4px 0 0;
+  vertical-align:text-bottom;
+  margin:0 4px 0 0;
 }
 
 /* }}} */
@@ -122,265 +122,265 @@ a#users-count:visited {
 /* {{{ header */
 
 #header {
-    display: table;
-    border-bottom: 1px solid #bbb;
-    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
-    border-top-left-radius: 4px; /* Chrome 4 以降で使える */
-    border-top-right-radius: 4px; /* Chrome 4 以降で使える */
+  display: table;
+  border-bottom: 1px solid #bbb;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
+  border-top-left-radius: 4px; /* Chrome 4 以降で使える */
+  border-top-right-radius: 4px; /* Chrome 4 以降で使える */
 }
 #edit-submit,
 #header {
-    /* gradient を使った青背景 */
-    /* Chrome 10 以降で使える */
-    background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
-    /* current standard; but unimplimented yet (chrome 19) */
-    background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
-    color: #FFFFFF;
+  /* gradient を使った青背景 */
+  /* Chrome 10 以降で使える */
+  background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+  /* current standard; but unimplimented yet (chrome 19) */
+  background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+  color: #FFFFFF;
 }
 
 #edit-submit:hover,
 #edit-submit:focus,
 #edit-submit:active {
-    background: -webkit-linear-gradient(top, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
-    background: linear-gradient(to bottom, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
+  background: -webkit-linear-gradient(top, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
+  background: linear-gradient(to bottom, #84a9d7 46%, #5287c7 54%, #5287c7 100%);
 }
 
 .table {
-    display: table;
+  display: table;
 }
 
 .table-left {
-    display: table-cell;
-    width: 100%;
-    vertical-align: top;
+  display: table-cell;
+  width: 100%;
+  vertical-align: top;
 }
 
 .table-right {
-    display: table-cell;
-    vertical-align: top;
+  display: table-cell;
+  vertical-align: top;
 }
 
 #title-editable-toggle {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #title-text-container {
-    display: inline;
+  display: inline;
 }
 
 #title-text-edit-container {
-    position: relative;
-    width: auto;
+  position: relative;
+  width: auto;
 }
 
 #title-input {
-    width: 80%;
+  width: 80%;
 }
 
 #current-image {
-    max-width: 50px;
-    max-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
 }
 
 #image-container {
-    /* margin: 5px 5px 3px 5px; */
+  /* margin: 5px 5px 3px 5px; */
 }
 
 #image-current-container {
-    border: 1px solid #E6E6E6;
-    padding: 2px;
-    cursor: pointer;
+  border: 1px solid #E6E6E6;
+  padding: 2px;
+  cursor: pointer;
 }
 
 #image-detect-container {
-    position: fixed;
-    right: 20px;
-    top: 90px;
-    bottom: 10px;
-    max-width: 400px;
-    min-width: 350px;
-    background-color: #FFF;
-    border: 1px solid #777;
-    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
-    overflow: hidden;
-    padding-bottom: 46px;
-    z-index: 200;
+  position: fixed;
+  right: 20px;
+  top: 90px;
+  bottom: 10px;
+  max-width: 400px;
+  min-width: 350px;
+  background-color: #FFF;
+  border: 1px solid #777;
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
+  overflow: hidden;
+  padding-bottom: 46px;
+  z-index: 200;
 }
 
 #image-detect-container-list {
-    overflow: auto;
-    height: 100%;
+  overflow: auto;
+  height: 100%;
 }
 
 #image-detect-container-list img {
-    max-width: 50px;
-    max-height: 50px;
-    padding: 5px;
-    cursor: pointer;
+  max-width: 50px;
+  max-height: 50px;
+  padding: 5px;
+  cursor: pointer;
 }
 
 #title-notice {
-    color: #333;
-    font-size: 12px;
-    line-height: 16px;
-    background-color: #EEE;
-    padding: 5px 10px 5px 10px;
-    border-radius: 6px;
-    margin-top: 5px;
-    margin-right: 50px;
-    width: auto;
+  color: #333;
+  font-size: 12px;
+  line-height: 16px;
+  background-color: #EEE;
+  padding: 5px 10px 5px 10px;
+  border-radius: 6px;
+  margin-top: 5px;
+  margin-right: 50px;
+  width: auto;
 }
 
 #title-notice-user-container {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #image-detect-notice {
-    position: absolute;
-    display: table-cell;
-    height: 40px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    color: #333;
-    background-color: #EEE;
-    border-top: 1px solid #AAA;
-    padding: 3px;
-    padding-left: 5px;
+  position: absolute;
+  display: table-cell;
+  height: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #333;
+  background-color: #EEE;
+  border-top: 1px solid #AAA;
+  padding: 3px;
+  padding-left: 5px;
 }
 
 
 #bookmark-canonical {
-    padding: 5px 10px 5px 10px;
-    margin: 5px 3px 5px 3px;
-    background-color: #FFF9C5;
-    border-radius: 6px;
+  padding: 5px 10px 5px 10px;
+  margin: 5px 3px 5px 3px;
+  background-color: #FFF9C5;
+  border-radius: 6px;
 }
 
 #canonical-tips {
-    background-repeat: no-repeat;
-    background-position: left 5px;
-    background-image: url('/images/caution.png');
-    padding-left: 20px;
+  background-repeat: no-repeat;
+  background-position: left 5px;
+  background-image: url('/images/caution.png');
+  padding-left: 20px;
 }
 
 #header-left {
-    display: table-cell;
-    width: 100%;
-    white-space: nowrap;
-    padding: 4px 4px 4px 10px;
+  display: table-cell;
+  width: 100%;
+  white-space: nowrap;
+  padding: 4px 4px 4px 10px;
 }
 
 #header-right {
-    display: table-cell;
-    width: 100%;
-    text-align: right;
-    white-space: nowrap;
-    padding: 4px 10px 4px 0;
+  display: table-cell;
+  width: 100%;
+  text-align: right;
+  white-space: nowrap;
+  padding: 4px 10px 4px 0;
 }
 
 #edit-submit {
-    width: 90px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    display: inline-block;
-    padding: 4px 6px 4px 11px;
-    margin: 0 0 0 15px;
-    border-radius: 3px; /* Chrome 4 以降で使える */
-    cursor: pointer;
-    color: rgba(255,255,255,1.0);
-    border: 1px solid #427DC4;
-    box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
+  width: 90px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  display: inline-block;
+  padding: 4px 6px 4px 11px;
+  margin: 0 0 0 15px;
+  border-radius: 3px; /* Chrome 4 以降で使える */
+  cursor: pointer;
+  color: rgba(255,255,255,1.0);
+  border: 1px solid #427DC4;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
 }
 
 #edit-submit {
-    border-radius: 3px; /* Chrome 4 以降で使える */
-    box-shadow: none; /* Chrome 10 以降で使える */
+  border-radius: 3px; /* Chrome 4 以降で使える */
+  box-shadow: none; /* Chrome 10 以降で使える */
 }
 
 ul.tab-ui li {
-    font-weight: bold;
-    display: inline-block;
-    font-size: 12px;
-    line-height: 24px;
-    margin: 0;
-    cursor: pointer;
-    color: rgba(255,255,255,0.8);
-    border: 1px solid #427DC4;
-    box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
+  font-weight: bold;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 24px;
+  margin: 0;
+  cursor: pointer;
+  color: rgba(255,255,255,0.8);
+  border: 1px solid #427DC4;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
 }
 
 ul.tab-ui li:hover {
-    background: rgba(255,225,255,0.1);
-    border: 1px solid #427DC4;
+  background: rgba(255,225,255,0.1);
+  border: 1px solid #427DC4;
 }
 
 ul.tab-ui li.tab-link {
-    background: transparent;
-    border: none;
-    box-shadow: none; /* Chrome 10 以降で使える */
-    padding-right: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
+  padding-right: 0;
 }
 
 ul.tab-ui li.tab-link a {
-    display: inline-block !important;
+  display: inline-block !important;
 }
 
 ul.tab-ui li.tab-link img {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 4px; /* Chrome 4 以降で使える */
-    padding: 2px;
-    display: inline-block;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px; /* Chrome 4 以降で使える */
+  padding: 2px;
+  display: inline-block;
 }
 
 #header-right ul.tab-ui li {
-    background: transparent;
-    border: none;
-    box-shadow: none; /* Chrome 10 以降で使える */
+  background: transparent;
+  border: none;
+  box-shadow: none; /* Chrome 10 以降で使える */
 }
 
 #header-right ul.tab-ui li input[type='image'] {
-    vertical-align: middle;
-    margin-top: -3px;
-    border: none;
+  vertical-align: middle;
+  margin-top: -3px;
+  border: none;
 }
 
 #bookmark-tab,
 #comment-tab {
-    background-image: url(/images/chrome-b-append_off.png);
-    background-position: 5px 3px;
-    background-repeat: no-repeat;
-    padding: 0 5px 0 25px;
-    border-radius: 5px 0 0 5px; /* Chrome 4 以降で使える */
+  background-image: url(/images/chrome-b-append_off.png);
+  background-position: 5px 3px;
+  background-repeat: no-repeat;
+  padding: 0 5px 0 25px;
+  border-radius: 5px 0 0 5px; /* Chrome 4 以降で使える */
 }
 
 #comment-tab {
-    background-image: url(/images/serif_list_off.png);
-    padding: 0 8px 0 25px;
-    border-radius: 0 5px 5px 0; /* Chrome 4 以降で使える */
+  background-image: url(/images/serif_list_off.png);
+  padding: 0 8px 0 25px;
+  border-radius: 0 5px 5px 0; /* Chrome 4 以降で使える */
 }
 
 #bookmark-tab.current {
-    background-image: url(/images/chrome-b-append.png);
+  background-image: url(/images/chrome-b-append.png);
 }
 
 #comment-tab.current {
-    background-image: url(/images/serif_list.png);
+  background-image: url(/images/serif_list.png);
 }
 
 ul.tab-ui li.current {
-    color: #2C6EBD;
-    background: #fff;
-    border-top-color: rgba(0,0,0,0.3);
-    border-left-color:  rgba(0,0,0,0.3);
-    border-right-color: rgba(255,255,255,0.3);
-    border-bottom-color:  rgba(255,255,255,0.3);
+  color: #2C6EBD;
+  background: #fff;
+  border-top-color: rgba(0,0,0,0.3);
+  border-left-color:  rgba(0,0,0,0.3);
+  border-right-color: rgba(255,255,255,0.3);
+  border-bottom-color:  rgba(255,255,255,0.3);
 }
 
 ul.tab-ui li img {
-    margin-top: -1px;
-    margin-right: 1px;
+  margin-top: -1px;
+  margin-right: 1px;
 }
 
 
@@ -389,97 +389,97 @@ ul.tab-ui li img {
 /* commnet {{{ */
 
 #comment-title-container {
-    background: no-repeat 10px 6px;
-    display: table-cell;
-    padding: 5px 10px 5px 32px;
-    /*
-    display: inline-block;
-    */
+  background: no-repeat 10px 6px;
+  display: table-cell;
+  padding: 5px 10px 5px 32px;
+  /*
+  display: inline-block;
+  */
 }
 
 #comment-infos {
-    display: none;
-    bottom: 0;
-    margin-bottom: -1px;
+  display: none;
+  bottom: 0;
+  margin-bottom: -1px;
 }
 
 #star-loading-icon {
-    margin-left: -3px;
-    display: none;
+  margin-left: -3px;
+  display: none;
 }
 
 #comment-container {
-    padding: 0;
-    background: #fff;
+  padding: 0;
+  background: #fff;
 }
 
 #comment-header {
-    font-size: 13px;
-    /*padding: 5px 10px 5px 10px;*/
+  font-size: 13px;
+  /*padding: 5px 10px 5px 10px;*/
 }
 
 .comment-list {
-    padding: 0;
+  padding: 0;
 }
 
 .comment-list li {
-    padding: 3px 20px 3px 10px;
+  padding: 3px 20px 3px 10px;
 }
 
 span.timestamp {
-    font-size: 85%;
-    color: #999;
-    margin: 4px;
+  font-size: 85%;
+  color: #999;
+  margin: 4px;
 }
 
 a.username {
-    margin-left: 4px;
+  margin-left: 4px;
 }
 
 #comment-message {
-    display: block;
-    margin: 30px;
-    color: #666;
+  display: block;
+  margin: 30px;
+  color: #666;
 }
 
 #comment-loading-icon {
-    margin-right: 4px;
+  margin-right: 4px;
 
 }
 
 #comment-title-right {
-    display: table-cell;
-    text-align: right;
-    padding-right: 2px;
-    vertical-align: bottom;
-    min-width: 93px;
-    /*
-    display: inline-block;
-    */
+  display: table-cell;
+  text-align: right;
+  padding-right: 2px;
+  vertical-align: bottom;
+  min-width: 93px;
+  /*
+  display: inline-block;
+  */
 }
 
 #image-detect-notice-user-container {
-    text-align: right;
-    font-size: 90%;
+  text-align: right;
+  font-size: 90%;
 }
 
 #image-detect-image-container {
-    position: absolute;
-    right: 0;
-    top: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 #image-detect-image-container img {
-    cursor: pointer;
-    background: #fff;
-    box-shadow: 0px 0px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
-    border-bottom-left-radius: 4px; /* Chrome 4 以降で使える */
-    padding: 2px;
-    border: 1px solid #eee;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0px 0px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
+  border-bottom-left-radius: 4px; /* Chrome 4 以降で使える */
+  padding: 2px;
+  border: 1px solid #eee;
 }
 
 span#favorites {
-    margin-left: 3px;
+  margin-left: 3px;
 }
 
 /* }}} */
@@ -487,104 +487,104 @@ span#favorites {
 /* edit {{{ */
 
 #form {
-    margin: 10px 10px 0 10px;
+  margin: 10px 10px 0 10px;
 }
 
 
 .content-header {
-    display: table;
-    width: 100%;
-    box-sizing: border-box;
-    border-bottom: 1px solid #E6E6E6;
-    background: #EEE;
+  display: table;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #E6E6E6;
+  background: #EEE;
 }
 
 #bookmark-edit-header {
-    padding: 5px 12px 5px 12px;
+  padding: 5px 12px 5px 12px;
 }
 
 #bookmark-edit-header a {
 }
 
 #bookmark-edit-header div.edit-cell {
-    font-size: 12px;
-    line-height: 16px;
-    padding-bottom: 0;
-    padding-top: 2px;
-    vertical-align: middle;
+  font-size: 12px;
+  line-height: 16px;
+  padding-bottom: 0;
+  padding-top: 2px;
+  vertical-align: middle;
 }
 
 #bookmark-edit-header .edit-cell:first-child img {
-    vertical-align: middle;
-    margin-top: -4px;
+  vertical-align: middle;
+  margin-top: -4px;
 }
 
 #bookmark-edit-header .edit-cell:last-child {
-    text-align: right;
+  text-align: right;
 }
 
 #edit > .entry-info-box {
-    display: -webkit-box; /* Chrome 21 未満 */
-    display: -webkit-flex; /* Chrome 21 以降 */
-    display: flex;
-    /* 方向 */
-    -webkit-box-orient: horizontal;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+  display: -webkit-box; /* Chrome 21 未満 */
+  display: -webkit-flex; /* Chrome 21 以降 */
+  display: flex;
+  /* 方向 */
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
 }
 
 #edit > .entry-info-box > .entry-basic-info-box {
-    -webkit-box-flex: 1; /* Chrome 21 未満 */
-    -webkit-flex: auto; /* Chrome 21 以降 */
-    flex: auto;
-    margin-bottom: 5px;
+  -webkit-box-flex: 1; /* Chrome 21 未満 */
+  -webkit-flex: auto; /* Chrome 21 以降 */
+  flex: auto;
+  margin-bottom: 5px;
 }
 
 #edit > .entry-info-box > .entry-image-box {
-    -webkit-box-flex: 0; /* Chrome 21 未満 */
-    -webkit-flex: none; /* Chrome 21 以降 */
-    flex: none;
-    margin-bottom: 10px;
+  -webkit-box-flex: 0; /* Chrome 21 未満 */
+  -webkit-flex: none; /* Chrome 21 以降 */
+  flex: none;
+  margin-bottom: 10px;
 }
 
 #buttons {
-    float: right;
-    margin: 10px 0 10px;
+  float: right;
+  margin: 10px 0 10px;
 }
 
 #buttons > .table-row,
 #buttons > .table-row > .edit-cell {
-    display: inline-block;
+  display: inline-block;
 }
 
 label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #buttons * input[type="submit"],
 .confirmation-balloon * input {
-    cursor: pointer;
-    font-size: 95%;
+  cursor: pointer;
+  font-size: 95%;
 }
 #buttons * input {
-    position: relative;
-    z-index: 10;
+  position: relative;
+  z-index: 10;
 }
 
 label {
-    font-size: 12px;
-    vertical-align: middle;
+  font-size: 12px;
+  vertical-align: middle;
 }
 
 .edit-left {
-    font-size: 90%;
-    font-weight: bold;
-    width: 1%;
-    white-space: nowrap;
+  font-size: 90%;
+  font-weight: bold;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .edit-cell {
-    display: table-cell;
+  display: table-cell;
 }
 
 #edit .edit-cell {
@@ -592,114 +592,114 @@ label {
 }
 
 #title-toggle-button {
-    padding-right: 30px;
-    float: right;
+  padding-right: 30px;
+  float: right;
 }
 
 #url-container {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #url-container a {
-    color: #2D6BC4;
-    text-decoration: none;
+  color: #2D6BC4;
+  text-decoration: none;
 }
 
 #url-container a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 #users-count-container {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
 /* }}} */
 
 #comment {
-    width: 100%;
-    margin: 0;
-    padding: 0 0 18px 0;
-    font-size: 12px;
-    line-height: 1.6;
-    vertical-align: top;
-    border: none;
-    box-shadow: none; /* Chrome 10 以降で使用可能 */
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box; /* Chrome 10 以降で使用可能 */
-    resize: vertical;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 18px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  vertical-align: top;
+  border: none;
+  box-shadow: none; /* Chrome 10 以降で使用可能 */
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; /* Chrome 10 以降で使用可能 */
+  resize: vertical;
 }
 
 #comment:focus {
-    background-color: #fff;
-    border: none;
-    outline: none;
+  background-color: #fff;
+  border: none;
+  outline: none;
 }
 
 #comment-area {
-    position: relative;
-    padding: 5px 5px 5px 5px;
-    margin-top: 10px;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
+  position: relative;
+  padding: 5px 5px 5px 5px;
+  margin-top: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
 }
 
 #comment-area:hover {
-    border: 1px solid #999;
+  border: 1px solid #999;
 }
 
 
 #bookmark-error,
 #bookmarked-notice {
-    text-align: center;
-    padding: 5px;
-    margin: 5px 10px 5px 10px;
-    font-size: 90%;
-    font-weight: bold;
-    color: #555;
-    background-color: #FDD;
-    border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  margin: 5px 10px 5px 10px;
+  font-size: 90%;
+  font-weight: bold;
+  color: #555;
+  background-color: #FDD;
+  border-radius: 3px;
 }
 #bookmarked-notice {
-    position: relative;
+  position: relative;
 }
 
 #bookmarked-notice-text {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 #delete-button {
-    -webkit-appearance: none;
-    background: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-    font-weight: normal;
-    color: #00d;
-    text-decoration: underline;
-    cursor: pointer;
+  -webkit-appearance: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-weight: normal;
+  color: #00d;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #type-counter {
-    position: absolute;
-    bottom: 5px;
-    right: 20px;
-    display: inline-block;
-    border-radius: 6px 0 0 6px;
-    padding-left: 8px;
-    padding-right: 2px;
-    opacity: 0.6;
-    font-size: 12px;
-    line-height: 12px;
-    color: #000;
-    background-color: #FFF;
-    white-space: nowrap;
-    text-align: right;
-    pointer-events: none;
+  position: absolute;
+  bottom: 5px;
+  right: 20px;
+  display: inline-block;
+  border-radius: 6px 0 0 6px;
+  padding-left: 8px;
+  padding-right: 2px;
+  opacity: 0.6;
+  font-size: 12px;
+  line-height: 12px;
+  color: #000;
+  background-color: #FFF;
+  white-space: nowrap;
+  text-align: right;
+  pointer-events: none;
 }
 
 #type-counter .red {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
 
 
@@ -707,36 +707,36 @@ label {
 }
 
 #checkbox-options {
-    padding: 3px;
-    font-size: 90%;
-    line-height: 1.7;
+  padding: 3px;
+  font-size: 90%;
+  line-height: 1.7;
 }
 
 #checkbox-options dt {
-    font-weight: bold;
-    margin-right: 3px;
-    display: inline;
+  font-weight: bold;
+  margin-right: 3px;
+  display: inline;
 }
 
 #checkbox-options dd {
-    display: inline;
+  display: inline;
 }
 
 #checkbox-options dd + dt:before {
-    content: '\A';
-    white-space: pre;
+  content: '\A';
+  white-space: pre;
 }
 
 #checkbox-options label {
-    margin-right: 7px;
-    display: inline-block;
-    vertical-align: middle;
-    cursor:pointer;
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor:pointer;
 }
 
 #checkbox-options label.disabled {
-    color: #aaa;
-    cursor: auto;
+  color: #aaa;
+  cursor: auto;
 }
 
 #post-twitter-label .label-text,
@@ -745,257 +745,257 @@ label {
 #post-mixi-check-label .label-text,
 #private-label .label-text,
 #send-mail-label .label-text {
-    background: 0px 50% no-repeat;
-    margin-left: 2px;
-    padding-left: 21px;
+  background: 0px 50% no-repeat;
+  margin-left: 2px;
+  padding-left: 21px;
 }
 
 #post-twitter-label .label-text {
-    background-image: url(/images/add-twitter.png);
+  background-image: url(/images/add-twitter.png);
 }
 
 #post-facebook-label .label-text {
-    background-image: url(/images/icon-facebook.png);
+  background-image: url(/images/icon-facebook.png);
 }
 
 #post-evernote-label .label-text {
-    background-image: url(/images/icon-evernote.png);
+  background-image: url(/images/icon-evernote.png);
 }
 
 #post-mixi-check-label .label-text {
-    background-image: url(/images/icon-mixi.png);
+  background-image: url(/images/icon-mixi.png);
 }
 
 #private-label .label-text {
-    background-image: url(/images/add-private.png);
+  background-image: url(/images/add-private.png);
 }
 
 #send-mail-label .label-text {
-    background-image: url(/images/icon-mail.png);
+  background-image: url(/images/icon-mail.png);
 }
 
 #asin-container {
-    display: none;
+  display: none;
 }
 
 #submit-container {
-    position: relative;
+  position: relative;
 }
 .option-help-tooltip {
-    position: absolute;
-    bottom: 100%;
-    padding: 10px;
-    margin: -0.3em 0.4em;
-    font-size: 90%;
-    color: #555;
-    background-color: #FDD;
-    border-radius: 3px;
+  position: absolute;
+  bottom: 100%;
+  padding: 10px;
+  margin: -0.3em 0.4em;
+  font-size: 90%;
+  color: #555;
+  background-color: #FDD;
+  border-radius: 3px;
 }
 
 .option-help-tooltip a {
-    font-size: 11px;
+  font-size: 11px;
 }
 
 .confirmation-balloon {
-    background-color: #FFFFFF;
-    border: solid 1px #CCCCCC;
-    color: #666;
-    margin-top: 5px;
-    padding: 12px;
+  background-color: #FFFFFF;
+  border: solid 1px #CCCCCC;
+  color: #666;
+  margin-top: 5px;
+  padding: 12px;
 }
 
 .confirmation-balloon p.msg {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .confirmation-balloon input {
-    width: 100px;
+  width: 100px;
 }
 
 .confirmation-balloon input.cancel {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #delete-button-confirmation {
-    position: absolute;
-    top: -0.1em;
-    right: 25px;
-    z-index: 20;
+  position: absolute;
+  top: -0.1em;
+  right: 25px;
+  z-index: 20;
 }
 
 div#tag-container {
-    background-color: #E7F0FC;
-    border: 1px solid #E6E6FC;
-    border-radius: 3px;
-    padding: 8px 6px 8px 6px;
-    margin: 5px 0 0 0;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #666;
+  background-color: #E7F0FC;
+  border: 1px solid #E6E6FC;
+  border-radius: 3px;
+  padding: 8px 6px 8px 6px;
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
 }
 
 div#tag-container dl:last-child {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 div#tag-container dt {
-    color: #333;
+  color: #333;
 }
 
 #recommend-tags-container {
-    display: none;
-    padding:0;
+  display: none;
+  padding:0;
 }
 
 #all-tags-container {
-    display: none;
-    padding:0;
+  display: none;
+  padding:0;
 }
 
 #recommend-tags-container dt, #all-tags-container dt {
-    margin: 0 3px 5px 5px;
-    font-weight: bold;
-    font-size: 12px;
+  margin: 0 3px 5px 5px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 #recommend-tags-container dt a, #all-tags-container dt #show-all-tags-toggle {
-    font-weight: normal;
-    font-size: 11px;
+  font-weight: normal;
+  font-size: 11px;
 }
 
 #recommend-tags-container dd, #all-tags-container dd {
 }
 
 #recommend-tags-container dd .tag, #all-tags-container dd .tag{
-    margin-right: 1px;
-    padding: 0px 5px 0px 5px;
-    cursor: pointer;
-    white-space: nowrap;
-    display: inline-block;
-    border: 1px solid #E7F0FC;
+  margin-right: 1px;
+  padding: 0px 5px 0px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-block;
+  border: 1px solid #E7F0FC;
 }
 
 #recommend-tags-container dd .tag:hover, #all-tags-container dd .tag:hover {
-    background-color: #becde0;
-    border-radius: 5px;
+  background-color: #becde0;
+  border-radius: 5px;
 }
 
 #recommend-tags-container dd .selected, #all-tags-container dd .selected {
-    background-color: #7DB4E8;
-    color: #FFF;
-    border-radius: 5px;
+  background-color: #7DB4E8;
+  color: #FFF;
+  border-radius: 5px;
 }
 
 #tag-notice {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 #tag-complete-list {
-    display: none;
-    position: absolute;
-    z-index: 100;
-    list-style: none;
-    background-color: #fff;
-    border: 1px solid #CCC;
-    color: #666;
-    min-width: 125px;
-    max-width: 200px;
+  display: none;
+  position: absolute;
+  z-index: 100;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #CCC;
+  color: #666;
+  min-width: 125px;
+  max-width: 200px;
 }
 
 #tag-complete-list li {
-    padding: 1px 5px 1px 5px;
+  padding: 1px 5px 1px 5px;
 }
 
 #tag-complete-list li:hover {
-    background-color: #B5D6FE;
-    cursor: pointer;
+  background-color: #B5D6FE;
+  cursor: pointer;
 }
 
 #tag-complete-list li.selected {
-    background-color: #7DB4E8;
-    color: #FFF;
+  background-color: #7DB4E8;
+  color: #FFF;
 }
 
 #tag-complete-list li .complete-list-tag {
-    padding-left: 3px;
-    line-height: 1.6;
+  padding-left: 3px;
+  line-height: 1.6;
 }
 
 #tag-complete-list li .complete-list-count {
-    float: right;
-    line-height: 1.6;
-    padding-right: 3px;
-    color: #777;
-    font-weight: bold;
+  float: right;
+  line-height: 1.6;
+  padding-right: 3px;
+  color: #777;
+  font-weight: bold;
 }
 
 #tag-complete-list li.selected .complete-list-count {
-    color: #EEE;
+  color: #EEE;
 }
 
 dd#all-tags {
-    max-height: 8em;
-    overflow: auto;
+  max-height: 8em;
+  overflow: auto;
 }
 
 #title {
-    font-weight: bold;
-    margin-bottom: 3px;
-    line-height: 1.6;
+  font-weight: bold;
+  margin-bottom: 3px;
+  line-height: 1.6;
 }
 
 #url {
-    margin: 0 0 1px 2px;
+  margin: 0 0 1px 2px;
 }
 
 .none {
-    display: none;
+  display: none;
 }
 
 #search-form {
-    display: inline-block;
-    background-color: #FFF;
-    -webkit-box-flex: 1;
-    height: 24px;
-    width: 180px;
-    padding: 0;
-    vertical-align: middle;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
+  display: inline-block;
+  background-color: #FFF;
+  -webkit-box-flex: 1;
+  height: 24px;
+  width: 180px;
+  padding: 0;
+  vertical-align: middle;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
 }
 
 #search-form input {
-    border: none;
-    width: 100%;
-    box-sizing: border-box;
-    background: url(../images/user-search.png) 5px center no-repeat;
-    font-size: 12px;
-    line-height: 24px;
-    padding: 0 10px 0 22px;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  background: url(../images/user-search.png) 5px center no-repeat;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 10px 0 22px;
 }
 
 #search-word-preview em {
-    font-weight: bold;
-    font-style: normal;
-    padding-left: 5px;
-    padding-right: 5px;
-    color: #000;
+  font-weight: bold;
+  font-style: normal;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #000;
 }
 
 #search-word {
-    -webkit-box-flex: 1;
+  -webkit-box-flex: 1;
 }
 
 #search-preview-sep {
-    padding-left: 5px;
-    padding-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #search-total-count {
 }
 
 #header-usericon {
-    display: none;
+  display: none;
 }
 
 #header-usericon img {
@@ -1004,160 +1004,160 @@ dd#all-tags {
 #show-all-tags-toggle,
 #recommend-tags-container .note,
 #tag-notice .note {
-    padding-left: 10px;
-    font-size: 90%;
-    color: #555;
-    text-decoration: underline;
-    cursor:pointer;
+  padding-left: 10px;
+  font-size: 90%;
+  color: #555;
+  text-decoration: underline;
+  cursor:pointer;
 }
 
 #login-container,
 #bookmark-container,
 #comment-container,
 #search-container {
-    display: none;
+  display: none;
 }
 
 #search-container,
 .comment-list {
-    max-height: 470px;
-    overflow-y: auto;
-    word-break:break-all;
+  max-height: 470px;
+  overflow-y: auto;
+  word-break:break-all;
 }
 
 #bookmark-message,
 #comment-message {
-    text-align: center;
-    padding: 20px 10px 20px 10px;
+  text-align: center;
+  padding: 20px 10px 20px 10px;
 }
 
 .comment-list li {
-    padding: 7px 10px 7px 10px;
-    border-bottom: 1px solid #F0F0F0;
-    margin: 0 8px 0 8px;
-    font-size: 98%;
-    line-height: 1.5;
+  padding: 7px 10px 7px 10px;
+  border-bottom: 1px solid #F0F0F0;
+  margin: 0 8px 0 8px;
+  font-size: 98%;
+  line-height: 1.5;
 }
 
 .comment-list li a.username {
-    padding: 0px 10px 0px 3px;
-    color: #2D6BC4;
-    text-decoration: none;
+  padding: 0px 10px 0px 3px;
+  color: #2D6BC4;
+  text-decoration: none;
 }
 
 .comment-list li a.username:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .comment-list li .comment {
-    color: #333;
+  color: #333;
 }
 
 .comment-list li .timestamp {
-    font-size: 90%;
-    color: #999;
-    padding-left: 5px;
+  font-size: 90%;
+  color: #999;
+  padding-left: 5px;
 }
 
 .hide-nocomment > li.nocomment {
-    display: none;
+  display: none;
 }
 
 #comment-users {
-    /* 1, 2users */
-    background-color: #fdd;
-    color: red;
-    text-align: underline;
-    padding: 1px;
+  /* 1, 2users */
+  background-color: #fdd;
+  color: red;
+  text-align: underline;
+  padding: 1px;
 }
 
 em #comment-users {
-    /* 3 users over */
-    font-weight: bold;
+  /* 3 users over */
+  font-weight: bold;
 }
 
 #comment-title {
-    line-height: 1.6;
-    margin-right: 8px;
+  line-height: 1.6;
+  margin-right: 8px;
 }
 
 #comment-title-star-container {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
 #comment-toggle {
-    cursor: pointer;
-    margin-right: 4px;
+  cursor: pointer;
+  margin-right: 4px;
 }
 
 
 /* loading */
 .loading {
-    display: none !important;
+  display: none !important;
 }
 
 body.data-loading * .loaded {
-    display: none !important;
+  display: none !important;
 }
 
 body.data-loading * .loading {
-    display: inline !important;
+  display: inline !important;
 }
 
 
 /* search-container {{{ */
 
 #search-container h3.entry-search {
-    margin: 0 0 0 -20px;
-    padding: 0 0 0 20px;
-    background-repeat: no-repeat;
-    background-position: left 3px;
-    text-indent: 0px;
-    font-weight: normal;
+  margin: 0 0 0 -20px;
+  padding: 0 0 0 20px;
+  background-repeat: no-repeat;
+  background-position: left 3px;
+  text-indent: 0px;
+  font-weight: normal;
 }
 
 #search-container h3.entry-search a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #search-container li {
 }
 
 #search-container div.comment {
-    font-size: 95%;
+  font-size: 95%;
 }
 
 #search-container div.infos {
-    margin: 2px 0 0 0;
+  margin: 2px 0 0 0;
 }
 
 #search-container div.infos a.url {
-    font-size: 85%;
+  font-size: 85%;
 }
 
 #search-container ul {
-    padding-top: 2px;
+  padding-top: 2px;
 }
 
 #search-container ul li {
-    list-style: none;
-    line-height: 1.4;
-    margin: 8px 10px 0px 10px !important;
+  list-style: none;
+  line-height: 1.4;
+  margin: 8px 10px 0px 10px !important;
 }
 
 #search-container span.highlight {
-    /* background-color: yellow !important; */
-    font-weight: bold;
+  /* background-color: yellow !important; */
+  font-weight: bold;
 }
 
 #search-container a.user {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #search-container .tags,
 #search-container a.user-tag {
-    text-decoration: none;
-    color: #999;
+  text-decoration: none;
+  color: #999;
 }
 
 #search-container a.url,
@@ -1165,60 +1165,60 @@ body.data-loading * .loading {
 #search-container a.url:visited,
 #search-container a.url:link
 {
-    color:green;
-    text-decoration: none;
+  color:green;
+  text-decoration: none;
 }
 
 #search-container div.pager {
-    float: none;
-    margin-top: 13px;
+  float: none;
+  margin-top: 13px;
 }
 
 #search-container div.pager span {
-    text-decoration: none;
-    color: #AAA;
+  text-decoration: none;
+  color: #AAA;
 }
 
 #search-container div.pager span.shown {
-    cursor: pointer;
-    text-decoration: underline;
-    color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
 }
 
 #search-container div.pager span.pager-next {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
 #search-container ul.result {
-    padding-top: 5px;
+  padding-top: 5px;
 }
 
 #search-container span.timestamp {
-    color: #555;
+  color: #555;
 }
 
 #search-container div.message-container {
-    display: none;
-    clear: both;
-    margin-top: 5em;
+  display: none;
+  clear: both;
+  margin-top: 5em;
 }
 
 #search-container div.message-container p.bookmark-search-result {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #search-container div.message-container p.message-notice {
-    color: #999;
-    font-size: 95%;
-    margin-top: 5px;
+  color: #999;
+  font-size: 95%;
+  margin-top: 5px;
 }
 
 /* }}} */
 
 
 #comment-count-detail {
-    color: #555;
-    font-size: 11px;
+  color: #555;
+  font-size: 11px;
 }
 
 /* USERS {{{ */
@@ -1228,70 +1228,70 @@ em a:visited,
 strong a:link,
 strong a:hover,
 strong a:visited {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    text-decoration: underline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  text-decoration: underline !important;
 }
 
 strong a:link,
 strong a:hover,
 strong a:visited {
-    color: #ff0000 !important;
-    background: #FFCCCC !important;
+  color: #ff0000 !important;
+  background: #FFCCCC !important;
 }
 
 em a:link,
 em a:hover,
 em a:visited {
-    color: #FF6666 !important;
-    background: #FFF0F0 !important;
+  color: #FF6666 !important;
+  background: #FFF0F0 !important;
 }
 
 /* }}} */
 
 /* register {{{ */
 #bookmark-register {
-    padding: 0 0 10px 0;
-    margin: auto;
+  padding: 0 0 10px 0;
+  margin: auto;
 }
 
 #bookmark-login-header {
-    font-weight: bold;
-    background: #f9efcf;
-    border: 1px solid #ede2c2;
-    margin: 0 0px 10px 0;
-    padding: 5px;
-    border-radius: 4px; /* Chrome 4 以降で使用可能 */
-    color: #71590c;
-    text-align: center;
+  font-weight: bold;
+  background: #f9efcf;
+  border: 1px solid #ede2c2;
+  margin: 0 0px 10px 0;
+  padding: 5px;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
+  color: #71590c;
+  text-align: center;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
 }
 
 .bookmark-register-button {
-    text-align: center;
-    padding: 20px 0 0 0;
+  text-align: center;
+  padding: 20px 0 0 0;
 }
 
 #bookmark-register-intro {
-    width: 80%;
-    margin: 20px auto;
-    background: #fafafa;
-    padding: 10px;
-    border: 1px solid #eee;
-    border-radius: 4px; /* Chrome 4 以降で使用可能 */
-    line-height: 1.5;
+  width: 80%;
+  margin: 20px auto;
+  background: #fafafa;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px; /* Chrome 4 以降で使用可能 */
+  line-height: 1.5;
 }
 
 #bookmark-register-intro span.image {
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 
@@ -1302,40 +1302,40 @@ em a:visited {
 }
 
 #search-result li.bookmark {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-    padding-left: 28px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  padding-left: 28px;
 }
 
 #search-result li.bookmark h3 {
-    text-indent: -25px;
+  text-indent: -25px;
 }
 
 #search-result li.bookmark img {
-    margin: 0 7px 2px 0;
+  margin: 0 7px 2px 0;
 }
 
 #search-header {
 }
 
 #search-header .edit-cell {
-    padding: 3px 3px 3px 8px;
+  padding: 3px 3px 3px 8px;
 }
 
 #search-header .edit-cell:last-child {
-    text-align: right;
-    padding: 3px 12px 3px 3px;
+  text-align: right;
+  padding: 3px 12px 3px 3px;
 }
 
 /* }}} */
 
 
 #favorites a img {
-    margin:0 2px;
+  margin:0 2px;
 }
 
 #search-tab {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 /**
@@ -1343,215 +1343,215 @@ em a:visited {
  */
 
 #checkbox-options {
-    position: relative;
-    padding: 0;
-    display: inline-block;
-    float: left;
+  position: relative;
+  padding: 0;
+  display: inline-block;
+  float: left;
 }
 #checkbox-options h6 {
-    display: none;
+  display: none;
 }
 #checkbox-options:not(.expanded) #checkbox-options-expanded {
-    display: none;
+  display: none;
 }
 #checkbox-options.expanded #checkbox-options-minimized {
-    visibility: hidden;
+  visibility: hidden;
 }
 #checkbox-options *,
 #buttons * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 #checkbox-options-button-to-expand {
-    height: 45px;
-    width: 16px;
-    line-height: 16px;
-    padding: 9;
-    margin: 0 5px 0 5px;
-    background-color: #FFF;
-    border: none;
-    background: url(../images/box-open.png) center center no-repeat;
-    cursor: pointer;
+  height: 45px;
+  width: 16px;
+  line-height: 16px;
+  padding: 9;
+  margin: 0 5px 0 5px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-open.png) center center no-repeat;
+  cursor: pointer;
 }
 
 /* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
 body.sharing-options-panel-opend .option-help-tooltip {
-    margin-left: 160px;
+  margin-left: 160px;
 }
 
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
-    position: absolute;
-    left: -1px;
-    bottom: 12px;
-    background-color: #FFFFFF;
-    border: solid 1px #CCCCCC;
-    color: #666;
+  position: absolute;
+  left: -1px;
+  bottom: 12px;
+  background-color: #FFFFFF;
+  border: solid 1px #CCCCCC;
+  color: #666;
 }
 
 #checkbox-options-expanded ul {
-    padding: 5px 0 5px 0;
+  padding: 5px 0 5px 0;
 }
 
 #checkbox-options-expanded ul li {
-    list-style-type: none;
-    padding: 0 12px 0 12px;
-    margin: 5px 0 5px 0;
-    line-height: 16px;
+  list-style-type: none;
+  padding: 0 12px 0 12px;
+  margin: 5px 0 5px 0;
+  line-height: 16px;
 }
 
 #checkbox-options-expanded-item-template label {
-    margin-right: 0px;
+  margin-right: 0px;
 }
 
 #checkbox-options-expanded ul li span.displayed-name {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 #checkbox-options-expanded .bar {
-    margin-bottom: 0;
-    background-color: #EEE;
-    border-top: 1px solid #DDD;
+  margin-bottom: 0;
+  background-color: #EEE;
+  border-top: 1px solid #DDD;
 }
 
 #checkbox-options-button-to-minimize {
-    float: left;
-    height: 21px;
-    width: 100%;
-    cursor: pointer;
-    box-sizing: border-box;
-    padding: 2px 5px 0 10px;
-    background-color: #FFF;
-    border: none;
-    background: url(../images/box-close.png) 10px 50% no-repeat;
+  float: left;
+  height: 21px;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 2px 5px 0 10px;
+  background-color: #FFF;
+  border: none;
+  background: url(../images/box-close.png) 10px 50% no-repeat;
 }
 
 /** 閉じているときの表示 */
 
 #checkbox-options #checkbox-options-minimized {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 #checkbox-options #checkbox-options-minimized ul,
 #checkbox-options #checkbox-options-minimized li {
-    display: inline-block;
+  display: inline-block;
 }
 
 #checkbox-options #checkbox-options-minimized ul {
 }
 
 #checkbox-options #checkbox-options-minimized li {
-    margin-right: 4px;
-    line-height: 16px;
+  margin-right: 4px;
+  line-height: 16px;
 }
 
 /**
  * Twitter に流す URL のリンク先
  */
 #twitter-shared-link-button-to-expand {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    width: 10px;
-    overflow: hidden;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: 10px;
+  overflow: hidden;
 }
 #twitter-shared-link-button-to-expand::before {
-    content: url(../images/box-open.png);
-    position: relative;
-    left: -4px;
-    top: 4px;
+  content: url(../images/box-open.png);
+  position: relative;
+  left: -4px;
+  top: 4px;
 }
 #twitter-shared-link-button-to-expand:disabled {
-    opacity: 0.4;
-    cursor: default;
+  opacity: 0.4;
+  cursor: default;
 }
 #twitter-shared-link-button-to-expand.js-opened::before {
-    content: url(../images/box-close.png);
+  content: url(../images/box-close.png);
 }
 
 #twitter-shared-link-select-popup {
-    display: none;
-    width: 14em;
-    position: absolute;
-    bottom: 100%;
-    color: #333;
-    border: solid #CCC 1px;
-    border-radius: 3px;
-    background-color: white;
-    padding: 8px;
+  display: none;
+  width: 14em;
+  position: absolute;
+  bottom: 100%;
+  color: #333;
+  border: solid #CCC 1px;
+  border-radius: 3px;
+  background-color: white;
+  padding: 8px;
 }
 
 #twitter-shared-link-select-popup input {
-    display: none;
+  display: none;
 }
 
 #twitter-shared-link-select-popup input + label {
-    display: block;
-    padding: 0px 5px 0px 5px;
-    border-radius: 5px;
-    color: #666666;
-    line-height: 1.5;
+  display: block;
+  padding: 0px 5px 0px 5px;
+  border-radius: 5px;
+  color: #666666;
+  line-height: 1.5;
 }
 #twitter-shared-link-select-popup > div {
-    margin: 2px 0;
+  margin: 2px 0;
 }
 #twitter-shared-link-select-popup input + label:hover {
-    background-color: #DDDDDD;
+  background-color: #DDDDDD;
 }
 #twitter-shared-link-select-popup input:checked + label {
-    color: white;
-    background-color: #747474;
+  color: white;
+  background-color: #747474;
 }
 
 /**
  * 非公開ボタンのための CSS
  */
 #private-button {
-    width: 3em;
-    margin-left: -1em;
-    z-index: 1;
+  width: 3em;
+  margin-left: -1em;
+  z-index: 1;
 }
 #private-button.active .off, /* 非公開 ON の場合の off 用表示 */
 #private-button:not(.active) .on { /* 非公開 OFF の場合の on 用表示 */
-    display: none;
+  display: none;
 }
 #private-button .on { /* 非公開 ON の表示 */
-    color: #FF0;
+  color: #FF0;
 }
 #private-button .off { /* 非公開 OFF の表示 */
 }
 
 .comment-mode-tab{
-    display: inline-block;
-    text-align: center;
-    vertical-align: bottom;
-    margin-left: -5px;
-    padding: 2px;
-    height: 16px;
-    width: 27px;
-    font-size: 90%;
-    background-color: #F9F9F9;
-    border: 1px solid #E6E6E6;
-    border-radius: 5px 5px 0 0;
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+  margin-left: -5px;
+  padding: 2px;
+  height: 16px;
+  width: 27px;
+  font-size: 90%;
+  background-color: #F9F9F9;
+  border: 1px solid #E6E6E6;
+  border-radius: 5px 5px 0 0;
 }
 
 .comment-mode-tab.active{
-    background-color:#FFFFFF;
-    border-width: 1px;
-    border-color: #E6E6E6 #E6E6E6 #FFFFFF #E6E6E6;
+  background-color:#FFFFFF;
+  border-width: 1px;
+  border-color: #E6E6E6 #E6E6E6 #FFFFFF #E6E6E6;
 }
 
 .comment-mode-tab:hover{
-    cursor: pointer;
-    background-color: #DDDDDD;
-    transition: all 0.2s ease;
-    /*-webkit-transition: all 0.5s ease;*/
+  cursor: pointer;
+  background-color: #DDDDDD;
+  transition: all 0.2s ease;
+  /*-webkit-transition: all 0.5s ease;*/
 }
 
 .comment-mode-tab.active{
-    cursor: default;
+  cursor: default;
 }
 
 .comment-mode-tab.active:hover{
-    background-color:#FFFFFF;
+  background-color:#FFFFFF;
 }
