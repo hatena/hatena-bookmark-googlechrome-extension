@@ -315,7 +315,6 @@ var View = {
         },
         __init: function() {
             var self = this;
-            Config.set('popup.commentviewer.hasPopular', true);
             getInformation().next(function(info) {
                 self.__setTitle(info.title || info.url);
                 self.__titleContainer.css('background-image', info.faviconUrl ? info.faviconUrl : sprintf('url(%s)', Utils.faviconUrl(info.url)));
@@ -403,7 +402,6 @@ var View = {
             HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
                 if (data) {
                     if (data.bookmarks.length == 0){
-                        Config.set('popup.commentviewer.hasPopular', false);
                         $("#comment-mode-popular").hide();
                         return;
                     }
@@ -486,7 +484,6 @@ var View = {
                     if (data.bookmarks.length == 0){
                         // デフォルトがpopularだったときは、Modeを変更せずcommentを表示する
                         self.__changeCommentMode('popular', 'comment');
-                        Config.set('popup.commentviewer.hasPopular', false);
                         $("#comment-mode-popular").hide();
 
                         self.__popularList.hide();
