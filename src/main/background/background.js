@@ -287,8 +287,8 @@ chrome.contextMenus.create({
     'title':'このページをはてなブックマークで表示',
     'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
     'onclick':function(info, tab) {
-        var url = tab.url.replace(/^https?:\/\//,'');
-        window.open('http://b.hatena.ne.jp/entry/'+url);
+        var url = tab.url;
+        window.open('http://b.hatena.ne.jp/entry?url='+encodeURIComponent(url));
     }
 });
 chrome.contextMenus.create({
@@ -311,7 +311,7 @@ chrome.contextMenus.create({
     'title':'このリンクをはてなブックマークで表示',
     'contexts':['link'],
     'onclick':function(info, tab) {
-        var url = info.linkUrl.replace(/^https?:\/\//,'');
+        var url = info.linkUrl;
         window.open("http://b.hatena.ne.jp/entry?url=" + encodeURIComponent(url));
     }
 });
