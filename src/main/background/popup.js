@@ -297,21 +297,27 @@ var View = {
             this.__init();
             $("#comment-toggle").bind( "click", this.__listeners.onClickNoCommentToggleButton );
             Object.keys(self.__commentModeButtonSelector).forEach(function(mode){
-                $(self.__commentModeButtonSelector[mode]).bind( "click", function(){
-                    var prevMode = Config.get('popup.commentviewer.mode');
-                    if (mode != prevMode){
-                        Config.set('popup.commentviewer.mode', mode);
-                        self.__changeCommentMode(prevMode, mode);
-                    }
-                });
+                $(self.__commentModeButtonSelector[mode]).bind("click", self.__listeners.onClickCommentModeButton);
             });
         },
         onhide: function() {
+            var self = this;
             $("#comment-toggle").unbind( "click", this.__listeners.onClickNoCommentToggleButton );
+            Object.keys(self.__commentModeButtonSelector).forEach(function(mode){
+                $(self.__commentModeButtonSelector[mode]).unbind("click", self.__listeners.onClickCommentModeButton);
+            });
         },
         // --- private methods ---
         __listeners: {
-            onClickNoCommentToggleButton: function ( evt ) { View.comment.__toggleNoComment() }
+            onClickNoCommentToggleButton: function ( evt ) { View.comment.__toggleNoComment() },
+            onClickCommentModeButton: function ( evt ){
+                var mode = this.id.split("-").pop();
+                var prevMode = Config.get('popup.commentviewer.mode');
+                if (mode != prevMode){
+                    Config.set('popup.commentviewer.mode', mode);
+                    View.comment.__changeCommentMode(prevMode, mode);
+                }
+            }
         },
         __init: function() {
             var self = this;
