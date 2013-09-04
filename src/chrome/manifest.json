@@ -70,5 +70,13 @@
   "options_page": "background/config.html",
   "background": {
     "page": "background/background.html"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+B",
+        "mac": "MacCtrl+Shift+B"
+      }
+    }
   }
 }
