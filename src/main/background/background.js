@@ -319,7 +319,7 @@ chrome.contextMenus.create({
     'title':'はてなブックマークで「%s」を検索',
     'contexts':['selection'],
     'onclick': function(info, tab) {
-        window.open('http://b.hatena.ne.jp/search?q='+encodeURI(info.selectionText));
+        window.open('http://b.hatena.ne.jp/search?q='+encodeURIComponent(info.selectionText));
     }
 });
 
