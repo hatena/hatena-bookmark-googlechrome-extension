@@ -390,6 +390,8 @@ var View = {
         __showCommentHeader: function(data){
             var self = this;
             var bookmarks = data.bookmarks;
+            // ブクマの非表示設定をされているページはdata.bookmarksがない
+            if (!bookmarks) return;
 
             if (UserManager.user && UserManager.user.ignores) {
                 var ignoreRegex = UserManager.user.ignores;
