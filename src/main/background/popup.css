@@ -452,7 +452,7 @@ a.username {
   text-align: right;
   padding-right: 2px;
   vertical-align: bottom;
-  min-width: 93px;
+  min-width: 100px;
   /*
   display: inline-block;
   */
@@ -1526,11 +1526,11 @@ body.sharing-options-panel-opend .option-help-tooltip {
   text-align: center;
   vertical-align: bottom;
   margin-left: -5px;
-  padding: 2px;
+  padding: 2px 4px;
   height: 16px;
   width: 27px;
   font-size: 90%;
-  background-color: #F9F9F9;
+  background-color: #DDDDDD;
   border: 1px solid #E6E6E6;
   border-radius: 5px 5px 0 0;
 }
@@ -1543,8 +1543,8 @@ body.sharing-options-panel-opend .option-help-tooltip {
 
 .comment-mode-tab:hover{
   cursor: pointer;
-  background-color: #DDDDDD;
-  transition: all 0.2s ease;
+  background-color: #CCCCCC;
+  transition: all 0.1s ease;
   /*-webkit-transition: all 0.5s ease;*/
 }
 
