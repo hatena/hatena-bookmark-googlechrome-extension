@@ -447,12 +447,10 @@ var View = {
                     }
                     var publicLen = bookmarks.length;
 
-                    if (Config.get('popup.commentviewer.autodetect.enabled')) {
+                    if (!self.__calledShowPopularComment && Config.get('popup.commentviewer.autodetect.enabled')) {
                         if (publicLen < Config.get('popup.commentviewer.autodetect.threshold')) {
                             self.__changeCommentMode('nocomment');
                         }
-                    } else if (!Config.get('popup.commentviewer.togglehide')) {
-                        self.__changeCommentMode('nocomment');
                     }
 
                     if (publicLen == 0) {
@@ -483,8 +481,13 @@ var View = {
                 self.__commentMessage.hide();
                 if (data) {
                     if (!data.bookmarks || data.bookmarks.length == 0){
-                        // デフォルトがpopularだったときは、Modeを変更せずcommentを表示する
-                        self.__changeCommentMode('comment');
+                        // デフォルトがpopularだったときは、
+                        // autodetectがenableなら全て表示、そうでなければコメントを表示
+                        if (Config.get('popup.commentviewer.autodetect.enabled')) {
+                            self.__changeCommentMode('nocomment');
+                        } else {
+                            self.__changeCommentMode('comment');
+                        }
                         $("#comment-mode-popular").hide();
 
                         self.__popularList.hide();
@@ -493,11 +496,6 @@ var View = {
                         return;
                     }
 
-                    if (Config.get('popup.commentviewer.autodetect.enabled')) {
-                        if (data.bookmarks.length < Config.get('popup.commentviewer.autodetect.threshold')) {
-                            self.__changeCommentMode('nocomment');
-                        }
-                    }
                     self.__popularList.show();
                     self.__list.hide();
 
