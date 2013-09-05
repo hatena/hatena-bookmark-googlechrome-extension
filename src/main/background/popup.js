@@ -1400,13 +1400,26 @@ var mainPage = new Page( "main" );
         ViewManager.search( $('#search-word').attr('value') );
     }
     var _searchIncD = null;
+    var _words = [];
     function searchIncSearchHandler( evt ) {
+        var searchWord = $('#search-word').prop('value');
+        var words = Model.Bookmark.splitSearchWord(searchWord);
+        if(!isChangedWords(words)) return;
         evt.preventDefault();
         if ( _searchIncD ) _searchIncD.cancel();
         _searchIncD = Deferred.wait(0.2).next(function() {
             _searchIncD = null;
-            ViewManager.search( $('#search-word').attr('value') );
+            _words = words;
+            ViewManager.search(searchWord);
         });
+    }
+
+    function isChangedWords(words){
+        if(words.length != _words.length) return true;
+        for (var i = 0; i < _words.length; i++){
+            if(words[i] != _words[i]) return true;
+        }
+        return false;
     }
 
     mainPage.onshow = function mainPage_onshow() {
@@ -1414,7 +1427,7 @@ var mainPage = new Page( "main" );
         $("#comment-tab").bind( "click", onClickCommentButton );
         $('#search-form').bind( "submit", searchFormSubmitHandler );
         if ( Config.get('popup.search.incsearch') ) {
-            $('#search-word').bind( "keyup", searchIncSearchHandler );
+            $('#search-word').bind( "input", searchIncSearchHandler );
         }
 
         var lastView = Config.get('popup.lastView');
@@ -1435,6 +1448,6 @@ var mainPage = new Page( "main" );
         $("#comment-tab").unbind( "click", onClickCommentButton );
         $('#search-form').unbind( "submit", searchFormSubmitHandler );
         // bind してなくても削除処理をする
-        $('#search-word').unbind( "keyup", searchIncSearchHandler );
+        $('#search-word').unbind( "input", searchIncSearchHandler );
     };
 }).call( this );
