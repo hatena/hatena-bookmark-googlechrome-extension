@@ -1398,7 +1398,7 @@ var mainPage = new Page( "main" );
     var _searchIncD = null;
     var _words = [];
     function searchIncSearchHandler( evt ) {
-        var searchWord = $('#search-word').attr('value');
+        var searchWord = $('#search-word').prop('value');
         var words = Model.Bookmark.splitSearchWord(searchWord);
         if(!isChangedWords(words)) return;
         evt.preventDefault();
