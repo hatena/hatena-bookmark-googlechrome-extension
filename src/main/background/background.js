@@ -277,7 +277,7 @@ chrome.contextMenus.create({
                    +'&title='+encodeURIComponent(tab.title)),
             focused : true,
             type : 'popup',
-            height : 550,
+            height : 480,
             width : 500
         });
     }

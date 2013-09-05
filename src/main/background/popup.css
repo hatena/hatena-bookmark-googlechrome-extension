@@ -24,7 +24,8 @@
 input[type="checkbox"] {
   margin-right: 5px;
 }
-
+html {
+}
 body {
     font: 100%/1.4 "Arial", "Helvetica", sans-serif;
     font-size: small;
