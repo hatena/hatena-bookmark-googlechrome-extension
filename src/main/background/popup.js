@@ -276,6 +276,7 @@ var View = {
         get container()       { return $('#comment-container') },
         get tab()             { return $('#comment-tab') },
         // --- private accessors ---
+        get __popularList()     { return $('#popular-comment-list') },
         get __list()            { return $('#comment-list') },
         get __title()           { return $('#comment-title') },
         get __titleContainer()  { return $('#comment-title-container') },
@@ -285,20 +286,40 @@ var View = {
         get __commentInfos()    { return $('#comment-infos') },
         get __commentToggle()   { return $('#comment-toggle') },
         get __commentMessage()   { return $('#comment-message') },
+        __commentModeButtonSelector: {
+            popular: "#comment-mode-popular",
+            comment: "#comment-mode-comment",
+            nocomment: "#comment-mode-nocomment",
+        },
+        __entryURL:"",
+        __calledShowComment: false,
+        __calledShowPopularComment: false,
+        __prevCommentMode:  Config.get('popup.commentviewer.mode'),
         // --- public methods ---
         onshow: function() {
+            var self = this;
             this.__init();
-            $("#comment-toggle").bind( "click", this.__listeners.onClickNoCommentToggleButton );
+            Object.keys(self.__commentModeButtonSelector).forEach(function(mode){
+                $(self.__commentModeButtonSelector[mode]).bind("click", self.__listeners.onClickCommentModeButton);
+            });
         },
         onhide: function() {
-            $("#comment-toggle").unbind( "click", this.__listeners.onClickNoCommentToggleButton );
+            var self = this;
+            Object.keys(self.__commentModeButtonSelector).forEach(function(mode){
+                $(self.__commentModeButtonSelector[mode]).unbind("click", self.__listeners.onClickCommentModeButton);
+            });
         },
         // --- private methods ---
         __listeners: {
-            onClickNoCommentToggleButton: function ( evt ) { View.comment.__toggleNoComment() }
+            onClickCommentModeButton: function ( evt ){
+                var mode = this.id.split("-").pop();
+                if (mode != View.comment.__prevCommentMode){
+                    Config.set('popup.commentviewer.mode', mode);
+                    View.comment.__changeCommentMode(mode);
+                }
+            }
         },
         __init: function() {
-            if (this.inited) return;
             var self = this;
             getInformation().next(function(info) {
                 self.__setTitle(info.title || info.url);
@@ -307,18 +328,40 @@ var View = {
                     self.__commentMessage.text('表示できるブックマークコメントはありません');
                     return;
                 }
-                HTTPCache.comment.get(info.url).next(function(r) {
+                self.__entryURL = info.url;
+                HTTPCache.comment.get(self.__entryURL).next(function(r) {
                     if (r) {
-                        self.__commentMessage.hide();
                         self.__setTitle(r.title);
-                        self.__list.empty();
-                        self.__list.html('');
-                        self.__showComment(r);
-                    } else {
-                        self.__commentMessage.text('表示できるブックマークコメントはありません');
+                        self.__showCommentHeader(r);
                     }
                 });
+                self.__changeCommentMode(Config.get('popup.commentviewer.mode'));
             });
+        },
+        __changeCommentMode: function(currentMode){
+            var self = this;
+            Object.keys(self.__commentModeButtonSelector).forEach(function(m){
+                $(self.__commentModeButtonSelector[m]).removeClass("active");
+            });
+            $("#comment-mode-" + currentMode).addClass("active");
+            switch (currentMode){
+                case 'popular':
+                    self.__showPopularComment();
+                    break;
+                case 'comment':
+                    Config.set('popup.commentviewer.togglehide', true);
+                    if (!self.__calledShowComment || self.__prevCommentMode == 'popular') self.__showComment();
+                    self.__hideNoComment();
+                    break;
+                case 'nocomment':
+                    Config.set('popup.commentviewer.togglehide', false);
+                    if (!self.__calledShowComment || self.__prevCommentMode == 'popular') self.__showComment();
+                    self.__showNoComment();
+                    break;
+                default:
+                    break;
+            }
+            self.__prevCommentMode = currentMode;
         },
         __setTitle: function(title) {
             this.__title.text(Utils.truncate(title, 60));
@@ -338,41 +381,17 @@ var View = {
             this.__commentToggle.attr('title', 'すべてのユーザを表示');
             this.__commentToggle.attr('alt', 'すべてのユーザを表示');
         },
-        __toggleNoComment: function() {
-            if (this.__list.hasClass('hide-nocomment')) {
-                this.__showNoComment();
-            } else {
-                this.__hideNoComment();
-            }
-        },
-        __showComment: function(data) {
-            var eid = data.eid;
+        __showCommentHeader: function(data){
             var self = this;
             var bookmarks = data.bookmarks;
-
-            // http://b.hatena.ne.jp/entry/jsonlite/ が返す JSON に "bookmarks"
-            // プロパティが存在しないのは, 著者が非公開設定にしている場合
-            if ( !bookmarks ) {
-                self.__commentMessage.text( "ページ作者の希望により" +
-                        "ブックマーク一覧は非表示に設定されています" );
-                self.__commentMessage.show();
-                this.inited = true;
-                return;
-            }
+            // ブクマの非表示設定をされているページはdata.bookmarksがない
+            if (!bookmarks) return;
 
             if (UserManager.user && UserManager.user.ignores) {
                 var ignoreRegex = UserManager.user.ignores;
                 bookmarks = bookmarks.filter(function(b) { return ! ignoreRegex.test(b.user) });
             }
             var publicLen = bookmarks.length;
-
-            if (Config.get('popup.commentviewer.autodetect.enabled')) {
-                if (Config.get('popup.commentviewer.autodetect.threshold') < publicLen) {
-                    self.__hideNoComment();
-                }
-            } else if (!Config.get('popup.commentviewer.togglehide')) {
-                self.__hideNoComment();
-            }
 
             self.__commentUsers.text(sprintf('%d %s', data.count, data.count > 1 ? 'users' : 'user'));
             self.__commentUsers.attr('href', data.entry_url);
@@ -382,15 +401,122 @@ var View = {
             self.__commentCount.text(sprintf('(%s + %s)', publicLen, data.count - publicLen));
             self.__commentInfos.show();
 
-            if (publicLen == 0) {
-                self.__commentMessage.text('表示できるブックマークコメントはありません');
-                self.__commentMessage.show();
-                this.inited = true;
+            HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
+                if (data) {
+                    if (data.bookmarks.length == 0){
+                        $("#comment-mode-popular").hide();
+                        return;
+                    }
+                }
+            });
+
+            var options = {
+                title: data.title,
+                uri: data.url,
+            };
+            // 全体のstarの数を計算
+            if (!self.isInit){
+                Hatena.Bookmark.Star.loadElements([], options);
+                self.isInit = true;
+            }
+        },
+        __showComment: function() {
+            var self = this;
+            if (self.__calledShowComment){
+                self.__list.show();
+                self.__popularList.hide();
                 return;
             }
+            self.__calledShowComment = true;
+            HTTPCache.comment.get(self.__entryURL).next(function(data) {
+                if (data) {
+                    self.__commentMessage.hide();
+                    var bookmarks = data.bookmarks;
 
-            var i = 0;
-            var step = 100;
+                    // http://b.hatena.ne.jp/entry/jsonlite/ が返す JSON に "bookmarks"
+                    // プロパティが存在しないのは, 著者が非公開設定にしている場合
+                    if ( !bookmarks ) {
+                        self.__commentMessage.text( "ページ作者の希望により" +
+                            "ブックマーク一覧は非表示に設定されています" );
+                        self.__commentMessage.show();
+                        return;
+                    }
+
+                    if (UserManager.user && UserManager.user.ignores) {
+                        var ignoreRegex = UserManager.user.ignores;
+                        bookmarks = bookmarks.filter(function(b) { return ! ignoreRegex.test(b.user) });
+                    }
+                    var publicLen = bookmarks.length;
+
+                    if (!self.__calledShowPopularComment && Config.get('popup.commentviewer.autodetect.enabled')) {
+                        if (publicLen < Config.get('popup.commentviewer.autodetect.threshold')) {
+                            self.__changeCommentMode('nocomment');
+                        }
+                    }
+
+                    if (publicLen == 0) {
+                        self.__commentMessage.text('表示できるブックマークコメントはありません');
+                        self.__commentMessage.show();
+                        return;
+                    }
+
+                    self.__list.show();
+                    self.__popularList.hide();
+
+                    self.__createCommentsDom(data, self.__list);
+
+                } else {
+                    self.__commentMessage.text('表示できるブックマークコメントはありません');
+                }
+            });
+        },
+        __showPopularComment: function() {
+            var self = this;
+            if (self.__calledShowPopularComment){
+                self.__popularList.show();
+                self.__list.hide();
+                return;
+            }
+            self.__calledShowPopularComment = true;
+            HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
+                self.__commentMessage.hide();
+                if (data) {
+                    if (!data.bookmarks || data.bookmarks.length == 0){
+                        // デフォルトがpopularだったときは、
+                        // autodetectがenableなら全て表示、そうでなければコメントを表示
+                        if (Config.get('popup.commentviewer.autodetect.enabled')) {
+                            self.__changeCommentMode('nocomment');
+                        } else {
+                            self.__changeCommentMode('comment');
+                        }
+                        $("#comment-mode-popular").hide();
+
+                        self.__popularList.hide();
+                        self.__list.show();
+
+                        return;
+                    }
+
+                    self.__popularList.show();
+                    self.__list.hide();
+
+                    self.__createCommentsDom(data, self.__popularList);
+                } else {
+                    self.__showComment();
+                }
+            });
+        },
+        __createCommentsDom: function(data, commentContainer){
+            var self = this;
+            var eid = data.eid;
+            var bookmarks = data.bookmarks;
+
+            if (UserManager.user && UserManager.user.ignores) {
+                var ignoreRegex = UserManager.user.ignores;
+                bookmarks = bookmarks.filter(function(b) { return ! ignoreRegex.test(b.user) });
+            }
+            var publicLen = bookmarks.length;
+
             var starLoaded = 0;
             self.__starLoadingIcon.show();
             var starLoadedCheck = function(entriesLen) {
@@ -400,11 +526,8 @@ var View = {
                 }
             }
 
-            var options = {
-                title: data.title,
-                uri: data.url,
-            };
-
+            var i = 0;
+            var step = 100;
             var httpRegexp = /(.*?)((?:https?):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\'*$!]|&(?!lt;|gt;|quot;))+)(.*)/;
             Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
@@ -413,23 +536,23 @@ var View = {
                     var b = bookmarks[i++];
                     if (!b) continue;
                     var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
-                                            b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
-                                            eid);
+                        b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
+                        eid);
 
                     var li = Utils.createElementFromString(
                         '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
-                    {
-                        data: {
-                            userlink: B_HTTP + b.user + '/',
-                            permalink: permalink,
-                            icon: User.View.prototype.getProfileIcon(b.user),
-                            user: b.user,
-                            klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
-                            comment: b.comment,
-                            timestamp: b.timestamp.substring(0, 10),
-                            document: document
-                        }
-                    });
+                        {
+                            data: {
+                                userlink: B_HTTP + b.user + '/',
+                                permalink: permalink,
+                                icon: User.View.prototype.getProfileIcon(b.user),
+                                user: b.user,
+                                klass: b.comment.length == 0 ? 'userlist nocomment' : 'userlist',
+                                comment: b.comment,
+                                timestamp: b.timestamp.substring(0, 10),
+                                document: document
+                            }
+                        });
                     if (httpRegexp.test(b.comment)) {
                         var matches = [];
                         var match;
@@ -458,11 +581,10 @@ var View = {
                     frag.appendChild(li);
                     elements.push(li);
                 }
-                Hatena.Bookmark.Star.loadElements(elements, (n == 0 ? options : null)).next(starLoadedCheck);
-                self.__list.append(frag);
+                Hatena.Bookmark.Star.loadElements(elements, null).next(starLoadedCheck);
+                commentContainer.append(frag);
                 return Deferred.wait(0.25);
             });
-            this.inited = true;
         }
     },
     bookmark: {
