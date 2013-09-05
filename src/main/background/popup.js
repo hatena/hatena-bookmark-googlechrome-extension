@@ -487,7 +487,7 @@ var View = {
             HTTPCache.popularComment.get(self.__entryURL).next(function(data) {
                 self.__commentMessage.hide();
                 if (data) {
-                    if (data.bookmarks.length == 0){
+                    if (!data.bookmarks || data.bookmarks.length == 0){
                         // デフォルトがpopularだったときは、Modeを変更せずcommentを表示する
                         self.__changeCommentMode('popular', 'comment');
                         $("#comment-mode-popular").hide();
