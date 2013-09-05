@@ -40,7 +40,10 @@
         'popup.bookmark.postEvernote': false,
         'popup.bookmark.postMixiCheck': false,
         'popup.bookmark.addAsin': false,
-        'popup.bookmark.lastCommentValue': {},
+        'popup.bookmark.lastCommentValue': {
+            'default': {},
+            type: 'object',
+        },
         'popup.tags.recommendTags.enabled': true,
         'popup.tags.allTags.enabled': true,
         'popup.tags.showAllTags': false,
