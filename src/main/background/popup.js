@@ -4,7 +4,6 @@ importFeature(BG, ['UserManager', 'User', 'HTTPCache', 'URI', 'Manager', 'Model'
 
 var request_uri = URI.parse('http://chrome/' + location.href);
 var popupMode = request_uri.param('url') ? false : true;
-
 if (popupMode) {
     // XXX
     p = function(msg) {
@@ -75,7 +74,9 @@ function saveWindowPositions(win) {
 }
 
 function loadWindowPosition(win) {
-    if (request_uri.param('debug') || request_uri.param('error')) return;
+    if (request_uri.param('debug') || request_uri.param('error') || request_uri.param('popup')) {
+        return;
+    }
     var pos;
     try { pos = JSON.parse(localStorage.bookmarkEditWindowPositions) } catch (e) {};
     if (!pos) {
@@ -551,11 +552,10 @@ var View = {
             }
             // 選択されている文字列があれば引用風の体裁でコメントにフィルイン
             // ただし、すでにコメント欄に入力済みの文字列がある場合はフィルインしない
-            if(!this.tagCompleter.inputLine.value){
-                if (data.selection) {
-                    var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
-                    this.__updateComment(quote);
-                }
+            // コンテキストメニューからの呼び出しの際はこれに相当する処理を__loadByInformationの中で実行
+            if (!request_uri.param('popup') && data.selection && !this.tagCompleter.inputLine.value) {
+                var quote = '“' + data.selection.replace(/\s+/g, ' ') + '”';
+                this.__updateComment(quote);
             }
         },
         __setImages: function(images) {
@@ -697,16 +697,11 @@ var View = {
             var url = info.url;
             if (info.tabId) {
                 if (/^https?:\/\//.test(info.url)) {
-                    chrome.tabs.executeScript(info.tabId, {
-                        file: "/content/bookmarkedit_bridge.js",
-                        allFrames: false,
-                        runAt: "document_end",
-                    }, function (results) {
-                        var res = results[0];
-                        if (res.url !== info.url) {
-                            console.info("ブックマーク対象ページの情報を取得しようとしましたが、タブに表示されているページの URL が期待する URL ではありませんでした。");
-                            return;
-                        }
+                    chrome.runtime.sendMessage({
+                        message : 'get_bookmarkedit_info',
+                        tabId : info.tabId,
+                        url : url
+                    },function(res){
                         self.__updatePageData(res);
 
                     });
@@ -725,6 +720,10 @@ var View = {
                 $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
                 .removeClass('none');
                 this.__commentEL.attr('value', request_uri.param('comment'));
+            }
+            // 文字選択中にコンテキストメニューから開いた時にコメントを引用風にフィルインする処理
+            if (request_uri.param('popup') && request_uri.param('comment') && !this.__commentEL.prop("value")) {
+                this.__commentEL.prop("value", "“" + request_uri.param('comment') + "“");
             }
 
             // debug /
@@ -1175,6 +1174,8 @@ var ready = function() {
     if (request_uri.param('error')) {
         ViewManager.showBookmarkAddForm();
         return;
+    } else if (request_uri.param('popup')) {
+        ViewManager.showBookmarkAddForm();
     }
 };
 
