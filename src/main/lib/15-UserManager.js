@@ -1,3 +1,4 @@
+/// reference: "../config.js"
 
 var UserManager = $({});
 UserManager.MY_NAME_URL = B_HTTP + 'my.name';
@@ -115,7 +116,7 @@ User.prototype = {
         });
     },
     link: function(path) {
-        return B_HTTP + this.name + '/' + (path ? path + '?editer=craddon' : '');
+        return B_HTTP + this.name + "/" + (path ? path + "?editer=" + BOOKMARK_EXT_CONFIG["editor_name"] : "");
     },
     get database() {
         return new Database('hatenabookmark-' + this.name, {

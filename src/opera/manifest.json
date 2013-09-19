@@ -1,0 +1,72 @@
+{
+  "manifest_version": 2,
+  "default_locale": "ja",
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "version": "1.4.0",
+  "permissions": [
+    "http://*/*",
+    "https://*/*",
+    "tabs",
+    "unlimited_storage"
+  ],
+  "icons": {
+      "16": "images/favicon16.png",
+      "32": "images/favicon32.png",
+      "48": "images/favicon48.png",
+      "128": "images/favicon128.png"
+  },
+  "browser_action": {
+    "default_icon": "images/chrome-b-plus.png",
+    "default_title": "Hatena Bookmark",
+    "default_popup": "background/popup.html"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "all_frames": false,
+      "js": [
+        "content/login_check.js"
+      ],
+      "matches": [
+        "http://b.hatena.ne.jp/guide/chrome_register",
+        "http://b.hatena.ne.jp/guide/chrome_register*",
+        "http://www.hatena.ne.jp/login",
+        "https://www.hatena.ne.jp/login",
+        "http://www.hatena.ne.jp/login*",
+        "https://www.hatena.ne.jp/login*"
+      ]
+    },
+    {
+      "run_at": "document_end",
+      "all_frames": false,
+      "js": [
+        "content/logout.js"
+      ],
+      "matches": [
+        "http://www.hatena.ne.jp/logout",
+        "https://www.hatena.ne.jp/logout",
+        "http://www.hatena.ne.jp/logout*",
+        "https://www.hatena.ne.jp/logout*"
+      ]
+    },
+    {
+      "run_at": "document_end",
+      "all_frames": false,
+      "js": [
+        "content/widget_embedder.js"
+      ],
+      "css": [
+        "content/widget_embedder.css"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "options_page": "background/config.html",
+  "background": {
+    "page": "background/background.html"
+  }
+}

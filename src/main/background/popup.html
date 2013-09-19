@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../lib/51-HatenaStarLoader.js"></script>
 <script type="text/javascript" src="../lib/60-TagCompleter.js"></script>
 <link rel="stylesheet" href="popup.css" type="text/css" />
+<title>はてなブックマーク Google Chrome 拡張</title>
 </head>
 <body class="data-loading">
 <div id="eula">
@@ -353,14 +354,17 @@
 
     <div id="comment-title-right">
       <div id="comment-infos">
-        <img id="comment-toggle" src="/images/comment-viewer-toggle-on.png" />
+        <div class="comment-mode-tab active" id="comment-mode-popular" title="人気コメント">人気</div>
+        <div class="comment-mode-tab" id="comment-mode-comment" title="新着コメント">新着</div>
+        <div class="comment-mode-tab" id="comment-mode-nocomment" title="全てのブックマーク">全て</div>
       </div>
     </div>
 
 
   </h3>
   <div id="comment-message"><img id="comment-loading-icon" src="/images/loading.gif" />コメントをロードしています…</div>
-  <ul id="comment-list"></ul>
+  <ul class="comment-list" id="comment-list"></ul>
+  <ul class="comment-list" id="popular-comment-list"></ul>
 </div>
 <div id="search-container">
   <div id="search-header" class="content-header">

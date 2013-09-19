@@ -134,8 +134,6 @@ $.extendWithAccessorProperties(Manager, {
 
 var ConnectMessenger = $({});
 
-ConnectMessenger = $({});
-
 ConnectMessenger.bind('login_check', function(data) {
     // console.log('login by url: ' + data.url);
     UserManager.loginWithRetry(15 * 1000);
@@ -161,40 +159,22 @@ ConnectMessenger.bind('get_siteinfos_with_xpath', function(event, data, port) {
         SiteinfoManager.sendSiteinfosWithXPath(port);
     }
 });
-
-var bookmarkeditBridgePorts = {};
-ConnectMessenger.bind('bookmarkedit_bridge_set', function(event, data, port) {
-    var url = data.url;
-    var disconnectHandler = function() {
-        port.onDisconnect.removeListener(disconnectHandler);
-        delete bookmarkeditBridgePorts[url];
-    }
-    bookmarkeditBridgePorts[url] = port;
-    port.onDisconnect.addListener(disconnectHandler);
-});
-
-ConnectMessenger.bind('bookmarkedit_bridge_get', function(event, data, port) {
-    // console.log('!get' + data.url);
-    var url = data.url;
-    // console.log(bookmarkeditBridgePorts);
-    var bridgePort = bookmarkeditBridgePorts[url];
-    if (bridgePort) {
-        bridgePort.onMessage.addListener(function(info, con) {
-            if (info.message == 'bookmarkedit_bridge_recieve' && data.url == url) {
-                console.log('recieve!!');
-                port.postMessage({
-                    message: info.message,
-                    data: info.data
-                });
-            }
-        });
-
-        bridgePort.postMessage({
-            message: 'get',
-            data: {}
-        });
-    }
-});
+chrome.runtime.onMessage.addListener(function(data, sender, sendResponse){
+    var res;
+    chrome.tabs.executeScript(data.tabId-0, {
+        file: "/content/bookmarkedit_bridge.js",
+        allFrames: false,
+        runAt: "document_end",
+    }, function (results) {
+        res = results[0];
+        if (res.url !== data.url) {
+            console.info("ブックマーク対象ページの情報を取得しようとしましたが、タブに表示されているページの URL が期待する URL ではありませんでした。");
+            return;
+        }
+        sendResponse(res);
+    });
+    return true;
+})
 
 UserManager.bind('UserChange', function() {
     if (UserManager.user) Sync.init();
@@ -279,6 +259,68 @@ chrome.extension.onConnect.addListener(function(port, name) {
       if (info.message)
           ConnectMessenger.trigger(info.message, [info.data, con]);
   });
+});
+
+// 右クリックメニュー
+
+chrome.contextMenus.create({
+    'title':'このページをはてなブックマークに追加',
+    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
+    'onclick':function(info, tab) {
+        var url = tab.url;
+        var selectionText = info.selectionText || '';
+        chrome.windows.create({
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)
+                   +'&comment='+encodeURIComponent(selectionText)
+                   +'&windowId='+tab.windowId
+                   +'&tabId='+tab.id
+                   +'&title='+encodeURIComponent(tab.title)),
+            focused : true,
+            type : 'popup',
+            height : 480,
+            width : 500
+        });
+    }
+});
+/*
+chrome.contextMenus.create({
+    'title':'このページをはてなブックマークで表示',
+    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
+    'onclick':function(info, tab) {
+        var url = tab.url;
+        window.open('http://b.hatena.ne.jp/entry?url='+encodeURIComponent(url));
+    }
+});
+chrome.contextMenus.create({
+    'title':'このリンクをはてなブックマークに追加',
+    'contexts':['link'],
+    'onclick':function(info, tab) {
+        var url = info.linkUrl;
+        chrome.windows.create({
+            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)),
+            focused : true,
+            type : 'popup',
+            height : 550,
+            width : 500
+        });
+
+    }
+});
+*/
+chrome.contextMenus.create({
+    'title':'このリンクをはてなブックマークで表示',
+    'contexts':['link'],
+    'onclick':function(info, tab) {
+        var url = info.linkUrl;
+        window.open("http://b.hatena.ne.jp/entry?url=" + encodeURIComponent(url));
+    }
+});
+chrome.contextMenus.create({
+    'title':'はてなブックマークで「%s」を検索',
+    'contexts':['selection'],
+    'onclick': function(info, tab) {
+        window.open('http://b.hatena.ne.jp/search?q='+encodeURIComponent(info.selectionText));
+    }
 });
 
 // login check

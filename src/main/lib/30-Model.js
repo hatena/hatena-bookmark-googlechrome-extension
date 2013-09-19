@@ -87,8 +87,11 @@ $.extend(Bookmark, {
         var tmp = Bookmark.parse(str);
         return tmp[0];
     },
+    splitSearchWord: function(word){
+        return (word || '').toUpperCase().replace(/\s+$/, "").split(/\s+/);
+    },
     search: function(word, options) {
-        var words = (word || '').toUpperCase().split(/\s+/);
+        var words = this.splitSearchWord(word);
         if (!options) options = {};
         options = $.extend({
             order: 'date',

@@ -1,16 +1,5 @@
 
-
-var port;
-function init() {
-    port = chrome.extension.connect();
-    port.onMessage.addListener(onMessage);
-    port.postMessage({
-        message: 'bookmarkedit_bridge_set',
-        data: { url: location.href },
-    });
-}
-
-function onMessage(info) {
+function getPageInfo() {
     var data = {
         url: location.href,
     };
@@ -24,10 +13,10 @@ function onMessage(info) {
     var title = getTitle();
     if (title) data.title = title;
 
-    port.postMessage({
-        message: 'bookmarkedit_bridge_recieve',
-        data: data,
-    });
+    var selection = getSelectedString();
+    if (selection) data.selection = selection;
+
+    return data;
 }
 
 function getTitle() {
@@ -67,7 +56,12 @@ function getImages() {
     return images.filter(function(image) { return image && image.src }).map(function(image) { return image.src });
 }
 
+function getSelectedString() {
+    var selection = window.getSelection();
+    if (!selection.rangeCount) return null;
+    var range = selection.getRangeAt(0);
+    if (range.collapsed) return null;
+    return range.toString();
+}
 
-if (window.top == window.self)
-    init();
-
+getPageInfo(); // メソッドの返り値が `executeScript` 呼び出し側に返される

@@ -85,6 +85,26 @@ Ten.Array = {
     isArray: function(o) {
         return (o instanceof Array ||
                 (o && typeof(o.length) === 'number' && typeof(o) != 'string' && !o.nodeType));
+    },
+    find: function (arr, cond) {
+        var code = (cond instanceof Function) ? cond : function (v) {
+            return v == cond;
+        };
+        var arrL = arr.length;
+        for (var i = 0; i < arrL; i++) {
+            if (code(arr[i])) {
+                return arr[i];
+            }
+        }
+        return undefined; // not null
+    },
+    forEach: function (arraylike, code) {
+        var length = arraylike.length;
+        for (var i = 0; i < length; i++) {
+            var r = code(arraylike[i]);
+            if (r && r.stop) return r.returnValue;
+        }
+        return null;
     }
 };
 
@@ -519,6 +539,60 @@ Ten.DOM = new Ten.Class({
         }
         return null;
     },
+    firstElementChild: function (node) {
+        var el = node.firstElementChild || node.firstChild;
+        while (el && el.nodeType != 1) {
+            el = el.nextSibling;
+        }
+        return el;
+    },
+    getElementSetByClassNames: function (map, container) {
+        var elements = {root: []};
+
+        if (map.root) {
+            if (map.root instanceof Array) {
+                elements.root = map.root;
+            } else {
+                if (Ten.DOM.hasClassName(container, map.root)) {
+                    elements.root = [container];
+                } else {
+                    elements.root = Ten.DOM.getElementsByClassName(map.root, container);
+                }
+            }
+            delete map.root;
+        }
+
+        var root = elements.root[0] || container || document.body || document.documentElement || document;
+        for (var n in map) {
+            if (map[n] instanceof Array) {
+                elements[n] = map[n];
+            } else if (map[n]) {
+                elements[n] = Ten.DOM.getElementsByClassName(map[n], root);
+            }
+        }
+
+        return elements;
+    },
+    getAncestorByClassName: function (className, node) {
+        while (node != null) {
+            node = node.parentNode;
+            if (Ten.DOM.hasClassName(node, className)) {
+                return node;
+            }
+        }
+        return null;
+    },
+    someParentNode: function(el, func) {
+        if (el.parentNode) {
+            if (func(el.parentNode)) {
+                return true;
+            } else {
+                return Ten.DOM.someParentNode(el.parentNode, func);
+            }
+        } else {
+            return false;
+        }
+    },
     insertBefore: function(node, ref) {
         ref.parentNode.insertBefore(node, ref);
     },
@@ -578,6 +652,17 @@ Ten.DOM = new Ten.Class({
             return document.selection.createRange().text;
         else
             return '';
+    },
+    clearSelection: function() {
+        if (window.getSelection) {
+            window.getSelection().collapse(document.body, 0);
+        } else if (document.getSelection) {
+            document.getSelection().collapse(document.body, 0);
+        } else {
+            var selection = document.selection.createRange();
+            selection.setEndPoint("EndToStart", selection);
+            selection.select();
+        }
     },
     show: function(elem) {
         elem.style.display = 'block';
@@ -1415,35 +1500,54 @@ Ten.Logger = new Ten.Class({
     }
 });
 
-/* Ten.Browser */
+/* DEPRECATED: Ten.Browser */
 Ten.Browser = {
     isIE: navigator.userAgent.indexOf('MSIE') != -1,
     isIE6 : navigator.userAgent.indexOf('MSIE 6.') != -1,
     isIE7 : navigator.userAgent.indexOf('MSIE 7.') != -1,
     isIE8 : navigator.userAgent.indexOf('MSIE 8.') != -1,
     isIE9 : navigator.userAgent.indexOf('MSIE 9.') != -1,
+    geIE10 : /MSIE [0-9]{2,}\./.test(navigator.userAgent),
+    /* Gecko */
     isMozilla: navigator.userAgent.indexOf('Mozilla') != -1 && !/compatible|WebKit/.test(navigator.userAgent),
+    /* Presto */
     isOpera: !!window.opera,
+    isWebKit: navigator.userAgent.indexOf('WebKit') != -1,
     isSafari: navigator.userAgent.indexOf('WebKit') != -1 && navigator.userAgent.indexOf('Chrome/') == -1,
     isChrome : navigator.userAgent.indexOf('Chrome/') != -1,
     isFirefox : navigator.userAgent.indexOf('Firefox/') != -1,
     isDSi : navigator.userAgent.indexOf('Nintendo DSi') != -1,
     is3DS : navigator.userAgent.indexOf('Nintendo 3DS') != -1,
-    isWii : navigator.userAgent.indexOf('Nintendo Wii') != -1,
-    isAndroid : navigator.userAgent.indexOf('Android') != -1,
+    isWii : navigator.userAgent.indexOf('Nintendo Wii') != -1 && !navigator.userAgent.indexOf('Nintendo WiiU'),
+    isWiiU: navigator.userAgent.indexOf('Nintendo WiiU'),
+    /* Android smartphones */
+    isAndroid : navigator.userAgent.indexOf('Android') != -1 && navigator.userAgent.indexOf('Mobile') != -1,
+    /* iPhone and iPod touch */
     isIPhone : (navigator.userAgent.indexOf('iPod;') != -1 || navigator.userAgent.indexOf('iPhone;') != -1 || navigator.userAgent.indexOf('iPhone Simulator;') != -1),
     isIPad : navigator.userAgent.indexOf('iPad') != -1,
+    isBB: navigator.userAgent.indexOf('BlackBerry') == 0,
+    isWM: navigator.userAgent.indexOf('IEMobile') != -1 || navigator.userAgent.indexOf('Windows Phone') != -1,
+    isOSX: navigator.userAgent.indexOf('OS X ') != -1,
     isSupportsXPath : !!document.evaluate,
+    noQuirks: document.compatMode == 'CSS1Compat',
     version: {
         string: (/(?:Firefox\/|MSIE |Opera\/|Chrome\/|Version\/)([\d.]+)/.exec(navigator.userAgent) || []).pop(),
         valueOf: function() { return parseFloat(this.string) },
         toString: function() { return this.string }
     }
 };
+/* Touch small devices */
 Ten.Browser.isTouch = Ten.Browser.isIPhone || Ten.Browser.isAndroid || Ten.Browser.isDSi || Ten.Browser.is3DS;
 Ten.Browser.isSmartPhone = Ten.Browser.isIPhone || Ten.Browser.isAndroid;
+Ten.Browser.leIE7 = Ten.Browser.isIE6 || Ten.Browser.isIE7;
+
+if (!Ten.Browser.isIE) Ten.JSONP.MaxBytes = 7000;
+
+if (!Ten.Browser.CSS) Ten.Browser.CSS = {};
+Ten.Browser.CSS.noFixed = Ten.Browser.isIE6 || (Ten.Browser.isIE && !Ten.Browser.noQuirks);
 
 Ten.Event.onKeyDown = ((Ten.Browser.isFirefox && Ten.Browser.isOSX) || Ten.Browser.isOpera) ? 'onkeypress' : 'onkeydown';
+
 
 Ten.Deferred = (function () {
     function Deferred () { return (this instanceof Deferred) ? this.init() : new Deferred() }
@@ -1800,6 +1904,7 @@ Ten.Deferred = (function () {
         }
         return Deferred;
     };
+    
     
     return Deferred;
 })();
@@ -2353,7 +2458,7 @@ Hatena.Star.User = new Ten.Class({
         var hostname = location.hostname || '';
         if (this.name.match(/@(.*)/)) {
             if (RegExp.$1 == "DSi") {
-                return Hatena.Star.UgoMemoURL + this.name + '/';
+                return Hatena.Star.PortalURL + this.name + '/';
             } else if (RegExp.$1 == "facebook") {
                 return Hatena.Star.HaikuURL + this.name + '/';
             } else {
@@ -2381,7 +2486,7 @@ Hatena.Star.Entry = new Ten.Class({
         this.stars = [];
         this.colored_stars = [];
         this.comments = [];
-        this.starEntry = null;
+        this._hasBoundToStarEntry = false;
     },
     maxStarCount: 11
 },{
@@ -2389,14 +2494,17 @@ Hatena.Star.Entry = new Ten.Class({
         this.stars = [];
         this.star_container.innerHTML = '';
     },
+    hasBoundToStarEntry: function () {
+        return this._hasBoundToStarEntry;
+    },
     bindStarEntry: function(se) {
-        this.starEntry = se;
+        this._hasBoundToStarEntry = true;
         if (se.colored_stars) {
             var colored_star_hash = {};
             for (var i = 0, len = se.colored_stars.length; i < len ; i++){
                 colored_star_hash[se.colored_stars[i].color] = se.colored_stars[i].stars;
             }
-            var cs = "purple,blue,red,green".split(',');
+            var cs = [ "purple", "blue", "red", "green" ];
             for (var i = 0, len = cs.length; i < len ; i++){
                 var csh = colored_star_hash[cs[i]];
                 if (csh) this.pushStars(csh,cs[i]);
@@ -3446,6 +3554,7 @@ Hatena.Star.CommentButton = new Ten.Class({
         this.show();
         this.constructor = Hatena.Star.CommentButtonActive;
         this.img.src = Hatena.Star.Button.getImgSrc(this.constructor,this.container);
+        Ten.DOM.addClassName(this.container, 'hatena-star-comment-active');
     }
 });
 
@@ -4100,7 +4209,7 @@ Hatena.Star.CommentScreen = new Ten.Class({
         for (var i=0; i<comments.length; i++) {
             cc.appendChild(comments[i].asElement());
         }
-        if (e.starEntry && !e.can_comment) {
+        if ( e.hasBoundToStarEntry() && !e.can_comment ) {
             this.hideCommentForm();
         } else {
             this.addCommentForm();
@@ -4379,6 +4488,8 @@ Hatena.Star.EntryLoader = new Ten.Class({
             result = window.location;
         } else if (selector == 'parent') {
             result = parent;
+        } else if (selector.match(/^link\[rel~?="?canonical"?\]$/)) {
+            result = Ten.querySelector(selector);
         } else {
             result = Ten.Selector.getElementsBySelector(selector,parent)[0];
         }
@@ -4415,19 +4526,22 @@ Hatena.Star.EntryLoader = new Ten.Class({
     receiveStarEntries: function(res) {
         var c = Hatena.Star.EntryLoader;
         var entries = res.entries;
+        var encodedUriToEntryInfoMap = {};
         if (!entries) entries = [];
-        for (var i = 0, cLen = c.entries.length ; i < cLen ; i++) {
+        for ( var i = 0, len = entries.length; i < len; ++i ) {
+            var entryInfo = entries[i];
+            if ( !entryInfo.uri ) continue;
+            var eURI = entryInfo.eURI;
+            if ( !eURI ) eURI = entryInfo.eURI = encodeURIComponent( entryInfo.uri );
+            encodedUriToEntryInfoMap[eURI] = entryInfo;
+        }
+        for ( var i = 0, len = c.entries.length; i < len; ++i ) {
             var e = c.entries[i];
-            if (e.starEntry) continue;
-            if (!e.eURI) e.eURI = encodeURIComponent(e.uri);
-            for (var j = 0, eLen = entries.length ; j < eLen ; j++) {
-                var se = entries[j];
-                if (!se.uri) continue;
-                if ((se.eURI || (se.eURI = encodeURIComponent(se.uri))) == e.eURI) {
-                    e.bindStarEntry(se);
-                    entries.splice(j,1);
-                    break;
-                }
+            var entryInfo;
+            if ( e.hasBoundToStarEntry() ) continue;
+            if ( !e.eURI ) e.eURI = encodeURIComponent(e.uri);
+            if ( entryInfo = encodedUriToEntryInfoMap[e.eURI] ) {
+                e.bindStarEntry( entryInfo );
             }
             if (typeof(e.can_comment) == 'undefined') {
                 e.setCanComment(res.can_comment);

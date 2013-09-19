@@ -13,8 +13,8 @@
 }
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .shadow {
@@ -24,10 +24,11 @@
 input[type="checkbox"] {
   margin-right: 5px;
 }
-
+html {
+}
 body {
-    font: 100%/1.4 "Arial", "Helvetica", sans-serif;
-    font-size: small;
+  font: 100%/1.4 "Arial", "Helvetica", sans-serif;
+  font-size: small;
 }
 
 #main {
@@ -87,23 +88,23 @@ input[type='text'] {
 }
 
 .table-row {
-    display: table-row;
+  display: table-row;
 }
 
 a:link,
 a:hover,
 a:visited {
-    color: #2D6BC4;
+  color: #2D6BC4;
 }
 
 a#users-count:link,
 a#users-count:hover,
 a#users-count:visited {
-    font-size: 90%;
-    color: #E9637A;
-    padding: 0px 3px 0px 3px;
-    font-weight: bold;
-    text-decoration: underline;
+  font-size: 90%;
+  color: #E9637A;
+  padding: 0px 3px 0px 3px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .usericon,
@@ -122,20 +123,20 @@ a#users-count:visited {
 /* {{{ header */
 
 #header {
-    display: table;
-    border-bottom: 1px solid #bbb;
-    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
-    border-top-left-radius: 4px; /* Chrome 4 以降で使える */
-    border-top-right-radius: 4px; /* Chrome 4 以降で使える */
+  display: table;
+  border-bottom: 1px solid #bbb;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
+  border-top-left-radius: 4px; /* Chrome 4 以降で使える */
+  border-top-right-radius: 4px; /* Chrome 4 以降で使える */
 }
 #edit-submit,
 #header {
-    /* gradient を使った青背景 */
-    /* Chrome 10 以降で使える */
-    background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
-    /* current standard; but unimplimented yet (chrome 19) */
-    background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
-    color: #FFFFFF;
+  /* gradient を使った青背景 */
+  /* Chrome 10 以降で使える */
+  background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+  /* current standard; but unimplimented yet (chrome 19) */
+  background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+  color: #FFFFFF;
 }
 
 #edit-submit:hover,
@@ -232,7 +233,7 @@ a#users-count:visited {
 }
 
 #title-notice-user-container {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #image-detect-notice {
@@ -389,9 +390,9 @@ ul.tab-ui li img {
 /* commnet {{{ */
 
 #comment-title-container {
-  background: no-repeat 0px 2px;
-  padding: 0 15px 0 22px;
+  background: no-repeat 10px 6px;
   display: table-cell;
+  padding: 5px 10px 5px 32px;
   /*
   display: inline-block;
   */
@@ -399,7 +400,8 @@ ul.tab-ui li img {
 
 #comment-infos {
   display: none;
-  padding-bottom: 3px;
+  bottom: 0;
+  margin-bottom: -1px;
 }
 
 #star-loading-icon {
@@ -414,14 +416,14 @@ ul.tab-ui li img {
 
 #comment-header {
   font-size: 13px;
-  padding: 5px 10px 5px 10px;
+  /*padding: 5px 10px 5px 10px;*/
 }
 
-#comment-list {
+.comment-list {
   padding: 0;
 }
 
-#comment-list li {
+.comment-list li {
   padding: 3px 20px 3px 10px;
 }
 
@@ -449,6 +451,9 @@ a.username {
 #comment-title-right {
   display: table-cell;
   text-align: right;
+  padding-right: 2px;
+  vertical-align: bottom;
+  min-width: 105px;
   /*
   display: inline-block;
   */
@@ -520,51 +525,51 @@ span#favorites {
 }
 
 #edit > .entry-info-box {
-    display: -webkit-box; /* Chrome 21 未満 */
-    display: -webkit-flex; /* Chrome 21 以降 */
-    display: flex;
-    /* 方向 */
-    -webkit-box-orient: horizontal;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+  display: -webkit-box; /* Chrome 21 未満 */
+  display: -webkit-flex; /* Chrome 21 以降 */
+  display: flex;
+  /* 方向 */
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
 }
 
 #edit > .entry-info-box > .entry-basic-info-box {
-    -webkit-box-flex: 1; /* Chrome 21 未満 */
-    -webkit-flex: auto; /* Chrome 21 以降 */
-    flex: auto;
-    margin-bottom: 5px;
+  -webkit-box-flex: 1; /* Chrome 21 未満 */
+  -webkit-flex: auto; /* Chrome 21 以降 */
+  flex: auto;
+  margin-bottom: 5px;
 }
 
 #edit > .entry-info-box > .entry-image-box {
-    -webkit-box-flex: 0; /* Chrome 21 未満 */
-    -webkit-flex: none; /* Chrome 21 以降 */
-    flex: none;
-    margin-bottom: 10px;
+  -webkit-box-flex: 0; /* Chrome 21 未満 */
+  -webkit-flex: none; /* Chrome 21 以降 */
+  flex: none;
+  margin-bottom: 10px;
 }
 
 #buttons {
-    float: right;
-    margin: 10px 0 10px;
+  float: right;
+  margin: 10px 0 10px;
 }
 
 #buttons > .table-row,
 #buttons > .table-row > .edit-cell {
-    display: inline-block;
+  display: inline-block;
 }
 
 label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #buttons * input[type="submit"],
 .confirmation-balloon * input {
-    cursor: pointer;
-    font-size: 95%;
+  cursor: pointer;
+  font-size: 95%;
 }
 #buttons * input {
-    position: relative;
-    z-index: 10;
+  position: relative;
+  z-index: 10;
 }
 
 label {
@@ -573,10 +578,10 @@ label {
 }
 
 .edit-left {
-    font-size: 90%;
-    font-weight: bold;
-    width: 1%;
-    white-space: nowrap;
+  font-size: 90%;
+  font-weight: bold;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .edit-cell {
@@ -626,9 +631,9 @@ label {
 }
 
 #comment:focus {
-   background-color: #fff;
-   border: none;
-   outline: none;
+  background-color: #fff;
+  border: none;
+  outline: none;
 }
 
 #comment-area {
@@ -646,51 +651,51 @@ label {
 
 #bookmark-error,
 #bookmarked-notice {
-    text-align: center;
-    padding: 5px;
-    margin: 5px 10px 5px 10px;
-    font-size: 90%;
-    font-weight: bold;
-    color: #555;
-    background-color: #FDD;
-    border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  margin: 5px 10px 5px 10px;
+  font-size: 90%;
+  font-weight: bold;
+  color: #555;
+  background-color: #FDD;
+  border-radius: 3px;
 }
 #bookmarked-notice {
-    position: relative;
+  position: relative;
 }
 
 #bookmarked-notice-text {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 #delete-button {
-    -webkit-appearance: none;
-    background: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-    font-weight: normal;
-    color: #00d;
-    text-decoration: underline;
-    cursor: pointer;
+  -webkit-appearance: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-weight: normal;
+  color: #00d;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #type-counter {
-    position: absolute;
-    bottom: 5px;
-    right: 20px;
-    display: inline-block;
-    border-radius: 6px 0 0 6px;
-    padding-left: 8px;
-    padding-right: 2px;
-    opacity: 0.6;
-    font-size: 12px;
-    line-height: 12px;
-    color: #000;
-    background-color: #FFF;
-    white-space: nowrap;
-    text-align: right;
-    pointer-events: none;
+  position: absolute;
+  bottom: 5px;
+  right: 20px;
+  display: inline-block;
+  border-radius: 6px 0 0 6px;
+  padding-left: 8px;
+  padding-right: 2px;
+  opacity: 0.6;
+  font-size: 12px;
+  line-height: 12px;
+  color: #000;
+  background-color: #FFF;
+  white-space: nowrap;
+  text-align: right;
+  pointer-events: none;
 }
 
 #type-counter .red {
@@ -703,36 +708,36 @@ label {
 }
 
 #checkbox-options {
-    padding: 3px;
-    font-size: 90%;
-    line-height: 1.7;
+  padding: 3px;
+  font-size: 90%;
+  line-height: 1.7;
 }
 
 #checkbox-options dt {
-    font-weight: bold;
-    margin-right: 3px;
-    display: inline;
+  font-weight: bold;
+  margin-right: 3px;
+  display: inline;
 }
 
 #checkbox-options dd {
-    display: inline;
+  display: inline;
 }
 
 #checkbox-options dd + dt:before {
-    content: '\A';
-    white-space: pre;
+  content: '\A';
+  white-space: pre;
 }
 
 #checkbox-options label {
-    margin-right: 7px;
-    display: inline-block;
-    vertical-align: middle;
-    cursor:pointer;
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor:pointer;
 }
 
 #checkbox-options label.disabled {
-    color: #aaa;
-    cursor: auto;
+  color: #aaa;
+  cursor: auto;
 }
 
 #post-twitter-label .label-text,
@@ -741,63 +746,63 @@ label {
 #post-mixi-check-label .label-text,
 #private-label .label-text,
 #send-mail-label .label-text {
-    background: 0px 50% no-repeat;
-    margin-left: 2px;
-    padding-left: 21px;
+  background: 0px 50% no-repeat;
+  margin-left: 2px;
+  padding-left: 21px;
 }
 
 #post-twitter-label .label-text {
-    background-image: url(/images/add-twitter.png);
+  background-image: url(/images/add-twitter.png);
 }
 
 #post-facebook-label .label-text {
-    background-image: url(/images/icon-facebook.png);
+  background-image: url(/images/icon-facebook.png);
 }
 
 #post-evernote-label .label-text {
-    background-image: url(/images/icon-evernote.png);
+  background-image: url(/images/icon-evernote.png);
 }
 
 #post-mixi-check-label .label-text {
-    background-image: url(/images/icon-mixi.png);
+  background-image: url(/images/icon-mixi.png);
 }
 
 #private-label .label-text {
-    background-image: url(/images/add-private.png);
+  background-image: url(/images/add-private.png);
 }
 
 #send-mail-label .label-text {
-    background-image: url(/images/icon-mail.png);
+  background-image: url(/images/icon-mail.png);
 }
 
 #asin-container {
-    display: none;
+  display: none;
 }
 
 #submit-container {
-    position: relative;
+  position: relative;
 }
 .option-help-tooltip {
-    position: absolute;
-    bottom: 100%;
-    padding: 10px;
-    margin: -0.3em 0.4em;
-    font-size: 90%;
-    color: #555;
-    background-color: #FDD;
-    border-radius: 3px;
+  position: absolute;
+  bottom: 100%;
+  padding: 10px;
+  margin: -0.3em 0.4em;
+  font-size: 90%;
+  color: #555;
+  background-color: #FDD;
+  border-radius: 3px;
 }
 
 .option-help-tooltip a {
-    font-size: 11px;
+  font-size: 11px;
 }
 
 .confirmation-balloon {
-    background-color: #FFFFFF;
-    border: solid 1px #CCCCCC;
-    color: #666;
-    margin-top: 5px;
-    padding: 12px;
+  background-color: #FFFFFF;
+  border: solid 1px #CCCCCC;
+  color: #666;
+  margin-top: 5px;
+  padding: 12px;
 }
 
 .confirmation-balloon p.msg {
@@ -813,25 +818,25 @@ label {
 }
 
 #delete-button-confirmation {
-    position: absolute;
-    top: -0.1em;
-    right: 25px;
-    z-index: 20;
+  position: absolute;
+  top: -0.1em;
+  right: 25px;
+  z-index: 20;
 }
 
 div#tag-container {
-    background-color: #E7F0FC;
-    border: 1px solid #E6E6FC;
-    border-radius: 3px;
-    padding: 8px 6px 8px 6px;
-    margin: 5px 0 0 0;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #666;
+  background-color: #E7F0FC;
+  border: 1px solid #E6E6FC;
+  border-radius: 3px;
+  padding: 8px 6px 8px 6px;
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
 }
 
 div#tag-container dl:last-child {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 div#tag-container dt {
@@ -839,24 +844,24 @@ div#tag-container dt {
 }
 
 #recommend-tags-container {
-    display: none;
-    padding:0;
+  display: none;
+  padding:0;
 }
 
 #all-tags-container {
-    display: none;
-    padding:0;
+  display: none;
+  padding:0;
 }
 
 #recommend-tags-container dt, #all-tags-container dt {
-    margin: 0 3px 5px 5px;
-    font-weight: bold;
-    font-size: 12px;
+  margin: 0 3px 5px 5px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 #recommend-tags-container dt a, #all-tags-container dt #show-all-tags-toggle {
-    font-weight: normal;
-    font-size: 11px;
+  font-weight: normal;
+  font-size: 11px;
 }
 
 #recommend-tags-container dd, #all-tags-container dd {
@@ -935,17 +940,17 @@ dd#all-tags {
 }
 
 #title {
-    font-weight: bold;
-    margin-bottom: 3px;
-    line-height: 1.6;
+  font-weight: bold;
+  margin-bottom: 3px;
+  line-height: 1.6;
 }
 
 #url {
-    margin: 0 0 1px 2px;
+  margin: 0 0 1px 2px;
 }
 
 .none {
-    display: none;
+  display: none;
 }
 
 #search-form {
@@ -1015,7 +1020,7 @@ dd#all-tags {
 }
 
 #search-container,
-#comment-list {
+.comment-list {
   max-height: 470px;
   overflow-y: auto;
   word-break:break-all;
@@ -1027,7 +1032,7 @@ dd#all-tags {
   padding: 20px 10px 20px 10px;
 }
 
-#comment-list li {
+.comment-list li {
   padding: 7px 10px 7px 10px;
   border-bottom: 1px solid #F0F0F0;
   margin: 0 8px 0 8px;
@@ -1035,28 +1040,28 @@ dd#all-tags {
   line-height: 1.5;
 }
 
-#comment-list li a.username {
+.comment-list li a.username {
   padding: 0px 10px 0px 3px;
   color: #2D6BC4;
   text-decoration: none;
 }
 
-#comment-list li a.username:hover {
+.comment-list li a.username:hover {
   text-decoration: underline;
 }
 
-#comment-list li .comment {
+.comment-list li .comment {
   color: #333;
 }
 
-#comment-list li .timestamp {
+.comment-list li .timestamp {
   font-size: 90%;
   color: #999;
   padding-left: 5px;
 }
 
 .hide-nocomment > li.nocomment {
-     display: none;
+  display: none;
 }
 
 #comment-users {
@@ -1089,15 +1094,15 @@ em #comment-users {
 
 /* loading */
 .loading {
-    display: none !important;
+  display: none !important;
 }
 
 body.data-loading * .loaded {
-    display: none !important;
+  display: none !important;
 }
 
 body.data-loading * .loading {
-    display: inline !important;
+  display: inline !important;
 }
 
 
@@ -1132,7 +1137,7 @@ body.data-loading * .loading {
 }
 
 #search-container ul {
- padding-top: 2px;
+  padding-top: 2px;
 }
 
 #search-container ul li {
@@ -1339,23 +1344,23 @@ em a:visited {
  */
 
 #checkbox-options {
-    position: relative;
-    padding: 0;
-    display: inline-block;
-    float: left;
+  position: relative;
+  padding: 0;
+  display: inline-block;
+  float: left;
 }
 #checkbox-options h6 {
-    display: none;
+  display: none;
 }
 #checkbox-options:not(.expanded) #checkbox-options-expanded {
-    display: none;
+  display: none;
 }
 #checkbox-options.expanded #checkbox-options-minimized {
-    visibility: hidden;
+  visibility: hidden;
 }
 #checkbox-options *,
 #buttons * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 #checkbox-options-button-to-expand {
@@ -1372,17 +1377,17 @@ em a:visited {
 
 /* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
 body.sharing-options-panel-opend .option-help-tooltip {
-    margin-left: 160px;
+  margin-left: 160px;
 }
 
 /** 開いているときの表示 */
 #checkbox-options #checkbox-options-expanded {
-    position: absolute;
-    left: -1px;
-    bottom: 12px;
-    background-color: #FFFFFF;
-    border: solid 1px #CCCCCC;
-    color: #666;
+  position: absolute;
+  left: -1px;
+  bottom: 12px;
+  background-color: #FFFFFF;
+  border: solid 1px #CCCCCC;
+  color: #666;
 }
 
 #checkbox-options-expanded ul {
@@ -1405,9 +1410,9 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 
 #checkbox-options-expanded .bar {
-    margin-bottom: 0;
-    background-color: #EEE;
-    border-top: 1px solid #DDD;
+  margin-bottom: 0;
+  background-color: #EEE;
+  border-top: 1px solid #DDD;
 }
 
 #checkbox-options-button-to-minimize {
@@ -1430,7 +1435,7 @@ body.sharing-options-panel-opend .option-help-tooltip {
 
 #checkbox-options #checkbox-options-minimized ul,
 #checkbox-options #checkbox-options-minimized li {
-    display: inline-block;
+  display: inline-block;
 }
 
 #checkbox-options #checkbox-options-minimized ul {
@@ -1478,7 +1483,7 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 
 #twitter-shared-link-select-popup input {
-    display: none;
+  display: none;
 }
 
 #twitter-shared-link-select-popup input + label {
@@ -1489,30 +1494,65 @@ body.sharing-options-panel-opend .option-help-tooltip {
   line-height: 1.5;
 }
 #twitter-shared-link-select-popup > div {
-    margin: 2px 0;
+  margin: 2px 0;
 }
 #twitter-shared-link-select-popup input + label:hover {
-    background-color: #DDDDDD;
+  background-color: #DDDDDD;
 }
 #twitter-shared-link-select-popup input:checked + label {
-    color: white;
-    background-color: #747474;
+  color: white;
+  background-color: #747474;
 }
 
 /**
  * 非公開ボタンのための CSS
  */
 #private-button {
-    width: 3em;
-    margin-left: -1em;
-    z-index: 1;
+  width: 3em;
+  margin-left: -1em;
+  z-index: 1;
 }
 #private-button.active .off, /* 非公開 ON の場合の off 用表示 */
 #private-button:not(.active) .on { /* 非公開 OFF の場合の on 用表示 */
-    display: none;
+  display: none;
 }
 #private-button .on { /* 非公開 ON の表示 */
-    color: #FF0;
+  color: #FF0;
 }
 #private-button .off { /* 非公開 OFF の表示 */
+}
+
+.comment-mode-tab{
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+  margin-left: -5px;
+  padding: 2px 4px;
+  height: 16px;
+  width: 27px;
+  font-size: 90%;
+  background-color: #DDDDDD;
+  border: 1px solid #E6E6E6;
+  border-radius: 5px 5px 0 0;
+}
+
+.comment-mode-tab.active{
+  background-color:#FFFFFF;
+  border-width: 1px;
+  border-color: #E6E6E6 #E6E6E6 #FFFFFF #E6E6E6;
+}
+
+.comment-mode-tab:hover{
+  cursor: pointer;
+  background-color: #CCCCCC;
+  transition: all 0.1s ease;
+  /*-webkit-transition: all 0.5s ease;*/
+}
+
+.comment-mode-tab.active{
+  cursor: default;
+}
+
+.comment-mode-tab.active:hover{
+  background-color:#FFFFFF;
 }
