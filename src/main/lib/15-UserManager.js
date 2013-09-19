@@ -82,7 +82,6 @@ User.prototype = {
     get rks() { return this.options.rks },
     get private() { return this.options.private == 1 },
     get public() { return !this.private },
-    get defaultSharedLinkTo() { return this.options.default_shared_link_to || "entry" },
     get canUseTwitter() { return this.options.is_oauth_twitter == 1 },
     get postTwitterChecked() { return this.options.twitter_checked || 'inherit' },
     get canUseFacebook() { return this.options.is_oauth_facebook == 1 },

@@ -1447,64 +1447,6 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 
 /**
- * Twitter に流す URL のリンク先
- */
-#twitter-shared-link-button-to-expand {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  width: 10px;
-  overflow: hidden;
-}
-#twitter-shared-link-button-to-expand::before {
-  content: url(../images/box-open.png);
-  position: relative;
-  left: -4px;
-  top: 4px;
-}
-#twitter-shared-link-button-to-expand:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-#twitter-shared-link-button-to-expand.js-opened::before {
-  content: url(../images/box-close.png);
-}
-
-#twitter-shared-link-select-popup {
-  display: none;
-  width: 14em;
-  position: absolute;
-  bottom: 100%;
-  color: #333;
-  border: solid #CCC 1px;
-  border-radius: 3px;
-  background-color: white;
-  padding: 8px;
-}
-
-#twitter-shared-link-select-popup input {
-  display: none;
-}
-
-#twitter-shared-link-select-popup input + label {
-  display: block;
-  padding: 0px 5px 0px 5px;
-  border-radius: 5px;
-  color: #666666;
-  line-height: 1.5;
-}
-#twitter-shared-link-select-popup > div {
-  margin: 2px 0;
-}
-#twitter-shared-link-select-popup input + label:hover {
-  background-color: #DDDDDD;
-}
-#twitter-shared-link-select-popup input:checked + label {
-  color: white;
-  background-color: #747474;
-}
-
-/**
  * 非公開ボタンのための CSS
  */
 #private-button {
