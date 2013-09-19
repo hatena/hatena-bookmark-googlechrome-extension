@@ -1371,7 +1371,7 @@ em a:visited {
   margin: 0 5px 0 5px;
   background-color: #FFF;
   border: none;
-  background: url(../images/box-close.png) center center no-repeat;
+  background: url(../images/box-open.png) center center no-repeat;
   cursor: pointer;
 }
 
@@ -1424,7 +1424,7 @@ body.sharing-options-panel-opend .option-help-tooltip {
   padding: 2px 5px 0 10px;
   background-color: #FFF;
   border: none;
-  background: url(../images/box-open.png) 10px 50% no-repeat;
+  background: url(../images/box-close.png) 10px 50% no-repeat;
 }
 
 /** 閉じているときの表示 */
