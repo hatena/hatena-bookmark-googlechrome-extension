@@ -116,6 +116,16 @@ function onClickConfigResetButton() {
     }
 }
 
+function updateViewAccordingToWhetherEulaAccepted() {
+    if (localStorage.eula) {
+        $("#eula").hide();
+        $("#main-section").show();
+    } else {
+        $("#main-section").hide();
+        $("#eula").show();
+    }
+}
+
 $(document).ready(function() {
     Config.View.autoObserve();
     $('body').show();
@@ -125,5 +135,13 @@ $(document).ready(function() {
     $(".extensions-link").bind( "click", function(){
         chrome.tabs.create({url: "chrome://extensions/"});
     });
-});
 
+    window.addEventListener("storage", function (evt) {
+        updateViewAccordingToWhetherEulaAccepted();
+    }, false);
+    $("#eula-accept-button-ok").bind("click", function (evt) {
+        localStorage.eula = "accepted";
+        updateViewAccordingToWhetherEulaAccepted();
+    });
+    updateViewAccordingToWhetherEulaAccepted();
+});

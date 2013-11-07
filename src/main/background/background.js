@@ -3,6 +3,17 @@ var isEuraAgreed = function() {
     return !!localStorage.eula;
 }
 
+// 利用規約に同意していない場合は設定ページを新しいタブで開く
+var createTabWithConfigPage = function () {
+    chrome.tabs.create({ url: "/background/config.html" });
+};
+
+// 拡張機能のインストール時や Chrome 本体のアップデート時などに呼ばれる
+// See: http://developer.chrome.com/apps/runtime.html#event-onInstalled
+chrome.runtime.onInstalled.addListener(function (evt) {
+    if (!isEuraAgreed()) createTabWithConfigPage();
+});
+
 var Manager = $({});
 
 $.extendWithAccessorProperties(Manager, {
