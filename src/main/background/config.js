@@ -137,7 +137,10 @@ $(document).ready(function() {
     });
 
     window.addEventListener("storage", function (evt) {
-        updateViewAccordingToWhetherEulaAccepted();
+        // `localStorage.clear()` されたときは `evt.key` の値は偽値になる
+        if (evt.key === "eula" || evt.key) {
+            updateViewAccordingToWhetherEulaAccepted();
+        }
     }, false);
     $("#eula-accept-button-ok").bind("click", function (evt) {
         localStorage.eula = "accepted";
