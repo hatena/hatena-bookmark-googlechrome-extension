@@ -5,7 +5,14 @@ var isEuraAgreed = function() {
 
 // 利用規約に同意していない場合は設定ページを新しいタブで開く
 var createTabWithConfigPage = function () {
-    chrome.tabs.create({ url: "/background/config.html" });
+    // XXX Chrome on Mavericks でポップアップをクリックしたときに,
+    // タブをフォアグラウンドで開くと Chrome のウィンドウが隠されてしまう (Cmd-h) 問題の対策
+    // create するときに active:true (デフォルト値) だと必ず隠される
+    chrome.tabs.create({ url: "/background/config.html", active: false }, function (tab) {
+        setTimeout(function () {
+            chrome.tabs.update(tab.id, { active: true });
+        }, 100); // XXX setTimeout しないとダメ
+    });
 };
 
 // 拡張機能のインストール時や Chrome 本体のアップデート時などに呼ばれる
