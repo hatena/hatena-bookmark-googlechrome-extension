@@ -90,3 +90,38 @@ input[type='text'] {
   width: 2em;
   text-align: right;
 }
+
+
+#eula {
+  max-width: 800px;
+  min-width: 400px;
+  margin: 10px;
+}
+
+#eula p {
+  padding: 5px 5px 0 5px;
+}
+
+.eula-accept {
+  padding: 4px 4px 4px 10px;
+  text-align: center;
+}
+
+.eula-accept input {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
+#eula blockquote {
+  margin: 20px 20px 5px 20px;
+  overflow: auto;
+  height: 15em;
+  border: 1px solid #999;
+}
+
+#eula pre {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  padding: 1em;
+}

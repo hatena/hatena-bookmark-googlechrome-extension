@@ -1398,9 +1398,16 @@ $(document).bind('ready', ready);
 }).call( this );
 
 
-
 $(document).bind( "ready", function onready() {
     $(document).unbind( "ready", onready );
+    // 利用規約に同意していない場合は新タブを開いてポップアップを閉じる。
+    // OS X における Chrome だとポップアップのサイズが小さくなってしまうことがあるため。
+    // OS X の Chrome で問題がなくなったら元に戻す。
+    if (!BG.isEuraAgreed()) {
+        BG.createTabWithConfigPage();
+        closeWin();
+        return;
+    }
     changePopupWindowWidthAppropriately();
     pageManager.initialize();
 } );
@@ -1485,6 +1492,8 @@ var Page;
     }
 }).call( this );
 
+// XXX 現在は利用規約に同意していない場合は新タブを開いてポップアップを閉じるように
+// なっているので `eulaPage` は使われていない。
 var eulaPage = new Page( "eula" );
 (function extendEulaPageObject() {
     function eulaAccept() {
