@@ -1,7 +1,12 @@
 
 var isEuraAgreed = function() {
     return !!localStorage.eula;
-}
+};
+
+var acceptEula = function () {
+    localStorage.setItem("eula", "accepted");
+    UserManager.loginWithRetry(15 * 1000);
+};
 
 // 利用規約に同意していない場合は設定ページを新しいタブで開く
 var createTabWithConfigPage = function () {

@@ -136,6 +136,9 @@ $(document).ready(function() {
         chrome.tabs.create({url: "chrome://extensions/"});
     });
 
+    // XXX 利用規約への同意がされたかどうかを、`localStorage` を意識せずに扱える
+    // ようにすべき。
+    // 別の window における `localStorage` の変化を検知
     window.addEventListener("storage", function (evt) {
         // `localStorage.clear()` されたときは `evt.key` の値は偽値になる
         if (evt.key === "eula" || evt.key) {
@@ -143,8 +146,8 @@ $(document).ready(function() {
         }
     }, false);
     $("#eula-accept-button-ok").bind("click", function (evt) {
-        localStorage.eula = "accepted";
-        updateViewAccordingToWhetherEulaAccepted();
+        // background ページで `localStorage` を変化させるので上のイベントリスナで検知できる
+        BG.acceptEula();
     });
     updateViewAccordingToWhetherEulaAccepted();
 });
