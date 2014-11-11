@@ -22,8 +22,13 @@ src/tests にテストがあります。
 テストは, はてなブックマーク Google Chrome 拡張をインストールしている Chrome で
 chrome-extension://{extension-id}/tests/test.html にアクセスすると実行されます。
 
+### パッケージングについて
+
 リリースのための zip ファイルには src/tests を含める必要はありません。
 (`rake package` により ZIP ファイルを作成すると自動的に src/tests 以下は除かれます。)
+```
+rake package
+```
 
 ## ソースファイルの配置
 
