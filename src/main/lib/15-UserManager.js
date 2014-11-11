@@ -164,7 +164,7 @@ User.prototype = {
     },
 
     saveBookmark: function(data) {
-        // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1"]
+        // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1&read_later=1"]
         var data = URI.parseQuery(data);
         data.rks = this.rks;
         var endpoint = this.link('add.edit.json');
