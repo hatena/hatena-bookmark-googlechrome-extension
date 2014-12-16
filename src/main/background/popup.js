@@ -538,9 +538,18 @@ var View = {
                     var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
                         b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
                         eid);
+                    var str;
+                    if (Config.get('popup.tags.withComment.enabled')) {
+                        var tags = b.tags.map(function(tag) {
+                            return '<a rel="tag" class="user-tag" href="http://b.hatena.ne.jp/search/tag?q=' + encodeURIComponent(tag) + '">' + tag + '</a>';
+                        }).join(',');
+                        str = '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="tags">' + tags + '</span><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>';
+                    } else {
+                        str = '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>';
+                    }
 
                     var li = Utils.createElementFromString(
-                        '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
+                        str,
                         {
                             data: {
                                 userlink: B_HTTP + b.user + '/',
