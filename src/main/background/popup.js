@@ -867,25 +867,25 @@ var View = {
 
             if (url.indexOf('http://b.hatena.ne.jp/entry/') == 0) {
                 var canURL = (function(url) {
-                  var m = (new RegExp('^http://b\.hatena\.ne\.jp/entry(?:/s)?(.*)')).exec(url);
-                  var trailingURL = m[1];
-                  if ((new RegExp('^/[^.]+/')).test(trailingURL)) {
-                      // 普通のURLはドメイン部分に . を持つので {eid} が指定されているとして扱う
-                      // また http://b.hatena.ne.jp/{eid} は即リダイレクトされるため指定された url は
-                      // http://b.hatena.ne.jp/{eid}/comment/xxxx などだと考え、そのまま利用する
-                      return url;
-                  } else {
-                    var canURL = url;
-                    if (url.indexOf('http://b.hatena.ne.jp/entry/s/') == 0) {
-                        canURL = canURL.replace('/s/', '/').replace('http://', 'https://');
-                    }
-                    canURL = canURL.replace('b.hatena.ne.jp/entry/', '');
-                    return canURL;
-                  }
+                    var m = (new RegExp('^http://b\.hatena\.ne\.jp/entry(?:/s)?(.*)')).exec(url);
+                        var trailingURL = m[1];
+                        if ((new RegExp('^/[^.]+/')).test(trailingURL)) {
+                            // 普通のURLはドメイン部分に . を持つので {eid} が指定されているとして扱う
+                            // また http://b.hatena.ne.jp/{eid} は即リダイレクトされるため指定された url は
+                            // http://b.hatena.ne.jp/{eid}/comment/xxxx などだと考え、そのまま利用する
+                            return url;
+                        } else {
+                            var canURL = url;
+                            if (url.indexOf('http://b.hatena.ne.jp/entry/s/') == 0) {
+                                canURL = canURL.replace('/s/', '/').replace('http://', 'https://');
+                            }
+                            canURL = canURL.replace('b.hatena.ne.jp/entry/', '');
+                            return canURL;
+                        }
                 })(url);
                 if (url !== canURL) {
-                  $('#canonical-tips').text('エントリーページをブックマークしようとしています。');
-                  this.__setCanonical(canURL);
+                    $('#canonical-tips').text('エントリーページをブックマークしようとしています。');
+                    this.__setCanonical(canURL);
                 }
             }
 
