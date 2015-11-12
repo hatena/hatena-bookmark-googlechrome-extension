@@ -178,7 +178,7 @@ extend(WidgetEmbedder.prototype, {
         const sharpEscapedURL = url.replace(/#/g, '%23');
         const entryURL = getEntryURL(url);
         const oldEntryURL = B_HTTP + 'entry/' + sharpEscapedURL;
-        const imageAPIPrefix = 'http://b.st-hatena.com/entry/image/';
+        const imageAPIPrefix = B_HTTP + 'entry/image/';
         const oldImageAPIPrefix = B_HTTP + 'entry/image/';
         const addURL = B_HTTP + 'my/add.confirm?url=' + encodeURIComponent(url);
         const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
@@ -233,7 +233,7 @@ extend(WidgetEmbedder.prototype, {
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
         var img = E('img', {
-            src: 'http://b.st-hatena.com/entry/image/' + sharpEscapedURL,
+            src: B_HTTP + entry/image/' + sharpEscapedURL,
             alt: WidgetEmbedder.messages.SHOW_ENTRY_TEXT,
             style: 'display: none;',
         });

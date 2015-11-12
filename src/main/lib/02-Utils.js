@@ -113,7 +113,7 @@ var Utils = {
         return B_HTTP + 'entry/' + url.replace('#', '%23');
     },
     entryImage: function(url) {
-        return 'http://b.st-hatena.com/entry/image/' + url.replace('#', '%23');
+        return B_HTTP + 'entry/image/' + url.replace('#', '%23');
     },
     faviconUrl: function(url) {
         return 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(url.replace('#', '%23'));
