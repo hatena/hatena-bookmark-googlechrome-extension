@@ -97,6 +97,11 @@ a:visited {
   color: #2D6BC4;
 }
 
+a.pseudo {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 a#users-count:link,
 a#users-count:hover,
 a#users-count:visited {

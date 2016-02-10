@@ -1534,6 +1534,10 @@ var eulaPage = new Page( "eula" );
 
 var mainPage = new Page( "main" );
 (function extendMainPage() {
+    function onClickBookmarkATag( evt ) {
+        evt.preventDefault();
+        $(evt.target).parent().click();
+    }
     function onClickBookmarkButton( evt ) {
         ViewManager.showBookmarkAddForm();
     }
@@ -1568,6 +1572,7 @@ var mainPage = new Page( "main" );
     }
 
     mainPage.onshow = function mainPage_onshow() {
+        $("a.pseudo").bind( "click", onClickBookmarkATag );
         $("#bookmark-tab").bind( "click", onClickBookmarkButton );
         $("#comment-tab").bind( "click", onClickCommentButton );
         $('#search-form').bind( "submit", searchFormSubmitHandler );
@@ -1589,6 +1594,7 @@ var mainPage = new Page( "main" );
         }
     };
     mainPage.onhide = function mainPage_onhide() {
+        $("a.pseudo").unbind( "click", onClickBookmarkATag );
         $("#bookmark-tab").unbind( "click", onClickBookmarkButton );
         $("#comment-tab").unbind( "click", onClickCommentButton );
         $('#search-form').unbind( "submit", searchFormSubmitHandler );
