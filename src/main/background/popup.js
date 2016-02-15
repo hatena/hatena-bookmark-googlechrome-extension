@@ -903,7 +903,7 @@ var View = {
                     // darty...
                     var m = inputLine.value;
                     var byte = Utils.countCommentToBytes(m);
-                    byte = Math.floor(byte / 3);
+                    byte = Math.ceil(byte / 3);
                     self.__typeCount.text(byte);
                     if (byte > 100) {
                         self.__typeCount.addClass('red');
