@@ -3,7 +3,7 @@
   "default_locale": "ja",
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "permissions": [
     "http://*/*",
     "https://*/*",
@@ -78,5 +78,6 @@
         "mac": "MacCtrl+Shift+B"
       }
     }
-  }
+  },
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
 }
