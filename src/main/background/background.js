@@ -111,26 +111,26 @@ $.extendWithAccessorProperties(Manager, {
 
             HTTPCache.counter.get(tab.url).next(function(count) {
                 if (count == null) {
-                    chrome.browserAction.setBadgeText({tabId: tab.id, 
+                    chrome.browserAction.setBadgeText({tabId: tab.id,
                         text: '-',
                     });
-                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
+                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
                         color: [200,200,200, 255],
                     });
                 } else {
-                    chrome.browserAction.setBadgeText({tabId: tab.id, 
+                    chrome.browserAction.setBadgeText({tabId: tab.id,
                         text: "" + count,
                     });
-                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
-                        color: [96,255,0, 200],
+                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
+                        color: [110,203,49, 255],
                     });
                 }
             });
         } else {
-            chrome.browserAction.setBadgeText({tabId: tab.id, 
+            chrome.browserAction.setBadgeText({tabId: tab.id,
                 text: '',
             });
-            chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, 
+            chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
                 color: [99,99,99, 255],
             });
         }
@@ -388,6 +388,3 @@ setTimeout(function() {
 chrome.windows.create({url:'../tests/test.html'});
 }, 10);
 */
-
-
-
