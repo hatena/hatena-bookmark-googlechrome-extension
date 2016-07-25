@@ -122,7 +122,7 @@ $.extendWithAccessorProperties(Manager, {
                         text: "" + count,
                     });
                     chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
-                        color: [96,255,0, 200],
+                        color: [110,203,49, 255],
                     });
                 }
             });
