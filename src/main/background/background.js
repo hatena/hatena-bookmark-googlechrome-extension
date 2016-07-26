@@ -118,8 +118,12 @@ $.extendWithAccessorProperties(Manager, {
                         color: [200,200,200, 255],
                     });
                 } else {
+                    var countText = count.toString();
+                    if (countText.length > 3) {
+                      countText = countText.slice(0, countText.length - 3) + "k";
+                    }
                     chrome.browserAction.setBadgeText({tabId: tab.id,
-                        text: "" + count,
+                        text: countText,
                     });
                     chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
                         color: [110,203,49, 255],
