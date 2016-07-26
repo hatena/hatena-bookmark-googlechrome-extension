@@ -96,48 +96,39 @@ $.extendWithAccessorProperties(Manager, {
         return;
     },
     updateBookmarkCounter: function(tab) {
-        if (!localStorage.eula) return;
+        if (!localStorage.eula) {
+            return;
+        }
 
         chrome.browserAction.setIcon({path: '/images/chrome-b-plus.png'});
-        if (tab && tab.url && tab.url.indexOf('http') == 0 && Config.get('background.bookmarkcounter.enabled')) {
 
-            if (UserManager.user) {
-                 UserManager.user.hasBookmark(tab.url).next(function(bool) {
-                     if (bool) {
-                         chrome.browserAction.setIcon({tabId: tab.id, path: '/images/chrome-b-checked.png'});
-                     }
-                 });
-            }
+        if (tab == null || tab.url == null || tab.url.indexOf('http') !== 0 || !Config.get('background.bookmarkcounter.enabled')) {
+            chrome.browserAction.setBadgeText({tabId: tab.id, text: ''});
+            chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [99,99,99, 255]});
+            return;
+        }
 
-            HTTPCache.counter.get(tab.url).next(function(count) {
-                if (count == null) {
-                    chrome.browserAction.setBadgeText({tabId: tab.id,
-                        text: '-',
-                    });
-                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
-                        color: [200,200,200, 255],
-                    });
-                } else {
-                    var countText = count.toString();
-                    if (countText.length > 3) {
-                      countText = countText.slice(0, countText.length - 3) + "k";
-                    }
-                    chrome.browserAction.setBadgeText({tabId: tab.id,
-                        text: countText,
-                    });
-                    chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
-                        color: [110,203,49, 255],
-                    });
+        if (UserManager.user) {
+            UserManager.user.hasBookmark(tab.url).next(function(bool) {
+                if (bool) {
+                    chrome.browserAction.setIcon({tabId: tab.id, path: '/images/chrome-b-checked.png'});
                 }
             });
-        } else {
-            chrome.browserAction.setBadgeText({tabId: tab.id,
-                text: '',
-            });
-            chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id,
-                color: [99,99,99, 255],
-            });
         }
+
+        HTTPCache.counter.get(tab.url).next(function(count) {
+            if (count == null || isNaN(parseInt(count, 10))) {
+                chrome.browserAction.setBadgeText({tabId: tab.id, text: '-'});
+                chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [200,200,200, 255]});
+            } else {
+                var countText = count.toString();
+                if (countText.length > 3) {
+                    countText = countText.slice(0, countText.length - 3) + "k";
+                }
+                chrome.browserAction.setBadgeText({tabId: tab.id, text: countText});
+                chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [110,203,49, 255]});
+            }
+        });
     },
     updateTab: function(tab) {
         Manager.updateBookmarkIcon(tab);
