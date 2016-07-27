@@ -121,9 +121,17 @@ $.extendWithAccessorProperties(Manager, {
                 chrome.browserAction.setBadgeText({tabId: tab.id, text: '-'});
                 chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [200,200,200, 255]});
             } else {
-                var countText = count.toString();
-                if (countText.length > 3) {
-                    countText = countText.slice(0, countText.length - 3) + "k";
+                // ブックマーク数が 4 桁 (1,000) 以上なら k （キロ）で表現する（切り捨て）
+                var countText = '';
+                if (count.length <= 3) {
+                    countText = count;
+                } else if (count.length === 4) {
+                    countText = count.slice(0, 1) + "." + count.slice(1, 2) + "k";
+                } else if (count.length <= 6) {
+                    countText = count.slice(0, count.length - 3) + "k";
+                } else {
+                    // 7 桁以上なら正確な数を表示しない
+                    countText = '1M+';
                 }
                 chrome.browserAction.setBadgeText({tabId: tab.id, text: countText});
                 chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [110,203,49, 255]});
