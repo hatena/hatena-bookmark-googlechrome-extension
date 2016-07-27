@@ -229,6 +229,15 @@ var View = {
             Config.set( 'popup.search.lastWord', word );
             this.__searchWord.focus();
 
+            // マイブックマーク検索のイベントを Google Analytics に送信
+            if (window['ga'] != null) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: 'extension.search',
+                    eventAction: 'local_search'
+                });
+            }
+
             document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
             var list = this.__list;
             list.empty();
