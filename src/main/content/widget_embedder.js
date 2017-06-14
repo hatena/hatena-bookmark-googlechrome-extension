@@ -233,7 +233,7 @@ extend(WidgetEmbedder.prototype, {
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
         var img = E('img', {
-            src: 'http://b.st-hatena.com/entry/image/' + sharpEscapedURL,
+            src: '//b.st-hatena.com/entry/image/' + sharpEscapedURL,
             alt: WidgetEmbedder.messages.SHOW_ENTRY_TEXT,
             style: 'display: none;',
         });
