@@ -49,6 +49,7 @@
         'popup.tags.allTags.enabled': true,
         'popup.tags.showAllTags': false,
         'popup.tags.complete.enabled': true,
+        'popup.tags.withComment.enabled': false,
         'popup.lastView': 'comment',
         'content.webinfo.enabled': true,
         'background.bookmarkcounter.enabled': true,

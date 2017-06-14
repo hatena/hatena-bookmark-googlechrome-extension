@@ -1050,6 +1050,16 @@ dd#all-tags {
   text-decoration: underline;
 }
 
+.comment-list li .tags,
+.comment-list li .tags a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.comment-list li .tags {
+  padding: 0 5px 0 0;
+}
+
 .comment-list li .comment {
   color: #333;
 }
