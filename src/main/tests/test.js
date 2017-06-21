@@ -567,6 +567,7 @@ asyncTest( 'sync sync sync', 12, function(d) {
             equal(tags['javascript'], 11);
         });
     }).
+    error(function() {}).
     next(function () {
         QUnit.start();
     });
