@@ -85,15 +85,6 @@ HTTPCache.counter = new HTTPCache('counterCache', {
     encoder: encodeURIComponent,
 });
 
-HTTPCache.counter.isValid = function(url) {
-    // XXX
-    if (url.indexOf('https') == 0) {
-        return false;
-    } else {
-        return true;
-    }
-};
-
 /*
 HTTPCache.counter.createFilter = function(ev) {
     let filters = eval( '(' + HTTPCache.counter.prefs.get('counterIgnoreList') + ')');
