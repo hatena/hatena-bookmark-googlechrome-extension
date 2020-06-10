@@ -3,7 +3,7 @@
 本文書は, はてなブックマーク Google Chrome 拡張の開発者向けです。
 利用者向け情報は下記ページなどをご覧ください。
 
-* http://b.hatena.ne.jp/guide/chrome_extentions
+* http://b.hatena.ne.jp/help/entry/chrome_extensions
 
 ## ブランチの使い方
 

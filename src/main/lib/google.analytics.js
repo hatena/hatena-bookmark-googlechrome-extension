@@ -5,7 +5,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 ga('create', 'UA-76724775-1', 'auto');
 ga('set', 'checkProtocolTask', null);
-chrome.tabs.getSelected(null, function(tab) {
+chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
+    var tab = tabs[0];
     if (tab.url) {
 	ga('send', 'pageview', tab.url);
     }

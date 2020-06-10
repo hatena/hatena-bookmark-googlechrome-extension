@@ -9,9 +9,15 @@
     "https://*/*",
     "tabs",
     "bookmarks",
-    "unlimited_storage",
+    "unlimitedStorage",
     "contextMenus"
   ],
+  "applications": {
+    "gecko": {
+      "id": "bookmark@hatena.ne.jp",
+      "strict_min_version": "45.0"
+    }
+  },
   "icons": {
       "16": "images/favicon16.png",
       "32": "images/favicon32.png",
@@ -65,7 +71,9 @@
       ]
     }
   ],
-  "options_page": "background/config.html",
+  "options_ui": {
+    "page": "background/config.html"
+  },
   "background": {
     "page": "background/background.html"
   },
@@ -77,5 +85,5 @@
       }
     }
   },
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+  "content_security_policy": "script-src 'self'; object-src 'self'"
 }

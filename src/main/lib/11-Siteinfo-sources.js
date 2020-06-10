@@ -8,7 +8,7 @@ SiteinfoManager.addSiteinfos({
             annotationPosition: 'after',
         },
         {
-            domain:  '^http://b\\.hatena\\.ne\\.jp/',
+            domain:  '^https?://b\\.hatena\\.ne\\.jp/',
             disable: true,
         },
     ],
@@ -16,8 +16,7 @@ SiteinfoManager.addSiteinfos({
 
 SiteinfoManager.addSiteinfos({
     urls: [
-        'http://wedata.net/databases/HatenaBookmarkUsersCount/items.json',
-        'http://b.st-hatena.com/file/HatenaBookmarkUsersCount.items.json',
+        'https://b.st-hatena.com/file/v4/archive/HatenaBookmarkUsersCount.items.json',
     ],
     converter: SiteinfoManager.LDRizeConverter,
     key: 'HatenaBookmarkUsersCount',
@@ -27,8 +26,7 @@ SiteinfoManager.addSiteinfos({
 
 SiteinfoManager.addSiteinfos({
     urls: [
-        'http://wedata.net/databases/LDRize/items.json',
-        'http://b.st-hatena.com/file/LDRize.items.json',
+        'https://b.st-hatena.com/file/v4/archive/LDRize.items.json',
     ],
     converter: SiteinfoManager.LDRizeConverter,
     key: 'LDRizeSiteinfo',
@@ -36,7 +34,7 @@ SiteinfoManager.addSiteinfos({
 
 SiteinfoManager.addSiteinfos({
     urls: [
-        'http://s.hatena.ne.jp/siteconfig.json',
+        'https://s.hatena.ne.jp/siteconfig.json',
     ],
     converter: SiteinfoManager.SiteconfigConverter,
     key: 'HatenaStarSiteConfig',

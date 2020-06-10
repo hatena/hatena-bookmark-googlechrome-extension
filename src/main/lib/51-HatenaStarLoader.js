@@ -51,7 +51,7 @@ Hatena.Bookmark.Star = {
         var a = Ten.DOM.getElementsByTagAndClassName('a', 'username', el)[0];
         if (!a) return null;
         var pathname = a.pathname.replace(/^\//, '');
-        entry.uri = 'http://b.hatena.ne.jp/' + pathname + a.hash;
+        entry.uri = 'https://b.hatena.ne.jp/' + pathname + a.hash;
         var title = '';
         var tags = Ten.DOM.getElementsByTagAndClassName('a', 'user-tag', el);
         for (var i = 0; i < tags.length; i++) {
@@ -126,17 +126,17 @@ Hatena.Bookmark.Star = {
         Hatena.Star.User.RKS.ready(res.rks);
     },
     getStarEntries: function(entries, starElements) {
-        // var c = Hatena.Star.EntryLoader;
-        // var entries = c.entries;
         if (!entries || !entries.length) return;
-        var endpoint = 'entries.simple.json?';
-        var url = Hatena.Star.BaseURL + endpoint;
+        var endpoint = 'entries.json?';
+        var baseURL = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol);
+        var url = baseURL + endpoint;
 
         // normal loading
         var len = entries.length;
         for (var i = 0; i < len; i++) {
             url += 'uri=' + encodeURIComponent(entries[i].uri) + '&';
         }
+        url += 'no_comments=1';
         return jQuery.get(url,void 0,void 0,'text').next(function(res) {
             res = JSON.parse(res);
             var len = res.entries ? res.entries.length : 0;
@@ -179,4 +179,3 @@ Hatena.Star.Button = new Ten.Class({
         return c.ImgSrc;
     }
 });
-

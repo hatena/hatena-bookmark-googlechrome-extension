@@ -98,7 +98,7 @@ URI.prototype = {
             this.hash.replace(/#/, '%23')
         ].join('');
         if (this.isHTTPS) url = 's/' + url;
-        return B_HTTP + 'entry/' + url;
+        return B_ORIGIN + 'entry/' + url;
     },
     get isHTTPS() {
         return this.schema == 'https';
@@ -125,14 +125,3 @@ User.SaveRequester.prototype = {
         }
 }
 */
-
-
-
-
-
-
-
-
-
-
-

@@ -5,29 +5,19 @@
 (function () {
 module( "HTTPCache" );
 
-function mockAjax(opts) {
-    if (opts.url.indexOf('http') == 0) {
-        var orig_url = opts.url;
-        var url = URI.parse(opts.url);
-        opts.url = '/tests/data/' + url.schema + '/' + url.host + url.path + escape(url.search).replace(/%/g, '_');
-        // console.log([opts.url, '<-', orig_url].join(' '));
-    }
-    return opts;
-}
-
-var orig_ajax = $.ajax; $.ajax = function (opts) {
-    opts = mockAjax(opts);
-    return orig_ajax(opts);
-}
+// firefox ではローカルファイルの読み込みが content-type: application/xml になり
+// $.ajax が xml パースエラーを出してしまうのでモックする
+var orig = XMLHttpRequest.prototype.getAllResponseHeaders;
+XMLHttpRequest.prototype.getAllResponseHeaders = function(...args) { return ""; };
 
 asyncTest( 'HTTPCache', 5, function () {
     ExpireCache.clearAllCaches();
     var cache = new HTTPCache('test');
-    var url = 'http://b.hatena.ne.jp/index.html';
+    var url = 'https://b.hatena.ne.jp/index.html';
     var r_tmp;
     cache.get(url).next(function(res) {
         ok(res, 'get cache1');
-        return res.toString();
+        return res;
     }).next(function(res1) {
         ok(cache.has(url), 'has cache');
         cache.get(url).next(function(res) {
@@ -43,7 +33,7 @@ asyncTest( 'HTTPCache', 5, function () {
 } );
 
 asyncTest( 'HTTPCache(s)', 12, function () {
-    var url = 'http://b.hatena.ne.jp/index.html';
+    var url = 'https://b.hatena.ne.jp/index.html';
     ExpireCache.clearAllCaches();
     Deferred.parallel([
         HTTPCache.counter.get('https://www.hatena.ne.jp/').next(function(r) {

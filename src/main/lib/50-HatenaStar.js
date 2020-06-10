@@ -2284,7 +2284,7 @@ Hatena.User = new Ten.Class({
         if (!name) name = 'user';
         var pre = name.match(/^[\w-]{2}/)[0];
         var img = document.createElement('img');
-        img.src = 'http://www.hatena.ne.jp/users/' + pre + '/' + name + '/profile_s.gif';
+        img.src = 'https://www.hatena.ne.jp/users/' + pre + '/' + name + '/profile_s.gif';
         img.setAttribute('alt', name);
         img.setAttribute('title', name);
         img.setAttribute('width','16px');
@@ -2313,7 +2313,7 @@ Hatena.User = new Ten.Class({
 if (typeof(Hatena.Star) == 'undefined') {
     Hatena.Star = {};
 }
-Hatena.Star.VERSION = 1.95;
+Hatena.Star.VERSION = 1.97;
 
 /*
 // Hatena.Star.* classes //
@@ -2323,6 +2323,7 @@ if (!Hatena.Star.BaseURLProtocol) {
     Hatena.Star.BaseURLProtocol = ( location.protocol === "http:" ? "http:" : "https:" );
 }
 Hatena.Star.PortalURL = 'http://www.hatena.ne.jp/';
+Hatena.Star.ProfileURL = 'http://profile.hatena.ne.jp/';
 Hatena.Star.UgoMemoURL = 'http://ugomemo.hatena.ne.jp/';
 Hatena.Star.HaikuURL   = 'http://h.hatena.ne.jp/';
 Hatena.Star.HatenaHostRegexp = /(\.hatena\.ne\.jp|\.hatelabo.jp|\.hatena\.com)$/;
@@ -2414,9 +2415,8 @@ Hatena.Star.User = new Ten.Class({
         var cached = urlName ? Hatena.Star.User._nicknames[urlName] : null;
         if (!urlName) {
             cached = null;
-        } else if (!Hatena.Star.User.useHatenaUserNickname &&
-                   urlName &&
-                   !/\@/.test(urlName)) {
+        } else if (!Hatena.Star.User.useHatenaUserNickname && urlName) {
+            // ニックネームを使わない設定の場合は、urlName をそのままニックネームに
             cached = urlName;
         }
         if (cached !== undefined) {
@@ -2429,13 +2429,19 @@ Hatena.Star.User = new Ten.Class({
     },
     _getNicknames: {},
     _getNickname: function (urlName, nextCode) {
+      if (location.protocol === 'https:') {
+        // https: なページでは http: API を叩かないようにする。念の為。
+        nextCode.apply(Hatena.Star.User, [ urlName ]);
+        return;
+      }
+
       this._getNicknames[urlName] = this._getNicknames[urlName] || [];
       this._getNicknames[urlName].push(nextCode);
       clearTimeout(this._getNicknameTimer);
       this._getNicknameTimer = setTimeout(function () {
         var names = Hatena.Star.User._getNicknames;
         Hatena.Star.User._getNicknames = {};
-        var url = 'http://h1beta.hatena.com/api/friendships/show.json?url_name=sample';
+        var url = 'http://h.hatena.com/api/friendships/show.json?url_name=sample';
         for (var n in names) {
           url += '&url_name=' + encodeURIComponent(n);
         }
@@ -2457,18 +2463,12 @@ Hatena.Star.User = new Ten.Class({
     userPage: function() {
         var hostname = location.hostname || '';
         if (this.name.match(/@(.*)/)) {
-            if (RegExp.$1 == "DSi") {
-                return Hatena.Star.PortalURL + this.name + '/';
-            } else if (RegExp.$1 == "facebook") {
-                return Hatena.Star.HaikuURL + this.name + '/';
-            } else {
-                return Hatena.Star.BaseURL + this.name + '/';
-            }
+            return Hatena.Star.ProfileURL + this.name + '/';
         } else {
             if (Hatena.Star.HatenaHostRegexp.test(hostname)) {
                 return 'http://' + location.host + '/' + this.name + '/';
             } else {
-                return Hatena.Star.PortalURL + this.name + '/';
+                return Hatena.Star.ProfileURL + this.name + '/';
             }
         }
     }
@@ -4513,6 +4513,9 @@ Hatena.Star.EntryLoader = new Ten.Class({
         var entries = c.entries;
         if (!entries.length) return;
         var url = Hatena.Star.BaseURL.replace(/^http:/, Hatena.Star.BaseURLProtocol) + 'entries.json?';
+        if (Hatena.Star.noComments) {
+          url += 'no_comments=1&';
+        }
         for (var i = 0; i < entries.length; i++) {
             if (url.length > Ten.JSONP.MaxBytes) {
                 new Ten.JSONP(url, c, 'receiveStarEntries');
@@ -4759,6 +4762,7 @@ it under the same terms as the Perl programming language.
 */
 Hatena.Star.BaseURL = 'http://s.hatena.ne.jp/';
 Hatena.Star.PortalURL = 'http://www.hatena.ne.jp/';
+Hatena.Star.ProfileURL = 'http://profile.hatena.ne.jp/';
 Hatena.Star.Text.loading = '\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026';
 Hatena.Star.Text.close   = '\u9589\u3058\u308B';
 Hatena.Star.Text.colorstar_for_smartphone = "\u4ED8\u3051\u305F\u3044\u8272\u306E\u30B9\u30BF\u30FC\u3092\u30BF\u30C3\u30C1";

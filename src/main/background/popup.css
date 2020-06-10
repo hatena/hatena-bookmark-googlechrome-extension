@@ -161,21 +161,8 @@ a#users-count:visited {
   vertical-align: top;
 }
 
-#title-editable-toggle {
-  cursor: pointer;
-}
-
 #title-text-container {
   display: inline;
-}
-
-#title-text-edit-container {
-  position: relative;
-  width: auto;
-}
-
-#title-input {
-  width: 80%;
 }
 
 #current-image {
@@ -190,34 +177,6 @@ a#users-count:visited {
 #image-current-container {
   border: 1px solid #E6E6E6;
   padding: 2px;
-  cursor: pointer;
-}
-
-#image-detect-container {
-  position: fixed;
-  right: 20px;
-  top: 90px;
-  bottom: 10px;
-  max-width: 400px;
-  min-width: 350px;
-  background-color: #FFF;
-  border: 1px solid #777;
-  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5); /* Chrome 10 以降で使える */
-  overflow: hidden;
-  padding-bottom: 46px;
-  z-index: 200;
-}
-
-#image-detect-container-list {
-  overflow: auto;
-  height: 100%;
-}
-
-#image-detect-container-list img {
-  max-width: 50px;
-  max-height: 50px;
-  padding: 5px;
-  cursor: pointer;
 }
 
 #title-notice {
@@ -235,21 +194,6 @@ a#users-count:visited {
 #title-notice-user-container {
   margin-left: 20px;
 }
-
-#image-detect-notice {
-  position: absolute;
-  display: table-cell;
-  height: 40px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  color: #333;
-  background-color: #EEE;
-  border-top: 1px solid #AAA;
-  padding: 3px;
-  padding-left: 5px;
-}
-
 
 #bookmark-canonical {
   padding: 5px 10px 5px 10px;
@@ -423,10 +367,6 @@ ul.tab-ui li img {
   padding: 0;
 }
 
-.comment-list li {
-  padding: 3px 20px 3px 10px;
-}
-
 span.timestamp {
   font-size: 85%;
   color: #999;
@@ -457,26 +397,6 @@ a.username {
   /*
   display: inline-block;
   */
-}
-
-#image-detect-notice-user-container {
-  text-align: right;
-  font-size: 90%;
-}
-
-#image-detect-image-container {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-#image-detect-image-container img {
-  cursor: pointer;
-  background: #fff;
-  box-shadow: 0px 0px 2px rgba(0,0,0,0.2); /* Chrome 10 以降で使える */
-  border-bottom-left-radius: 4px; /* Chrome 4 以降で使える */
-  padding: 2px;
-  border: 1px solid #eee;
 }
 
 span#favorites {
@@ -708,6 +628,7 @@ label {
 }
 
 #checkbox-options {
+  margin: 10px 0 10px;
   padding: 3px;
   font-size: 90%;
   line-height: 1.7;
@@ -741,38 +662,14 @@ label {
 }
 
 #post-twitter-label .label-text,
-#post-facebook-label .label-text,
-#post-evernote-label .label-text,
-#post-mixi-check-label .label-text,
 #private-label .label-text,
-#send-mail-label .label-text {
-  background: 0px 50% no-repeat;
-  margin-left: 2px;
-  padding-left: 21px;
-}
 
 #post-twitter-label .label-text {
   background-image: url(/images/add-twitter.png);
 }
 
-#post-facebook-label .label-text {
-  background-image: url(/images/icon-facebook.png);
-}
-
-#post-evernote-label .label-text {
-  background-image: url(/images/icon-evernote.png);
-}
-
-#post-mixi-check-label .label-text {
-  background-image: url(/images/icon-mixi.png);
-}
-
 #private-label .label-text {
   background-image: url(/images/add-private.png);
-}
-
-#send-mail-label .label-text {
-  background-image: url(/images/icon-mail.png);
 }
 
 #asin-container {
@@ -1038,6 +935,7 @@ dd#all-tags {
   margin: 0 8px 0 8px;
   font-size: 98%;
   line-height: 1.5;
+  list-style-type: none;
 }
 
 .comment-list li a.username {
@@ -1352,27 +1250,9 @@ em a:visited {
 #checkbox-options h6 {
   display: none;
 }
-#checkbox-options:not(.expanded) #checkbox-options-expanded {
-  display: none;
-}
-#checkbox-options.expanded #checkbox-options-minimized {
-  visibility: hidden;
-}
 #checkbox-options *,
 #buttons * {
   vertical-align: middle;
-}
-
-#checkbox-options-button-to-expand {
-  height: 45px;
-  width: 16px;
-  line-height: 16px;
-  padding: 9;
-  margin: 0 5px 0 5px;
-  background-color: #FFF;
-  border: none;
-  background: url(../images/box-open.png) center center no-repeat;
-  cursor: pointer;
 }
 
 /* 共有パネルが開いているときは .option-help-tooltip の margin-left が 160px になるようにする */
@@ -1380,56 +1260,13 @@ body.sharing-options-panel-opend .option-help-tooltip {
   margin-left: 160px;
 }
 
-/** 開いているときの表示 */
-#checkbox-options #checkbox-options-expanded {
-  position: absolute;
-  left: -1px;
-  bottom: 12px;
-  background-color: #FFFFFF;
-  border: solid 1px #CCCCCC;
-  color: #666;
-}
-
-#checkbox-options-expanded ul {
-  padding: 5px 0 5px 0;
-}
-
-#checkbox-options-expanded ul li {
-  list-style-type: none;
-  padding: 0 12px 0 12px;
-  margin: 5px 0 5px 0;
-  line-height: 16px;
-}
-
-#checkbox-options-expanded-item-template label {
-  margin-right: 0px;
-}
-
-#checkbox-options-expanded ul li span.displayed-name {
-  margin-left: 5px;
-}
-
-#checkbox-options-expanded .bar {
-  margin-bottom: 0;
-  background-color: #EEE;
-  border-top: 1px solid #DDD;
-}
-
-#checkbox-options-button-to-minimize {
-  float: left;
-  height: 21px;
-  width: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-  padding: 2px 5px 0 10px;
-  background-color: #FFF;
-  border: none;
-  background: url(../images/box-close.png) 10px 50% no-repeat;
-}
-
 /** 閉じているときの表示 */
 
 #checkbox-options #checkbox-options-minimized {
+  margin-left: 5px;
+}
+
+#checkbox-options-minimized ul li span.displayed-name {
   margin-left: 5px;
 }
 
@@ -1442,8 +1279,9 @@ body.sharing-options-panel-opend .option-help-tooltip {
 }
 
 #checkbox-options #checkbox-options-minimized li {
+  height: 28px;
   margin-right: 4px;
-  line-height: 16px;
+  line-height: 28px;
 }
 
 /**

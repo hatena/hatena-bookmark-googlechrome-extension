@@ -12,7 +12,7 @@ $.extendWithAccessorProperties(TagCompleter, {
         $('body').bind('click', function() {
             self.list.hide();
         });
-        $('#tag-complete-list > li').live('click', function() {
+        $(document).on('click', '#tag-complete-list > li', function() {
             if (this.firstChild) {
                 self.inputLine.insertionTag(this.firstChild.textContent, self.getPos());
                 self.input.focus();
@@ -23,8 +23,8 @@ $.extendWithAccessorProperties(TagCompleter, {
         this.input = input;
         TagCompleter.InputLine.prototype.__defineSetter__('value', function(text) {
             this._text = text;
-            if (self.input.attr('value') != text)
-                self.input.attr('value', text);
+            if (self.input.val() != text)
+                self.input.val(text);
             if (self.options.updatedHandler) self.options.updatedHandler(this);
         });
         this.inputLine = new TagCompleter.InputLine('', []);

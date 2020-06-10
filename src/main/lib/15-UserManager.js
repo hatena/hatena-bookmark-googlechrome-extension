@@ -1,7 +1,7 @@
 /// reference: "../config.js"
 
 var UserManager = $({});
-UserManager.MY_NAME_URL = B_HTTP + 'my.name';
+UserManager.MY_NAME_URL = B_ORIGIN + 'my.name';
 
 $.extend(UserManager, {
     loginWithRetry: function(wait) {
@@ -53,44 +53,21 @@ $.extend(UserManager, {
     }
 });
 
-var User = function(name, options) {
-    this._name = name;
-    this.view = new User.View(name);
-    this.options = options || {};
-};
+var User = class {
+    constructor(name, options) {
+        this._name = name;
+        this.view = new User.View(name);
+        this.options = options || {};
+    }
 
-User.View = function(name) {
-    this.name = name;
-}
-
-User.View.prototype = {
-    getProfileIcon: function(name, isLarge) {
-        return sprintf('http://cdn1.www.st-hatena.com/users/%s/%s/profile%s.gif',
-                       name.substring(0, 2), name, isLarge ? '' : '_s');
-    },
-    get icon() {
-        return this.getProfileIcon(this.name);
-    },
-    get largeIcon() {
-        return this.getProfileIcon(this.name, true);
-    },
-};
-
-User.prototype = {
-    get name() { return this._name },
-    get plususer() { return this.options.plususer == 1 },
-    get rks() { return this.options.rks },
-    get private() { return this.options.private == 1 },
-    get public() { return !this.private },
-    get canUseTwitter() { return this.options.is_oauth_twitter == 1 },
-    get postTwitterChecked() { return this.options.twitter_checked || 'inherit' },
-    get canUseFacebook() { return this.options.is_oauth_facebook == 1 },
-    get postFacebookChecked() { return this.options.facebook_checked || 'inherit' },
-    get canUseEvernote() { return this.options.is_oauth_evernote == 1 },
-    get postEvernoteChecked() { return this.options.evernote_checked || 'inherit' },
-    get canUseMixiCheck() { return this.options.is_oauth_mixi_check == 1 },
-    get postMixiCheckChecked() { return this.options.mixi_check_checked || 'inherit' },
-    get maxCommentLength() { return this.options.max_comment_length || 100 },
+    get name() { return this._name }
+    get plususer() { return this.options.plususer == 1 }
+    get rks() { return this.options.rks }
+    get private() { return this.options.private == 1 }
+    get public() { return !this.private }
+    get canUseTwitter() { return this.options.is_oauth_twitter == 1 }
+    get postTwitterChecked() { return this.options.twitter_checked || 'inherit' }
+    get maxCommentLength() { return this.options.max_comment_length || 100 }
     get ignores() {
         if (this.options.ignores_regex) {
             if (typeof this._ignores == 'undefined') {
@@ -103,35 +80,26 @@ User.prototype = {
             return this._ignores;
         }
         return null;
-    },
-    resetDatabase: function() {
+    }
+    resetDatabase() {
         Model.initialize(true).next(function() {
             Sync.sync();
         });
-    },
-    hasBookmark: function user_hasBookmark(url) {
+    }
+    hasBookmark(url) {
         return Model.Bookmark.findByUrl(url).next(function(res) {
             return (res ? true : false);
         });
-    },
-    link: function(path) {
-        return B_HTTP + this.name + "/" + (path ? path + "?editer=" + BOOKMARK_EXT_CONFIG["editor_name"] : "");
-    },
+    }
+    link(path) {
+        return B_ORIGIN + this.name + "/" + (path ? path + "?editor=" + BOOKMARK_EXT_CONFIG["editor_name"] : "");
+    }
     get database() {
-        return new Database('hatenabookmark-' + this.name, {
-            estimatedSize: 50 * 1024 * 1024
-        });
-        /*
-        return new Database('hatenabookmark2-' + this.name, '1.0', 'hatenabookmark-' + this.name, 1024 * 1024 * 50);
-        */
-    },
-    get dataURL() { return sprintf(B_HTTP + '%s/search.data', this.name) },
-    // get dataURL() { return sprintf(B_HTTP + 'secondlife/search.data', this.name) },
-    // getProfileIcon: function user_getProfileIcon(isLarge) {
-    //     return UserUtils.getProfileIcon(this.name, isLarge);
-    // },
+        return IDBManager.getInstance(`hatenabookmark-${this.name}`);
+    }
+    get dataURL() { return sprintf(B_ORIGIN + '%s/search.data', this.name) }
 
-    deleteBookmark: function(url) {
+    deleteBookmark(url) {
         var data = {
             url: url,
             rks: this.rks,
@@ -150,7 +118,6 @@ User.prototype = {
             p('remote delete success - ' + url);
             Model.Bookmark.findByUrl(url).next(function(b) {
                 if (b) {
-                    // XXX: remove tag
                     p('delete bookmarked - ' + url);
                     HTTPCache.clearCached(url);
                     b.destroy().next(function() {
@@ -161,9 +128,9 @@ User.prototype = {
         }).error(function(res) {
             Manager.deleteBookmarkError(data);
         });
-    },
+    }
 
-    saveBookmark: function(data) {
+    saveBookmark(data) {
         // ["comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1&read_later=1"]
         var data = URI.parseQuery(data);
         data.rks = this.rks;
@@ -191,8 +158,8 @@ User.prototype = {
         }).error(function(res) {
             Manager.saveBookmarkError(data);
         });
-    },
-    updateBookmark: function(url, data) {
+    }
+    updateBookmark(url, data) {
          // XXX
          try {
              data = JSON.parse(data);
@@ -203,10 +170,8 @@ User.prototype = {
              HTTPCache.clearCached(url);
              if (b) {
                  b.set('comment', data.comment_raw || '');
-                 Model.getDatabase().transaction(function() {
-                     b.save().next(function() {
-                         $(document).trigger('BookmarksUpdated');
-                     });
+                 b.save().next(function() {
+                     $(document).trigger('BookmarksUpdated');
                  });
              } else {
                  p('update bookmark - save sync' + Sync._syncing);
@@ -222,9 +187,23 @@ User.prototype = {
                  }, 500);
              }
          });
-    },
-    clear: function user_clear() {
     }
-};
+    clear() {
+    }
+}
 
-
+User.View = class {
+    constructor(name) {
+        this.name = name;
+    }
+    getProfileIcon(name, isLarge) {
+        return sprintf('http://cdn1.www.st-hatena.com/users/%s/%s/profile%s.gif',
+                       name.substring(0, 2), name, isLarge ? '' : '_s');
+    }
+    get icon() {
+        return this.getProfileIcon(this.name);
+    }
+    get largeIcon() {
+        return this.getProfileIcon(this.name, true);
+    }
+}

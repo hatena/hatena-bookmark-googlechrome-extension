@@ -11,7 +11,8 @@ if (popupMode) {
     }
 } else if (request_uri.param('debug')) {
 } else {
-    chrome.tabs.getSelected(null, function(tab) {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
+        var tab = tabs[0];
         chrome.windows.get(tab.windowId, function(win) {
             window.currentWin = win;
             BG.popupWinInfo = {
@@ -26,7 +27,7 @@ if (popupMode) {
             delete BG.popupWinInfo;
         delete window.currentWin;
     });
-    chrome.extension.onConnect.addListener(function(port, name) {
+    chrome.runtime.onConnect.addListener(function(port, name) {
         port.onMessage.addListener(function(info, con) {
             if (info.message == 'popup-reload') {
                 if (info.data.url) {
@@ -92,7 +93,8 @@ function loadWindowPosition(win) {
 function getInformation() {
     var d = new Deferred();
     if (popupMode) {
-        BG.chrome.tabs.getSelected(null, function(tab) {
+        BG.chrome.tabs.query({ active: true, windowId: BG.chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
+            var tab = tabs[0];
             d.call({
                 url: tab.url,
                 faviconUrl: tab.faviconUrl,
@@ -165,12 +167,10 @@ function formSubmitHandler(ev) {
     var form = $('#form');
 
     var user = UserManager.user;
-    var url = form.serialize();
-    url = View.bookmark.__setSubmitData(url);
+    var formData = form.serialize();
+    formData = View.bookmark.__setSubmitData(formData);
+    user.saveBookmark(formData);
 
-    url = url.replace(new RegExp('\\+', 'g'), '%20'); // for title
-    console.log(url);
-    user.saveBookmark(url);
     setTimeout(function() {
         closeWin();
     }, 0);
@@ -230,15 +230,18 @@ var View = {
             this.__searchWord.focus();
 
             // マイブックマーク検索のイベントを Google Analytics に送信
+            // Firefox では analytics.js が使えないため、send できていない状態
             if (window['ga'] != null) {
                 ga('send', {
                     hitType: 'event',
                     eventCategory: 'extension.search',
-                    eventAction: 'local_search'
+                    eventAction: 'local_search',
+                    eventLabel: 'searchWord',
+                    eventValue: word,
                 });
             }
 
-            document.getElementById('hatena-websearch').href = 'http://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
+            document.getElementById('hatena-websearch').href = 'https://b.hatena.ne.jp/search?q=' + encodeURIComponent(word);
             var list = this.__list;
             list.empty();
             if (this.current) {
@@ -442,7 +445,7 @@ var View = {
                     self.__commentMessage.hide();
                     var bookmarks = data.bookmarks;
 
-                    // http://b.hatena.ne.jp/entry/jsonlite/ が返す JSON に "bookmarks"
+                    // https://b.hatena.ne.jp/entry/jsonlite/ が返す JSON に "bookmarks"
                     // プロパティが存在しないのは, 著者が非公開設定にしている場合
                     if ( !bookmarks ) {
                         self.__commentMessage.text( "ページ作者の希望により" +
@@ -536,7 +539,7 @@ var View = {
             }
 
             var i = 0;
-            var step = 100;
+            var step = 50;
             var httpRegexp = /(.*?)((?:https?):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\'*$!]|&(?!lt;|gt;|quot;))+)(.*)/;
             Deferred.loop({begin:0, end:publicLen, step:step}, function(n, o) {
                 var frag = document.createDocumentFragment();
@@ -544,7 +547,7 @@ var View = {
                 for (var j = 0;  j < o.step; j++) {
                     var b = bookmarks[i++];
                     if (!b) continue;
-                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
+                    var permalink = sprintf("https://b.hatena.ne.jp/%s/%s#bookmark-%s",
                         b.user, b.timestamp.substring(0, 10).replace(/\//g, ''),
                         eid);
 
@@ -552,7 +555,7 @@ var View = {
                         '<li class="#{klass}"><a href="#{userlink}"><img width="16" height="16" title="#{user}" alt="#{user}" src="#{icon}" /></a><a class="username" href="#{permalink}">#{user}</a><span class="comment">#{comment}</span><span class="timestamp">#{timestamp}</span></li>',
                         {
                             data: {
-                                userlink: B_HTTP + b.user + '/',
+                                userlink: B_ORIGIN + b.user + '/',
                                 permalink: permalink,
                                 icon: User.View.prototype.getProfileIcon(b.user),
                                 user: b.user,
@@ -625,10 +628,7 @@ var View = {
         },
         // --- private methods ---
         __listeners: {
-            onClickImgDetectClose: function ( evt ) { View.bookmark.__imageDetectClose() },
-            onClickImgCurrentContainer: function ( evt ) { View.bookmark.__imageDetect() },
             onClickCanonical: function ( evt ) { View.bookmark.__canonicalClick() },
-            onClickTitleEditToggleButton: function ( evt ) { View.bookmark.__titleEditToggle() },
             onSubmitForm: function ( evt ) {
                 formSubmitHandler( evt.currentTarget );
                 evt.preventDefault();
@@ -641,20 +641,14 @@ var View = {
         },
         __addListeners: function () {
             var ll = this.__listeners;
-            $("#image-detect-container-close-button").bind( "click", ll.onClickImgDetectClose );
-            $("#image-current-container").bind( "click", ll.onClickImgCurrentContainer );
             $("#canonical-tips-button").bind( "click", ll.onClickCanonical );
-            $("#title-editable-toggle").bind( "click", ll.onClickTitleEditToggleButton );
             $("#delete-button").bind( "click", ll.onClickDeleteButton );
             $("#form").bind( "submit", ll.onSubmitForm );
             this.privateOption.setEventListener();
         },
         __removeListeners: function () {
             var ll = this.__listeners;
-            $("#image-detect-container-close-button").unbind( "click", ll.onClickImgDetectClose );
-            $("#image-current-container").unbind( "click", ll.onClickImgCurrentContainer );
             $("#canonical-tips-button").unbind( "click", ll.onClickCanonical );
-            $("#title-editable-toggle").unbind( "click", ll.onClickTitleEditToggleButton );
             $("#delete-button").unbind( "click", ll.onClickDeleteButton );
             $("#form").unbind( "submit", ll.onSubmitForm );
             this.privateOption.unsetEventListener();
@@ -672,9 +666,6 @@ var View = {
             });
         },
         __updatePageData: function(data) {
-            if (data.images) {
-                this.__setImages(data.images);
-            }
             if (data.canonical) {
                 this.__setCanonical(data.canonical);
             }
@@ -689,55 +680,8 @@ var View = {
                 this.__updateComment(quote);
             }
         },
-        __setImages: function(images) {
-            if (this.images) {
-                this.images = this.images.concat(images);
-            } else {
-                this.images = images;
-            }
-            // TODO 元々非表示であることが期待されている? (非表示になることは現状ではない)
-            $('#image-table-container').show();
-        },
         __setSubmitData: function(data) {
-            var selectedImage = $('#current-image').attr('updated');
-            if (selectedImage) {
-                var noImage = selectedImage.indexOf('/images/noimages') != -1;
-                if (noImage) selectedImage = '/images/noimages.gif'; // set const noimage
-                if (this.currentEntry && this.currentEntry.image_url) {
-                    // 元画像がある
-                    if (this.currentEntry.image_url != selectedImage ||
-                        noImage) {
-                        // 変更があった
-                        data += '&image=' + encodeURIComponent(selectedImage);
-                    }
-                } else if (!noImage) {
-                    // 元画像が無く、変更があった
-                    data += '&image=' + encodeURIComponent(selectedImage);
-                }
-            }
             return data;
-        },
-        __imageDetectClose: function() {
-            $('#image-detect-container').hide();
-        },
-        __imageSelect: function(img) {
-            this.__updateCurrentImage(img.src);
-            this.__imageDetectClose();
-        },
-        __updateCurrentImage: function(src) {
-            $('#current-image').attr('src', src);
-            $('#current-image').attr('updated', src);
-        },
-        __imageDetect: function() {
-            var images = this.images;
-            if (images && images.length) {
-                images = $.unique(images.concat(['/images/noimages.png']));
-                var list = $('#image-detect-container-list').empty();
-                images.forEach(function(image) {
-                    list.append($('<img/>').attr('src', image));
-                });
-                $('#image-detect-container').show();
-            }
         },
         __setCurrentImage: function(url, lastEditor) {
             $('#current-image').attr('src', url);
@@ -745,10 +689,6 @@ var View = {
                 this.images.push(url);
             } else {
                 this.images = [url];
-            }
-            if (lastEditor) {
-                $('#image-detect-notice-user-container').text('最終変更 : ').append(createUserLink(lastEditor)).
-                show();
             }
         },
         __setCanonical: function(url) {
@@ -787,17 +727,17 @@ var View = {
         },
         __loadByInformation: function(info) {
             if (this.lastLoadedURL && this.lastLoadedURL != info.url) {
-                var comment = this.__commentEL.attr('value');
+                var comment = this.__commentEL.val();
                 this.updateLastCommentValue(this.lastLoadedURL, comment);
                 this.__clearView();
-                this.__commentEL.attr('value',comment);
+                this.__commentEL.val(comment);
             } else if (this.lastLoadedURL == info.url) {
                 return;
             } else {
                 // this.lastLoadedURL == undefined の場合
                 if ( this.__matchUrlOfComment(info.url) ){
                     var lastComment = Config.get('popup.bookmark.lastCommentValue').comment;
-                    this.__commentEL.attr('value', lastComment);
+                    this.__commentEL.val( lastComment);
                 } else {
                     Config.set('popup.bookmark.lastCommentValue',{});
                 }
@@ -842,7 +782,7 @@ var View = {
             var lastCommentValueConf = Config.get('popup.bookmark.lastCommentValue');
             if (lastCommentValueConf && this.__matchUrlOfComment(url)) {
                 // Config.set('popup.bookmark.lastCommentValue', {});
-                this.__commentEL.attr('value', lastCommentValueConf.comment);
+                this.__commentEL.val( lastCommentValueConf.comment);
                 var cLength = lastCommentValueConf.comment.length;
                 this.__commentEL.get(0).setSelectionRange(cLength, cLength);
             }
@@ -850,7 +790,7 @@ var View = {
             if (request_uri.param('error')) {
                 $('#bookmark-error').text('申し訳ありません、以下の URL のブックマークに失敗しました。しばらく時間をおいていただき、再度ブックマークください。')
                 .removeClass('none');
-                this.__commentEL.attr('value', request_uri.param('comment'));
+                this.__commentEL.val( request_uri.param('comment'));
             }
             // 文字選択中にコンテキストメニューから開いた時にコメントを引用風にフィルインする処理
             if (request_uri.param('popup') && request_uri.param('comment') && !this.__commentEL.prop("value")) {
@@ -874,22 +814,19 @@ var View = {
                 return;
             }
 
-            if (url.indexOf('http://b.hatena.ne.jp/entry/') == 0) {
+            if (url.indexOf('https://b.hatena.ne.jp/entry/') == 0) {
                 var canURL = (function(url) {
-                    var m = /^http:\/\/b\.hatena\.ne\.jp\/entry(?:\/s)?(.*)/.exec(url);
+                    var m = /^https?:\/\/b\.hatena\.ne\.jp\/entry(?:\/s)?\/(.*)/.exec(url);
                         var trailingURL = m[1];
-                        if (/^\/\d+\//.test(trailingURL)) {
+                        if (/^\d+\//.test(trailingURL)) {
                             // 普通のURLはドメイン部分に . を持つので {eid} が指定されているとして扱う
-                            // また http://b.hatena.ne.jp/{eid} は即リダイレクトされるため指定された url は
-                            // http://b.hatena.ne.jp/{eid}/comment/xxxx などだと考え、そのまま利用する
+                            // また https://b.hatena.ne.jp/entry/{eid} は即リダイレクトされるため指定された url は
+                            // https://b.hatena.ne.jp/entry/{eid}/comment/xxxx などだと考え、そのまま利用する
                             return url;
                         } else {
-                            var canURL = url;
-                            if (url.indexOf('http://b.hatena.ne.jp/entry/s/') == 0) {
-                                canURL = canURL.replace('/s/', '/').replace('http://', 'https://');
-                            }
-                            canURL = canURL.replace('b.hatena.ne.jp/entry/', '');
-                            return canURL;
+                            var is_https = url.indexOf('https://b.hatena.ne.jp/entry/s/') == 0;
+                            var scheme = is_https ? 'https:' : 'http:';
+                            return scheme + '//' + trailingURL;
                         }
                 })(url);
                 if (url !== canURL) {
@@ -899,7 +836,7 @@ var View = {
             }
 
             if (Config.get('popup.bookmark.confirmBookmark')) {
-                this.__confirmBookmark.attr('checked', 'checked');
+                this.__confirmBookmark.prop('checked', true);
             }
             this.__confirmBookmark.bind('change', function() {
                 Config.set('popup.bookmark.confirmBookmark', this.checked);
@@ -1029,7 +966,7 @@ var View = {
             if (b) {
                 $('#bookmarked-notice-text').text('このエントリーは ' + b.dateYMDHM + ' にブックマークしました');
                 $('#bookmarked-notice').removeClass('none');
-                $('#edit-submit').attr('value', '保存');
+                $('#edit-submit').val( '保存');
                 this.__updateComment(b.comment);
             }
         },
@@ -1039,7 +976,7 @@ var View = {
         },
 
         __setURL: function(url) {
-            $('#input-url').attr('value', url);
+            $('#input-url').val( url);
             $('#url').text(Utils.truncate(url, 50)).attr('title', url).attr('href', url);
 
             if (!$('#favicon').attr('src')) {
@@ -1049,36 +986,10 @@ var View = {
             }
         },
 
-        __titleEditToggle: function() {
-            var $img = $('#title-editable-toggle');
-            var to_edit_image_path = '/images/edit.png';
-            var to_close_image_path = '/images/close.gif';
-            if ($img.attr('src').indexOf(to_edit_image_path) == -1) {
-                $img.attr('src', to_edit_image_path);
-                $img.attr('title', 'タイトルを変更する');
-                $('#title-text-container').show();
-                $('#title-text-edit-container').addClass('none');
-                $('#title-input').attr('disabled', 'disabled');
-                $('#title-notice').hide();
-            } else {
-                $img.attr('src', to_close_image_path);
-                $img.attr('title', '変更をキャンセルする');
-                $('#title-text-container').hide();
-                $('#title-text-edit-container').removeClass('none');
-                $('#title-input').attr('disabled', null);
-                $('#title-notice').show();
-                if (this.currentEntry && this.currentEntry.title_last_editor) {
-                    $('#title-notice-user-container').text('最終変更: ').append(createUserLink(this.currentEntry.title_last_editor)).
-                    show();
-                }
-            }
-        },
-
         __setTitle: function(title, force) {
             if (force || !this.titleLoaded) {
                 this.__titleText.text(Utils.truncate(title, 60));
                 this.__titleText.attr('title', title);
-               $('#title-input').attr('value', title);
             }
             this.titleLoaded = true;
         },
@@ -1086,7 +997,6 @@ var View = {
         __setTitleByURL: function(title) {
             this.__titleText.text(Utils.truncate(title, 70));
             this.__titleText.attr('title', title);
-           $('#title-input').attr('value', title);
         },
 
         __setEntry: function(entry) {
@@ -1118,7 +1028,7 @@ var View = {
             if (entry.favorites && entry.favorites.length) {
                 var f = $('#favorites');
                 entry.favorites.reverse().forEach(function(fav) {
-                    var permalink = sprintf("http://b.hatena.ne.jp/%s/%d#bookmark-%d",
+                    var permalink = sprintf("https://b.hatena.ne.jp/%s/%d#bookmark-%d",
                                             fav.name, fav.timestamp.replace(/\//g, ''),
                                             entry.eid);
 
@@ -1147,7 +1057,7 @@ var View = {
             }
             if (entry.has_asin) {
                 var addAsin = $('#add-asin').prop('disabled', null);
-                $('#asin').prop('disabled', null).attr('value', entry.asin);
+                $('#asin').prop('disabled', null).val( entry.asin);
                 $('#asin-container').show();
             }
         },
@@ -1158,20 +1068,6 @@ var View = {
         },
     }
 };
-
-function createUserLink(username) {
-    var permalink = sprintf("http://b.hatena.ne.jp/%s/", username);
-    return Utils.createElementFromString(
-        '<span><img class="usericon" title="#{title}" alt="#{title}" src="#{icon}" /> <a href="#{permalink}">#{username}</a></span>',
-    {
-        data: {
-            permalink: permalink,
-            icon: User.View.prototype.getProfileIcon(username),
-            username: username,
-            title: username
-        }
-    });
-}
 
 var ViewManager = {
     initialize: function __ViewManager_initialize() {
@@ -1210,11 +1106,19 @@ var ViewManager = {
         }
         // }, 20); // 待機時間が短いとコメント一覧がすぐには表示されない問題
     },
-
+    showLoginMessage: function() {
+        const viewName = 'loginmessage'
+        this.show(viewName);
+        const loginView = View[viewName];
+        const container = loginView.container[0];
+        const link = container.querySelector("#register-link");
+        const href = link.getAttribute('href');
+        link.setAttribute('href', href + '&via=' + BOOKMARK_EXT_CONFIG["register_via"])
+    },
     showBookmarkAddForm: function () {
         this.__changeTab("bookmark");
         if ( !UserManager.user ) {
-            this.show('loginmessage');
+            this.showLoginMessage();
         } else {
             this.show('bookmark');
         }
@@ -1226,7 +1130,7 @@ var ViewManager = {
     search: function ( searchWord ) {
         this.__changeTab("search");
         if ( !UserManager.user ) {
-            this.show('loginmessage');
+            this.showLoginMessage();
         } else {
             this.show('search');
             View.search.searchAndDisplay( searchWord );
@@ -1291,7 +1195,7 @@ function changePopupWindowWidthAppropriately() {
 
 var ready = function() {
     // bookmark view におけるタグ一覧のタグクリックのリスナ
-    $('dd span.tag').live( 'click', function() {
+    $(document).on( 'click', 'dd span.tag', function() {
         // TODO この関数は View.bookmark の中で管理すべき
         var bView = View.bookmark;
         var tag = this.textContent;
@@ -1308,11 +1212,7 @@ var ready = function() {
         return false;
     } );
 
-    $('#image-detect-container-list img').live('click', function() {
-        // TODO この関数は View.bookmark の中で管理すべき
-        View.bookmark.__imageSelect(this);
-    });
-    $('a').live('click', function() {
+    $(document).on('click', 'a', function() {
         this.target = '_blank';
     });
     // $('a').each(function() { this.target = '_blank' });
@@ -1324,7 +1224,7 @@ var ready = function() {
     }
 };
 
-$(document).bind('ready', ready);
+$(ready);
 
 /**
  * View.bookmark.privateOption
@@ -1421,7 +1321,7 @@ $(document).bind('ready', ready);
 }).call( this );
 
 
-$(document).bind( "ready", function onready() {
+$(function onready() {
     $(document).unbind( "ready", onready );
     // 利用規約に同意していない場合は新タブを開いてポップアップを閉じる。
     // OS X における Chrome だとポップアップのサイズが小さくなってしまうことがあるため。
@@ -1436,7 +1336,7 @@ $(document).bind( "ready", function onready() {
 } );
 $(window).bind( "unload", function onunload() {
     $(window).unbind( "unload", onunload );
-    View.bookmark.updateLastCommentValue(View.bookmark.lastLoadedURL, $('#comment').attr('value'));
+    View.bookmark.updateLastCommentValue(View.bookmark.lastLoadedURL, $('#comment').val());
     pageManager.finalize();
 } );
 
@@ -1551,7 +1451,7 @@ var mainPage = new Page( "main" );
     }
     function searchFormSubmitHandler( evt ) {
         evt.preventDefault();
-        ViewManager.search( $('#search-word').attr('value') );
+        ViewManager.search( $('#search-word').val() );
     }
     var _searchIncD = null;
     var _words = [];
@@ -1591,7 +1491,7 @@ var mainPage = new Page( "main" );
             var lastWord = Config.get('popup.search.lastWord');
             if ( lastView === 'search' && lastWord ) {
                 document.getElementById('search-word').value = lastWord;
-                ViewManager.search( $('#search-word').attr('value') );
+                ViewManager.search( $('#search-word').val() );
             } else {
                 ViewManager.showComment();
             }

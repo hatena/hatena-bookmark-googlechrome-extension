@@ -24,6 +24,9 @@ var Config = {
         number: function(value) {
             return Number(value);
         },
+        string: function(value) {
+            return value.toString();
+        }
     },
     normalizers: {
         between: function(value, options) {
@@ -110,6 +113,9 @@ var Config = {
                 break;
             case 'boolean':
                 type = 'boolean';
+                break;
+            case 'string':
+                type = 'string';
                 break;
             default:
                 type = 'object';

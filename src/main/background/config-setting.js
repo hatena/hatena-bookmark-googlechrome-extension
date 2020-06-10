@@ -37,9 +37,6 @@
         'popup.commentviewer.mode': 'popular',
         'popup.bookmark.confirmBookmark': false,
         'popup.bookmark.postTwitter': false,
-        'popup.bookmark.postFacebook': false,
-        'popup.bookmark.postEvernote': false,
-        'popup.bookmark.postMixiCheck': false,
         'popup.bookmark.addAsin': false,
         'popup.bookmark.lastCommentValue': {
             'default': {},
@@ -52,6 +49,8 @@
         'popup.lastView': 'comment',
         'content.webinfo.enabled': true,
         'background.bookmarkcounter.enabled': true,
+        'background.bookmarkcounter.blacklist': '^https://.*$',
+
     };
     Object.keys(defaults).forEach(function(key) {
         Config.append(key, defaults[key]);

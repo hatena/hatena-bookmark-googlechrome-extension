@@ -239,7 +239,7 @@ test( "uri", 32, function () {
     equal(u.href, hatena);
     equal(u.pathQuery, '/foobar?query=foo');
     equal(u.encodeURI, encodeURIComponent(hatena));
-    equal(u.entryURL, B_HTTP + 'entry/www.hatena.ne.jp/foobar?query=foo%23hash=bar');
+    equal(u.entryURL, B_ORIGIN + 'entry/www.hatena.ne.jp/foobar?query=foo%23hash=bar');
 
     hatena = 'https://www.hatena.ne.jp/';
     u = URI.parse(hatena);
@@ -253,7 +253,7 @@ test( "uri", 32, function () {
     equal(u.href, hatena);
     equal(u.pathQuery, '/');
     equal(u.encodeURI, encodeURIComponent(hatena));
-    equal(u.entryURL, B_HTTP + 'entry/s/www.hatena.ne.jp/');
+    equal(u.entryURL, B_ORIGIN + 'entry/s/www.hatena.ne.jp/');
 
     hatena = 'http://www.hatena.ne.jp/foobar?query1=foo%23&query2=bar#test';
     u = URI.parse(hatena);
@@ -278,10 +278,10 @@ test( "uri", 32, function () {
     });
     equal(u.search, '');
 
-    var parsed = URI.parseQuery('comment=%5Bhatena%5Dhatenabookmark&url=http%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1');
+    var parsed = URI.parseQuery('comment=%5Bhatena%5Dhatenabookmark&url=https%3A%2F%2Fb.hatena.ne.jp%2F&with_status_op=1&private=1');
     is(parsed, {
         comment: '[hatena]hatenabookmark',
-        url: 'http://b.hatena.ne.jp/',
+        url: 'https://b.hatena.ne.jp/',
         with_status_op: '1',
         private: '1',
     });
@@ -340,7 +340,7 @@ asyncTest( 'ExpireCache', 8, function () {
     cache = new ExpireCache('testcache2' + (new Date-0), 0.01); // 10ms cache
     cache.set('foo1', 'bar');
     equal(cache.get('foo1'), 'bar');
-    wait(0.2).next(function() {
+    Deferred.wait(0.2).next(function() {
         ok(cache.get('foo1') == null, 'cache expired');
         QUnit.start();
     });
@@ -411,169 +411,3 @@ test( 'SiteinfoManager.SiteconfigConverter', 5, function () {
     equal(data[0].link, '__location__', 'converted link');
     equal(data[0].annotation, 'descendant::p[count(preceding-sibling::*) = 1]', 'converted annotation');
 } );
-
-(function () {
-var Bookmark = Model.Bookmark, Tag = Model.Tag;
-module( "Model" );
-
-asyncTest( 'Model Bookmark/Tag', 13, function(d) {
-    var db = new Database('testModelBookmarkTag');
-    Model.getDatabase = function() { return db };
-
-    var bDate = new Bookmark();
-    bDate.date = new Date(1255519120 * 1000);
-    equal(bDate.get('date'), 1255519120 , 'date proxy');
-    Database.debugMessage = true;
-    Model.initialize(true).next(function() {
-        ok(true, 'initialize model');
-        var bookmark = new Bookmark({
-            url: 'http://www.hatena.ne.jp/',
-            comment: '[hatena][はてな]これはすごい',
-            title: 'はてなのサイト',
-        });
-        bookmark.set('date', 1255519120);
-        bookmark.saveWithTransaction().next(function(b) {
-            equal(b.id, 1);
-            equal(b.date - 0, new Date(1255519120 * 1000)-0, 'date proxy');
-            ok(typeof b.search === 'undefined', 'Bookmark#search not used');
-            Tag.find({}).next(function(tags) {
-                equal(tags.length, 2);
-                equal(tags[0].name, 'hatena');
-                equal(tags[1].name, 'はてな');
-            }).next(function() {
-                db.transaction(function() {
-                    for (var i = 0;  i < 99; i++) {
-                        var b = new Bookmark({
-                            url: 'http://www.hatena.ne.jp/' + i,
-                            comment: '[hatena][はてな]これはすごい' + i,
-                            title: 'はてなのサイト' + i,
-                        });
-                        b.set('date', 1255519120 + i);
-                        b.save().next();
-                    }
-                }).next(function() {
-                    ok(true, '100 bookmark insert');
-                    Tag.count().next(function(c) {
-                        equal(c, 200);
-                        Bookmark.search('なのサ').next(function(r) {
-                            equal(r.length, 20, 'search res');
-                            Bookmark.search('すごい5').next(function(r) {
-                                equal(r.length, 11, 'search res2');
-                                equal(r[r.length-1].url, 'http://www.hatena.ne.jp/59', 'search order');
-                                QUnit.start();
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-} );
-}).call( this );
-
-module( "User" );
-
-test( 'UserView', 2, function () {
-    var view = new User.View('nagayama');
-    ok(view.icon.match(/\/users\/na\/nagayama\/profile_s\.gif$/));
-    ok(view.largeIcon.match(/\/users\/na\/nagayama\/profile\.gif$/));
-});
-
-asyncTest( 'UserManeger', 7, function () {
-    // UserManager.MY_NAME_URL = '/tests/data/hatenatest.my.name';
-    UserManager.deferred('bind', 'UserChange').next(function(ev, user) {
-        ok(true, 'Loggin!');
-        equal(UserManager.user, user, 'user');
-        equal(user.name, 'hatenatest');
-        ok(user.ignores instanceof RegExp, 'ignores regexp list');
-        ok(user.public != user.private, 'public/private');
-        ok(user.database instanceof Database, 'database instance');
-        UserManager.clearUser();
-        ok(UserManager.user != user, 'no user');
-        QUnit.start();
-
-        UserManager.unbind('UserChange');
-    });
-    UserManager.login();
-} );
-
-(function () {
-module( "Sync" );
-
-var Bookmark = Model.Bookmark, Tag = Model.Tag;
-asyncTest( 'sync sync sync', 12, function(d) {
-    Timer.__defineGetter__('now', function() { return 1255663923100 });
-    var db = new Database('SyncTest');
-    Model.getDatabase = function() { return db };
-    var user = new User('hatenatest', {});
-    Sync.getDataURL = function() {
-        return user.dataURL;
-    }
-    // Sync.deferred は, jQuery.fn.deferred で定義されていて, JSDeferred.connect を
-    // 行う. 要は, Sync.bind("progress", ...) でイベントリスナを登録し, イベント発火
-    // 時に next に進むものと思えばよい. (bind は Object.prototype.bind ではなく
-    // jQuery のメソッド)
-    Sync.deferred('bind', 'progress').next(function(ev, obj) {
-        if (obj.value !== null && obj.value == 0) {
-            ok(true, 'progress start');
-        }
-    });
-    Sync.deferred('bind', 'complete').next(function() {
-        ok(true, 'Sync!');
-        Sync.unbind('complete');
-    }).
-    // Sync.deferred().next メソッドのコールバックの中から Deferred オブジェクトを
-    // 返しても, そこに値がセットされる前に次の next コールバックが呼び出されてしまう
-    // ようなので, 一旦別の next コールバック呼び出しをはさむ
-    // Sync 前の状態確認
-    next(function () {
-        return Bookmark.count().next(function(r) {
-            equal(r, 518, 'total count');
-        });
-    }).
-    next(function () {
-        return Tag.find({where: {name: 'db'}}).next(function (r) {
-            equal(r.length, 13, 'tag');
-        });
-    }).
-    // Sync する
-    next(function () {
-        var d = Sync.deferred('bind', 'complete').next(function() {
-            ok(true, 'sync sync');
-        });
-        Sync.sync();
-        return d;
-    }).
-    // 以降は Sync 後の状態確認
-    next(function () {
-        return Bookmark.count().next(function(r) {
-            equal(r, 519, 'total count2');
-        });
-    }).
-    next(function () {
-        return Tag.find({where: {name: 'db'}}).next(function(r) {
-            equal(r.length, 14, 'tag2');
-        });
-    }).
-    next(function () {
-        return Bookmark.search('高速').next(function(r) {
-            equal(r.length, 3, 'search');
-        });
-    }).
-    next(function () {
-        return Tag.getNameCountHash().next(function(tags) {
-            equal(Object.keys(tags).length, 88);
-            equal(tags['並行'], 40);
-            equal(tags['javascript'], 11);
-        });
-    }).
-    error(function() {}).
-    next(function () {
-        QUnit.start();
-    });
-
-    Model.initialize(true).next(function() {
-        Sync.init();
-    });
-} );
-}).call( this );

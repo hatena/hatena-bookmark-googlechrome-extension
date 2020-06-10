@@ -63,8 +63,9 @@ end
 
 setup_filecopy_task(:filecopy_chrome, 'obj/chrome', [ 'src/main', 'src/chrome' ])
 setup_filecopy_task(:filecopy_opera,  'obj/opera',  [ 'src/main', 'src/opera' ])
+setup_filecopy_task(:filecopy_firefox, 'obj/firefox', [ 'src/main', 'src/firefox' ])
 
-task :filecopy => [ :filecopy_chrome, :filecopy_opera ]
+task :filecopy => [ :filecopy_chrome, :filecopy_opera, :filecopy_firefox ]
 
 desc "Chrome 拡張リリース用の zip ファイルを生成する"
 task :package_chrome => [ :filecopy_chrome ] do
@@ -74,4 +75,13 @@ task :package_chrome => [ :filecopy_chrome ] do
   sh 'find obj/chrome | grep -v \'^obj/chrome/tests\\(/\\|$\\)\' | xargs zip bookmark-googlechrome-extension.zip'
 end
 
-task :package => [ :package_chrome ]
+desc "Firefox 拡張リリース用の zip ファイルを生成する"
+task :package_firefox => [ :filecopy_firefox ] do
+  # TODO src_path を使うように
+  # TODO output_path を使うように
+  # TODO project_name を使うように
+  sh 'cd obj/firefox && zip -r bookmark-firefox-extension.zip . -x tests/\\*'
+  sh 'mv obj/firefox/bookmark-firefox-extension.zip .'
+end
+
+task :package => [ :package_chrome, :package_firefox ]

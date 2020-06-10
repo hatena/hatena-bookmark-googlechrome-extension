@@ -13,7 +13,6 @@ h1 {
   margin: 0;
   padding: 0;
   font-size: 160%;
-  background: 
   padding-left: 37px;
   height: 40px;
   line-height: 40px;
@@ -39,6 +38,10 @@ fieldset {
 h2 {
   font-size: 100%;
   margin-left: 1em;
+}
+
+h4 {
+  margin: 12px 0px 0px 0px;
 }
 
 table {
@@ -85,6 +88,10 @@ p.notice {
   padding: 3px;
 }
 
+textarea.blacklist {
+  width: 300px;
+  height: 60px;
+}
 
 input[type='text'] {
   width: 2em;

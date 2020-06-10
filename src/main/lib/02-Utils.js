@@ -2,11 +2,11 @@
 // consts
 var GLOBAL = this;
 var B_HOST = 'b.hatena.ne.jp';
-var B_HTTP = 'http://' + B_HOST + '/';
+var B_ORIGIN = 'https://' + B_HOST + '/';
 var B_STATIC_HOST = 'cdn-ak.b.st-hatena.com';
-var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
-var B_API_STATIC_HOST = 'api.b.st-hatena.com';
-var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
+var B_STATIC_ORIGIN = 'https://' + B_STATIC_HOST + '/';
+var B_API_HOST = 'b.hatena.ne.jp';
+var B_API_ORIGIN = 'https://' + B_API_HOST;
 
 // utility
 var p = function() {
@@ -110,17 +110,18 @@ var Utils = {
         return str;
     },
     entryURL: function(url) {
-        return B_HTTP + 'entry/' + url.replace('#', '%23');
+        return B_ORIGIN + 'entry/' + url.replace('#', '%23');
     },
     entryImage: function(url) {
-        return 'http://b.st-hatena.com/entry/image/' + url.replace('#', '%23');
+        return 'https://b.st-hatena.com/entry/image/' + url.replace('#', '%23');
     },
     faviconUrl: function(url) {
-        return 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(url.replace('#', '%23'));
+        return 'https://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(url.replace('#', '%23'));
     },
     editBookmarkCurrent: function(winId) {
-        chrome.tabs.getSelected(winId, function(tabs) {
-            chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tabs.id);
+        chrome.tabs.query({ active: true, windowId: winId }, function(tabs) {
+            var tab = tabs[0];
+            chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tab.id);
         });
     },
     createElementSimply: function(name, attr) {
@@ -182,12 +183,6 @@ var Utils = {
 Utils.createElementSimply.t = function(text) { return document.createTextNode(text) }
 
 if (typeof Deferred != 'undefined') {
-    if (Deferred.WebDatabase) {
-        var Database = Deferred.WebDatabase;
-        // Database.debugMessage = true;
-        var Model = Database.Model, SQL = Database.SQL;
-    }
-
     Deferred.onerror = function(e) { console.error(e);console.error(e.stack) };
 
     Deferred.retry = function(retryCount, funcDeffered/* funcDeffered() return Deferred */, options) {
@@ -262,7 +257,7 @@ if (typeof jQuery != 'undefined') {
                     // Recurse if we're merging object values
                     if ( deep && !getterFlag && copy && typeof copy === "object" && !copy.nodeType ) {
                         src = target[ name ];
-                        target[ name ] = jQuery.extend( deep, 
+                        target[ name ] = jQuery.extend( deep,
                             // Never move original objects, clone them
                             src || ( copy.length != null ? [ ] : { } )
                         , copy );

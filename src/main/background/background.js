@@ -56,7 +56,7 @@ $.extendWithAccessorProperties(Manager, {
         chrome.tabs.get(tabId, Manager.editBookmarkTab);
     },
     editBookmarkCurrentTab: function() {
-        chrome.tabs.getSelected(null, Manager.editBookmarkTab);
+        chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) { Manager.editBookmarkTab(tabs[0]) });
     },
     saveBookmarkError: function(data) {
         console.error(data);
@@ -112,12 +112,14 @@ $.extendWithAccessorProperties(Manager, {
             UserManager.user.hasBookmark(tab.url).next(function(bool) {
                 if (bool) {
                     chrome.browserAction.setIcon({tabId: tab.id, path: '/images/chrome-b-checked.png'});
+                } else {
+                    chrome.browserAction.setIcon({tabId: tab.id, path: '/images/chrome-b-plus.png'});
                 }
             });
         }
 
         HTTPCache.counter.get(tab.url).next(function(count) {
-            if (count == null || isNaN(parseInt(count, 10))) {
+            if (count == null || count === '0' || isNaN(parseInt(count, 10))) {
                 chrome.browserAction.setBadgeText({tabId: tab.id, text: '-'});
                 chrome.browserAction.setBadgeBackgroundColor({tabId: tab.id, color: [200,200,200, 255]});
             } else {
@@ -148,7 +150,8 @@ $.extendWithAccessorProperties(Manager, {
         });
     },
     updateCurrentTab: function() {
-        chrome.tabs.getSelected(null, function(t) {
+        chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
+            var t = tabs[0];
             chrome.windows.getCurrent(function(w) {
                 if (t && w && w.id == t.windowId) {
                     Manager.updateTab(t);
@@ -215,7 +218,7 @@ $(document).bind('BookmarksUpdated', function() {
     Manager.updateCurrentTab();
 });
 
-$(document).ready(function() {
+$(function() {
     // console.log('ready');
     if (isEuraAgreed()) {
         UserManager.loginWithRetry(15 * 1000);
@@ -227,7 +230,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, opt) {
         Manager.updateTabById(tabId);
 });
 
-chrome.tabs.onSelectionChanged.addListener(function(tabId) {
+chrome.tabs.onActivated.addListener(function(tabId) {
     Manager.updateCurrentTab();
 });
 
@@ -278,7 +281,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 });
 */
 
-chrome.extension.onConnect.addListener(function(port, name) {
+chrome.runtime.onConnect.addListener(function(port, name) {
   port.onMessage.addListener(function(info, con) {
       if (!localStorage.eula) return;
 
@@ -290,9 +293,24 @@ chrome.extension.onConnect.addListener(function(port, name) {
 // 右クリックメニュー
 
 chrome.contextMenus.create({
+    'id': 'add-bookmark',
     'title':'このページをはてなブックマークに追加',
     'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
-    'onclick':function(info, tab) {
+});
+chrome.contextMenus.create({
+    'id': 'show-bookmarks',
+    'title':'このリンクをはてなブックマークで表示',
+    'contexts':['link'],
+});
+chrome.contextMenus.create({
+    'id': 'search-bookmarks',
+    'title':'はてなブックマークで「%s」を検索',
+    'contexts':['selection'],
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    switch (info.menuItemId) {
+    case 'add-bookmark':
         var url = tab.url;
         var selectionText = info.selectionText || '';
         chrome.windows.create({
@@ -301,51 +319,22 @@ chrome.contextMenus.create({
                    +'&windowId='+tab.windowId
                    +'&tabId='+tab.id
                    +'&title='+encodeURIComponent(tab.title)),
-            focused : true,
             type : 'popup',
             height : 480,
             width : 500
         });
-    }
-});
-/*
-chrome.contextMenus.create({
-    'title':'このページをはてなブックマークで表示',
-    'contexts':["page", "frame", "selection", "editable", "image", "video", "audio"],
-    'onclick':function(info, tab) {
-        var url = tab.url;
-        window.open('http://b.hatena.ne.jp/entry?url='+encodeURIComponent(url));
-    }
-});
-chrome.contextMenus.create({
-    'title':'このリンクをはてなブックマークに追加',
-    'contexts':['link'],
-    'onclick':function(info, tab) {
+        break;
+    case 'show-bookmarks':
         var url = info.linkUrl;
-        chrome.windows.create({
-            url : ('/background/popup.html?popup=1&url='+encodeURIComponent(url)),
-            focused : true,
-            type : 'popup',
-            height : 550,
-            width : 500
+        chrome.tabs.create({
+            url: "https://b.hatena.ne.jp/entry/" + encodeURIComponent(url)
         });
-
-    }
-});
-*/
-chrome.contextMenus.create({
-    'title':'このリンクをはてなブックマークで表示',
-    'contexts':['link'],
-    'onclick':function(info, tab) {
-        var url = info.linkUrl;
-        window.open("http://b.hatena.ne.jp/entry?url=" + encodeURIComponent(url));
-    }
-});
-chrome.contextMenus.create({
-    'title':'はてなブックマークで「%s」を検索',
-    'contexts':['selection'],
-    'onclick': function(info, tab) {
-        window.open('http://b.hatena.ne.jp/search?q='+encodeURIComponent(info.selectionText));
+        break;
+    case 'search-bookmarks':
+        chrome.tabs.create({
+            url: 'https://b.hatena.ne.jp/search?q='+encodeURIComponent(info.selectionText)
+        });
+        break;
     }
 });
 
@@ -355,39 +344,3 @@ setInterval(function() {
         UserManager.login();
     }
 }, 1000 * 60 * 23);
-
-// chrome webdatabase 5M 制限のため、tag 参照テーブルを作らない
-Model.Bookmark.afterSave = function() {
-}
-
-// debug
-/*
-setTimeout(function() {
-    var url = 'http://d.hatena.ne.jp/HolyGrail/20091107/1257607807';
-    url = 'http://b.hatena.ne.jp/articles/200911/598';
-    url = 'http://www.amazon.co.jp/exec/obidos/ASIN/B002T9VBP8/hatena-uk-22/ref=nosim';
-    url = 'http://b.hatena.ne.jp/entry/s/addons.mozilla.org/ja/firefox/addon/1843';
-    url = 'https://addons.mozilla.org/ja/firefox/addon/1843';
-    // url = 'http://hail2u.net/blog/webdesign/yui3-css-reset-problem.html?xx';
-    url = 'http://example.com/';
-    url = '/background/popup.html?debug=1&url=' + encodeURIComponent(url);
-    // var url = 'http://www.hatena.ne.jp/';
-    chrome.tabs.create({
-        url: url,
-    });
-}, 10);
-
-/*
-setTimeout(function() {
-    var url = '/tests/test.html';
-    chrome.tabs.create({
-        url: url,
-    });
-}, 10);
-*/
-
-/*
-setTimeout(function() {
-chrome.windows.create({url:'../tests/test.html'});
-}, 10);
-*/

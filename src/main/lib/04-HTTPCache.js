@@ -80,17 +80,28 @@ HTTPCache.encodeBookmarkURL = function(url) {
 
 HTTPCache.counter = new HTTPCache('counterCache', {
     expire: 60 * 15,
-    baseURL: B_API_STATIC_HTTP + 'entry.count?url=',
+    baseURL: B_API_ORIGIN + '/entry.count?url=',
     // encoder: HTTPCache.encodeBookmarkURL,
     encoder: encodeURIComponent,
 });
 
 HTTPCache.counter.isValid = function(url) {
     // XXX
-    if (url.indexOf('https') == 0) {
-        return false;
+    if(Config.get('background.bookmarkcounter.enabled')) {
+        var blacklistText = Config.get('background.bookmarkcounter.blacklist');
+        if(typeof blacklistText !== 'string') {
+            return true;
+        }
+        var blacklist = blacklistText.split('\n');
+        return !blacklist.some(function(regexpText) {
+            if(!regexpText.length) {
+                return false;
+            }           
+            var re = new RegExp(regexpText);
+            return re.test(url);
+        })
     } else {
-        return true;
+        return false;
     }
 };
 
@@ -112,7 +123,7 @@ HTTPCache.counter.loadHandler = function(ev) {
 
 HTTPCache.comment = new HTTPCache('commentCache', {
     expire: 60 * 30,
-    baseURL: B_HTTP + 'entry/jsonlite/?url=',
+    baseURL: B_API_ORIGIN + '/entry/jsonlite/?url=',
     seriarizer: 'JSON',
     json: true,
     // encoder: HTTPCache.encodeBookmarkURL,
@@ -121,7 +132,7 @@ HTTPCache.comment = new HTTPCache('commentCache', {
 
 HTTPCache.popularComment = new HTTPCache('popularCommentCache', {
     expire: 60 * 30,
-    baseURL: B_HTTP + 'api/viewer.popular_bookmarks?url=',
+    baseURL: B_API_ORIGIN + '/api/viewer.popular_bookmarks?url=',
     seriarizer: 'JSON',
     json: true,
     encoder: encodeURIComponent,
@@ -129,7 +140,7 @@ HTTPCache.popularComment = new HTTPCache('popularCommentCache', {
 
 HTTPCache.entry = new HTTPCache('entryCache', {
     expire: 60 * 15,
-    baseURL: B_HTTP + 'my.entry?url=',
+    baseURL: B_API_ORIGIN + '/my.entry?url=',
     seriarizer: 'JSON',
     json: true,
     // encoder: HTTPCache.encodeBookmarkURL,
@@ -184,7 +195,7 @@ HTTPCache.usertags = new HTTPCache('usertagsCache', {
         return res;
     },
     createURL: function(name) {
-        return sprintf('%s%s/tags.json', B_HTTP, name);
+        return sprintf('%s/%s/tags.json', B_API_ORIGIN, name);
     }
 });
 

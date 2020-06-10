@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    json (1.8.0)
+    json (2.1.0)
     jsonschema (2.0.2)
-    rake (10.0.4)
+    rake (12.3.1)
     watchr (0.7)
 
 PLATFORMS
@@ -14,3 +14,6 @@ DEPENDENCIES
   jsonschema
   rake
   watchr
+
+BUNDLED WITH
+   1.16.1

@@ -7,6 +7,8 @@ Config.View = {
         var self = this;
         $(':text').each(self.textUpdateHandler);
         $(':radio').each(self.radioHander);
+        $('textarea').each(self.textUpdateHandler);
+
         /*
         Object.keys(Config.configs).forEach(function(key) {
             var targets = document.getElementsByName(key);
@@ -20,18 +22,18 @@ Config.View = {
     textUpdateHandler: function() {
         var target = $(this);
         var key = target.attr('name');
-        target.attr('value', Config.get(key));
+        target.val( Config.get(key));
         target.keyupD;
         var updateHandler = function() {
             if (target.keyupD) {
                 target.keyupD.cancel();
                 target.keyupD = null;
             }
-            var val = target.attr('value');
+            var val = target.val();
             Config.set(key, val);
             var newVal = Config.get(key);
             if (val != newVal) {
-                target.attr('value', newVal);
+                target.val( newVal);
                 Config.View.afterUpdate(key);
             }
         };
@@ -49,14 +51,14 @@ Config.View = {
         // bool only ... XXX
         var config = Config.configs[key];
         var culVal = Config.get(key);
-        if ((culVal) && target.attr('value') == '1') {
-            target.attr('checked', 'checked');
-        } else if (!culVal && target.attr('value') == '0') {
-            target.attr('checked', 'checked');
+        if ((culVal) && target.val() == '1') {
+            target.prop('checked', true);
+        } else if (!culVal && target.val() == '0') {
+            target.prop('checked', true);
         }
         var updateHandler = function() {
-            if (target.attr('checked')) {
-                var val = target.attr('value');
+            if (target.prop('checked')) {
+                var val = target.val();
                 Config.set(key, val);
                 Config.View.afterUpdate(key);
             }
@@ -126,7 +128,7 @@ function updateViewAccordingToWhetherEulaAccepted() {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     Config.View.autoObserve();
     $('body').show();
     if (user) showInitDB();

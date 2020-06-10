@@ -2,13 +2,18 @@
 
 // XXX ToDo: Consider about namespaces.
 
-const B_HTTP = 'http://b.hatena.ne.jp/';
-const B_STATIC_HTTP = 'http://cdn-ak.b.st-hatena.com/';
+const B_HOST = 'b.hatena.ne.jp';
+const B_HTTP  = 'http://' + B_HOST;
+const B_HTTPS = 'https://' + B_HOST;
+
+const B_STATIC_HOST = 'b.st-hatena.com';
+const B_STATIC_HTTP  = 'http://' + B_STATIC_HOST;
+const B_STATIC_HTTPS = 'https://' + B_STATIC_HOST;
 
 var SiteinfoRequestor = {
     init: function SR_init() {
         var self = SiteinfoRequestor;
-        self.port = chrome.extension.connect();
+        self.port = chrome.runtime.connect();
         self.port.onMessage.addListener(self.onMessage);
         self.port.postMessage({
             message: 'get_siteinfo_for_url',
@@ -176,12 +181,19 @@ extend(WidgetEmbedder.prototype, {
     getExistingWidgets: function WE_getExistingWidgets(paragraph, link) {
         const url = link.href;
         const sharpEscapedURL = url.replace(/#/g, '%23');
-        const entryURL = getEntryURL(url);
-        const oldEntryURL = B_HTTP + 'entry/' + sharpEscapedURL;
-        const imageAPIPrefix = 'http://b.st-hatena.com/entry/image/';
-        const oldImageAPIPrefix = B_HTTP + 'entry/image/';
-        const addURL = B_HTTP + 'my/add.confirm?url=' + encodeURIComponent(url);
-        const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
+        const entryPath = getEntryPath(url);
+        const entryURLHTTP  = B_HTTP + entryPath;
+        const entryURLHTTPS = B_HTTPS + entryPath;
+        const oldEntryURLHTTP  = B_HTTP + '/entry/' + sharpEscapedURL;
+        const oldEntryURLHTTPS = B_HTTPS + '/entry/' + sharpEscapedURL;
+        const imageAPIHTTPPrefix  = B_STATIC_HTTP + 'entry/image/';
+        const imageAPIHTTPSPrefix = B_STATIC_HTTPS + 'entry/image/';
+        const oldImageAPIHTTPPrefix  = B_HTTP + 'entry/image/';
+        const oldImageAPIHTTPSPrefix = B_HTTPS + 'entry/image/';
+        const addURLHTTP  = B_HTTP + 'my/add.confirm?url=' + encodeURIComponent(url);
+        const addURLHTTPS = B_HTTPS + 'my/add.confirm?url=' + encodeURIComponent(url);
+        const oldAddURLHTTP  = B_HTTP + 'append?' + sharpEscapedURL;
+        const oldAddURLHTTPS = B_HTTPS + 'append?' + sharpEscapedURL;
         const entryImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
         var widgets = {
             entry:     null,
@@ -191,8 +203,10 @@ extend(WidgetEmbedder.prototype, {
         };
         queryXPathAll('descendant::a[@href]', paragraph).forEach(function (a) {
             switch (a.href) {
-            case entryURL:
-            case oldEntryURL:
+            case entryURLHTTP:
+            case entryURLHTTPS:
+            case oldEntryURLHTTP:
+            case oldEntryURLHTTPS:
                 var content = a.firstChild;
                 if (!content) break;
                 if (content.nodeType === Node.TEXT_NODE) {
@@ -208,8 +222,10 @@ extend(WidgetEmbedder.prototype, {
                 }
                 if (content.localName === 'img') {
                     var src = content.src || '';
-                    if (src.indexOf(imageAPIPrefix) === 0 ||
-                        src.indexOf(oldImageAPIPrefix) === 0) {
+                    if (src.indexOf(imageAPIHTTPPrefix) === 0 ||
+                        src.indexOf(imageAPIHTTPSPrefix) === 0 ||
+                        src.indexOf(oldImageAPIHTTPPrefix) === 0 ||
+                        src.indexOf(oldImageAPIHTTPSPrefix) === 0) {
                         widgets.counter = a;
                     } else if (src.indexOf(entryImagePrefix) === 0) {
                         widgets.entry = a;
@@ -217,8 +233,10 @@ extend(WidgetEmbedder.prototype, {
                 }
                 break;
 
-            case addURL:
-            case oldAddURL:
+            case addURLHTTP:
+            case addURLHTTPS:
+            case oldAddURLHTTP:
+            case oldAddURLHTTPS:
                 widgets.addButton = a;
                 break;
             }
@@ -233,7 +251,7 @@ extend(WidgetEmbedder.prototype, {
         var url = link.href;
         var sharpEscapedURL = url.replace(/#/g, '%23');
         var img = E('img', {
-            src: 'http://b.st-hatena.com/entry/image/' + sharpEscapedURL,
+            src: '//b.st-hatena.com/entry/image/' + sharpEscapedURL,
             alt: WidgetEmbedder.messages.SHOW_ENTRY_TEXT,
             style: 'display: none;',
         });
@@ -318,15 +336,18 @@ function E(name, attrs) {
     return element;
 }
 
-function getEntryURL(url) {
+function getEntryPath(url) {
     var suffix = url.replace(/#/g, '%23');
     if (suffix.indexOf('http://') === 0)
         suffix = suffix.substring(7);
     else if (suffix.indexOf('https://') === 0)
         suffix = 's/' + suffix.substring(8);
-    return B_HTTP + 'entry/' + suffix;
+    return '/entry/' + suffix;
 }
 
+function getEntryURL(url) {
+    return B_HTTPS + getEntryPath(url);
+}
 
 if (window.top == window.self)
     SiteinfoRequestor.init();
