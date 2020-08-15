@@ -256,11 +256,13 @@ extend(WidgetEmbedder.prototype, {
             style: 'display: none;',
         });
         img.addEventListener('load', this._onImageLoad, false);
-        widgets.appendChild(E('a', {
+        var a = E('a', {
             href: getEntryURL(url),
             title: WidgetEmbedder.messages.SHOW_ENTRY_TITLE,
-            'class': 'hBookmark-widget-counter'
-        }, img));
+            'class': 'hBookmark-widget-counter',
+        }, img);
+        var div = E('div', {}, a);
+        widgets.appendChild(div);
         return widgets;
     },
 
